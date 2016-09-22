@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Polish-Lody</title>
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="page-header">
+			{% if user.is_authenticated %}
+			<p class="top-menu">Hello {{ user.username }}<small>(<a href="">Log out</a>)</small></p>
+			
+			{% else %}
+			<a href="" class="top-menu"><span class="glyphicon glyphicon-lock"></span>(Log in)</a>
+			{% endif %}
+            <h1><a href="">Polish-Lody</a></h1>
+        </div>
+
+        <div>
+            <h1><a href="">First implemented features</a></h1>
+        </div>
+
+        <div>
+            <h1><a href="">Second implemented features</a></h1>
+        </div>
+        
+        <div>
+            <h1><a href="">Third implemented features</a></h1>
+        </div>
+    </body>
+</html>
