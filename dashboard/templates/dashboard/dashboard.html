@@ -10,7 +10,7 @@
     <body>
         <div class="page-header">
 			{% if user.is_authenticated %}
-			<p class="top-menu">Hello {{ user.username }}<small>(<a href="">Log out</a>)</small></p>
+			<p class="top-menu">Hello {{ user.email }}<small> | <a href="/logout">Log out</a></small></p>
 			
 			{% else %}
 			<a href="" class="top-menu"><span class="glyphicon glyphicon-lock"></span>(Log in)</a>
