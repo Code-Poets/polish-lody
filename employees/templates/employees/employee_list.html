@@ -1,0 +1,45 @@
+<h4>All employees</h4>
+<a href="{% url 'employee_new' %}">Add employee</a><br><br>
+{% if all_employee_list %}
+    <table>
+        <tr>
+            <td>
+                Full name
+            </td>
+            <td>
+                Rate per hour
+            </td>
+            <td>
+                Contract expiration date
+            </td>
+            <td>
+                Health book expiration date
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        {% for employee in all_employee_list %}
+        <tr>
+            <td>
+                <a href="{% url 'employee_detail' employee.pk %}">{{ employee.full_name }}</a>
+            </td>
+            <td>
+                {{ employee.rate_per_hour }}
+            </td>
+            <td>
+                {{ employee.contract_exp_date|date:"d.m.Y" }}
+            </td>
+            <td>
+                {{ employee.health_book_exp_date|date:"d.m.Y" }}
+            </td>
+            <td>
+                <a href="{% url 'employee_edit' employee.id %}">Edit</a>
+                <a href="{% url 'employee_delete' employee.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Employee list is empty.</p>
+{% endif %}

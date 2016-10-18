@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^change-password/done/$', auth_views.password_change_done, {'template_name': 'registration/change-password-done.html'}, name='password_change_done'),
     url(r'^admin/', admin.site.urls),
     url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^employees/', include('employees.urls')),
 ]
