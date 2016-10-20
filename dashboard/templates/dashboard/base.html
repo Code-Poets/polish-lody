@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Polish-Lody</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		<link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    </head>
+    <body>
+        <div class="page-header">
+			{% if user.is_authenticated %}
+			<p class="top-menu">Hello {{ user.email }}<small> | <a href="{% url 'logout' %}">Log out</a><br><a href="{% url 'password_change' %}">Change Password</a></small></p>
+			
+			{% else %}
+			<a href="/" class="top-menu"><span class="glyphicon glyphicon-lock"></span>(Log in)</a>
+			{% endif %}
+            <h1><a href="/dashboard">Polish-Lody</a></h1>
+        </div>
+        
+        {% block content %}
+        {% endblock %}
+
+    </body>
+</html>
