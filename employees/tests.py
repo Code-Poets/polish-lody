@@ -22,13 +22,16 @@ class EmployeeMethodTests(TestCase):
 
 class EmployeeListViewTests(TestCase):
 
+    fixtures = ['user.json',]
+
     c = Client()
 
     def test_employee_list_view_with_no_employees(self):
         """
         if no employees exist, an appropritate message should be displayed
         """
-        response = self.client.get(reverse_lazy('employees'))
+        self.c.login(username='manager@polishlody.pl', password='codepassword')
+        response = self.c.get(reverse_lazy('employees'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "The list of employees is empty")
         self.assertQuerysetEqual(response.context['all_employee_list'], [])
@@ -41,13 +44,16 @@ class EmployeeListViewTests(TestCase):
             first_name='Example', 
             last_name='Example', 
             email='example@example.com'
-        ).save()
+        )
+        first_employee.save()
         second_employee = Employee(
             first_name='Example2', 
             last_name='Example2', 
             email='example2@example.com'
-        ).save()
-        response = self.client.get(reverse_lazy('employees'))
+        )
+        second_employee.save()
+        self.c.login(username='manager@polishlody.pl', password='codepassword')
+        response = self.c.get(reverse_lazy('employees'))
         self.assertQuerysetEqual(
             response.context['all_employee_list'], 
             ['<Employee: Example>', '<Employee: Example2>']
@@ -55,12 +61,15 @@ class EmployeeListViewTests(TestCase):
 
 class EmployeeDetailViewTests(TestCase):
 
+    fixtures = ['user.json',]
+
     c = Client()
 
     def test_employee_detail_view_with_the_existing_record(self):
         """
         the detail view of an existing employee should be return status_code 200
         """
+        self.c.login(username='manager@polishlody.pl', password='codepassword')
         employee = Employee(first_name='John', last_name='Gamlet', email="gamlet@example.com")
         employee.save()
         url = reverse_lazy('employee_detail', args=(employee.id,))
@@ -72,6 +81,7 @@ class EmployeeDetailViewTests(TestCase):
         """
         the detail view of a no existing employee should be return status_code 404
         """
+        self.c.login(username='manager@polishlody.pl', password='codepassword')
         url = reverse_lazy('employee_detail', args=(120215454121,))
         response = self.c.get(url)
         self.assertEqual(response.status_code, 404)
