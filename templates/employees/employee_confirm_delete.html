@@ -1,0 +1,14 @@
+{% extends 'polishlody/base.html' %}
+
+{% block title %}Confirmation{% endblock %}
+        
+{% block body_block %}
+
+    <form method="post">
+        {% csrf_token %}
+        Are you sure you want to delete {{ object.full_name }} ?
+        <input type="submit" name="submit" value="Yes">
+        <a href="{% url 'employees' %}">No. Back to the employee list</a>
+    </form>
+
+{% endblock %}

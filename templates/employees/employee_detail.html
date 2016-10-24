@@ -1,0 +1,49 @@
+{% extends 'polishlody/base.html' %}
+
+{% block title %}Details{% endblock %}
+        
+{% block body_block %}
+
+    {% if employee %}
+        <h1>{{ employee.full_name }}</h1> <a href="{% url 'employee_edit' employee.id %}">Edit</a> <a href="{% url 'employee_delete' employee.id %}">Delete</a><br><br>
+        <table>
+            <tr>
+                <td>
+                    Email:
+                </td>
+                <td>
+                    {{ employee.email }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Rate per hour:
+                </td>
+                <td>
+                    {{ employee.rate_per_hour }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Contract expiration date:
+                </td>
+                <td>
+                    {{ employee.contract_exp_date }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Health book expiration date:
+                </td>
+                <td>
+                    {{ employee.health_book_exp_date }}
+                </td>
+            </tr>
+        </table>
+        <br>
+        <a href="{% url 'employees' %}">Back</a>
+    {% else %}
+        <p>Employee not found</p>
+    {% endif %}
+
+{% endblock %}
