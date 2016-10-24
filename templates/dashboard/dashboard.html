@@ -4,6 +4,16 @@
         
 {% block body_block %}
 
-    <a href="{% url 'employees' %}">Employees</a>
-    
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4>Employees</h4></div>
+            <div class="panel-body">
+                <a href="{% url 'employees' %}">Employee list</a>
+                <a href="{% url 'employee_new' %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+
 {% endblock %}

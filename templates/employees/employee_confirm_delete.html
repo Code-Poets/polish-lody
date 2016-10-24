@@ -4,11 +4,18 @@
         
 {% block body_block %}
 
-    <form method="post">
-        {% csrf_token %}
-        Are you sure you want to delete {{ object.full_name }} ?
-        <input type="submit" name="submit" value="Yes">
-        <a href="{% url 'employees' %}">No. Back to the employee list</a>
-    </form>
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h4>Confirmation</h4>
+        </div>
+        <div class="panel-body">
+            <form method="post">
+                {% csrf_token %}
+                Are you sure you want to delete {{ object.full_name }}?<br><br>
+                <input type="submit" name="submit" value="Yes" class="btn btn-danger">
+                <a href="{% url 'employees' %}" class="btn btn-default">Back to the employee list</a>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}

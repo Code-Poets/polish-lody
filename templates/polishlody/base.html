@@ -19,25 +19,27 @@
     </head>
 
     <body>
+        <div id="wrap">
+            <nav class="navbar navbar-inverse">
+                <div class="container">
+                    <a href="/dashboard" class="navbar-brand">Polish-Lody</a>
+                    <p class="navbar-text navbar-right">
+                    {% if user.is_authenticated %}
+                        Hello {{ user.email }} | <a href="{% url 'password_change' %}">Change Password</a> | <a href="{% url 'logout' %}">Log out</a>
+                    {% else %}
+                        <a href="/">Log in</a>
+                    {% endif %}
+                    </p>
+                </div>
+            </nav>
 
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <a href="/dashboard" class="navbar-brand">Polish-Lody</a>
-                <p class="navbar-text navbar-right">
-                {% if user.is_authenticated %}
-                    Hello {{ user.email }} | <a href="{% url 'password_change' %}">Change Password</a> | <a href="{% url 'logout' %}">Log out</a>
-                {% else %}
-                    <a href="/">Log in</a>
-                {% endif %}
-                </p>
+            <div class="container-fluid">
+                {% block body_block %}{% endblock %}
             </div>
-        </nav>
 
-        <div class="container-fluid">
-            {% block body_block %}{% endblock %}
+            <div id="push"></div>
         </div>
-
-        <footer class="footer">
+        <footer id="footer">
             <div class="container">
                 <p>Code Poets | 2016</p>
             </div>
