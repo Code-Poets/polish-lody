@@ -143,3 +143,5 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 DATE_INPUT_FORMATS = [
     '%d.%m.%Y', # '01.01.2000'
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

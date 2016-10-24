@@ -67,6 +67,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         ('date joined'),
         default=timezone.now
     )
+    is_active = models.BooleanField(
+        ('active'),
+        default=True,
+        help_text=(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
 
     objects = MyUserManager()
 
