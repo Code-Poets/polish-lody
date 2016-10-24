@@ -1,0 +1,74 @@
+/* Basic */
+html, body {
+    padding: 0px;
+    font-size: 14px;
+    font-family: "Verdana", sans-serif;
+    height: 100%;
+}
+
+/* Header */
+.navbar {
+    border-radius: 0px;
+    border: 1px solid #AFD6AA;
+    background-color: #AFD6AA;
+    height: 70px;
+    line-height: 1.6em;
+    padding: 10px 0 6px;
+    color: #635044;
+    a {
+        color: #635044;
+    }
+    p {
+        color: #635044 !important;
+    }
+}
+
+.navbar-brand {
+    color: #635044 !important;
+    &:hover {
+        color: #000 !important;
+    } 
+}
+
+/* Wrap */
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Footer */
+
+#push,
+#footer {
+    height: 60px;
+}
+
+#footer {
+    background-color: #635044;
+    width: 100%;
+    padding: 20px;
+    color: #fff;
+}
+
+/* Forms */
+
+.login-form {
+    height: 300px;
+    max-width: 400px;
+    background-color: #AFD6AA;
+    padding: 20px 20px 20px 20px;
+    text-align: center;
+    border: 1px solid #635044;
+    border-radius: 5px;
+    color: #635044;
+}
+
+/* Buttons */
+
+.btn-login {
+    width: 100%;
+}

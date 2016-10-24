@@ -1,7 +1,6 @@
 *.pyc
 __pycache__
 *.pyo
-/static
 db.sqlite3
 *.map
 /staticfiles/main.css
