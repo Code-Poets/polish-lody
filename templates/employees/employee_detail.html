@@ -31,6 +31,14 @@
                     </tr>
                     <tr>
                         <td>
+                            Contract start date:
+                        </td>
+                        <td>
+                            {{ employee.contract_start_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             Contract expiration date:
                         </td>
                         <td>
@@ -45,7 +53,95 @@
                             {{ employee.health_book_exp_date }}
                         </td>
                     </tr>
+                    <tr>
+                        {% if employee.all_unpaid_months_salary is True %}
+                        <td bgcolor="#e6ffe6">
+                            Sum of all unpaid months:
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            {{ employee.all_unpaid_months_salary }}
+                        </td>
+                        {% else %}
+                        <td bgcolor="#ffcccc">
+                            Sum of all unpaid months:
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            {{ employee.all_unpaid_months_salary }}
+                        </td>
+                        {% endif %}
+                    </tr>
                 </table>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <td>
+                            Month and year
+                        </td>
+                        <td>
+                            Hours worked
+                        </td>
+                        <td>
+                            Rate per hour
+                        </td>
+                        <td>
+                            Was salary paid?
+                        </td>
+                        <td>
+                            Salary this month
+                        </td>
+                        <td>
+                            To be paid
+                        </td>
+                    </tr>
+                    {% for month in months %}
+                    {% if month.salary_is_paid is True %}
+                    <tr>
+                        <td bgcolor="#e6ffe6">
+                            {{ month.month_detail }}
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            {{ month.hours_worked_in_this_month }}
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            {{ month.rate_per_hour_this_month }}
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            Paid
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            {{ month.how_much_was_paid_to_employee }}
+                        </td>
+                        <td bgcolor="#e6ffe6">
+                            {{ month.calculating_salary_for_this_month }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td bgcolor="#ffcccc">
+                            {{ month.month_detail }}
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            {{ month.hours_worked_in_this_month }}
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            {{ month.rate_per_hour_this_month }}
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            Not paid
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            {{ month.how_much_was_paid_to_employee }}
+                        </td>
+                        <td bgcolor="#ffcccc">
+                            {{ month.calculating_salary_for_this_month }}
+                        </td>
+                    </tr>
+
+                    {% endif %}
+                    {% endfor %}
+                </table>
+
             </div>
         </div>
 
