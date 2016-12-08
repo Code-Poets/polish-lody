@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 
 import time
-
+from datetime import date
 from django.db import models, transaction
 from django.utils import timezone
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
 
-def save_month(mon, yr, Employee):
-    month = Month.objects.create(month=mon, year=yr, employee=Employee)
+def save_month(mon, yr, Employee, rph):
+    month = Month.objects.create(month=mon, year=yr, employee=Employee, rate_per_hour_this_month=rph)
     month.save()
 
 class Employee(models.Model):
@@ -37,10 +37,6 @@ class Employee(models.Model):
     contract_start_date = models.DateField(blank=True, default=timezone.now, null=True)
     contract_exp_date = models.DateField(blank=True, default=None, null=True)
     health_book_exp_date = models.DateField(blank=True, default=None, null=True)
-
-    hours_in_current_month = models.IntegerField(blank=True, null=True, default=0, validators=[
-        MinValueValidator(0), MaxValueValidator(720)
-    ])
     gender = models.CharField(max_length=16, null=True, blank=True, default=None,
                               choices=gender_choices)
     position = models.CharField(max_length=16, null=True, blank=True, default=None,
@@ -66,68 +62,58 @@ class Employee(models.Model):
                     for yr in db_years_list:
                         if db_years_list.index(yr) == 0:
                             for mon in months_in_start_year:
-                                save_month(mon, yr, self)
+                                save_month(mon, yr, self, self.rate_per_hour)
                         elif db_years_list.index(yr) == (len(db_years_list)-1):
                             for mon in months_in_last_year:
-                                save_month(mon, yr, self)
+                                save_month(mon, yr, self, self.rate_per_hour)
                         else:
                             for mon in months:
-                                save_month(mon, yr, self)
+                                save_month(mon, yr, self, self.rate_per_hour)
             else:
                 with transaction.atomic():
                     for mon in months_in_start_year:
-                        save_month(mon, db_years_list[0], self)
+                        save_month(mon, db_years_list[0], self, self.rate_per_hour)
         else:
-            print(list(years), "Years")
             db_years_list = list(self.year_set.all())
             print(db_years_list)
             if len(years) == len(db_years_list) and len(db_years_list) != 1:
-                print("FGSDSFS")
                 for mon in months_in_last_year:
                     if not self.month_set.filter(month=mon).exists():
-                        print("Adding %s to start year." % mon)
-                        save_month(mon, db_years_list[0], self)
+                        save_month(mon, db_years_list[0], self, self.rate_per_hour)
                 for mon in months_in_start_year:
                     if not self.month_set.filter(month=mon).exists():
-                        print("Adding %s to last year." % mon)
-                        save_month(mon, db_years_list[-1], self)
+                        save_month(mon, db_years_list[-1], self, self.rate_per_hour)
 
             for yr in years:
                 print(yr, db_years_list[-1])
 
                 if not self.year_set.filter(year=yr).exists() and years.index(yr) != (len(years)-1)\
                         and years.index(yr) != 0:
-                    print("ASDF")
                     yr = Year.objects.create(year=yr, employee=self)
                     yr.save()
                     with transaction.atomic():
                         for mon in months:
-                            save_month(mon, yr, self)
+                            save_month(mon, yr, self, self.rate_per_hour)
 
                 elif self.year_set.filter(year=yr).exists() and len(db_years_list) == 1:
                     with transaction.atomic():
                         for mon in months_in_start_year:
                             if self.month_set.filter(month=mon).exists() == False:
-                                print("Adding %s to start year." % mon)
-                                save_month(mon, db_years_list[0], self)
+                                save_month(mon, db_years_list[0], self, self.rate_per_hour)
 
                 elif not self.year_set.filter(year=yr).exists() and years.index(yr) == (len(years)-1):
-                    print("GHJK")
                     yr = Year.objects.create(year=yr, employee=self)
                     yr.save()
                     with transaction.atomic():
                         for mon in months_in_last_year:
-                            print("Adding %s to last year." % mon)
-                            save_month(mon, yr, self)
+                            save_month(mon, yr, self, self.rate_per_hour)
 
                 elif not self.year_set.filter(year=yr).exists() and years.index(yr) == 0:
-                    print("ZXCV")
                     yr = Year.objects.create(year=yr, employee=self)
                     yr.save()
                     with transaction.atomic():
                         for mon in months_in_start_year:
-                            print("Adding %s to start year." % mon)
-                            save_month(mon, yr, self)
+                            save_month(mon, yr, self, self.rate_per_hour)
 
 
     def __str__(self):
@@ -136,20 +122,15 @@ class Employee(models.Model):
     def full_name(self):
         return self.first_name + " " + self.last_name
 
-    def salary(self):
-        return self.hours_in_current_month * self.rate_per_hour
-
     def all_unpaid_months_salary(self):
         all_months = self.month_set.all()
         sum_of_all_months = 0
         for mon in all_months:
             rph = mon.rate_per_hour_this_month
             hpm = mon.hours_worked_in_this_month
-            print(rph, hpm)
             sal = (rph * hpm)
             sum_of_all_months += sal
             sum_of_all_months -= mon.how_much_was_paid_to_employee
-            print(sum_of_all_months)
         return sum_of_all_months
 
     def years_employed(self):
@@ -171,16 +152,12 @@ class Employee(models.Model):
         else:
             months_in_first_year = months[(int(self.contract_start_date.month) - 1):(int(self.contract_exp_date.month))]
             months_in_last_year = []
-        print(months_in_first_year)
-        print(months_in_last_year)
         return months_in_first_year, months_in_last_year
 
     def save(self, *args, **kwargs):
-        start = time.time()
         super(Employee, self).save(*args, **kwargs)
+
         self.create_or_update_months_and_years_for_employee()
-        end = time.time()
-        print(end - start)
 
 class Year(models.Model):
 
@@ -191,6 +168,7 @@ class Year(models.Model):
         return str(self.year)
 
 class Month(models.Model):
+
 
     year = models.ForeignKey(Year, default=2016, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
@@ -217,7 +195,13 @@ class Month(models.Model):
         return self.month
 
     def calculating_salary_for_this_month(self):
-        return int(self.rate_per_hour_this_month * self.hours_worked_in_this_month)
+        return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2)
 
-
+    def current_month(self):
+        months = ['January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'
+                  ]
+        current_date = date.today()
+        current_month = months[(current_date.month)-1]
+        return current_month
 
