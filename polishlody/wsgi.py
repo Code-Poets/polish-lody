@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
+import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
