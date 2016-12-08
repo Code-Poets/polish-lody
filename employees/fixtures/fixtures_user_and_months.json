@@ -1,0 +1,397 @@
+[
+{
+  "model": "employees.employee",
+  "pk": 1,
+  "fields": {
+    "first_name": "Waldemar",
+    "last_name": "Kiepski",
+    "email": "waldus.k@gmail.com",
+    "rate_per_hour": "10.00",
+    "employee_password": null,
+    "contract_start_date": "2015-03-07",
+    "contract_exp_date": "2016-07-06",
+    "health_book_exp_date": "2016-11-28",
+    "gender": "1",
+    "position": "1",
+    "contract_type": "1"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 2,
+  "fields": {
+    "first_name": "Britney",
+    "last_name": "Spears",
+    "email": "britney@yahoo.com",
+    "rate_per_hour": "13.00",
+    "employee_password": "",
+    "contract_start_date": "2016-06-07",
+    "contract_exp_date": "2016-09-07",
+    "health_book_exp_date": "2016-12-07",
+    "gender": "2",
+    "position": "2",
+    "contract_type": "1"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 3,
+  "fields": {
+    "first_name": "Czarny",
+    "last_name": "Lodziarz",
+    "email": "czarny.lodziarz@lody.pl",
+    "rate_per_hour": "10.00",
+    "employee_password": "",
+    "contract_start_date": "2016-10-07",
+    "contract_exp_date": "2016-12-07",
+    "health_book_exp_date": "2016-12-07",
+    "gender": "1",
+    "position": "3",
+    "contract_type": "3"
+  }
+},
+{
+  "model": "employees.year",
+  "pk": 1,
+  "fields": {
+    "employee": 1,
+    "year": "2015"
+  }
+},
+{
+  "model": "employees.year",
+  "pk": 2,
+  "fields": {
+    "employee": 1,
+    "year": "2016"
+  }
+},
+{
+  "model": "employees.year",
+  "pk": 3,
+  "fields": {
+    "employee": 2,
+    "year": "2016"
+  }
+},
+{
+  "model": "employees.year",
+  "pk": 4,
+  "fields": {
+    "employee": 3,
+    "year": "2016"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 1,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "March",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 120,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 2,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "April",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 130,
+    "how_much_was_paid_to_employee": "1600.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 3,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "May",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 120,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "14.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 4,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "June",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 5,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "July",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 150,
+    "how_much_was_paid_to_employee": "3000.00",
+    "rate_per_hour_this_month": "20.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 6,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "August",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1000.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 7,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "September",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 8,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "October",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 110,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 9,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "November",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 130,
+    "how_much_was_paid_to_employee": "1300.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 10,
+  "fields": {
+    "year": 1,
+    "employee": 1,
+    "month": "December",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 120,
+    "how_much_was_paid_to_employee": "1200.00",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 11,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "January",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1000.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 12,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "February",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 140,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 13,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "March",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 50,
+    "how_much_was_paid_to_employee": "600.00",
+    "rate_per_hour_this_month": "12.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 14,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "April",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 150,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 15,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "May",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 300,
+    "how_much_was_paid_to_employee": "2000.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 16,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "June",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 150,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "12.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 17,
+  "fields": {
+    "year": 2,
+    "employee": 1,
+    "month": "July",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 180,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "12.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 18,
+  "fields": {
+    "year": 3,
+    "employee": 2,
+    "month": "June",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1300.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 19,
+  "fields": {
+    "year": 3,
+    "employee": 2,
+    "month": "July",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1300.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 20,
+  "fields": {
+    "year": 3,
+    "employee": 2,
+    "month": "August",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 150,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 21,
+  "fields": {
+    "year": 3,
+    "employee": 2,
+    "month": "September",
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "0.00",
+    "rate_per_hour_this_month": "13.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 22,
+  "fields": {
+    "year": 4,
+    "employee": 3,
+    "month": "October",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 200,
+    "how_much_was_paid_to_employee": "2000.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 23,
+  "fields": {
+    "year": 4,
+    "employee": 3,
+    "month": "November",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 100,
+    "how_much_was_paid_to_employee": "1000.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 24,
+  "fields": {
+    "year": 4,
+    "employee": 3,
+    "month": "December",
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": 150,
+    "how_much_was_paid_to_employee": "1500.00",
+    "rate_per_hour_this_month": "10.00"
+  }
+}
+]
