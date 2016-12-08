@@ -39,8 +39,7 @@ class EmployeeCreate(LoginRequiredMixin, CreateView):
               'contract_exp_date',
               'health_book_exp_date',
               'position',
-              'contract_type',
-              'hours_in_current_month']
+              'contract_type',]
 
 
 class EmployeeUpdate(LoginRequiredMixin, UpdateView):
@@ -55,8 +54,7 @@ class EmployeeUpdate(LoginRequiredMixin, UpdateView):
               'contract_exp_date',
               'health_book_exp_date',
               'position',
-              'contract_type',
-              'hours_in_current_month']
+              'contract_type',]
 
 class EmployeeDelete(LoginRequiredMixin, DeleteView):
     model = Employee
