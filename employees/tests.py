@@ -66,6 +66,28 @@ class EmployeeMethodTests(TestCase):
         self.assertEqual(employee_years.count(), 1)
         self.assertEqual(employee_years[0].year, '2016')
 
+    def test_should_save_method_not_be_so_bugged_anymore(self):
+        start_date = date(2016, 3, 1)
+        exp_date = date(2016, 6, 1)
+        Employee(first_name="Alan", last_name="Shepard", email="asdf@mail.com", contract_start_date=start_date,
+                 contract_exp_date=exp_date).save()
+        employee = Employee.objects.get(first_name='Alan')
+        new_start_date = date(2015, 10, 1)
+        employee.contract_start_date = new_start_date
+        employee.save()
+        employee_months = employee.month_set.all()
+        employee_years = employee.year_set.all()
+        self.assertEqual(employee_years.count(), 2)
+        self.assertEqual(employee_months.count(), 9)
+        new_start_date = date(2014, 10, 1)
+        new_exp_date = date(2015, 6, 1)
+        employee.contract_start_date = new_start_date
+        employee.contract_start_date = new_exp_date
+        employee_months = employee.month_set.all()
+        employee_years = employee.year_set.all()
+        self.assertEqual(employee_months.count(), 9)
+        self.assertEqual(employee_years.count(), 2)
+
     def test_should_save_method_create_two_years_and_appropriate_months_for_two_years_of_work(self):
         start_date = date(2183, 2, 1)
         exp_date = date(2184, 11, 1)
