@@ -47,8 +47,7 @@ class Employee(models.Model):
 
     def create_or_update_months_and_years_for_employee(self):
         ### TA FUNKCJA RÓWNIEŻ USUWA LATA I MIESIĄCE, JEŚLI UŻYTKOWNIK POTWIERDZI ZMIANĘ DANYCH
-        ### ZAUWAŻYŁEM, ŻE DALEJ SIĘ BUGUJE, ALE TO PO KILKU ZMIANACH, W DODATKU TAKICH, KTÓRE UMYŚLNIE
-        ### ZROBIŁEM, ŻEBY W KONCU SIĘ ZEPSUŁO. IT'S A FEATURE.
+        ### NA TEN KOD NALEŻY NIE PATRZEĆ DLA WŁASNEGO ZDROWIA
         months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'
                   ]
@@ -78,11 +77,8 @@ class Employee(models.Model):
                         save_month(mon, db_years_list[0], self, self.rate_per_hour)
 
         else:
-            print(months_in_start_year)
             db_years_list = list(self.year_set.all())
-            print(db_years_list)
             db_last_year_months = db_years_list[-1].month_set.all()
-            print(db_last_year_months)
             if len(years) == len(db_years_list) and len(db_years_list) != 1:
                 for mon in months_in_last_year:
                     if not self.month_set.filter(month=mon, year=db_years_list[0]).exists():
@@ -91,7 +87,7 @@ class Employee(models.Model):
                     if not self.month_set.filter(month=mon, year=db_years_list[-1]).exists():
                         save_month(mon, db_years_list[-1], self, self.rate_per_hour)
 
-            if len(db_years_list) > len(years):
+            if len(db_years_list) >= len(years):
                 for yr in db_years_list:
                     ### DELETES A YEAR IF USER SPECIFIES SHORTER CONTRACT THAN BEFORE (E.G. WAS INTRODUCED
                     ### BY MISTAKE)
@@ -102,17 +98,27 @@ class Employee(models.Model):
                         delete_year.delete()
 
             if len(years) == 1:
-                db_month_list = list(self.year_set.get(year=years[0]).month_set.all())
-                for mon in db_month_list:
-                    mon = mon.simple_month_name()
-                    month = self.year_set.get(year=years[0]).month_set.get(month=mon).simple_month_name()
-                    if not month in months_in_start_year:
-                        try:
-                            print("Deleting month %s from database." % month)
-                            delete_month = self.month_set.filter(month=mon, year=db_years_list[0])
-                            delete_month.delete()
-                        except:
-                            print("Oops.")
+
+                try:
+                    db_month_list = list(self.year_set.get(year=years[0]).month_set.all())
+                    for mon in db_month_list:
+
+                        mon = mon.simple_month_name()
+                        month = self.year_set.get(year=years[0]).month_set.get(month=mon).simple_month_name()
+                        if not month in months_in_start_year:
+                            try:
+                                print("Deleting month %s from database." % month)
+                                delete_month = self.month_set.filter(month=mon, year=db_years_list[0])
+                                delete_month.delete()
+                            except:
+                                print("Oops.")
+                except:
+                    print("Oops.")
+                    year = Year.objects.create(year=years[0], employee=self)
+                    year.save()
+                    with transaction.atomic():
+                        for mon in months_in_start_year:
+                            save_month(mon, year, self, self.rate_per_hour)
             if self.year_set.filter(year=years[0]).exists() and\
                 len(years) == len(db_years_list) and len(db_years_list) != 1:
                 db_months_in_first_year = list(self.year_set.get(year=years[0]).month_set.all())
@@ -127,9 +133,9 @@ class Employee(models.Model):
                         print(delete_month)
                         delete_month.delete()
 
+
             contract_last_year = db_years_list[-1]
             contract_exp_year = contract_last_year.year
-            print(contract_exp_year)
             for yr in years:
                 if not self.year_set.filter(year=yr).exists() and years.index(yr) != (len(years)-1)\
                         and years.index(yr) != 0:
@@ -153,7 +159,6 @@ class Employee(models.Model):
                             save_month(mon, year, self, self.rate_per_hour)
 
                 if not self.year_set.filter(year=yr).exists() and years.index(yr) == 0:
-                    print(months_in_start_year)
                     year = Year.objects.create(year=yr, employee=self)
                     year.save()
                     with transaction.atomic():
@@ -204,10 +209,12 @@ class Employee(models.Model):
         return months_in_first_year, months_in_last_year
 
     def save(self, *args, **kwargs):
+        start_time = timezone.now()
         super(Employee, self).save(*args, **kwargs)
-
+        super(Employee, self).save(*args, **kwargs)
         self.create_or_update_months_and_years_for_employee()
-
+        end_time = timezone.now()
+        print(end_time-start_time)
 class Year(models.Model):
 
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
