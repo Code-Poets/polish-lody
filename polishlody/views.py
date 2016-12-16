@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, views
 from django.views.generic import RedirectView
 from django.shortcuts import render
+from users.models import MyUser
+
 #from django.template.response import TemplateResponse
 
 def auto_login(response):
@@ -20,9 +22,11 @@ def auto_login(response):
     username = result.form.email
     return result, username 
 '''
-@auto_login
+#@auto_login
 def password_reset_confirm(request, **kwargs):
     assert "template_name" not in kwargs, "One does not bring their own template into this view"
+    login(request, user=user.email)
+    #RedirectView.as_view(url='/')
     return views.password_reset_confirm(request, template_name="registration/password_reset_confirm.html")
 def password_reset_complete(request):
     #auto_login(request)
