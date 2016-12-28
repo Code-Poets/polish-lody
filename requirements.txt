@@ -7,3 +7,4 @@ requests==2.9.1
 django-bootstrap3==7.1.0
 django-widget-tweaks==1.4.1
 django-sass-processor==0.5.2
+django-braces==1.10.0

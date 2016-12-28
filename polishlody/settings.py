@@ -160,7 +160,7 @@ DATE_INPUT_FORMATS = [
 ]
 
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = 'polishmietek123' #my gmail password
 EMAIL_HOST_USER = 'polishmietek@gmail.com' #my gmail username

@@ -5,7 +5,10 @@ from django.db import models, transaction
 from django.utils import timezone
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
 
-class Employee(models.Model):
+from users.models import MyUser
+
+
+class Employee(MyUser):
 
     gender_choices = (
         ("Male", "Male"),
@@ -22,9 +25,6 @@ class Employee(models.Model):
         ("Other", "Other"),
     )
 
-    first_name = models.CharField(max_length=255, default=None)
-    last_name = models.CharField(max_length=255, default=None)
-    email = models.EmailField(validators=[validate_email], max_length=255, unique=True, default=None)
     rate_per_hour = models.DecimalField(max_digits=7, decimal_places=2, blank=True, default=0, validators=[
         MinValueValidator(0)
     ])

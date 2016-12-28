@@ -4,14 +4,15 @@ from django.http import Http404, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 import time
 from django.contrib import messages
 from .forms import EmployeeForm, MonthForm
+from braces import views
 from .models import Employee, Month
+from .mixins import OwnershipMixin
 
-
-class EmployeeList(LoginRequiredMixin, ListView):
+class EmployeeList(views.LoginRequiredMixin, views.StaffuserRequiredMixin, ListView):
     tmplate_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
     paginate_by = 10
@@ -19,7 +20,7 @@ class EmployeeList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Employee.objects.order_by("last_name")
 
-class EmployeeDetail(LoginRequiredMixin, DetailView):
+class EmployeeDetail(views.LoginRequiredMixin, OwnershipMixin, DetailView):
     model = Employee
     template_name = 'employees/employee_detail.html'
 
@@ -29,7 +30,7 @@ class EmployeeDetail(LoginRequiredMixin, DetailView):
         context['months'] = employee_object.month_set.all().order_by('-year', '-month')
         return context
 
-class EmployeeCreate(LoginRequiredMixin, CreateView):
+class EmployeeCreate(views.LoginRequiredMixin, views.StaffuserRequiredMixin, CreateView):
 
     form_class = EmployeeForm
     success_url = reverse_lazy('employees')
@@ -48,7 +49,7 @@ class EmployeeCreate(LoginRequiredMixin, CreateView):
                                      "Specified e-mail address has already been assigned to another employee")
             return HttpResponseRedirect('')
 
-class EmployeeUpdate(LoginRequiredMixin, UpdateView):
+class EmployeeUpdate(views.LoginRequiredMixin, OwnershipMixin, UpdateView):
 
     form_class = EmployeeForm
     success_url = reverse_lazy('employees')
@@ -155,7 +156,7 @@ class MonthUpdate(LoginRequiredMixin, UpdateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class EmployeeDelete(LoginRequiredMixin, DeleteView):
+class EmployeeDelete(views.LoginRequiredMixin, views.StaffuserRequiredMixin, DeleteView):
     model = Employee
     success_url = reverse_lazy('employees')
 

@@ -15,6 +15,7 @@ from whitenoise.django import DjangoWhiteNoise
 # reload(sys)
 # sys.setdefaultencoding("utf-8")
 
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "polishlody.settings")
 
 application = get_wsgi_application()

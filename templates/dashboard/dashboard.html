@@ -8,8 +8,14 @@
         <div class="panel panel-default">
             <div class="panel-heading"><h4>Employees</h4></div>
             <div class="panel-body">
-                <a href="{% url 'employees' %}">Employee list</a>
-                <a href="{% url 'employee_new' %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a>
+                {% if user.is_staff %}
+                    <a href="{% url 'employees' %}">Employee list</a>
+                    <a href="{% url 'employee_new' %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a>
+                {% elif user.employee.id == user.pk %}
+                    <a href="{% url 'employee_detail' user.pk%}">My Details</a>
+                {% else%}
+                    <a>Your have no power here!!!</a>
+                {% endif %}
             </div>
         </div>
     </div>
