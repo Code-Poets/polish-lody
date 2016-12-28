@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from .models import Employee, Month, Year
+from .models import Employee, Month
 
 def make_month_paid(modeladmin, request, queryset):
     queryset.update(salary_is_paid=True)
@@ -17,5 +17,4 @@ class MonthAdmin(admin.ModelAdmin):
 
 admin.site.register(Employee)
 admin.site.register(Month, MonthAdmin)
-admin.site.register(Year)
 
