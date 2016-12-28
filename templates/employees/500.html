@@ -1,0 +1,17 @@
+{% extends 'polishlody/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}500 Internal Server Error{% endblock %}
+        
+{% block body_block %}
+
+        <div class="not-found">
+            <h4>
+                <strong>Don't worry! It probably is not your fault. Meanwhile, you should go back to the employee list.</strong>
+            </h4>
+        </div>
+        <div class="not-found">
+            <a href="{% url 'employees' %}" class="btn btn-default" >Back to employee list</a>
+        </div>
+
+{% endblock %}
