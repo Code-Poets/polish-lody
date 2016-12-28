@@ -10,10 +10,12 @@
             <h4>
                 {% if employee %}
                     {{ employee.full_name }}
+                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
                 {% else %}
                     New employee
-                {% endif %}
                 <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
+                {% endif %}
+
             </h4>
         </div>
         <div class="panel-body">
@@ -29,6 +31,9 @@
                         {{ form.email.errors }}
                         {{ form.first_name.errors }}
                         {{ form.last_name.errors }}
+                        {{ form.contract_start_date.errors }}
+                        {{ form.contract_exp_date.errors }}
+                        {{ form.health_book_exp_date.errors }}
                     </div>
                 {% endif %}
                 {% for e in form %}
