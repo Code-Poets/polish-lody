@@ -4,3 +4,5 @@ __pycache__
 db.sqlite3
 *.map
 /staticfiles/main.css
+/pl-py3
+/.idea
