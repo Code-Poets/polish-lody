@@ -1,0 +1,86 @@
+{% extends 'polishlody/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+{% if month %}Editing month {{ month.month_name }} {{ month.year }}
+{% else %}404
+{% endif %}
+{% endblock %}
+
+
+{% block body_block %}
+
+{% if month %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
+                {% if employee and month %}
+                Editing {{ month.month_name }} {{ month.year }} for {{ employee }}
+                {% endif %}
+                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+            </h4>
+        </div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal">
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                {% csrf_token %}
+                {% for e in form %}
+                {% if e.label == "Employee" %}
+                    <div class="form-group" hidden>
+                        <label class="col-sm-2 control-label">{{ e.label }}</label>
+                        <div class="col-sm-2">
+                            {{ e|add_class:"form-control" }}
+                        </div>
+                    </div>
+                {% elif e.label == "Hours worked in this month" %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Hours worked:</label>
+                        <div class="col-sm-2">
+                            {{ e|add_class:"form-control" }}
+                        </div>
+                    </div>
+                {% elif e.label == "Rate per hour this month" %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Rate per hour:</label>
+                        <div class="col-sm-2 form-field">
+                            {{ e|add_class:"form-control" }}
+                        </div>
+                    </div>
+                {% elif e.label == "Paid?" %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ e.label }}</label>
+                        <div class="col-sm-2 radio-select">
+                            {{ e }}
+                        </div>
+                    </div>
+                {% else %}
+                <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ e.label }}:</label>
+                        <div class="col-sm-2 form-field">
+                            {{ e|add_class:"form-control" }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                <br>
+                <center>
+                    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">Cancel</a>
+                </center>
+                <br>
+            </form>
+        </div>
+    </div>
+{% else %}
+
+    <div class="panel panel-danger">
+        <div class="panel-body">
+            <p>The month you are trying to edit does not exist anymore.</p>
+            <a href="{% url 'employees' %}" class="btn btn-default">Back to the employee list</a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
