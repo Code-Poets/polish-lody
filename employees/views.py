@@ -43,7 +43,6 @@ class EmployeeCreate(LoginRequiredMixin, CreateView):
                                  "Successfully created employee %s" % self.object.full_name())
             return form_validation
         except:
-            print(str(self.object.employee))
             if "already exists" in str(form.errors):
                 messages.add_message(self.request, messages.ERROR,
                                      "Specified e-mail address has already been assigned to another employee")
@@ -142,16 +141,13 @@ class MonthUpdate(LoginRequiredMixin, UpdateView):
             return HttpResponseRedirect('../')
 
     def form_valid(self, form):
-        print("dfgdgdd")
         form_validation = super(MonthUpdate, self).form_valid(form)
-        print("fsdfgsfs")
         messages.add_message(self.request, messages.SUCCESS,
                              "Successfully edited month %s in year %s." %
                              (self.object.month_name(), self.object.year))
         return form_validation
 
     def form_invalid(self, form, **kwargs):
-        print("ASDFF")
         employee_object = self.get_object().employee
         if "already exists" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
