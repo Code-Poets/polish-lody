@@ -11,22 +11,22 @@
     {% if all_employee_list %}
         <table class="table table-hover sortable">
             <tr>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Full name</b>
                 </td>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Rate per hour (zł)</b>
                 </td>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Position</b>
                 </td>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Contract expiration date</b>
                 </td>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Health book expiration date</b>
                 </td>
-                <td class="cursor-hover">
+                <td class="cursor-hover" align="center" valign="middle">
                     <b>Total unpaid salaries (zł)</b>
                 </td>
                 <td>
@@ -37,19 +37,19 @@
                 <td>
                     <a href="{% url 'employee_detail' employee.pk %}">{{ employee.full_name }}</a>
                 </td>
-                <td class="col-numeric">
+                <td align="center" valign="middle">
                     {{ employee.rate_per_hour }}
                 </td>
-                <td>
+                <td align="center" valign="middle">
                     {{ employee.position }}
                 </td>
-                <td>
+                <td align="center" valign="middle">
                     {{ employee.contract_exp_date|date:"d.m.Y" }}
                 </td>
-                <td>
+                <td align="center" valign="middle">
                     {{ employee.health_book_exp_date|date:"d.m.Y" }}
                 </td>
-                <td class="sorttable_numeric col-numeric">
+                <td class="sorttable_numeric" align="center" valign="middle">
                     {% if employee.all_unpaid_salaries == 0 %}
                     0.00
                     {% elif employee.all_unpaid_salaries != 0 and employee.all_unpaid_salaries != None %}
