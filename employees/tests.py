@@ -182,7 +182,7 @@ class MonthCreateViewTests(TestCase):
 
 class MonthDeleteViewTests(TestCase):
 
-    fixtures = ['fixtures.json']
+    fixtures = ['user.json']
     c = Client()
 
     def test_should_month_delete_method_work_properly(self):

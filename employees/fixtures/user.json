@@ -9,7 +9,7 @@
             "email": "manager@polishlody.pl", 
             "first_name": "", 
             "last_name": "", 
-            "is_staff": false,
+            "is_staff": true,
             "is_active": true, 
             "date_joined": 
             "2016-10-19T14:56:25.634Z", 
