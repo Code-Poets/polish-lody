@@ -22,6 +22,7 @@ class EmployeeAdmin(AuthUserAdmin):
     fieldsets = (
         ('User', {'fields': ('email','password')}),
         ('Personal info', {'fields': ('first_name', 'last_name')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff')}),
         ('Employee info', {'fields': ('rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
@@ -29,12 +30,13 @@ class EmployeeAdmin(AuthUserAdmin):
     add_fieldsets = (
         (None, {'fields': ('email','password1', 'password2',)}),
         ('Personal info', {'fields': ('first_name', 'last_name')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff')}),
         ('Employee info', {'fields': ('rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type')}),
     )
     form = EmployeeChangeForm
     add_form = EmployeeCreationForm
-    list_display = ('email', 'first_name', 'last_name', 'is_active')
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff')
     list_filter = ()
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('last_name','first_name',)

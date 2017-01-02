@@ -17,6 +17,8 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
 class EmployeeForm(ModelForm):
     class Meta:
         model = Employee
+        fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
+         'health_book_exp_date', 'gender', 'position', 'contract_type']
         exclude = []
 
         widgets = {
