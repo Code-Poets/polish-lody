@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from .models import Employee, Month
+from .forms import EmployeeForm
 
 from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm
 from django import forms
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
-
-class EmployeeCreationForm(AuthUserCreationForm):
-
-    class Meta:
-        model = Employee
-        fields = ["email"]
 
 class EmployeeChangeForm(AuthUserChangeForm):
 
@@ -35,7 +30,7 @@ class EmployeeAdmin(AuthUserAdmin):
          'health_book_exp_date', 'gender', 'position', 'contract_type')}),
     )
     form = EmployeeChangeForm
-    add_form = EmployeeCreationForm
+    add_form = EmployeeForm
     list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff')
     list_filter = ()
     search_fields = ('email', 'first_name', 'last_name')

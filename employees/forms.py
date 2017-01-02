@@ -1,4 +1,5 @@
 from django.forms import ModelForm, RadioSelect
+from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm
 from employees.models import Employee, Month
 from django.utils.safestring import mark_safe
 from django import forms
@@ -14,18 +15,20 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
   def render(self):
     return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
-class EmployeeForm(ModelForm):
+class EmployeeForm(AuthUserCreationForm):
+    
+    class Meta:
+        model = Employee
+        fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
+         'health_book_exp_date', 'gender', 'position', 'contract_type']
+        exclude = []
+
+class EmployeeChangeForm(ModelForm):
     class Meta:
         model = Employee
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
         exclude = []
-
-        widgets = {
-            'contract_start_date': forms.DateInput(attrs={'class':'datepicker'}),
-            'contract_exp_date': forms.DateInput(attrs={'class':'datepicker'}),
-            'health_book_exp_date': forms.DateInput(attrs={'class':'datepicker'}),
-        }
 
 class MonthForm(ModelForm):
     class Meta:

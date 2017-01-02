@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
 from django.contrib import messages
-from .forms import EmployeeForm, MonthForm
+from .forms import EmployeeForm, EmployeeChangeForm, MonthForm
 from .models import Employee, Month
 from .mixins import OwnershipMixin
 
@@ -51,7 +51,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
 
 class EmployeeUpdate(LoginRequiredMixin, OwnershipMixin, UpdateView):
 
-    form_class = EmployeeForm
+    form_class = EmployeeChangeForm
     success_url = reverse_lazy('employees')
     template_name = 'employees/employee_form.html'
 
