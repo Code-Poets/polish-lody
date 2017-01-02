@@ -4,20 +4,14 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome{% endblock %} | Polish lody</title>
-
         {% load static %}
-
         {# Load the tag library #}
         {% load bootstrap3 %}
-
         {# Load CSS and JavaScript #}
-        <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
         {% bootstrap_css %}
         {% bootstrap_javascript %}
-
-        <!-- Display django.contrib.messages as Bootstrap alerts -->
-
         {% load sass_tags %}
+        <script src="{% static 'sorttable.js' %}"></script>
         <link href="{% sass_src 'main.scss' %}" rel="stylesheet" type="text/css" />
     </head>
 
