@@ -45,8 +45,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=255, unique=True, 
         help_text=_('Required. 255 characters or fewer.'))
 
-    first_name = models.CharField(_('first name'), max_length=30, blank=True, null=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True, null=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=False, null=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=False, null=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False,
         help_text=_('Designates whether the user can log into this admin site.'))
