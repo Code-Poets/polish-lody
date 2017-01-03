@@ -5,28 +5,86 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-import time
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from .forms import EmployeeForm, MonthForm
 from .models import Employee, Month
 
+def make_paginate_by_list():
+    paginate_by = [2, 5, 10, 25, 100]
+    return paginate_by
+
 
 class EmployeeList(LoginRequiredMixin, ListView):
+
     tmplate_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
-    paginate_by = 10
+
+    def get_paginate_by(self, queryset):
+        try:
+            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') \
+                    or self.request.session['per_page_pagination'] or 10
+        except:
+            per_page = 10
+        return per_page
 
     def get_queryset(self):
-        return Employee.objects.order_by("last_name")
+        return Employee.objects.all()
 
-class EmployeeDetail(LoginRequiredMixin, DetailView):
-    model = Employee
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeList, self).get_context_data(**kwargs)
+        employee_list = self.get_queryset()
+        paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
+        page = self.request.GET.get('page')
+        pg = self.get_paginate_by(employee_list)
+        if pg is not None:
+            self.request.session['per_page_pagination'] = pg
+            context['current_paginate_by_number'] = int(pg)
+        try:
+            employee_pages = paginator.page(page)
+        except PageNotAnInteger:
+            employee_pages = paginator.page(1)
+        except EmptyPage:
+            employee_pages = paginator.page(paginator.num_pages)
+        context['paginate_by_numbers'] = make_paginate_by_list()
+        context['employee_list'] = employee_pages
+        return context
+
+class EmployeeDetail(LoginRequiredMixin, ListView):
+    model = Month
     template_name = 'employees/employee_detail.html'
+
+    def get_paginate_by(self, queryset):
+        try:
+            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') \
+                    or self.request.session['per_page_pagination'] or 10
+        except:
+            per_page = 10
+        return per_page
+
+    def get_queryset(self):
+        employee = Employee.objects.get(pk=self.kwargs.get('pk'))
+        months = employee.month_set.all()
+        return months
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDetail, self).get_context_data(**kwargs)
-        employee_object = self.get_object()
-        context['months'] = employee_object.month_set.all().order_by('-year', '-month')
+        month_list = self.get_queryset().order_by('-year', '-month')
+        context['employee'] = Employee.objects.get(pk=self.kwargs.get('pk'))
+        paginator = Paginator(month_list, self.get_paginate_by(month_list))
+        page = self.request.GET.get('page')
+        pg = self.get_paginate_by(month_list)
+        if pg is not None:
+            self.request.session['per_page_pagination'] = pg
+            context['current_paginate_by_number'] = int(pg)
+        try:
+            month_pages = paginator.page(page)
+        except PageNotAnInteger:
+            month_pages = paginator.page(1)
+        except EmptyPage:
+            month_pages = paginator.page(paginator.num_pages)
+        context['paginate_by_numbers'] = make_paginate_by_list()
+        context['months'] = month_pages
         return context
 
 class EmployeeCreate(LoginRequiredMixin, CreateView):
