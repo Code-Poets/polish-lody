@@ -200,10 +200,41 @@
             </div>
             {% endif %}
         </div>
+        {% if page_obj.has_other_pages %}
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo; Previous</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>Next &raquo;</span></li>
+        {% endif %}
+        </ul><br/>
+    {% endif %}
+
+    <span>Months per page:</span><br/>
+        <ul class="pagination">
+            {% for number in paginate_by_numbers %}
+            {% if current_paginate_by_number == number %}
+            <li class="active"><a href="?per_page={{ number }}">{{ number }}</a></li>
+            {% else %}
+            <li><a href="?per_page={{ number }}">{{ number }}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul><br/>
 
         <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
     {% else %}
-        <p>Employee not found</p>
+        <p>Employee not found</p><br/>
     {% endif %}
-
 {% endblock %}
