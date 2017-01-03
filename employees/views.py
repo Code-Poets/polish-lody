@@ -49,7 +49,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
                                      "Specified e-mail address has already been assigned to another employee")
             return HttpResponseRedirect('')
 
-class EmployeeUpdate(LoginRequiredMixin, OwnershipMixin, UpdateView):
+class EmployeeUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
 
     form_class = EmployeeChangeForm
     success_url = reverse_lazy('employees')
@@ -62,7 +62,7 @@ class EmployeeUpdate(LoginRequiredMixin, OwnershipMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
 
-class MonthCreate(LoginRequiredMixin, CreateView):
+class MonthCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
 
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
@@ -110,7 +110,7 @@ class MonthCreate(LoginRequiredMixin, CreateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class MonthUpdate(LoginRequiredMixin, UpdateView):
+class MonthUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
 
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
@@ -171,7 +171,7 @@ class EmployeeDelete(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
 
         return HttpResponseRedirect(self.success_url)
 
-class MonthDelete(LoginRequiredMixin, DeleteView):
+class MonthDelete(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
     model = Month
 
     def get_success_url(self, **kwargs):
