@@ -92,7 +92,8 @@ class Month(models.Model):
     employee = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
     month = models.IntegerField(choices=month_choices, default=default_month, verbose_name=u'Month')
     salary_is_paid = models.BooleanField(default=False, verbose_name=u'Paid?', choices=bool_choices)
-    hours_worked_in_this_month = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(720)])
+    hours_worked_in_this_month = models.DecimalField(decimal_places=1, max_digits=4, default=0, 
+                                                    validators=[MaxValueValidator(720), MinValueValidator(0)])
     rate_per_hour_this_month = models.DecimalField(decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
 
