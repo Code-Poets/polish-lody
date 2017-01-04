@@ -183,7 +183,7 @@
                             <span class="glyphicon glyphicon-ok icon-true" aria-hidden="true"></span>
                         </td>
                         <td bgcolor="#e6ffe6">
-                            {{ month.calculating_salary_for_this_month }}zł
+                            {{ month.calculating_salary_for_this_month }}
                         </td>
                         <td bgcolor="#e6ffe6">
                         {% if user.is_staff %}
@@ -200,10 +200,14 @@
             </div>
             {% endif %}
         </div>
+
+
+
+
         {% if page_obj.has_other_pages %}
         <ul class="pagination">
         {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}{{ getvars }}">&laquo; Previous</a></li>
         {% else %}
             <li class="disabled"><span>&laquo; Previous</span></li>
         {% endif %}
@@ -211,11 +215,11 @@
             {% if page_obj.number == i %}
                 <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
             {% else %}
-                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                <li><a href="?page={{ i }}{{ getvars }}">{{ i }}</a></li>
             {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
+            <li><a href="?page={{ page_obj.next_page_number }}{{ getvars }}">Next &raquo;</a></li>
         {% else %}
             <li class="disabled"><span>Next &raquo;</span></li>
         {% endif %}
@@ -226,9 +230,9 @@
         <ul class="pagination">
             {% for number in paginate_by_numbers %}
             {% if current_paginate_by_number == number %}
-            <li class="active"><a href="?per_page={{ number }}">{{ number }}</a></li>
+            <li class="active"><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
             {% else %}
-            <li><a href="?per_page={{ number }}">{{ number }}</a></li>
+            <li><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
             {% endif %}
             {% endfor %}
         </ul><br/>
