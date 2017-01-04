@@ -12,6 +12,29 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
 
     {% if all_employee_list %}
+
+        <div class="panel-body">
+            <form method="get" action="{% url 'employees' %}">
+                <select name="orderby">
+                    <option selected disabled>Choose order type:</option>
+                    <option value="id">Oldest first</option>
+                    <option value="-id">Newest first</option>
+                    <option value="contract_start_date">Contract start date ascending</option>
+                    <option value="-contract_start_date">Contract start date descending</option>
+                    <option value="rate_per_hour">Rate per hour ascending</option>
+                    <option value="-rate_per_hour">Rate per hour descending</option>
+                    <option value="health_book_exp_date">Health book expiration date ascending</option>
+                    <option value="-health_book_exp_date">Health book expiration date descending</option>
+                    <option value="contract_exp_date">Contract expiration date ascending</option>
+                    <option value="-contract_exp_date">Contract expiration date descending</option>
+                    <option value="unpaid_salaries">Total unpaid salaries ascending</option>
+                    <option value="-unpaid_salaries">Total unpaid salaries descending</option>
+
+
+                </select>
+            <p><input type="submit" name="submit" value="submit"/></p>
+            </form>
+        </div>
         <table class="table table-hover sortable">
             <tr>
                 <td class="cursor-hover" align="center" valign="middle">
@@ -72,11 +95,10 @@
         <p>The list of employees is empty</p>
     {% endif %}
 
-
     {% if page_obj.has_other_pages %}
         <ul class="pagination">
         {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}{{ getvars }}">&laquo; Previous</a></li>
         {% else %}
             <li class="disabled"><span>&laquo; Previous</span></li>
         {% endif %}
@@ -84,11 +106,11 @@
             {% if page_obj.number == i %}
                 <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
             {% else %}
-                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                <li><a href="?page={{ i }}{{ getvars }}">{{ i }}</a></li>
             {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
+            <li><a href="?page={{ page_obj.next_page_number }}{{ getvars }}">Next &raquo;</a></li>
         {% else %}
             <li class="disabled"><span>Next &raquo;</span></li>
         {% endif %}
@@ -99,9 +121,9 @@
         <ul class="pagination">
             {% for number in paginate_by_numbers %}
             {% if current_paginate_by_number == number %}
-            <li class="active"><a href="?per_page={{ number }}">{{ number }}</a></li>
+            <li class="active"><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
             {% else %}
-            <li><a href="?per_page={{ number }}">{{ number }}</a></li>
+            <li><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
             {% endif %}
             {% endfor %}
         </ul><br/>
