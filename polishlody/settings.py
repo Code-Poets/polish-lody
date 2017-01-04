@@ -156,7 +156,13 @@ SASS_PRECISION = 8
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATE_INPUT_FORMATS = [
-    '%d.%m.%Y', # '01.01.2000'
+    '%d.%m.%Y',                         # '01.01.2000'
+    '%Y-%m-%d', '%d-%m-%Y', '%m-%d-%Y', # '2006-10-25',
+    '%m/%d/%Y', '%m/%d/%y',             # '10/25/2006', '10/25/06'
+    '%b %d %Y', '%b %d, %Y',            # 'Oct 25 2006', 'Oct 25, 2006'
+    '%d %b %Y', '%d %b, %Y',            # '25 Oct 2006', '25 Oct, 2006'
+    '%B %d %Y', '%B %d, %Y',            # 'October 25 2006', 'October 25, 2006'
+    '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
 ]
 
 EMAIL_USE_TLS = True
