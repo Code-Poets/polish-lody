@@ -9,27 +9,53 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from .forms import EmployeeForm, MonthForm
 from .models import Employee, Month
+from  django.db.models import F, DecimalField, ExpressionWrapper
+import random
 
 def make_paginate_by_list():
     paginate_by = [2, 5, 10, 25, 100]
     return paginate_by
 
+def order_by_unpaid_salaries(descending):
+    employees = Employee.objects.all()
+    employees_dict = {}
+    for emp in employees:
+        emp_salary_value = emp.all_unpaid_salaries_for_sorting()
+        if emp_salary_value is not None:
+            employees_dict[emp] = emp_salary_value
+        else:
+            employees_dict[emp] = -1
+    sorted_by_unpaid_salaries_list = sorted(employees_dict.items(), reverse=descending,
+                                            key=lambda x: x[1])
+    new_emp_list = []
+    for employee, value in sorted_by_unpaid_salaries_list:
+        new_emp_list.append(employee)
+    return new_emp_list
+
 
 class EmployeeList(LoginRequiredMixin, ListView):
 
-    tmplate_name = 'employees/employee_list.html'
+    template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
-
     def get_paginate_by(self, queryset):
         try:
-            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') \
-                    or self.request.session['per_page_pagination'] or 10
+            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
         except:
             per_page = 10
         return per_page
 
     def get_queryset(self):
-        return Employee.objects.all()
+        order = self.request.GET.get('orderby', 'last_name')
+        if order == 'unpaid_salaries':
+            queryset = order_by_unpaid_salaries(False)
+        elif order == '-unpaid_salaries':
+            queryset = order_by_unpaid_salaries(True)
+        else:
+            try:
+                queryset = Employee.objects.all().order_by(order)
+            except:
+                queryset = Employee.objects.all()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeList, self).get_context_data(**kwargs)
@@ -38,7 +64,7 @@ class EmployeeList(LoginRequiredMixin, ListView):
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(employee_list)
         if pg is not None:
-            self.request.session['per_page_pagination'] = pg
+            # self.request.session['per_page_pagination'] = pg
             context['current_paginate_by_number'] = int(pg)
         try:
             employee_pages = paginator.page(page)
@@ -48,6 +74,7 @@ class EmployeeList(LoginRequiredMixin, ListView):
             employee_pages = paginator.page(paginator.num_pages)
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
+        context['orderby'] = self.request.GET.get('orderby', 'last_name')
         return context
 
 class EmployeeDetail(LoginRequiredMixin, ListView):
@@ -56,26 +83,45 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
 
     def get_paginate_by(self, queryset):
         try:
-            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') \
-                    or self.request.session['per_page_pagination'] or 10
+            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
         except:
             per_page = 10
         return per_page
 
     def get_queryset(self):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
-        months = employee.month_set.all()
-        return months
+        order = self.request.GET.get('orderby', ('-year', '-month'))
+        print(order, type(order))
+        if order == 'newest':
+            month_queryset = employee.month_set.all().order_by('-year', '-month')
+
+        elif order == 'oldest':
+            month_queryset = employee.month_set.all().order_by('year', 'month')
+
+        elif order == 'to_be_paid':
+            month_queryset = employee.month_set.annotate(
+                to_be_paid=(F('hours_worked_in_this_month')*F('hours_worked_in_this_month'))
+            ).order_by('to_be_paid')
+        elif order == '-to_be_paid':
+            month_queryset = employee.month_set.annotate(
+                to_be_paid=(F('hours_worked_in_this_month') * F('hours_worked_in_this_month'))
+            ).order_by('-to_be_paid')
+
+        else:
+            try:
+                month_queryset = employee.month_set.all().order_by(order)
+            except:
+                month_queryset = employee.month_set.all().order_by('-year', '-month')
+        return month_queryset
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDetail, self).get_context_data(**kwargs)
-        month_list = self.get_queryset().order_by('-year', '-month')
+        month_list = self.get_queryset()
         context['employee'] = Employee.objects.get(pk=self.kwargs.get('pk'))
         paginator = Paginator(month_list, self.get_paginate_by(month_list))
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(month_list)
         if pg is not None:
-            self.request.session['per_page_pagination'] = pg
             context['current_paginate_by_number'] = int(pg)
         try:
             month_pages = paginator.page(page)
@@ -85,6 +131,7 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
             month_pages = paginator.page(paginator.num_pages)
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['months'] = month_pages
+        # context['orderby'] = self.request.GET.get('orderby', ('year', '-month'))
         return context
 
 class EmployeeCreate(LoginRequiredMixin, CreateView):
