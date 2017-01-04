@@ -54,6 +54,16 @@ class Employee(MyUser):
                     salary += ms
             return salary
 
+    def all_unpaid_salaries_for_sorting(self):
+        employee_months = self.month_set.all()
+        if len(employee_months) != 0:
+            salary = 0
+            for month in employee_months:
+                if month.salary_is_paid is False or month.salary_is_paid == 0:
+                    ms = month.calculating_salary_for_this_month()
+                    salary += ms
+            return int(salary)
+
     def __str__(self):
         return self.first_name + " " + self.last_name
 
@@ -89,7 +99,7 @@ class Month(models.Model):
     employee = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
     month = models.IntegerField(choices=month_choices, default=default_month, verbose_name=u'Month')
     salary_is_paid = models.BooleanField(default=False, verbose_name=u'Paid?', choices=bool_choices)
-    hours_worked_in_this_month = models.DecimalField(decimal_places=1, max_digits=4, default=0, 
+    hours_worked_in_this_month = models.DecimalField(decimal_places=1, max_digits=4, default=0,
                                                     validators=[MaxValueValidator(720), MinValueValidator(0)])
     rate_per_hour_this_month = models.DecimalField(decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
@@ -110,6 +120,7 @@ class Month(models.Model):
         return self.months_dict[self.month]
 
     def calculating_salary_for_this_month(self):
+        # print(round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2))
         return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2)
 
     class Meta:
