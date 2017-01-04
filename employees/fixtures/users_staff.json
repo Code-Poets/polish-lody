@@ -1,0 +1,36 @@
+[
+{
+  "model": "users.myuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$shqCmXcrvOWf$fcbAIN/Vj2GNhHtgb4G1myKmPnWEyKQ3jDQDWntnXl4=",
+    "last_login": "2017-01-04T13:39:40.685Z",
+    "is_superuser": true,
+    "email": "admin@polishlody.com",
+    "first_name": null,
+    "last_name": null,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-01-03T15:43:18.464Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.myuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$fvwZBrg9Fhat$Ih2p6UIjZqlasWMrlpxotrmJhmYOhNOc0Lm1FwvEVb0=",
+    "last_login": "2017-01-04T13:24:59.735Z",
+    "is_superuser": false,
+    "email": "jakub@polishlody.com",
+    "first_name": "Jakub",
+    "last_name": "Czachura",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-01-03T15:46:58.846Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

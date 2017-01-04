@@ -1,4 +1,4 @@
-from django.forms import ModelForm, RadioSelect
+from django.forms import ModelForm, RadioSelect, SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm
 from employees.models import Employee, Month
 from django.utils.safestring import mark_safe
@@ -28,6 +28,7 @@ class EmployeeChangeForm(ModelForm):
         model = Employee
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
+        #widgets = {'health_book_exp_date': SelectDateWidget()}
         exclude = []
 
 class MonthForm(ModelForm):
