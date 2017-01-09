@@ -9,28 +9,88 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from .forms import EmployeeForm, MonthForm
 from .models import Employee, Month
-from  django.db.models import F, DecimalField, ExpressionWrapper
-import random
+from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
+# import random
+
+def make_year_list_for_filtering_in_emp_detail(employee):
+    months = employee.month_set.all()
+    years = []
+    for month in months:
+        if not month.year in years:
+            years.append(month.year)
+    sorted_years = sorted(years)
+    return sorted_years
+
+def make_employee_list_view_order_form_options():
+    options = [
+        ('id', 'Oldest first'),
+        ('-id', 'Newest first'),
+        ("contract_start_date", "Contract start date ascending"),
+        ("-contract_start_date", "Contract start date descending"),
+        ("rate_per_hour", "Rate per hour ascending"),
+        ("-rate_per_hour", "Rate per hour descending"),
+        ("health_book_exp_date", "Health book expiration date ascending"),
+        ("-health_book_exp_date", "Health book expiration date descending"),
+        ("contract_exp_date", "Contract expiration date ascending"),
+        ("-contract_exp_date", "Contract expiration date descending"),
+        ("unpaid_salaries", "Total unpaid salaries ascending"),
+        ("-unpaid_salaries", "Total unpaid salaries descending"),
+    ]
+    return options
+
+def make_employee_detail_view_order_form_options():
+    options = [
+       ('oldest','Oldest first'),
+       ('newest', 'Newest first'),
+       ("hours_worked_in_this_month","Hours worked ascending"),
+       ("-hours_worked_in_this_month","Hours worked descending"),
+       ("rate_per_hour_this_month","Rate per hour ascending"),
+       ("-rate_per_hour_this_month","Rate per hour descending"),
+       ("to_be_paid", "To be paid ascending"),
+       ("-to_be_paid", "To be paid descending"),
+    ]
+    return options
 
 def make_paginate_by_list():
     paginate_by = [2, 5, 10, 25, 100]
     return paginate_by
 
-def order_by_unpaid_salaries(descending):
-    employees = Employee.objects.all()
-    employees_dict = {}
-    for emp in employees:
-        emp_salary_value = emp.all_unpaid_salaries_for_sorting()
-        if emp_salary_value is not None:
-            employees_dict[emp] = emp_salary_value
-        else:
-            employees_dict[emp] = -1
-    sorted_by_unpaid_salaries_list = sorted(employees_dict.items(), reverse=descending,
-                                            key=lambda x: x[1])
-    new_emp_list = []
-    for employee, value in sorted_by_unpaid_salaries_list:
-        new_emp_list.append(employee)
-    return new_emp_list
+def find_user_by_name(query_name):
+   qs = Employee.objects.all()
+   for term in query_name.split():
+        qs = qs.filter( Q(first_name__contains = term) | Q(last_name__contains = term))
+   return qs
+
+def order_by_default(order):
+    try:
+        queryset = Employee.objects.all().order_by(order)
+    except:
+        queryset = Employee.objects.all()
+    return queryset
+
+def order_by_unpaid_salaries(name_filter, descending):
+    if name_filter is not None:
+        employees = find_user_by_name(name_filter)
+    else:
+        employees = Employee.objects.all()
+
+    query = employees.annotate(
+        unpaid_salaries=Sum(
+            Case(
+                When(
+                    month=None,
+                    then=-1
+                ),
+                When(
+                    month__salary_is_paid=False,
+                    then=(F('month__rate_per_hour_this_month') * F('month__hours_worked_in_this_month')),
+                ),
+                default=0,
+                output_field=DecimalField(),
+            )
+        )
+    ).order_by('%sunpaid_salaries' % (descending))
+    return query
 
 
 class EmployeeList(LoginRequiredMixin, ListView):
@@ -44,27 +104,13 @@ class EmployeeList(LoginRequiredMixin, ListView):
             per_page = 10
         return per_page
 
-    def get_queryset(self):
-        order = self.request.GET.get('orderby', 'last_name')
-        if order == 'unpaid_salaries':
-            queryset = order_by_unpaid_salaries(False)
-        elif order == '-unpaid_salaries':
-            queryset = order_by_unpaid_salaries(True)
-        else:
-            try:
-                queryset = Employee.objects.all().order_by(order)
-            except:
-                queryset = Employee.objects.all()
-        return queryset
-
     def get_context_data(self, **kwargs):
         context = super(EmployeeList, self).get_context_data(**kwargs)
-        employee_list = self.get_queryset()
+        employee_list = context['all_employee_list']
         paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(employee_list)
         if pg is not None:
-            # self.request.session['per_page_pagination'] = pg
             context['current_paginate_by_number'] = int(pg)
         try:
             employee_pages = paginator.page(page)
@@ -75,7 +121,43 @@ class EmployeeList(LoginRequiredMixin, ListView):
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
         context['orderby'] = self.request.GET.get('orderby', 'last_name')
+        context['position_filter'] = self.request.GET.get('position_filter')
+        context['employee_filter'] = self.request.GET.get('employee_filter') or 'Search for employee...'
+        context['sorting_options'] = make_employee_list_view_order_form_options()
+        context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
         return context
+
+    def get_queryset(self):
+        clear_filters = self.request.GET.get('clear_filters')
+        order = self.request.GET.get('orderby', 'last_name')
+        employee_filter = self.request.GET.get('employee_filter') or None
+        position_filter = self.request.GET.get('position_filter') or None
+        hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months') or None
+        if clear_filters is None:
+            if order == 'unpaid_salaries':
+                queryset = order_by_unpaid_salaries(employee_filter, '')
+            elif order == '-unpaid_salaries':
+                queryset = order_by_unpaid_salaries(employee_filter, '-')
+            elif not 'unpaid' in order and employee_filter is not None:
+                filtered_queryset = find_user_by_name(employee_filter)
+                queryset = filtered_queryset.order_by(order)
+            else:
+                queryset = order_by_default(order)
+            if position_filter is not None:
+                queryset = queryset.filter(position=position_filter)
+            if hide_zero_salary_months_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
+            if queryset.count() == 0:
+                messages.add_message(self.request, messages.WARNING,
+                                     "No employee meets the search criteria. Widen your search or check filter for typos.")
+        else:
+            order = self.request.GET.get('orderby', 'last_name')
+            queryset = order_by_default(order)
+        return queryset
 
 class EmployeeDetail(LoginRequiredMixin, ListView):
     model = Month
@@ -90,23 +172,45 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
-        order = self.request.GET.get('orderby', ('-year', '-month'))
-        print(order, type(order))
-        if order == 'newest':
-            month_queryset = employee.month_set.all().order_by('-year', '-month')
+        order = self.request.GET.get('orderby', )#('-year', '-month'))
+        hide_paid_filter = self.request.GET.get('hide_paid_months_filter')
+        hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
+        clear_filters = self.request.GET.get('clear_filters')
+        year_filter = self.request.GET.get('select_year')
+        if clear_filters is None:
 
-        elif order == 'oldest':
-            month_queryset = employee.month_set.all().order_by('year', 'month')
+            if order == 'newest':
+                month_queryset = employee.month_set.all().order_by('-year', '-month')
 
-        elif order == 'to_be_paid':
-            month_queryset = employee.month_set.annotate(
-                to_be_paid=(F('hours_worked_in_this_month')*F('hours_worked_in_this_month'))
-            ).order_by('to_be_paid')
-        elif order == '-to_be_paid':
-            month_queryset = employee.month_set.annotate(
-                to_be_paid=(F('hours_worked_in_this_month') * F('hours_worked_in_this_month'))
-            ).order_by('-to_be_paid')
+            elif order == 'oldest':
+                month_queryset = employee.month_set.all().order_by('year', 'month')
 
+            elif order == 'to_be_paid':
+                month_queryset = employee.month_set.annotate(
+                    to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
+                ).order_by('to_be_paid')
+            elif order == '-to_be_paid':
+                month_queryset = employee.month_set.annotate(
+                    to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
+                ).order_by('-to_be_paid')
+
+            else:
+                try:
+                    month_queryset = employee.month_set.all().order_by(order)
+                except:
+                    month_queryset = employee.month_set.all().order_by('-year', '-month')
+            if year_filter is not None:
+                years = make_year_list_for_filtering_in_emp_detail(employee)
+                years.remove(int(year_filter))
+                month_queryset = month_queryset.exclude(year__in=years)
+            if hide_paid_filter is not None:
+                month_queryset = month_queryset.exclude(salary_is_paid=True)
+            if hide_unpaid_filter is not None:
+                month_queryset = month_queryset.exclude(salary_is_paid=False)
+
+            if month_queryset.count() == 0:
+                messages.add_message(self.request, messages.WARNING,
+                                     "Employee has no months which satisfy specified criteria. Check filters again.")
         else:
             try:
                 month_queryset = employee.month_set.all().order_by(order)
@@ -116,7 +220,7 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDetail, self).get_context_data(**kwargs)
-        month_list = self.get_queryset()
+        month_list = context['object_list']
         context['employee'] = Employee.objects.get(pk=self.kwargs.get('pk'))
         paginator = Paginator(month_list, self.get_paginate_by(month_list))
         page = self.request.GET.get('page')
@@ -131,7 +235,15 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
             month_pages = paginator.page(paginator.num_pages)
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['months'] = month_pages
-        # context['orderby'] = self.request.GET.get('orderby', ('year', '-month'))
+        context['month_sorting_options'] = make_employee_detail_view_order_form_options()
+        context['years'] = make_year_list_for_filtering_in_emp_detail(context['employee'])
+        try:
+            context['select_year'] = int(self.request.GET.get('select_year'))
+        except:
+            pass
+        context['hide_paid_months_filter'] = self.request.GET.get('hide_paid_months_filter') or False
+        context['hide_unpaid_months_filter'] = self.request.GET.get('hide_unpaid_months_filter') or False
+        context['orderby'] = self.request.GET.get('orderby')
         return context
 
 class EmployeeCreate(LoginRequiredMixin, CreateView):
