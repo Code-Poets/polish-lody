@@ -47,22 +47,22 @@ class Employee(MyUser):
     def all_unpaid_salaries(self):
         employee_months = self.month_set.all()
         if len(employee_months) != 0:
-            salary = 0
+            unpaid_salaries = 0
             for month in employee_months:
                 if month.salary_is_paid is False:
                     ms = month.calculating_salary_for_this_month()
-                    salary += ms
-            return salary
+                    unpaid_salaries += ms
+            return unpaid_salaries
 
     def all_unpaid_salaries_for_sorting(self):
         employee_months = self.month_set.all()
         if len(employee_months) != 0:
-            salary = 0
+            unpaid_salaries = 0
             for month in employee_months:
                 if month.salary_is_paid is False or month.salary_is_paid == 0:
                     ms = month.calculating_salary_for_this_month()
-                    salary += ms
-            return int(salary)
+                    unpaid_salaries += ms
+            return unpaid_salaries
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -120,7 +120,6 @@ class Month(models.Model):
         return self.months_dict[self.month]
 
     def calculating_salary_for_this_month(self):
-        # print(round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2))
         return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2)
 
     class Meta:
