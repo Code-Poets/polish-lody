@@ -11,30 +11,53 @@
     <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
 
+    <div class="panel-body">
+        <form method="get" action="{% url 'employees' %}">
+            <p><select name="orderby">
+                {% for tuple in sorting_options %}
+                {% if tuple.0 == 'id' %}
+                <option selected disabled>Choose order type:</option>
+                {% endif %}
+                {% if tuple.0 == orderby %}
+                <option selected value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                {% else %}
+                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            <select name="position_filter">
+                <option selected disabled>Choose position:</option>
+                {% if position_filter == 'Sale' %}
+                <option selected value="Sale">Sale</option>
+                {% else %}
+                <option value="Sale">Sale</option>
+                {% endif %}
+                {% if position_filter == 'Production' %}
+                <option selected value="Production">Production</option>
+                {% else %}
+                <option value="Production">Production</option>
+                {% endif %}
+                {% if position_filter == 'Other' %}
+                <option selected value="Other">Other</option>
+                {% else %}
+                <option value="Other">Other</option>
+                {% endif %}
+            </select></p>
+            <p>Search for employee: <input type="text" placeholder="{{ employee_filter }}" name="employee_filter"/></p>
+            {% if hide_zero_salary_months %}
+            <p>Hide employees whose unpaid salary is 0.<input type="checkbox" checked name="hide_zero_salary_months"></p>
+            {% else %}
+            <p>Hide employees whose unpaid salary is 0.<input type="checkbox" name="hide_zero_salary_months"></p>
+            {% endif %}
+        <input type="submit" name="submit" value="submit"/>
+        </form>
+    </div>
+    <div class="panel-body">
+        <form method="get" action="{% url 'employees' %}">
+            <p><input type="submit" name="clear_filters" value="Clear filters"/></p>
+        </form>
+    </div>
     {% if all_employee_list %}
-
-        <div class="panel-body">
-            <form method="get" action="{% url 'employees' %}">
-                <select name="orderby">
-                    <option selected disabled>Choose order type:</option>
-                    <option value="id">Oldest first</option>
-                    <option value="-id">Newest first</option>
-                    <option value="contract_start_date">Contract start date ascending</option>
-                    <option value="-contract_start_date">Contract start date descending</option>
-                    <option value="rate_per_hour">Rate per hour ascending</option>
-                    <option value="-rate_per_hour">Rate per hour descending</option>
-                    <option value="health_book_exp_date">Health book expiration date ascending</option>
-                    <option value="-health_book_exp_date">Health book expiration date descending</option>
-                    <option value="contract_exp_date">Contract expiration date ascending</option>
-                    <option value="-contract_exp_date">Contract expiration date descending</option>
-                    <option value="unpaid_salaries">Total unpaid salaries ascending</option>
-                    <option value="-unpaid_salaries">Total unpaid salaries descending</option>
-
-
-                </select>
-            <p><input type="submit" name="submit" value="submit"/></p>
-            </form>
-        </div>
         <table class="table table-hover sortable">
             <tr>
                 <td class="cursor-hover" align="center" valign="middle">
@@ -91,7 +114,7 @@
             </tr>
             {% endfor %} 
         </table>
-    {% else %}
+    {% elif not messages %}
         <p>The list of employees is empty</p>
     {% endif %}
 

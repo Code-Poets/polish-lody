@@ -98,6 +98,49 @@
                 {% endif %}
 
             </div>
+            <div class="panel-body">
+            <form method="get" action="{% url 'employee_detail' employee.id %}">
+                <select name="orderby">
+                {% for tuple in month_sorting_options %}
+                {% if tuple.0 == 'oldest' %}
+                <option selected disabled>Choose order type:</option>
+                {% endif %}
+                {% if tuple.0 == orderby %}
+                <option selected value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                {% else %}
+                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
+                {% endif %}
+                {% endfor %}
+                </select>
+                <select name="select_year">
+                    <option selected disabled>Select year:</option>
+                    {% for year in years %}
+                    {% if year == select_year %}
+                    <option selected value="{{ year }}">{{ year }}</option>
+                    {% else %}
+                    <option value="{{ year }}">{{ year }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
+            {% if hide_paid_months_filter %}
+            <p>Hide months which are paid for.<input type="checkbox" checked name="hide_paid_months_filter"></p>
+            {% else %}
+            <p>Hide months which are paid for.<input type="checkbox" name="hide_paid_months_filter"></p>
+            {% endif %}
+            {% if hide_unpaid_months_filter %}
+            <p>Hide months which are not paid for.<input type="checkbox" checked name="hide_unpaid_months_filter"></p>
+            {% else %}
+            <p>Hide months which are not paid for.<input type="checkbox" name="hide_unpaid_months_filter"></p>
+            {% endif %}
+            <p><input type="submit" name="submit" value="submit"/></p>
+            </form>
+            <div class="panel-body">
+                <form method="get" action="{% url 'employee_detail' employee.id %}">
+                    <p><input type="submit" name="clear_filters" value="Clear filters"/></p>
+                </form>
+            </div>
+
             {% if months %}
             <div class="panel-body">
                 <table class="table sortable">
@@ -105,39 +148,42 @@
                         <td class="cursor-hover">
                             Month and year
                         </td>
-                        <td class="cursor-hover">
+                        <td class="cursor-hover" align="center" valign="middle">
                             Hours worked
                         </td>
-                        <td class="cursor-hover">
+                        <td class="cursor-hover" align="center" valign="middle">
                             Rate per hour (zł)
                         </td>
-                        <td class="cursor-hover">
+                        <td class="cursor-hover" align="center" valign="middle">
                             Was salary paid?
                         </td>
-                        <td class="cursor-hover">
+                        <td class="cursor-hover" align="center" valign="middle">
                             To be paid (zł)
+                        </td>
+                        <td>
                         </td>
                     </tr>
                     {% for month in months %}
                     {% if month.salary_is_paid is False and month.calculating_salary_for_this_month == 0 %}
                     <tr>
-                        <td>
+                        <td align="center">
                             {{ month.month_detail }}
                         </td>
-                        <td>
+                        <td align="center" valign="middle">
                             {{ month.hours_worked_in_this_month }}
                         </td>
-                        <td>
+                        <td align="center" valign="middle">
                             {{ month.rate_per_hour_this_month }}
                         </td>
-                        <td>
+                        <td align="center" valign="middle">
                             <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
-                        </td>
-                        <td>
+                        </td >
+                        <td align="center" valign="middle">
                             {{ month.calculating_salary_for_this_month }}
                         </td>
                         <td>
                         {% if user.is_staff %}
+                        <td align="center" valign="middle">
                             <a href="{% url 'month_delete' month.id %}" class="btn btn-danger pull-right">Delete month</a>
                             <a href="{% url 'month_edit' month.id %}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>
                         {% endif %}
@@ -148,16 +194,16 @@
                         <td bgcolor="#ffcccc">
                             {{ month.month_detail }}
                         </td>
-                        <td bgcolor="#ffcccc">
+                        <td bgcolor="#ffcccc" align="center" valign="middle">
                             {{ month.hours_worked_in_this_month }}
                         </td>
-                        <td bgcolor="#ffcccc">
+                        <td bgcolor="#ffcccc" align="center" valign="middle">
                             {{ month.rate_per_hour_this_month }}
                         </td>
-                        <td bgcolor="#ffcccc">
+                        <td bgcolor="#ffcccc" align="center" valign="middle">
                             <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
                         </td>
-                        <td bgcolor="#ffcccc">
+                        <td bgcolor="#ffcccc" align="center" valign="middle">
                             {{ month.calculating_salary_for_this_month }}
                         </td>
                         <td bgcolor="#ffcccc">
@@ -173,16 +219,16 @@
                         <td bgcolor="#e6ffe6">
                             {{ month.month_detail }}
                         </td>
-                        <td bgcolor="#e6ffe6">
+                        <td bgcolor="#e6ffe6" align="center" valign="middle">
                             {{ month.hours_worked_in_this_month }}
                         </td>
-                        <td bgcolor="#e6ffe6">
+                        <td bgcolor="#e6ffe6" align="center" valign="middle">
                             {{ month.rate_per_hour_this_month }}
                         </td>
-                        <td bgcolor="#e6ffe6">
+                        <td bgcolor="#e6ffe6" align="center" valign="middle">
                             <span class="glyphicon glyphicon-ok icon-true" aria-hidden="true"></span>
                         </td>
-                        <td bgcolor="#e6ffe6">
+                        <td bgcolor="#e6ffe6" align="center" valign="middle">
                             {{ month.calculating_salary_for_this_month }}
                         </td>
                         <td bgcolor="#e6ffe6">
