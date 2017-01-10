@@ -44,9 +44,6 @@ class Employee(MyUser):
         months_enum = list(months_dict.keys())
         return months_dict, months_enum
 
-    def save(self, *args, **kwargs):
-        super(Employee, self).save(*args, **kwargs)
-
     def all_unpaid_salaries(self):
         employee_months = self.month_set.all()
         if len(employee_months) != 0:
