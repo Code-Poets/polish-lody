@@ -11,6 +11,8 @@ from .forms import EmployeeForm, MonthForm
 from .models import Employee, Month
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 # import random
+from django.utils import timezone
+from polishlody.settings import WARNING_DAYS_LEFT
 
 def make_year_list_for_filtering_in_emp_detail(employee):
     months = employee.month_set.all()
@@ -20,6 +22,24 @@ def make_year_list_for_filtering_in_emp_detail(employee):
             years.append(month.year)
     sorted_years = sorted(years)
     return sorted_years
+
+def position_list_and_filtering(self, queryset):
+    positions = {
+        'position_sale': 'Sale',
+        'position_production': 'Production',
+        'position_other': 'Other',
+    }
+    exclude_list = []
+
+    for key in positions.keys():
+        if self.request.GET.get(key) is None:
+            exclude_list.append(positions[key])
+            print(key)
+            queryset = queryset.exclude(position=positions[key])
+            print(positions[key])
+            print(queryset)
+
+    return queryset
 
 def make_employee_list_view_order_form_options():
     options = [
@@ -122,17 +142,27 @@ class EmployeeList(LoginRequiredMixin, ListView):
         context['employee_list'] = employee_pages
         context['orderby'] = self.request.GET.get('orderby', 'last_name')
         context['position_filter'] = self.request.GET.get('position_filter')
-        context['employee_filter'] = self.request.GET.get('employee_filter') or 'Search for employee...'
+        context['employee_filter'] = self.request.GET.get('employee_filter') or 'e.g. Darth Vader'
         context['sorting_options'] = make_employee_list_view_order_form_options()
         context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
+        context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
+        context['per_page'] = self.request.GET.get('per_page') or 10
+        context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        context['position_sale'] = self.request.GET.get('position_sale') or False
+        context['position_production'] = self.request.GET.get('position_production') or False
+        context['position_other'] = self.request.GET.get('position_other') or False
         return context
 
     def get_queryset(self):
         clear_filters = self.request.GET.get('clear_filters')
         order = self.request.GET.get('orderby', 'last_name')
-        employee_filter = self.request.GET.get('employee_filter') or None
-        position_filter = self.request.GET.get('position_filter') or None
-        hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months') or None
+        sale_position_filter = self.request.GET.get('position_sale') or False
+        production_position_filter = self.request.GET.get('position_production') or False
+        other_position_filter = self.request.GET.get('position_production') or False
+        employee_filter = self.request.GET.get('employee_filter')
+        position_filter = self.request.GET.get('position_filter')
+        hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
+        hide_paid_employees_filter = self.request.GET.get('hide_paid_employees_filter')
         if clear_filters is None:
             if order == 'unpaid_salaries':
                 queryset = order_by_unpaid_salaries(employee_filter, '')
@@ -143,17 +173,27 @@ class EmployeeList(LoginRequiredMixin, ListView):
                 queryset = filtered_queryset.order_by(order)
             else:
                 queryset = order_by_default(order)
-            if position_filter is not None:
-                queryset = queryset.filter(position=position_filter)
+            if sale_position_filter or production_position_filter or other_position_filter:
+                queryset = position_list_and_filtering(self, queryset)
+
             if hide_zero_salary_months_filter is not None:
                 exclude_list = []
                 for employee in queryset:
                     if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
                         exclude_list.append(employee.id)
                 queryset = queryset.exclude(id__in=exclude_list)
-            if queryset.count() == 0:
+            if hide_paid_employees_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
+
+            if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
+                    or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None):
                 messages.add_message(self.request, messages.WARNING,
-                                     "No employee meets the search criteria. Widen your search or check filter for typos.")
+                                     "No employee meets the search criteria. "
+                                     "Widen your search or check filter for typos.")
         else:
             order = self.request.GET.get('orderby', 'last_name')
             queryset = order_by_default(order)
@@ -172,7 +212,7 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
-        order = self.request.GET.get('orderby', )#('-year', '-month'))
+        order = self.request.GET.get('orderby', ('-year', '-month'))
         hide_paid_filter = self.request.GET.get('hide_paid_months_filter')
         hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
         clear_filters = self.request.GET.get('clear_filters')
@@ -243,7 +283,9 @@ class EmployeeDetail(LoginRequiredMixin, ListView):
             pass
         context['hide_paid_months_filter'] = self.request.GET.get('hide_paid_months_filter') or False
         context['hide_unpaid_months_filter'] = self.request.GET.get('hide_unpaid_months_filter') or False
-        context['orderby'] = self.request.GET.get('orderby')
+        context['orderby'] = self.request.GET.get('orderby','newest')
+        context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        context['per_page'] = self.request.GET.get('per_page') or 10
         return context
 
 class EmployeeCreate(LoginRequiredMixin, CreateView):
@@ -277,6 +319,12 @@ class EmployeeUpdate(LoginRequiredMixin, UpdateView):
         except:
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
+
+    def form_valid(self, form):
+        form_not_committed = form.save(commit=False)
+        form_not_committed.health_book_exp_date = form.cleaned_data['health_book_exp_date']
+        form_validation = super(EmployeeUpdate, self).form_valid(form)
+        return form_validation
 
 class MonthCreate(LoginRequiredMixin, CreateView):
 
