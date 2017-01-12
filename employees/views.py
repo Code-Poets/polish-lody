@@ -38,10 +38,6 @@ class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
 
     def form_valid(self, form, **kwargs):
         self.object = form.save(commit=False)
-        form_not_committed = form.save(commit=False)
-        form_not_committed.contract_start_date = form.cleaned_data['contract_start_date']
-        form_not_committed.contract_exp_date = form.cleaned_data['contract_exp_date']
-        form_not_committed.health_book_exp_date = form.cleaned_data['health_book_exp_date']
         try:
             form_validation = super(EmployeeCreate, self).form_valid(form)
             messages.add_message(self.request, messages.SUCCESS,
@@ -69,17 +65,6 @@ class EmployeeUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
         except:
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
-
-    def form_valid(self, form, **kwargs):
-        form_not_committed = form.save(commit=False)
-        form_not_committed.contract_start_date = form.cleaned_data['contract_start_date']
-        form_not_committed.contract_exp_date = form.cleaned_data['contract_exp_date']
-        form_not_committed.health_book_exp_date = form.cleaned_data['health_book_exp_date']
-        form_validation = super(EmployeeUpdate, self).form_valid(form)
-        return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, form, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form))
 
 class MonthCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
 

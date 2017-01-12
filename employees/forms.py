@@ -12,8 +12,6 @@ dateinput = partial(forms.DateInput, {'class': 'datepicker'})
 #     start_date = forms.DateField(widget=DateInput())
 #     end_date = forms.DateField(widget=DateInput())
 
-employee_year = range(2000, datetime.now().year + 10)
-
 class HorizontalRadioRenderer(RadioSelect.renderer):
   def render(self):
     return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
@@ -24,9 +22,9 @@ class EmployeeForm(AuthUserCreationForm):
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
         widgets = {
-                    'contract_start_date'   : SelectDateWidget(years=employee_year),
-                    'contract_exp_date'     : SelectDateWidget(years=employee_year),
-                    'health_book_exp_date'  : SelectDateWidget(years=employee_year)
+                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
                     }
 
 class EmployeeChangeForm(ModelForm):
@@ -35,9 +33,9 @@ class EmployeeChangeForm(ModelForm):
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
         widgets = {
-                    'contract_start_date'   : SelectDateWidget(years=employee_year),
-                    'contract_exp_date'     : SelectDateWidget(years=employee_year),
-                    'health_book_exp_date'  : SelectDateWidget(years=employee_year)
+                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
                     }
 
 class MonthForm(ModelForm):
