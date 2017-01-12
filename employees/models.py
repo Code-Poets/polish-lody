@@ -3,7 +3,21 @@ from __future__ import unicode_literals
 from datetime import date
 from django.db import models, transaction
 from django.utils import timezone
+import time
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
+
+def is_expiring(exp_date):
+    if exp_date is not None:
+        expiration_date = exp_date
+        current_time = time.time()
+        expiration_date = int(time.mktime(time.strptime(str(expiration_date), '%Y-%m-%d')))
+        days_left = int((expiration_date - current_time) / 86400)
+        if 0 < days_left < 30:
+            return days_left
+        elif 0 > days_left:
+            return [days_left, days_left*(-1)]
+        else:
+            return False
 
 class Employee(models.Model):
 
@@ -44,9 +58,6 @@ class Employee(models.Model):
         months_enum = list(months_dict.keys())
         return months_dict, months_enum
 
-    def save(self, *args, **kwargs):
-        super(Employee, self).save(*args, **kwargs)
-
     def all_unpaid_salaries(self):
         employee_months = self.month_set.all()
         if len(employee_months) != 0:
@@ -72,6 +83,11 @@ class Employee(models.Model):
 
     def full_name(self):
         return self.last_name + " " + self.first_name
+
+    def is_health_book_expiring(self):
+        return is_expiring(self.health_book_exp_date)
+    def is_contract_expiring(self):
+        return is_expiring(self.contract_exp_date)
 
 
 class Month(models.Model):
