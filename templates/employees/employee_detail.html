@@ -47,15 +47,35 @@
                         </td>
                         <td>
                             {{ employee.contract_exp_date }}
+                            {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
+                            <span title="Contract expires in about {{ employee.is_contract_expiring }} days."
+                             class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                            {% elif employee.is_contract_expiring.1 %}
+                            <span title="Contract expired {{ employee.is_contract_expiring.1 }} days ago!"
+                             class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <td>
                             Health book expiration date:
                         </td>
+                        {% if employee.is_health_book_expiring %}
+                        <td>
+                            {{ employee.health_book_exp_date }}
+                            {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
+                            <span title="Health book expires in about {{ employee.is_health_book_expiring }} days."
+                             class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                            {% elif employee.is_health_book_expiring.1 %}
+                            <span title="Health book expired {{ employee.is_health_book_expiring.1 }} days ago!"
+                             class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                            {% endif %}
+                        </td>
+                        {% else %}
                         <td>
                             {{ employee.health_book_exp_date }}
                         </td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td>
@@ -98,20 +118,10 @@
                 {% endif %}
 
             </div>
-            <div class="panel-body">
-            <form method="get" action="{% url 'employee_detail' employee.id %}">
-                <select name="orderby">
-                {% for tuple in month_sorting_options %}
-                {% if tuple.0 == 'oldest' %}
-                <option selected disabled>Choose order type:</option>
-                {% endif %}
-                {% if tuple.0 == orderby %}
-                <option selected value="{{ tuple.0 }}">{{ tuple.1 }}</option>
-                {% else %}
-                <option value="{{ tuple.0 }}">{{ tuple.1 }}</option>
-                {% endif %}
-                {% endfor %}
-                </select>
+            <div class="panel-body filter-forms">
+
+                <a name="month-table"></a>
+                <form method="get" action="{% url 'employee_detail' employee.id %}">
                 <select name="select_year">
                     <option selected disabled>Select year:</option>
                     {% for year in years %}
@@ -122,43 +132,86 @@
                     {% endif %}
                     {% endfor %}
                 </select>
-
-            {% if hide_paid_months_filter %}
-            <p>Hide months which are paid for.<input type="checkbox" checked name="hide_paid_months_filter"></p>
-            {% else %}
-            <p>Hide months which are paid for.<input type="checkbox" name="hide_paid_months_filter"></p>
-            {% endif %}
-            {% if hide_unpaid_months_filter %}
-            <p>Hide months which are not paid for.<input type="checkbox" checked name="hide_unpaid_months_filter"></p>
-            {% else %}
-            <p>Hide months which are not paid for.<input type="checkbox" name="hide_unpaid_months_filter"></p>
-            {% endif %}
-            <p><input type="submit" name="submit" value="submit"/></p>
-            </form>
-            <div class="panel-body">
+                    {% if hide_unpaid_months_filter %}
+                    <input id="paid_months" checked type="checkbox" class="vis-hidden"
+                           name="hide_unpaid_months_filter" />
+                    {% else %}
+                    <input id="paid_months" type="checkbox" class="vis-hidden"
+                           name="hide_unpaid_months_filter" />
+                    {% endif %}
+                    <label class="my-button" for="paid_months">Hide unpaid months.</label>
+                    {% if hide_paid_months_filter %}
+                    <input id="unpaid_months" type="checkbox" checked class="vis-hidden"
+                           name="hide_paid_months_filter" />
+                    {% else %}
+                    <input id="unpaid_months" type="checkbox"  class="vis-hidden"
+                           name="hide_paid_months_filter" />
+                    {% endif %}
+                    <label class="my-button" for="unpaid_months">Hide paid months.</label>
+                    <input class="btn btn-primary" type="submit" value="submit"/>
+                </form>
                 <form method="get" action="{% url 'employee_detail' employee.id %}">
-                    <p><input type="submit" name="clear_filters" value="Clear filters"/></p>
+                    <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
                 </form>
             </div>
-
             {% if months %}
             <div class="panel-body">
                 <table class="table sortable">
                     <tr>
                         <td class="cursor-hover">
                             Month and year
+                            <form title="Sort by most recent months" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=oldest&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-up"></a>
+                            </form>
+                            <form title="Sort by least recent months" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=newest&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-down"></a>
+                            </form>
                         </td>
                         <td class="cursor-hover" align="center" valign="middle">
                             Hours worked
+                            <form title="Sort by hours worked ascending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=hours_worked_in_this_month&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-up"></a>
+                            </form>
+                            <form title="Sort by hours worked descending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=-hours_worked_in_this_month&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-down"></a>
+                            </form>
                         </td>
                         <td class="cursor-hover" align="center" valign="middle">
                             Rate per hour (zł)
+                            <form title="Sort by rate per hour ascending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=rate_per_hour_this_month&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-up"></a>
+                            </form>
+                            <form title="Sort by rate per hour descending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=-rate_per_hour_this_month&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-down"></a>
+                            </form>
                         </td>
                         <td class="cursor-hover" align="center" valign="middle">
                             Was salary paid?
                         </td>
                         <td class="cursor-hover" align="center" valign="middle">
                             To be paid (zł)
+                            <form title="Sort by salary ascending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=to_be_paid&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-up"></a>
+                            </form>
+                            <form title="Sort by salary descending" class="column-title-form"
+                                  action="{% url 'employee_detail' employee.id %}" method="post">{% csrf_token %}
+                                <a href="?orderby=-to_be_paid&per_page={{ per_page }}#month-table"
+                                   class="glyphicon glyphicon-chevron-down"></a>
+                            </form>
                         </td>
                         <td>
                         </td>
@@ -166,7 +219,7 @@
                     {% for month in months %}
                     {% if month.salary_is_paid is False and month.calculating_salary_for_this_month == 0 %}
                     <tr>
-                        <td align="center">
+                        <td>
                             {{ month.month_detail }}
                         </td>
                         <td align="center" valign="middle">
@@ -283,7 +336,7 @@
             {% endfor %}
         </ul><br/>
 
-        <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
+        <a href="{% url 'employees' %}" class="btn btn-default" id="back-btn-detail">Back</a>
     {% else %}
         <p>Employee not found</p><br/>
     {% endif %}
