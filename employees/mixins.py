@@ -8,7 +8,8 @@ class OwnershipMixin(object):
         self.args = args
         self.kwargs = kwargs
         current_user = self.request.user._wrapped if hasattr(self.request.user, '_wrapped') else self.request.user
-        object_owner = getattr(self.get_object(), 'email')
+        employee = Employee.objects.get(pk=self.kwargs.get('pk'))
+        object_owner = getattr(employee, 'email')
         if str(current_user) != str(object_owner) and not current_user.is_staff:
             raise PermissionDenied
         return super(OwnershipMixin, self).dispatch(request, *args, **kwargs)

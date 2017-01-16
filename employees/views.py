@@ -200,9 +200,10 @@ class EmployeeList(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
             queryset = order_by_default(order)
         return queryset
 
-class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, DetailView):
+class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
     model = Month
     template_name = 'employees/employee_detail.html'
+
     def get_paginate_by(self, queryset):
         try:
             per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
@@ -222,7 +223,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, DetailView):
         hide_paid_filter = self.request.GET.get('hide_paid_months_filter')
         hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
         clear_filters = self.request.GET.get('clear_filters')
-
         selected_years = self.get_selected_years()
 
         if clear_filters is None:
