@@ -38,7 +38,7 @@
                 {% endif %}
                 {% for e in form %}
                     <div class="form-group">
-                        {% if e.label == 'Email address' or e.label == 'Password' or e.label == 'Password confirmation' or e.label == 'First name' or e.label == 'Last name' %}
+                        {% if e.label == 'Email address' or e.label == 'First name' or e.label == 'Last name' %}
                         <label class="col-sm-2 control-label">{{ e.label }}<span class="required"> *</span></label>
                         <div class="input-group col-sm-9">
                             {{ e|add_class:"form-control" }}

@@ -17,6 +17,23 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
     return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
 class EmployeeForm(AuthUserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(EmployeeForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+        # If one field gets autocompleted but not the other, our 'neither
+        # password or both password' validation will be triggered.
+        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = super(EmployeeForm, self).clean_password2()
+        if bool(password1) ^ bool(password2):
+            raise forms.ValidationError("Fill out both fields")
+        return password2
+
     class Meta:
         model = Employee
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
