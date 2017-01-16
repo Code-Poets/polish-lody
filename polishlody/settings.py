@@ -166,7 +166,9 @@ DATE_INPUT_FORMATS = [
     '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
 ]
 
+### VARIABLES USED IN APPLICATION
 WARNING_DAYS_LEFT = 30
+FORM_SUBMIT_DELAY = 2000
 
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
