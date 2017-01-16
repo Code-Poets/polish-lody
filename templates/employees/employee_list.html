@@ -12,7 +12,7 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
     <a name="employee-table"></a>
     <div class="panel-body filter-forms">
-        <form method="get" action="{% url 'employees' %}">
+        <form id="auto-submit-form" onclick="autoSubmitForm();" method="get" action="{% url 'employees' %}">
             {% if position_sale %}
             <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
             {% else %}
@@ -49,7 +49,6 @@
             {% endif %}
             <label class="my-button" for="chk_unpaid">Show only employees who weren't paid yet.</label>
             Search for employee: <input type="text" placeholder="{{ employee_filter }}" name="employee_filter"/>
-            <input type="submit" class="btn btn-primary" value="Submit"/>
         </form>
 
         <form method="get" action="{% url 'employees' %}">
