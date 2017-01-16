@@ -13,7 +13,8 @@ from .forms import EmployeeForm, EmployeeChangeForm, MonthForm
 from .models import Employee, Month
 from .mixins import OwnershipMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
-from polishlody.settings import WARNING_DAYS_LEFT
+import re
+from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 
 def make_year_list_for_filtering_in_emp_detail(employee):
     months = employee.month_set.all()
@@ -22,7 +23,7 @@ def make_year_list_for_filtering_in_emp_detail(employee):
         if not month.year in years:
             years.append(month.year)
     sorted_years = sorted(years)
-    return sorted_years
+    return sorted_years[::-1]
 
 def position_list_and_filtering(self, queryset):
     positions = {
@@ -150,6 +151,7 @@ class EmployeeList(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
         context['position_sale'] = self.request.GET.get('position_sale') or False
         context['position_production'] = self.request.GET.get('position_production') or False
         context['position_other'] = self.request.GET.get('position_other') or False
+        context['form_submit_delay'] = FORM_SUBMIT_DELAY
         return context
 
     def get_queryset(self):
@@ -207,13 +209,22 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, DetailView):
         except:
             per_page = 10
         return per_page
+
+    def get_selected_years(self):
+        url = self.request.GET.urlencode()
+        selected_years = re.findall(r'\d+', url)
+        selected_years = list(map(int, selected_years))
+        return selected_years
+
     def get_queryset(self):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
         order = self.request.GET.get('orderby', ('-year', '-month'))
         hide_paid_filter = self.request.GET.get('hide_paid_months_filter')
         hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
         clear_filters = self.request.GET.get('clear_filters')
-        year_filter = self.request.GET.get('select_year')
+
+        selected_years = self.get_selected_years()
+
         if clear_filters is None:
 
             if order == 'newest':
@@ -236,10 +247,10 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, DetailView):
                     month_queryset = employee.month_set.all().order_by(order)
                 except:
                     month_queryset = employee.month_set.all().order_by('-year', '-month')
-            if year_filter is not None:
-                years = make_year_list_for_filtering_in_emp_detail(employee)
-                years.remove(int(year_filter))
-                month_queryset = month_queryset.exclude(year__in=years)
+
+            if len(selected_years) != 0:
+                month_queryset = month_queryset.filter(year__in=selected_years)
+
             if hide_paid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=True)
             if hide_unpaid_filter is not None:
@@ -274,13 +285,22 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, DetailView):
         context['months'] = month_pages
         context['month_sorting_options'] = make_employee_detail_view_order_form_options()
         context['years'] = make_year_list_for_filtering_in_emp_detail(context['employee'])
+        selected_years = self.get_selected_years()
         try:
-            context['select_year'] = int(self.request.GET.get('select_year'))
+            context['selected_years'] = selected_years
+            show_all_years_at_load = [yr for yr in selected_years if yr in context['years'][5:]]
+            if len(show_all_years_at_load) == 0:
+                context['years_5'] = False
+            else:
+                context['years_5'] = True
+            context['years_hidden'] = context['years'][5:] or None
+            context['years_shown'] = context['years'][:5]
         except:
             pass
         context['hide_paid_months_filter'] = self.request.GET.get('hide_paid_months_filter') or False
         context['hide_unpaid_months_filter'] = self.request.GET.get('hide_unpaid_months_filter') or False
         context['orderby'] = self.request.GET.get('orderby','newest')
+        context['form_submit_delay'] = FORM_SUBMIT_DELAY
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['per_page'] = self.request.GET.get('per_page') or 10
         return context
