@@ -12,6 +12,31 @@
         {% bootstrap_javascript %}
         {% load sass_tags %}
         <link href="{% sass_src 'main.scss' %}" rel="stylesheet" type="text/css" />
+        <script type="text/javascript">
+            function submitForm() {
+                document.getElementById("auto-submit-form").submit();
+            };
+            function autoSubmitForm() {
+
+            var events = ['click', 'keydown'],
+                    i = events.length,
+                    timer,
+                    delay = 1500
+                    reset = function () {
+                        clearTimeout(timer);
+                        timer = setTimeout(submitForm, {{form_submit_delay}});
+                    };
+
+                while (i) {
+                    i -= 1;
+                    document.addEventListener(events[i], reset, false);
+                }
+                reset();
+            };
+
+
+        </script>
+
     </head>
 
     <body>
