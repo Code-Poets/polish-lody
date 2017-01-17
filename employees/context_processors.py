@@ -11,3 +11,11 @@ def getvars(request):
         del variables['page']
 
     return {'getvars': '&{0}'.format(variables.urlencode())}
+
+def getvars_perpage(request):
+
+    variables = request.GET.copy()
+    if 'per_page' in variables:
+        del variables['per_page']
+
+    return {'getvars_perpage': '&{0}'.format(variables.urlencode())}
