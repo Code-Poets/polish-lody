@@ -102,16 +102,6 @@ form.column-title-form {
     text-decoration: none;
     }
 
-a.glyphicon-chevron-up {
-    color: #393939;
-    text-decoration: none;
-    }
-
-a.glyphicon-chevron-down {
-    color: #393939;
-    text-decoration: none;
-    }
-
 .glyphicon-warning-sign {
     color: red;
     cursor: help;
@@ -146,7 +136,7 @@ span.employee-list-date {
 input[type=checkbox] + label {
   color: #blue;
 }
-input[type=checkbox]:checked + label {
+input[type=checkbox]:checked + label.my-button {
     box-shadow: 0px 0px 6px -4px #000000;
 	background-color:#e8e8e8;
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d6ffb2), color-stop(1, #7bd900));
@@ -209,5 +199,48 @@ form {
 
 .dont-show-those {
     display: none;
-
 }
+
+.sorting {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.glyphicon-chevron-up {
+    color: #393939;
+    text-decoration: none;
+    }
+
+.glyphicon-chevron-down {
+    text-decoration: none;
+    }
+
+.glyphicon-chevron-up:hover {
+    cursor: pointer;
+    }
+
+.glyphicon-chevron-down:hover {
+    cursor: pointer;
+    }
+
+input[type=radio]:checked + .glyphicon-chevron-up {
+    color:red;
+    }
+
+input[type=radio] + .glyphicon-chevron-up {
+    color:blue;
+    }
+
+input[type=radio]:checked + .glyphicon-chevron-down {
+    color:red;
+    }
+
+input[type=radio] + .glyphicon-chevron-down {
+    color:blue;
+    }
