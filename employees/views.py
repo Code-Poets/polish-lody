@@ -32,17 +32,15 @@ def position_list_and_filtering(self, queryset):
         'position_sale': 'Sale',
         'position_production': 'Production',
         'position_other': 'Other',
+        'position_none': 'None',
     }
     exclude_list = []
 
     for key in positions.keys():
         if self.request.GET.get(key) is None:
             exclude_list.append(positions[key])
-            print(key)
             queryset = queryset.exclude(position=positions[key])
-            print(positions[key])
-            print(queryset)
-
+    queryset = queryset.exclude(position=None)
     return queryset
 
 def make_employee_list_view_order_form_options():
@@ -119,6 +117,7 @@ def order_by_unpaid_salaries(name_filter, descending):
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
+
     def get_paginate_by(self, queryset):
         try:
             per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
@@ -179,13 +178,13 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             if sale_position_filter or production_position_filter or other_position_filter:
                 queryset = position_list_and_filtering(self, queryset)
 
-            if hide_zero_salary_months_filter is not None:
+            if hide_paid_employees_filter is not None:
                 exclude_list = []
                 for employee in queryset:
                     if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
                         exclude_list.append(employee.id)
                 queryset = queryset.exclude(id__in=exclude_list)
-            if hide_paid_employees_filter is not None:
+            if hide_zero_salary_months_filter is not None:
                 exclude_list = []
                 for employee in queryset:
                     if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
@@ -216,7 +215,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
     def get_selected_years(self):
         url = self.request.GET.urlencode()
         selected_years = re.findall(r'\d+', url)
-        selected_years = list(map(int, selected_years))
+        selected_years = [int(num) for num in selected_years if len(num) > 3]
         return selected_years
 
     def get_queryset(self):
@@ -249,15 +248,12 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                     month_queryset = employee.month_set.all().order_by(order)
                 except:
                     month_queryset = employee.month_set.all().order_by('-year', '-month')
-
             if len(selected_years) != 0:
                 month_queryset = month_queryset.filter(year__in=selected_years)
-
             if hide_paid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=True)
             if hide_unpaid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=False)
-
             if month_queryset.count() == 0:
                 messages.add_message(self.request, messages.WARNING,
                                      "Employee has no months which satisfy specified criteria. Check filters again.")
