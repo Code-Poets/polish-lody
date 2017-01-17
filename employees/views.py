@@ -220,28 +220,36 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
 
     def get_queryset(self):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
-        order = self.request.GET.get('orderby', ('-year', '-month'))
+        order = self.request.GET.get('order', ('-year', '-month'))
         hide_paid_filter = self.request.GET.get('hide_paid_months_filter')
         hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
         clear_filters = self.request.GET.get('clear_filters')
         selected_years = self.get_selected_years()
 
         if clear_filters is None:
-
             if order == 'newest':
                 month_queryset = employee.month_set.all().order_by('-year', '-month')
 
             elif order == 'oldest':
                 month_queryset = employee.month_set.all().order_by('year', 'month')
 
-            elif order == 'to_be_paid':
+            elif order == 'tbp-up':
                 month_queryset = employee.month_set.annotate(
                     to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
                 ).order_by('to_be_paid')
             elif order == '-to_be_paid':
                 month_queryset = employee.month_set.annotate(
                     to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
-                ).order_by('-to_be_paid')
+                ).order_by('tbp-down')
+            elif order == 'hours-up':
+                month_queryset = employee.month_set.all().order_by('hours_worked_in_this_month')
+            elif order == 'oldest':
+                month_queryset = employee.month_set.all().order_by('-hours_worked_in_this_month')
+
+            elif order == 'rph-up':
+                month_queryset = employee.month_set.all().order_by('rate_per_hour_this_month')
+            elif order == 'rph-down':
+                month_queryset = employee.month_set.all().order_by('-rate_per_hour_this_month')
 
             else:
                 try:
@@ -271,6 +279,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         paginator = Paginator(month_list, self.get_paginate_by(month_list))
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(month_list)
+
         if pg is not None:
             context['current_paginate_by_number'] = int(pg)
         try:
@@ -297,10 +306,11 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
             pass
         context['hide_paid_months_filter'] = self.request.GET.get('hide_paid_months_filter') or False
         context['hide_unpaid_months_filter'] = self.request.GET.get('hide_unpaid_months_filter') or False
-        context['orderby'] = self.request.GET.get('orderby','newest')
+        context['orderby'] = self.request.GET.get('order', 'newest')
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['per_page'] = self.request.GET.get('per_page') or 10
+
         return context
 
 class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
