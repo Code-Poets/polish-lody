@@ -18,4 +18,10 @@ def getvars_perpage(request):
     if 'per_page' in variables:
         del variables['per_page']
 
+    if 'page' in variables:
+        del variables['page']
+
+    if 'clear_filters' in variables:
+        del variables['clear_filters']
+
     return {'getvars_perpage': '&{0}'.format(variables.urlencode())}
