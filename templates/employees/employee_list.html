@@ -49,6 +49,17 @@
             {% endif %}
             <label class="my-button" for="chk_unpaid">Show only employees who weren't paid yet.</label>
             Search for employee: <input type="text" placeholder="{{ employee_filter }}" name="employee_filter"/>
+
+        <select hidden name="per_page">
+            {% for number in paginate_by_numbers %}
+                {% if current_paginate_by_number == number %}
+                    <option selected value="{{ number }}">{{number}}</option>
+                {% else %}
+                    <option value="{{ number }}">{{number}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
         </form>
 
         <form method="get" action="{% url 'employees' %}">
@@ -197,9 +208,9 @@
         <ul class="pagination">
             {% for number in paginate_by_numbers %}
             {% if current_paginate_by_number == number %}
-            <li class="active"><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
+            <li class="active"><a href="?per_page={{ number }}&orderby={{ orderby }}{{ getvars_perpage }}">{{ number }}</a></li>
             {% else %}
-            <li><a href="?per_page={{ number }}&orderby={{ orderby }}">{{ number }}</a></li>
+            <li><a href="?per_page={{ number }}&orderby={{ orderby }}{{ getvars_perpage }}">{{ number }}</a></li>
             {% endif %}
             {% endfor %}
         </ul><br/>
