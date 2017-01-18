@@ -156,4 +156,3 @@ DATE_INPUT_FORMATS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
