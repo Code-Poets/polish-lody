@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from .models import Employee
 
@@ -13,3 +14,6 @@ class OwnershipMixin(object):
         if str(current_user) != str(object_owner) and not current_user.is_staff:
             raise PermissionDenied
         return super(OwnershipMixin, self).dispatch(request, *args, **kwargs)
+
+class StaffUserMixin(PermissionRequiredMixin):
+    permission_required = 'MyUser.is_staff'
