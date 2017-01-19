@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.contrib.auth.forms import PasswordResetForm
+from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm
 from .models import Employee, Month
-from .mixins import OwnershipMixin
+from .mixins import OwnershipMixin, StaffUserMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
@@ -114,7 +116,7 @@ def order_by_unpaid_salaries(name_filter, descending):
     ).order_by('%sunpaid_salaries' % (descending))
     return query
 
-class EmployeeList(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
+class EmployeeList(LoginRequiredMixin, StaffUserMixin, ListView):
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
     def get_paginate_by(self, queryset):
@@ -305,7 +307,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         context['per_page'] = self.request.GET.get('per_page') or 10
         return context
 
-class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
+class EmployeeCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
     model = Employee
     form_class = EmployeeForm
     success_url = reverse_lazy('employees')
@@ -313,8 +315,28 @@ class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
 
     def form_valid(self, form, **kwargs):
         self.object = form.save(commit=False)
+        obj = form.save(commit=False)
+        if (not form.cleaned_data['password1'] or not obj.has_usable_password()):
+            # Django's PasswordResetForm won't let us reset an unusable
+            # password. We set it above super() so we don't have to save twice.
+            obj.set_password(get_random_string())
+            reset_password = True
+        else:
+            reset_password = False
+
+        super(EmployeeCreate, self).form_valid(form)
+
         try:
             form_validation = super(EmployeeCreate, self).form_valid(form)
+            if reset_password:
+                reset_form = PasswordResetForm({'email': obj.email})
+                request = HttpRequest()
+                assert reset_form.is_valid()
+                reset_form.save(
+                    request=request,
+                    use_https=request.is_secure(),
+                    email_template_name='registration/password_set_email.html',
+                )
             messages.add_message(self.request, messages.SUCCESS,
                                  "Successfully created employee %s" % self.object.full_name())
             return form_validation
@@ -327,7 +349,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-class EmployeeUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
+class EmployeeUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
 
     model = Employee
     form_class = EmployeeChangeForm
@@ -341,7 +363,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
 
-class MonthCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
+class MonthCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
     template_name = 'employees/month_form.html'
@@ -388,7 +410,7 @@ class MonthCreate(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class MonthUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
+class MonthUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
 
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
@@ -434,7 +456,7 @@ class MonthUpdate(LoginRequiredMixin, StaffuserRequiredMixin, UpdateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class EmployeeDelete(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
+class EmployeeDelete(LoginRequiredMixin, StaffUserMixin, DeleteView):
     model = Employee
     success_url = reverse_lazy('employees')
 
@@ -449,7 +471,7 @@ class EmployeeDelete(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
 
         return HttpResponseRedirect(self.success_url)
 
-class MonthDelete(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
+class MonthDelete(LoginRequiredMixin, StaffUserMixin, DeleteView):
     model = Month
 
     def get_success_url(self, **kwargs):
