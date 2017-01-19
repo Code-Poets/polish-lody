@@ -244,3 +244,9 @@ input[type=radio]:checked + .glyphicon-chevron-down {
 input[type=radio] + .glyphicon-chevron-down {
     color:blue;
     }
+
+.loading-icon {
+    display: inline-block;
+    opacity: 0;
+    transition:opacity 0.4s;
+}
