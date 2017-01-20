@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseRedirect
 from .models import Employee
 
 class OwnershipMixin(object):
@@ -12,8 +12,16 @@ class OwnershipMixin(object):
         employee = Employee.objects.get(pk=self.kwargs.get('pk'))
         object_owner = getattr(employee, 'email')
         if str(current_user) != str(object_owner) and not current_user.is_staff:
-            raise PermissionDenied
+            return HttpResponseRedirect('../')
         return super(OwnershipMixin, self).dispatch(request, *args, **kwargs)
 
-class StaffUserMixin(PermissionRequiredMixin):
-    permission_required = 'MyUser.is_staff'
+class StaffRequiredMixin(object):
+    """
+    View mixin which requires that the authenticated user is a staff member
+    (i.e. `is_staff` is True).
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseRedirect('../')
+        return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
