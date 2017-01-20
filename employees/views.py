@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+#from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -13,7 +13,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm
 from .models import Employee, Month
-from .mixins import OwnershipMixin, StaffUserMixin
+from .mixins import OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
@@ -116,7 +116,7 @@ def order_by_unpaid_salaries(name_filter, descending):
     ).order_by('%sunpaid_salaries' % (descending))
     return query
 
-class EmployeeList(LoginRequiredMixin, StaffUserMixin, ListView):
+class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
     def get_paginate_by(self, queryset):
@@ -307,7 +307,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         context['per_page'] = self.request.GET.get('per_page') or 10
         return context
 
-class EmployeeCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
+class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Employee
     form_class = EmployeeForm
     success_url = reverse_lazy('employees')
@@ -349,7 +349,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-class EmployeeUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
+class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     model = Employee
     form_class = EmployeeChangeForm
@@ -363,7 +363,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
 
-class MonthCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
+class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
     template_name = 'employees/month_form.html'
@@ -410,7 +410,7 @@ class MonthCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class MonthUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
+class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     form_class = MonthForm
     success_url = reverse_lazy('employee_detail')
@@ -456,7 +456,7 @@ class MonthUpdate(LoginRequiredMixin, StaffUserMixin, UpdateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class EmployeeDelete(LoginRequiredMixin, StaffUserMixin, DeleteView):
+class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Employee
     success_url = reverse_lazy('employees')
 
@@ -471,7 +471,7 @@ class EmployeeDelete(LoginRequiredMixin, StaffUserMixin, DeleteView):
 
         return HttpResponseRedirect(self.success_url)
 
-class MonthDelete(LoginRequiredMixin, StaffUserMixin, DeleteView):
+class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Month
 
     def get_success_url(self, **kwargs):
