@@ -1,0 +1,15 @@
+-   model: users.myuser
+    pk: 1
+    fields:
+        # password is: passwordpassword
+        password:      pbkdf2_sha256$30000$j2snrQAbMh0w$bZyjy+6ziSfE26XDG+3r+f3O07c1PMvWffCR3742H9I=
+        last_login:    "2016-12-02 16:06:07Z"
+        is_superuser:  true
+        email:         email@example.com
+        first_name: ''
+        last_name: ''
+        is_staff: true
+        date_joined: "2016-12-02 15:11:26Z"
+        is_active: true
+        groups: []
+        user_permissions: []
