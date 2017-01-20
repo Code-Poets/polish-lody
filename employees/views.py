@@ -330,8 +330,8 @@ class EmployeeCreate(LoginRequiredMixin, StaffUserMixin, CreateView):
             form_validation = super(EmployeeCreate, self).form_valid(form)
             if reset_password:
                 reset_form = PasswordResetForm({'email': obj.email})
-                request = HttpRequest()
                 assert reset_form.is_valid()
+                request = HttpRequest()
                 reset_form.save(
                     request=request,
                     use_https=request.is_secure(),
