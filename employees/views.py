@@ -262,7 +262,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 month_queryset = month_queryset.exclude(salary_is_paid=True)
             if hide_unpaid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=False)
-            if month_queryset.count() == 0:
+            if month_queryset.count() == 0 and not employee.month_set.all().count() == 0:
                 messages.add_message(self.request, messages.WARNING,
                                      "Employee has no months which satisfy specified criteria. Check filters again.")
         else:
