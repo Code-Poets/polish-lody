@@ -138,6 +138,7 @@
                 {% endif %}
 
             </div>
+            {% if months %}
             <a name="month-table"></a>
             <div class="panel-body">
             <form method="get" action="{% url 'employee_detail' employee.id %}#month-table">
@@ -622,7 +623,9 @@
             {% endfor %}
         </ul><br/>
 
+
         <a href="{% url 'employees' %}" class="btn btn-default" id="back-btn-detail">Back</a>
+        {% endif %}
     </div>
     {% else %}
         <p>Employee not found</p><br/>
