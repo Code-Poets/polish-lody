@@ -11,7 +11,6 @@
     <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
     <a name="employee-table"></a>
-    {% if all_employee_list %}
     <div class="panel-body filter-forms">
         <form method="get" action="{% url 'employees' %}">
             <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
@@ -68,6 +67,7 @@
 
         <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
         </div>
+    {% if all_employee_list %}
     <div class="panel-body">
         <table class="table table-hover">
             <tr>
