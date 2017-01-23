@@ -234,7 +234,7 @@ input[type=radio]:checked + .glyphicon-chevron-up {
     }
 
 input[type=radio] + .glyphicon-chevron-up {
-    color:blue;
+    color:#393939;
     }
 
 input[type=radio]:checked + .glyphicon-chevron-down {
@@ -242,5 +242,11 @@ input[type=radio]:checked + .glyphicon-chevron-down {
     }
 
 input[type=radio] + .glyphicon-chevron-down {
-    color:blue;
+    color:#393939;
     }
+
+.loading-icon {
+    display: inline-block;
+    opacity: 0;
+    transition:opacity 0.3s;
+}

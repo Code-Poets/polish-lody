@@ -12,7 +12,12 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
     <a name="employee-table"></a>
     <div class="panel-body filter-forms">
-        <form id="auto-submit-form" onclick="autoSubmitForm();" method="get" action="{% url 'employees' %}">
+        <form method="get" action="{% url 'employees' %}">
+            <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
+        </form>
+    </div>
+    <form id="auto-submit-form" method="get" action="{% url 'employees' %}">
+        <div class="panel-body filter-forms">
             {% if position_sale %}
             <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
             {% else %}
@@ -60,74 +65,119 @@
             {% endfor %}
         </select>
 
-        </form>
-
-        <form method="get" action="{% url 'employees' %}">
-            <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
-        </form>
-    </div>
+        <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+        </div>
     {% if all_employee_list %}
-    <div>
-
+    <div class="panel-body">
         <table class="table table-hover">
             <tr>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Full name</b>
-                    <form title="Sort by last name ascending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=last_name&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-up"></a>
-                    </form>
-                    <form title="Sort by last name descending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=-last_name&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-down"></a>
-                    </form>
+                        {% if orderby == 'last_name' %}
+                            <input id="last-name-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="last_name"/>
+                        {% else %}
+                            <input id="last-name-up" type="radio" class="sorting sort-up"
+                                           name="order" value="last_name"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up"
+                                   for="last-name-up"></label>
+                        {% if orderby == '-last_name' %}
+                            <input id="last-name-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-last_name"/>
+                        {% else %}
+                            <input id="last-name-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-last_name"/>
+                        {% endif %}
+                            <label title="Sort alphabetically descending" class="glyphicon glyphicon-chevron-down"
+                                   for="last-name-down"></label>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Rate per hour (zł)</b>
-                    <form title="Sort by rate per hour ascending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=rate_per_hour&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-up"></a>
-                    </form>
-                    <form title="Sort by rate per hour descending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=-rate_per_hour&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-down"></a>
-                    </form>
+                        {% if orderby == 'rate_per_hour' %}
+                            <input id="rate-per-hour-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="rate_per_hour"/>
+                        {% else %}
+                            <input id="rate-per-hour-up" type="radio" class="sorting sort-up"
+                                           name="order" value="rate_per_hour"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up"
+                                   for="rate-per-hour-up"></label>
+                        {% if orderby == '-rate_per_hour' %}
+                            <input id="rate-per-hour-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-rate_per_hour"/>
+                        {% else %}
+                            <input id="rate-per-hour-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-rate_per_hour"/>
+                        {% endif %}
+                            <label title="Sort alphabetically descending" class="glyphicon glyphicon-chevron-down"
+                                   for="rate-per-hour-down"></label>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Position</b>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Contract expiration date</b>
-                    <form title="Sort by contract expiration date ascending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=contract_exp_date&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-up"></a>
-                    </form>
-                    <form title="Sort by contract expiration date descending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=-contract_exp_date&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-down"></a>
-                    </form>
+                        {% if orderby == 'contract_exp_date' %}
+                            <input id="contract-exp-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="contract_exp_date"/>
+                        {% else %}
+                            <input id="contract-exp-up" type="radio" class="sorting sort-up"
+                                           name="order" value="contract_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by contract expiration date ascending" class="glyphicon glyphicon-chevron-up"
+                                   for="contract-exp-up"></label>
+                        {% if orderby == '-contract_exp_date' %}
+                            <input id="contract-exp-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-contract_exp_date"/>
+                        {% else %}
+                            <input id="contract-exp-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-contract_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by contract expiration date descending" class="glyphicon glyphicon-chevron-down"
+                                   for="contract-exp-down"></label>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Health book expiration date</b>
-                    <form title="Sort by health book expiration date ascending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=health_book_exp_date&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-up"></a>
-                    </form>
-                    <form title="Sort by health book expiration date descending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=-health_book_exp_date&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-down"></a>
-                    </form>
+                    {% if orderby == 'health_book_exp_date' %}
+                            <input id="health-book-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="health_book_exp_date"/>
+                        {% else %}
+                            <input id="health-book-up" type="radio" class="sorting sort-up"
+                                           name="order" value="health_book_exp_date"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up"
+                                   for="health-book-up"></label>
+                        {% if orderby == '-health_book_exp_date' %}
+                            <input id="health-book-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-health_book_exp_date"/>
+                        {% else %}
+                            <input id="health-book-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-health_book_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by health book expiration date descending" class="glyphicon glyphicon-chevron-down"
+                                   for="health-book-down"></label>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>Total unpaid salaries (zł)</b>
-                    <form title="Sort by unpaid salaries ascending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=unpaid_salaries&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-up"></a>
-                    </form>
-                    <form title="Sort by unpaid salaries descending" class="column-title-form"
-                          action="{% url 'employees' %}" method="post">
-                        <a href="?orderby=-unpaid_salaries&per_page={{ per_page }}#employee-table" class="glyphicon glyphicon-chevron-down"></a>
-                    </form>
+                        {% if orderby == 'unpaid_salaries' %}
+                            <input id="unpaid-salaries-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="unpaid_salaries"/>
+                        {% else %}
+                            <input id="unpaid-salaries-up" type="radio" class="sorting sort-up"
+                                           name="order" value="unpaid_salaries"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up"
+                                   for="unpaid-salaries-up"></label>
+                        {% if orderby == '-unpaid_salaries' %}
+                            <input id="unpaid-salaries-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-unpaid_salaries"/>
+                        {% else %}
+                            <input id="unpaid-salaries-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-unpaid_salaries"/>
+                        {% endif %}
+                            <label title="Sort by unpaid salaries descending" class="glyphicon glyphicon-chevron-down"
+                                   for="unpaid-salaries-down"></label>
                 </td>
                 <td>
                 </td>
@@ -181,8 +231,12 @@
             </tr>
             {% endfor %} 
         </table>
-    </div>
+
+        </div>
+    </form>
+
         {% if page_obj.has_other_pages %}
+        <div>
             <ul class="pagination">
             {% if page_obj.has_previous %}
                 <li><a href="?page={{ page_obj.previous_page_number }}{{ getvars }}">&laquo; Previous</a></li>
@@ -202,15 +256,15 @@
                 <li class="disabled"><span>Next &raquo;</span></li>
             {% endif %}
             </ul><br/>
-
+        </div>
         {% endif %}
-    <span>Employees per page:</span><br/>
+        <span>Employees per page:</span><br/>
         <ul class="pagination">
             {% for number in paginate_by_numbers %}
             {% if current_paginate_by_number == number %}
-            <li class="active"><a href="?per_page={{ number }}&orderby={{ orderby }}{{ getvars_perpage }}">{{ number }}</a></li>
+            <li class="active"><a href="?per_page={{ number }}{{ getvars_perpage }}">{{ number }}</a></li>
             {% else %}
-            <li><a href="?per_page={{ number }}&orderby={{ orderby }}{{ getvars_perpage }}">{{ number }}</a></li>
+            <li><a href="?per_page={{ number }}{{ getvars_perpage }}">{{ number }}</a></li>
             {% endif %}
             {% endfor %}
         </ul><br/>
