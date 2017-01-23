@@ -141,7 +141,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             employee_pages = paginator.page(paginator.num_pages)
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
-        context['orderby'] = self.request.GET.get('orderby', 'last_name')
+        context['orderby'] = self.request.GET.get('order', 'last_name')
         context['position_filter'] = self.request.GET.get('position_filter')
         context['employee_filter'] = self.request.GET.get('employee_filter') or 'e.g. Darth Vader'
         context['sorting_options'] = make_employee_list_view_order_form_options()
@@ -157,7 +157,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
     def get_queryset(self):
         clear_filters = self.request.GET.get('clear_filters')
-        order = self.request.GET.get('orderby', 'last_name')
+        order = self.request.GET.get('order', 'last_name')
         sale_position_filter = self.request.GET.get('position_sale') or False
         production_position_filter = self.request.GET.get('position_production') or False
         other_position_filter = self.request.GET.get('position_production') or False
