@@ -6,7 +6,7 @@
 
     {% if employee %}
     <script>
-         $(document).ready(function(e) {
+        $(document).ready(function(e) {
             $('#hide-btn').click(function() {
                 {% for year in years_hidden %}
                     $('#{{ year }}').css("display","inline-block");
