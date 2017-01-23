@@ -210,6 +210,7 @@ form {
     padding: 0;
     position: absolute;
     width: 1px;
+    }
 
 .glyphicon-chevron-up {
     color: #393939;
@@ -247,5 +248,5 @@ input[type=radio] + .glyphicon-chevron-down {
 .loading-icon {
     display: inline-block;
     opacity: 0;
-    transition:opacity 0.3s;
+    transition: opacity 0.3s;
 }
