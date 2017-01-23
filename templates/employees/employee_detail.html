@@ -5,24 +5,26 @@
 {% block body_block %}
 
     {% if employee %}
-    <script type="text/javascript">
-        function expand() {
-            {% for year in years_hidden %}
-            document.getElementById('{{ year }}').style.display='inline-block';
-            {% endfor %}
-            document.getElementById('hide-btn').style.display='none';
-            document.getElementById('collapse-btn').style.display='inline-block';
-                    };
-
-        function collapse() {
-            {% for year in years_hidden %}
-            document.getElementById('{{ year }}').style.display='none';
-            {% endfor %}
-            document.getElementById('hide-btn').style.display='inline-block';
-            document.getElementById('collapse-btn').style.display='none';
-                    };
+    <script>
+         $(document).ready(function(e) {
+            $('#hide-btn').click(function() {
+                {% for year in years_hidden %}
+                    $('#{{ year }}').css("display","inline-block");
+                {% endfor %}
+                $('#hide-btn').css("display","none");
+                $('#collapse-btn').css("display", "inline-block");
+            });
+        });
+        $(document).ready(function(e) {
+            $('#collapse-btn').click(function() {
+                {% for year in years_hidden %}
+                    $('#{{ year }}').css("display","none");
+                {% endfor %}
+                $('#hide-btn').css("display","inline-block");
+                $('#collapse-btn').css("display", "none");
+            });
+        });
     </script>
-
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>{{ employee.full_name }} 
@@ -140,11 +142,11 @@
             <div class="panel-body">
             <form method="get" action="{% url 'employee_detail' employee.id %}#month-table">
                 <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
+                <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
             </form>
             </div>
 
-                <form id="auto-submit-form" method="get" action="{% url 'employee_detail' employee.id %}"
-                    onclick="autoSubmitForm();">
+                <form id="auto-submit-form" method="get" action="{% url 'employee_detail' employee.id %}">
                     <div class="panel-body filter-forms">
                     <span>Show year:</span>
 
@@ -158,16 +160,14 @@
                                     <input id="year_{{ year }}" type="checkbox" class="vis-hidden"
                                            name="yr{{ year }}" />
                                 {% endif %}
-                                    <label class="my-button" id="yr{{ year }}" for="year_{{ year }}">{{ year }}</label>
+                                    <label class="my-button" id="{{ year }}" for="year_{{ year }}">{{ year }}</label>
 
                             {% endfor %}
                             {% if years_hidden %}
-                                <button type="button" class="my-button dont-show-those" id="hide-btn"
-                                    onclick="expand();">
+                                <button type="button" class="my-button dont-show-those" id="hide-btn">
                                     <b>Expand year options</b>
                                 </button>
-                                <button type="button" class="my-button" id="collapse-btn"
-                                    onclick="collapse();">
+                                <button type="button" class="my-button" id="collapse-btn">
                                     <b>Collapse list</b>
                                 </button>
                             {% endif %}
@@ -195,12 +195,10 @@
                                 {% endif %}
                             {% endfor %}
                             {% if years_hidden %}
-                                <button type="button" class="my-button" id="hide-btn"
-                                    onclick="expand();">
+                                <button type="button" class="my-button" id="hide-btn">
                                     <b>Expand year options</b>
                                 </button>
-                                <button type="button" class="my-button dont-show-those" id="collapse-btn"
-                                    onclick="collapse();">
+                                <button type="button" class="my-button dont-show-those" id="collapse-btn">
                                     <b>Collapse list</b>
                                 </button>
                             {% endif %}
@@ -217,12 +215,10 @@
                                 {% endif %}
                         {% endfor %}
                             {% if years_hidden %}
-                            <button type="button" class="my-button" id="hide-btn"
-                                onclick="expand();">
+                            <button type="button" class="my-button" id="hide-btn">
                                 <b>Expand year options</b>
                             </button>
-                            <button type="button" class="my-button dont-show-those" id="collapse-btn"
-                                onclick="collapse();">
+                            <button type="button" class="my-button dont-show-those" id="collapse-btn">
                                 <b>Collapse list</b>
                             </button>
                             {% endif %}
@@ -253,8 +249,7 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
-
-                    </div>
+                </div>
                 {% if months %}
                 <div class="panel-body">
                     <table class="table">

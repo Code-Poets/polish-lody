@@ -19,27 +19,24 @@
         <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
         <script src="{% static 'js/jquery-ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/polish-lody-jquery.js' %}"></script>
-        <script type="text/javascript">
-            function submitForm() {
-                document.getElementById("auto-submit-form").submit();
-            };
-            function autoSubmitForm() {
 
-            var events = ['click', 'keydown'],
-                    i = events.length,
-                    timer,
-                    delay = 1500
-                    reset = function () {
-                        clearTimeout(timer);
-                        timer = setTimeout(submitForm, {{form_submit_delay}});
-                    };
-                while (i) {
-                    i -= 1;
-                    document.addEventListener(events[i], reset, false);
-                }
-                reset();
-            };
+        <script>
+                    var timer;
+
+        $(document).ready(function(e) {
+            $("#auto-submit-form").bind('click', function() {
+                $('#auto-submit-form').on('click', function(){
+                    var $submitForm = $('#auto-submit-form');
+                    clearTimeout(timer);
+                    $('.loading-icon').css('opacity','1');
+                    timer = setTimeout(function(){
+                        $submitForm.submit();
+                    },{{form_submit_delay}});
+                });
+            });
+        });
         </script>
+
     </head>
 
     <body>
@@ -61,6 +58,7 @@
                 {% bootstrap_messages %}
                 {% block body_block %}{% endblock %}
             </div>
+
 
             <div id="push"></div>
         </div>
