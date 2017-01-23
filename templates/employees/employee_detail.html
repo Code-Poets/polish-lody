@@ -25,7 +25,6 @@
             });
         });
     </script>
-
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>{{ employee.full_name }} 
@@ -143,6 +142,7 @@
             <div class="panel-body">
             <form method="get" action="{% url 'employee_detail' employee.id %}#month-table">
                 <input class="btn btn-primary" type="submit" name="clear_filters" value="Clear filters"/>
+                <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
             </form>
             </div>
 
@@ -249,10 +249,9 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
-
                     </div>
                     <div class="loading-icon">
-                        <img src="../../static/loading-icon.svg ">
+                        <img src="../../static/images/loading-icon.svg ">
                     </div>
                 {% if months %}
                 <div class="panel-body">
