@@ -35,7 +35,6 @@ def position_list_and_filtering(self, queryset):
         'position_none': 'None',
     }
     exclude_list = []
-
     for key in positions.keys():
         if self.request.GET.get(key) is None:
             exclude_list.append(positions[key])
@@ -160,7 +159,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         order = self.request.GET.get('order', 'last_name')
         sale_position_filter = self.request.GET.get('position_sale') or False
         production_position_filter = self.request.GET.get('position_production') or False
-        other_position_filter = self.request.GET.get('position_production') or False
+        other_position_filter = self.request.GET.get('position_other') or False
         employee_filter = self.request.GET.get('employee_filter')
         position_filter = self.request.GET.get('position_filter')
         hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
@@ -368,6 +367,13 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         except:
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
+
+    def form_valid(self, form, **kwargs):
+        form_validation = super(EmployeeUpdate, self).form_valid(form)
+        print(self.get_queryset().first())
+        messages.add_message(self.request, messages.SUCCESS,
+                             "Changes saved for employee %s" % (self.get_queryset().first()))
+        return form_validation
 
 class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     form_class = MonthForm
