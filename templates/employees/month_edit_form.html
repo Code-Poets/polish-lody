@@ -6,19 +6,21 @@
 {% endif %}
 {% endblock %}
 
-
+{% block header_block %}
+{% if month %}
+<div class="panel panel-heading panel-default">
+    <h4>
+        {% if employee and month %}
+        Editing {{ month.month_name }} {{ month.year }} for {{ employee }}
+        {% endif %}
+        <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+    </h4>
+</div>
+{% endif %}
+{% endblock %}
 {% block body_block %}
-
 {% if month %}
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4>
-                {% if employee and month %}
-                Editing {{ month.month_name }} {{ month.year }} for {{ employee }}
-                {% endif %}
-                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
-            </h4>
-        </div>
         <div class="panel-body">
             <form method="post" class="form-horizontal">
                 {% for error in form.non_field_errors %}
