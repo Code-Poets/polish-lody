@@ -7,3 +7,5 @@ db.sqlite3
 /pl-py3
 /.idea
 /staticfiles
+
+/polishlody/settings/local.py
