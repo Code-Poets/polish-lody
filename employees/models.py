@@ -13,12 +13,10 @@ def is_expiring(exp_date):
         current_time = time.time()
         expiration_date = int(time.mktime(time.strptime(str(expiration_date), '%Y-%m-%d')))
         days_left = int((expiration_date - current_time) / 86400)
-        if 0 < days_left < 30:
+        if 0 <= days_left <= 30:
             return days_left
         elif 0 > days_left:
             return [days_left, days_left*(-1)]
-        else:
-            return False
 
 class Employee(MyUser):
 
