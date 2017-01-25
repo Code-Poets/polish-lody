@@ -12,27 +12,12 @@
         {% bootstrap_javascript %}
         {% load sass_tags %}
         <link href="{% sass_src 'main.scss' %}" rel="stylesheet" type="text/css" />
-        <!-- jQuery -->
         <link rel="stylesheet" href='{% static "js/jquery-ui/jquery-ui.css" %}' />
         <link rel="stylesheet" href='{% static "js/jquery-ui/jquery-ui.theme.css" %}' />
         <link rel="stylesheet" href='{% static "js/jquery-ui/jquery-ui.structure.css" %}'/>
         <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
         <script src="{% static 'js/jquery-ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/polish-lody-jquery.js' %}"></script>
-        <script>
-        var timer;
-        $(document).ready(function(e) {
-            $('#auto-submit-form').on('click', function(){
-                var $submitForm = $('#auto-submit-form');
-                clearTimeout(timer);
-                $('.loading-icon').css('opacity','1');
-                timer = setTimeout(function(){
-                    $submitForm.submit();
-                },{{form_submit_delay}});
-            });
-        });
-        </script>
-
     </head>
 
     <body>
@@ -51,6 +36,7 @@
             </nav>
 
             <div class="container-fluid">
+                {% block header_block %}{% endblock %}
                 {% bootstrap_messages %}
                 {% block body_block %}{% endblock %}
             </div>
@@ -63,5 +49,6 @@
                 <p>Code Poets | 2016</p>
             </div>
         </footer>
+    <script src="{% static 'js/submit-delay.js' %}"></script>
     </body>
 </html>

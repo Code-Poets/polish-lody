@@ -2,18 +2,19 @@
 {% load widget_tweaks %}
 
 {% block title %}Create new month{% endblock %}
-        
+{% block header_block %}
+    <div class="panel panel-heading panel-default">
+        <h4>
+            {% if employee %}
+            New month for {{ employee }}
+            {% endif %}
+            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+        </h4>
+    </div>
+{% endblock %}
 {% block body_block %}
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4>
-                {% if employee %}
-                New month for {{ employee }}
-                {% endif %}
-                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
-            </h4>
-        </div>
         <div class="panel-body">
             <form method="post" class="form-horizontal">
                 {% csrf_token %}
