@@ -175,8 +175,4 @@ FORM_SUBMIT_DELAY = 2000
 
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'polishmietek123' #my gmail password
-EMAIL_HOST_USER = 'polishmietek@gmail.com' #my gmail username
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'polishlody team'
