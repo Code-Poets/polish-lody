@@ -1,208 +1,323 @@
 [
 {
-  "model": "employees.employee",
-  "pk": 8,
+  "model": "users.myuser",
+  "pk": 1,
   "fields": {
+    "password": "pbkdf2_sha256$30000$r2mqGMmXjkQo$+hx1E4c3TqcStI/3nS02G7yXAJhxS7oXcVmMcLXXT0M=",
+    "last_login": "2017-01-17T16:54:17.373Z",
+    "is_superuser": true,
+    "email": "admin@polishlody.pl",
+    "first_name": null,
+    "last_name": null,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-01-16T16:17:04.566Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.myuser",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$XaXbk1PGMRq2$oNtG2RkcQuMCgQJBuV/mzLhU/xOPgzK6djHuEAIitiE=",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "miecio@lody.pl",
+    "first_name": "Mietek",
+    "last_name": "\u017bul",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-16T16:32:09.894Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.myuser",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$HA9GHz9FQhou$bUYkfUfwr09HLRKlRU3Abjr7PA8Av3vNyo3Dx+lZgyE=",
+    "last_login": "2017-01-25T13:33:27.383Z",
+    "is_superuser": false,
+    "email": "czarny@lody.pl",
     "first_name": "Czarny",
     "last_name": "Lodziarz",
-    "email": "lodziarz@lody.pl",
-    "rate_per_hour": "15.00",
-    "contract_start_date": "2016-01-20",
-    "contract_exp_date": "2016-12-12",
-    "health_book_exp_date": "2016-12-12",
-    "gender": "Male",
-    "position": "Production",
-    "contract_type": "Fixed-term employment contract"
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-17T10:01:39.669Z",
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "employees.employee",
-  "pk": 9,
+  "model": "users.myuser",
+  "pk": 5,
   "fields": {
-    "first_name": "Jaros\u0142aw",
-    "last_name": "K.",
-    "email": "jaro.ave666@gov.pl",
-    "rate_per_hour": "6.66",
-    "contract_start_date": "2016-02-21",
-    "contract_exp_date": "2016-12-15",
-    "health_book_exp_date": "2016-12-15",
-    "gender": "Male",
-    "position": "Sale",
-    "contract_type": "Other"
-  }
-},
-{
-  "model": "employees.employee",
-  "pk": 10,
-  "fields": {
-    "first_name": "Alan",
-    "last_name": "Shepard",
-    "email": "a.shep@mail.com",
-    "rate_per_hour": "20.00",
-    "contract_start_date": "2183-11-07",
-    "contract_exp_date": "2186-11-07",
-    "health_book_exp_date": "2187-12-15",
-    "gender": "Male",
-    "position": "Other",
-    "contract_type": "Other"
-  }
-},
-{
-  "model": "employees.employee",
-  "pk": 22,
-  "fields": {
+    "password": "pbkdf2_sha256$30000$fhfgRcWhb5pb$+58U/dAQNe7lF7QsN9vUK28b9mDwvrJiz73N3Bykubk=",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "waldus@lody.pl",
     "first_name": "Waldemar",
     "last_name": "Kiepski",
-    "email": "waldus.k@lody.pl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-17T11:00:53.046Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.myuser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$L859tRYSea6Y$eZ3S+My1BKxnl929iyX0L2r83uEhAbd86cOOEF5shoE=",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "jadzia@lody.pl",
+    "first_name": "Jadzia",
+    "last_name": "Pani",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-17T12:40:35.488Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.myuser",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$sgjmNvQpoKn8$/tGdRM5lAdMRMXYt13JnU9nvCzCDBGNXWdQ+iquVQc0=",
+    "last_login": "2017-01-25T13:36:31.480Z",
+    "is_superuser": false,
+    "email": "jaro666@lody.pl",
+    "first_name": "Jaros\u0142aw",
+    "last_name": "K.",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-25T13:36:12.861Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 3,
+  "fields": {
     "rate_per_hour": "3.50",
-    "contract_start_date": "2016-01-12",
-    "contract_exp_date": "2017-02-28",
-    "health_book_exp_date": "2017-12-12",
+    "contract_start_date": "2017-01-16",
+    "contract_exp_date": "2014-06-13",
+    "health_book_exp_date": "2016-12-12",
+    "gender": null,
+    "position": "Sale",
+    "contract_type": "Non-fixed-term employment contract",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 4,
+  "fields": {
+    "rate_per_hour": "15.00",
+    "contract_start_date": "2017-01-17",
+    "contract_exp_date": "2017-01-27",
+    "health_book_exp_date": "2017-03-16",
+    "gender": "Male",
+    "position": "Production",
+    "contract_type": "Non-fixed-term employment contract",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 5,
+  "fields": {
+    "rate_per_hour": "3.50",
+    "contract_start_date": "2017-01-17",
+    "contract_exp_date": null,
+    "health_book_exp_date": "2017-01-26",
+    "gender": "Male",
+    "position": "Other",
+    "contract_type": "Other",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 6,
+  "fields": {
+    "rate_per_hour": "16.00",
+    "contract_start_date": "2017-01-17",
+    "contract_exp_date": "2017-01-26",
+    "health_book_exp_date": "2017-01-26",
+    "gender": "Female",
+    "position": null,
+    "contract_type": "Other",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 7,
+  "fields": {
+    "rate_per_hour": "66.69",
+    "contract_start_date": "2017-01-25",
+    "contract_exp_date": "2017-01-27",
+    "health_book_exp_date": "2017-02-11",
     "gender": "Male",
     "position": "Sale",
-    "contract_type": "Non-fixed-term employment contract"
+    "contract_type": "Non-fixed-term employment contract",
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
   "model": "employees.month",
-  "pk": 29,
+  "pk": 3,
   "fields": {
-    "year": 2016,
-    "employee": 8,
-    "month": 10,
+    "year": 2017,
+    "employee": 3,
+    "month": 1,
     "salary_is_paid": false,
-    "hours_worked_in_this_month": 98,
-    "rate_per_hour_this_month": "15.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 30,
-  "fields": {
-    "year": 2016,
-    "employee": 8,
-    "month": 12,
-    "salary_is_paid": true,
-    "hours_worked_in_this_month": 84,
-    "rate_per_hour_this_month": "15.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 33,
-  "fields": {
-    "year": 2016,
-    "employee": 8,
-    "month": 11,
-    "salary_is_paid": true,
-    "hours_worked_in_this_month": 69,
-    "rate_per_hour_this_month": "15.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 34,
-  "fields": {
-    "year": 2185,
-    "employee": 10,
-    "month": 9,
-    "salary_is_paid": true,
-    "hours_worked_in_this_month": 150,
-    "rate_per_hour_this_month": "20.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 35,
-  "fields": {
-    "year": 2185,
-    "employee": 10,
-    "month": 12,
-    "salary_is_paid": false,
-    "hours_worked_in_this_month": 200,
-    "rate_per_hour_this_month": "20.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 36,
-  "fields": {
-    "year": 2016,
-    "employee": 9,
-    "month": 4,
-    "salary_is_paid": false,
-    "hours_worked_in_this_month": 0,
-    "rate_per_hour_this_month": "6.66"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 47,
-  "fields": {
-    "year": 2016,
-    "employee": 9,
-    "month": 12,
-    "salary_is_paid": false,
-    "hours_worked_in_this_month": 66,
-    "rate_per_hour_this_month": "6.66"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 65,
-  "fields": {
-    "year": 2010,
-    "employee": 8,
-    "month": 12,
-    "salary_is_paid": false,
-    "hours_worked_in_this_month": 0,
-    "rate_per_hour_this_month": "15.00"
-  }
-},
-{
-  "model": "employees.month",
-  "pk": 99,
-  "fields": {
-    "year": 2016,
-    "employee": 22,
-    "month": 12,
-    "salary_is_paid": true,
-    "hours_worked_in_this_month": 62,
+    "hours_worked_in_this_month": "0.0",
     "rate_per_hour_this_month": "3.50"
   }
 },
 {
-  "model": "users.myuser",
-  "pk": 1,
+  "model": "employees.month",
+  "pk": 9,
   "fields": {
-    "password": "pbkdf2_sha256$30000$mqWVteCOW3xC$uW2i1vVTaUpe3/Tl+rB3DfxQjFmoLd36w8i/E3B8IH8=",
-    "last_login": "2016-12-21T15:52:09.393Z",
-    "is_superuser": true,
-    "email": "grzesiek@admin.com",
-    "first_name": "",
-    "last_name": "",
-    "is_staff": true,
-    "date_joined": "2016-12-12T14:57:23.299Z",
-    "is_active": true,
-    "groups": [],
-    "user_permissions": []
+    "year": 2017,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
   }
 },
 {
-  "model": "users.myuser",
-  "pk": 2,
+  "model": "employees.month",
+  "pk": 10,
   "fields": {
-    "password": "pbkdf2_sha256$30000$PlagOCDa8jH0$PdNuIBs9zD5Pv0yPXJtOLtOS2rFjOH7gTekcfQLT2Y0=",
-    "last_login": null,
-    "is_superuser": false,
-    "email": "manager@polishlody.pl",
-    "first_name": "",
-    "last_name": "",
-    "is_staff": false,
-    "date_joined": "2016-12-22T14:46:40.996Z",
-    "is_active": true,
-    "groups": [],
-    "user_permissions": []
+    "year": 2017,
+    "employee": 4,
+    "month": 2,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 11,
+  "fields": {
+    "year": 2017,
+    "employee": 4,
+    "month": 3,
+    "salary_is_paid": true,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 12,
+  "fields": {
+    "year": 2016,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 13,
+  "fields": {
+    "year": 2015,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 14,
+  "fields": {
+    "year": 2014,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 15,
+  "fields": {
+    "year": 2013,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 16,
+  "fields": {
+    "year": 2018,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 17,
+  "fields": {
+    "year": 2019,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 18,
+  "fields": {
+    "year": 2020,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "0.0",
+    "rate_per_hour_this_month": "15.00"
+  }
+},
+{
+  "model": "employees.month",
+  "pk": 19,
+  "fields": {
+    "year": 2027,
+    "employee": 4,
+    "month": 1,
+    "salary_is_paid": false,
+    "hours_worked_in_this_month": "2.5",
+    "rate_per_hour_this_month": "15.00"
   }
 }
 ]
