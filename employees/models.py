@@ -120,6 +120,9 @@ class Month(models.Model):
                                                    validators=[MinValueValidator(0)])
 
     def __str__(self):
+        return self.months_dict[self.month] + " " + str(self.year)
+
+    def month_status(self):
         if self.salary_is_paid == False:
             return str(self.month) + " " + str(self.year) + " - " + str(self.employee) + " - Not paid yet."
         if self.salary_is_paid == True:
