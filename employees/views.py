@@ -77,10 +77,11 @@ def make_paginate_by_list():
     return paginate_by
 
 def find_user_by_name(query_name):
-   qs = Employee.objects.all()
-   for term in query_name.split():
-        qs = qs.filter( Q(first_name__contains = term) | Q(last_name__contains = term))
-   return qs
+    qs = Employee.objects.all()
+    for term in query_name.split():
+        qs = qs.filter( Q(first_name__icontains = term) | Q(last_name__icontains = term)
+                        | Q(first_name__icontains = term.title()) | Q(last_name__icontains = term.title()))
+    return qs
 
 def order_by_default(order):
     try:
