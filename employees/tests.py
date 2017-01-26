@@ -5,13 +5,14 @@ from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from datetime import datetime, timedelta, date
 from .models import Employee, Month
-import random
-from employees import views
 from datetime import datetime, date
-# from .models import Employee, Month
-from  django.db.models import Case, When, Sum, F, Q, DecimalField #, ExpressionWrapper
 import random
+import time
 User = get_user_model()
+def admin_login(self):
+    admin = User.objects.create_superuser(email="test_admin@polishlody.pl", password="codepassword")
+    admin.save()
+    return self.c.login(username='test_admin@polishlody.pl', password='codepassword')
 
 class EmployeeMethodTests(TestCase):
     start_date = date.today()
@@ -33,7 +34,7 @@ class EmployeeMethodTests(TestCase):
         start_date = date.today()
         exp_date = date.today() + timedelta(days=30)
         with self.assertRaises(IntegrityError):
-            Employee(first_name=None, last_name=None, email="gamlet.com", contract_start_date=start_date,
+            Employee(first_name=None, last_name=None, email=None, contract_start_date=start_date,
             contract_exp_date=exp_date).save()
 
 class EmployeeListViewTests(TestCase):
@@ -45,7 +46,7 @@ class EmployeeListViewTests(TestCase):
         """
         if no employees exist, an appropritate message should be displayed
         """
-        self.c.login(username='manager@polishlody.pl', password='codepassword')
+        admin_login(self)
         response = self.c.get(reverse_lazy('employees'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "The list of employees is empty")
@@ -98,7 +99,7 @@ class EmployeeListViewTests(TestCase):
             contract_exp_date=exp_date,
         )
         second_employee.save()
-        self.c.login(username='manager@polishlody.pl', password='codepassword')
+        admin_login(self)
         response1 = self.c.get(reverse_lazy('employees') + "?per_page=1")
         self.assertTrue("Example Example" in str(response1.content))
         self.assertTrue("Example2 Example2" not in str(response1.content))
@@ -106,6 +107,43 @@ class EmployeeListViewTests(TestCase):
         self.assertTrue("Example2 Example2" in str(response2.content))
         self.assertTrue("Example Example" not in str(response2.content))
 
+class EmployeeDetailViewTests(TestCase):
+
+    fixtures = ['user.json',]
+    c = Client()
+
+    def test_employee_detail_view_with_the_existing_record(self):
+        """
+        the detail view of an existing employee should be return status_code 200
+        """
+        start_date = date.today()
+        exp_date = date.today() + timedelta(days=30)
+        admin_login(self)
+        employee = Employee(first_name='John', last_name='Gamlet', email="gamlet@example.com",
+                            contract_start_date=start_date,
+                            contract_exp_date=exp_date,
+                            )
+        employee.save()
+        url = reverse_lazy('employee_detail', args=(employee.id,))
+        response = self.c.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "John")
+    def test_employee_detail_view_with_no_existing_record(self):
+        """
+        the detail view of a no existing employee should be return status_code 404
+        """
+        admin_login(self)
+        url = reverse_lazy('employee_detail', args=(120215454121,))
+        ###
+        ### For some reason this test wouldnt work in traditional way (response = self.c.get(url) raised
+        ### error 404 and failed test.
+        try:
+            status_code = self.c.get(url, follow=True)
+            print(url)
+            print(status_code.content)
+        except:
+            status_code = 404
+        self.assertEqual(status_code, 404)
 
 
 class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
@@ -123,9 +161,7 @@ class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
                                            contract_exp_date=exp_date
         )
         employee.save()
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
-
+        admin_login(self)
         first_month = Month(
             month=1,
             year=2016,
@@ -143,7 +179,7 @@ class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
         response = self.c.get(url)
         self.assertQuerysetEqual(
             response.context['months'],
-            ['<Month: 3 2016 - Alan Shepard - Paid!>','<Month: 1 2016 - Alan Shepard - Not paid yet.>']
+            ['<Month: March 2016>','<Month: January 2016>']
         )
 
     def test_should_employee_detail_view_be_paginated(self):
@@ -156,9 +192,7 @@ class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
                                            contract_exp_date=exp_date
                                            )
         employee.save()
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
-
+        admin_login(self)
         first_month = Month(
             month=1,
             year=2016,
@@ -188,10 +222,8 @@ class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
         self.assertTrue('2016 January' in str(response.content))
         self.assertTrue('2016 May' not in str(response.content))
 
-
     def test_should_month_create_view_work(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         employee = random.choice(Employee.objects.all())
         url = reverse_lazy('month_new', args=(employee.id,))
         response = self.c.get(url)
@@ -210,8 +242,7 @@ class EmployeeDeleteViewTests(TestCase):
     c = Client()
 
     def test_should_employee_delete_method_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         start_date = date(2184, 11, 7)
         exp_date = date(2186, 11, 7, )
         emp = Employee(first_name="Alan", last_name="Shepard", email="shepard@mail.com",
@@ -230,41 +261,6 @@ class EmployeeDeleteViewTests(TestCase):
         response404 = self.c.get(reverse('month_delete', args=(m.id,)), follow=True)
         self.assertTrue('does not exist' in str(response404.content))
 
-class EmployeeDetailViewTests(TestCase):
-
-    fixtures = ['user.json',]
-    c = Client()
-
-    def test_employee_detail_view_with_the_existing_record(self):
-        """
-        the detail view of an existing employee should be return status_code 200
-        """
-        start_date = date.today()
-        exp_date = date.today() + timedelta(days=30)
-        self.c.login(username='manager@polishlody.pl', password='codepassword')
-        employee = Employee(first_name='John', last_name='Gamlet', email="gamlet@example.com",
-                            contract_start_date=start_date,
-                            contract_exp_date=exp_date,
-                            )
-        employee.save()
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "John")
-    def test_employee_detail_view_with_no_existing_record(self):
-        """
-        the detail view of a no existing employee should be return status_code 404
-        """
-        self.c.login(username='manager@polishlody.pl', password='codepassword')
-        url = reverse_lazy('employee_detail', args=(120215454121,))
-        ###
-        ### For some reason this test wouldnt work in traditional way (response = self.c.get(url) raised
-        ### error 404 and failed test.
-        try:
-            status_code = self.c.get(url)
-        except:
-            status_code = 404
-        self.assertEqual(status_code, 404)
 
 
 class MonthCreateAndUpdateViewTests(TestCase):
@@ -273,8 +269,7 @@ class MonthCreateAndUpdateViewTests(TestCase):
     c = Client()
 
     def test_should_month_update_view_work(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         month = random.choice(Month.objects.all())
         employee = month.employee#.__str__()
         year = month.year
@@ -323,8 +318,7 @@ class MonthDeleteViewTests(TestCase):
     c = Client()
 
     def test_should_month_delete_method_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         start_date = date(2184, 11, 7)
         exp_date = date(2186, 11, 7, )
         emp = Employee(first_name="Alan", last_name="Shepard", email="shepard@mail.com",
@@ -341,16 +335,15 @@ class MonthDeleteViewTests(TestCase):
         self.assertRedirects(post_response, reverse('employee_detail', args=(emp.id,)), status_code=302)
         m.delete()
         response404 = self.c.get(reverse('month_delete', args=(m_id,)), follow=True)
-        self.assertTrue('exist anymore' in str(response404.content))
+        self.assertTrue('not exist anymore' in str(response404.content))
 
-class EmployeeFiltersTests(TestCase):
+class EmployeeFilterTests(TestCase):
 
     fixtures = ['fixtures.json']
     c = Client()
 
     def test_should_name_filter_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         url = reverse_lazy('employees')
         response = self.c.get(url)
         filtered_response = self.c.get(url + "?employee_filter=czarny")
@@ -371,57 +364,92 @@ class EmployeeFiltersTests(TestCase):
         self.assertTrue("No employee meets the search criteria." in str(filtered_response_none.content))
 
     def test_should_position_filter_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         url = reverse_lazy('employees')
-        position_response = self.c.get(url + "?position_filter=Other")
+        position_response = self.c.get(url + "?position_other=on")
+        print(position_response)
         self.assertQuerysetEqual(
             position_response.context['all_employee_list'],
-            ['<Employee: Alan Shepard>']
+            ['<Employee: Waldemar Kiepski>']
         )
-        position_response_sale = self.c.get(url + "?position_filter=Sale")
+        position_response_sale = self.c.get(url + "?position_sale=on")
         self.assertQuerysetEqual(
             position_response_sale.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>'],
+            ['<Employee: Jarosław K.>', '<Employee: Mietek Żul>'],
         )
-        position_response_production = self.c.get(url + "?position_filter=Production")
+        position_response_production = self.c.get(url + "?position_production=on")
         self.assertQuerysetEqual(
             position_response_production.context['all_employee_list'],
             ['<Employee: Czarny Lodziarz>'],
         )
-        position_response_none = self.c.get(url + "?position_filter=inexistent_position")
+        position_response_none = self.c.get(url + "?inexistent_position=on")
         self.assertQuerysetEqual(
             position_response_none.context['all_employee_list'],
-            []
+            ['<Employee: Jarosław K.>','<Employee: Waldemar Kiepski>','<Employee: Czarny Lodziarz>',
+             '<Employee: Jadzia Pani>','<Employee: Mietek Żul>']
         )
 
     def test_should_hide_unpaid_employees_filter_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         url = reverse_lazy('employees')
         unpaid_response = self.c.get(url + "?hide_zero_salary_months=on")
         self.assertQuerysetEqual(
             unpaid_response.context['all_employee_list'],
-            ['<Employee: Jarosław K.>','<Employee: Czarny Lodziarz>','<Employee: Alan Shepard>']
+            ['<Employee: Jarosław K.>','<Employee: Waldemar Kiepski>',
+             '<Employee: Jadzia Pani>', '<Employee: Mietek Żul>']
         )
 
     def test_should_hide_paid_employees_filter_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         url = reverse_lazy('employees')
         unpaid_response = self.c.get(url + "?hide_paid_employees_filter=on")
         self.assertQuerysetEqual(
             unpaid_response.context['all_employee_list'],
-            ['<Employee: Waldemar Kiepski>']
+            ['<Employee: Czarny Lodziarz>']
         )
 
     def test_should_multiple_filters_at_a_time_work_properly(self):
-        self.c.login(username='manager@polishlody.pl',
-                     password='codepassword')
+        admin_login(self)
         url = reverse_lazy('employees')
-        employee = random.choice(Employee.objects.all())
-        response = self.c.get(url + "?employee_filter=w&position_filter=Sale&hide_paid_employees_filter=on")
+        response = self.c.get(url + "?employee_filter=w&position_filter=Sale&position_filter=Other"
+                                    "&position_filter=Production&hide_zero_salary_months=on")
         self.assertQuerysetEqual(
             response.context['all_employee_list'],
-            ['<Employee: Waldemar Kiepski>']
+            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>']
         )
+
+class MonthFilterTests(TestCase):
+
+    fixtures = ['fixtures.json']
+    c = Client()
+
+    def test_should_hide_unpaid_months_filter_work(self):
+        admin_login(self)
+        employee = Employee.objects.get(email="czarny@lody.pl")
+        url = reverse_lazy('employee_detail', args=(employee.id,))
+        response = self.c.get(url + "?hide_unpaid_months_filter=on")
+        self.assertQuerysetEqual(response.context['months'],
+                           ['<Month: March 2017>'])
+
+    def test_should_hide_paid_months_filter_work(self):
+        admin_login(self)
+        employee = Employee.objects.get(email="czarny@lody.pl")
+        url = reverse_lazy('employee_detail', args=(employee.id,))
+        response = self.c.get(url + "?hide_paid_months_filter=on")
+        self.assertEqual(len(response.context['months']), 10)
+
+    def test_should_year_filters_work(self):
+        admin_login(self)
+        employee = Employee.objects.get(email="czarny@lody.pl")
+        url = reverse_lazy('employee_detail', args=(employee.id,))
+        response = self.c.get(url + "?2017=on")
+        self.assertQuerysetEqual(response.context['months'],
+                                 ['<Month: March 2017>','<Month: February 2017>','<Month: January 2017>'])
+        response = self.c.get(url + "?2018=on")
+        self.assertQuerysetEqual(response.context['months'],
+                                 ['<Month: January 2018>'])
+
+
+
+
+
