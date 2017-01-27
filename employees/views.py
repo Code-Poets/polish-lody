@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect, HttpRequest
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 #from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
+import json
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -17,6 +18,16 @@ from .mixins import OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
+
+def ajax_verify_email(request):
+    if request.GET and request.is_ajax():
+        email = request.GET.get('data')
+        if Employee.objects.filter(email=email).exists():
+            return HttpResponse(json.dumps({
+                "status":1
+                }), content_type='application/json')
+        return HttpResponse('')
+    return HttpResponse('')
 
 def make_year_list_for_filtering_in_emp_detail(employee):
     months = employee.month_set.all()
@@ -550,3 +561,5 @@ def pl_500_view(request):
     response = render(request, template)
     response.status_code = 500
     return response
+
+

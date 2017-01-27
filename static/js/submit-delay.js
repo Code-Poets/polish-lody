@@ -10,4 +10,12 @@ $(document).ready(function(e) {
             $submitForm.submit();
         }, delay);
     });
+    $('#employee_filter').bind('click', function(){
+        var $submitForm = $('#auto-submit-form');
+        clearTimeout(timer);
+        $('.loading-icon').css('opacity','1');
+        timer = setTimeout(function(){
+            $submitForm.submit();
+        }, 5000);
+    });
 });
