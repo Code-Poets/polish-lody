@@ -254,3 +254,22 @@ input[type=radio] + .glyphicon-chevron-down {
 .panel-heading {
     background-color: #f5f5f5;
 }
+
+.verify-email {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    display: none;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    pointer-events: none;
+    padding-left: 10px;
+}
+
+.already-exists {
+    border: solid 2px red;
+    background-color: #ffe6e6;
+}

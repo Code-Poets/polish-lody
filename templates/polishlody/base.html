@@ -39,6 +39,8 @@
                 {% block header_block %}{% endblock %}
                 {% bootstrap_messages %}
                 {% block body_block %}{% endblock %}
+                {% block load_block %}{% endblock %}
+                {% block footer_block %}{% endblock %}
             </div>
 
 
@@ -50,5 +52,6 @@
             </div>
         </footer>
     <script src="{% static 'js/submit-delay.js' %}"></script>
+    <script src="(% static 'js/ajax-email-verify' %}"></script>
     </body>
 </html>

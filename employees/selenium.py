@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
+from django.test import TestCase, Client, RequestFactory
 
 class SeleniumScriptTests(TestCase):
     driver = webdriver.Firefox()

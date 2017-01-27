@@ -12,12 +12,11 @@
             New employee
         <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
         {% endif %}
-
+        <p class="append-here"></p>
     </h4>
 </div>
 {% endblock %}
 {% block body_block %}
-
     <div class="panel panel-default">
         <div class="panel-body">
             <form method="post" class="form-horizontal">
@@ -43,6 +42,9 @@
                         <label class="col-sm-2 control-label">{{ e.label }}<span class="required"> *</span></label>
                         <div class="input-group col-sm-9">
                             {{ e|add_class:"form-control" }}
+                            {% if e.label == 'Email address' %}
+                                <span class="glyphicon glyphicon-remove icon-false verify-email"></span>
+                            {% endif %}
                         </div>
                         {% elif e.label == 'Contract start date' or e.label == 'Contract exp date' or e.label == 'Health book exp date' %}
                         <label class="col-sm-2 control-label">{{ e.label }}</label>
@@ -70,5 +72,4 @@
             </form>
         </div>
     </div>
-
 {% endblock %}
