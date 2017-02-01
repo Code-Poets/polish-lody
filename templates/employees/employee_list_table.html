@@ -1,0 +1,223 @@
+<div class="panel-body ajax-loader">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Full name</b>
+                        {% if orderby == 'last_name' %}
+                            <input id="last-name-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="last_name"/>
+                        {% else %}
+                            <input id="last-name-up" type="radio" class="sorting sort-up"
+                                           name="order" value="last_name"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="last-name-up"></label>
+                        {% if orderby == '-last_name' %}
+                            <input id="last-name-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-last_name"/>
+                        {% else %}
+                            <input id="last-name-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-last_name"/>
+                        {% endif %}
+                            <label title="Sort alphabetically descending" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="last-name-down"></label>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Rate per hour (zł)</b>
+                        {% if orderby == 'rate_per_hour' %}
+                            <input id="rate-per-hour-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="rate_per_hour"/>
+                        {% else %}
+                            <input id="rate-per-hour-up" type="radio" class="sorting sort-up"
+                                           name="order" value="rate_per_hour"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="rate-per-hour-up"></label>
+                        {% if orderby == '-rate_per_hour' %}
+                            <input id="rate-per-hour-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-rate_per_hour"/>
+                        {% else %}
+                            <input id="rate-per-hour-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-rate_per_hour"/>
+                        {% endif %}
+                            <label title="Sort alphabetically descending" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="rate-per-hour-down"></label>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Position</b>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Contract expiration date</b>
+                        {% if orderby == 'contract_exp_date' %}
+                            <input id="contract-exp-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="contract_exp_date"/>
+                        {% else %}
+                            <input id="contract-exp-up" type="radio" class="sorting sort-up"
+                                           name="order" value="contract_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by contract expiration date ascending" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="contract-exp-up"></label>
+                        {% if orderby == '-contract_exp_date' %}
+                            <input id="contract-exp-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-contract_exp_date"/>
+                        {% else %}
+                            <input id="contract-exp-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-contract_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by contract expiration date descending" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="contract-exp-down"></label>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Health book expiration date</b>
+                    {% if orderby == 'health_book_exp_date' %}
+                            <input id="health-book-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="health_book_exp_date"/>
+                        {% else %}
+                            <input id="health-book-up" type="radio" class="sorting sort-up"
+                                           name="order" value="health_book_exp_date"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="health-book-up"></label>
+                        {% if orderby == '-health_book_exp_date' %}
+                            <input id="health-book-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-health_book_exp_date"/>
+                        {% else %}
+                            <input id="health-book-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-health_book_exp_date"/>
+                        {% endif %}
+                            <label title="Sort by health book expiration date descending" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="health-book-down"></label>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    <b>Total unpaid salaries (zł)</b>
+                        {% if orderby == 'unpaid_salaries' %}
+                            <input id="unpaid-salaries-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="unpaid_salaries"/>
+                        {% else %}
+                            <input id="unpaid-salaries-up" type="radio" class="sorting sort-up"
+                                           name="order" value="unpaid_salaries"/>
+                        {% endif %}
+                            <label title="Sort alphabetically ascending" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="unpaid-salaries-up"></label>
+                        {% if orderby == '-unpaid_salaries' %}
+                            <input id="unpaid-salaries-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="-unpaid_salaries"/>
+                        {% else %}
+                            <input id="unpaid-salaries-down" type="radio" class="sorting sort-down"
+                                           name="order" value="-unpaid_salaries"/>
+                        {% endif %}
+                            <label title="Sort by unpaid salaries descending" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="unpaid-salaries-down"></label>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in all_employee_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'employee_detail' employee.pk %}">{{ employee.full_name }}</a>
+                    </td>
+                    <td align="center" valign="middle">
+                        {{ employee.rate_per_hour }}
+                    </td>
+                    <td align="center" valign="middle">
+                        {{ employee.position }}
+                    </td>
+                    <td class="employee-list-date">
+                        {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
+                        <span title="Contract expires in about {{ employee.is_contract_expiring }} days."
+                            class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                        {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
+                        <span title="Contract expires within 24 hours!"
+                            class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                        {% elif employee.is_contract_expiring.1 %}
+                        <span title="Contract expired {{ employee.is_contract_expiring.1 }} days ago!"
+                            class="glyphicon glyphicon-warning-sign employee-list"></span>
+                        {% endif %}
+                        <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }}</span>
+                    </td>
+                    <td class="employee-list-date">
+                        {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
+                        <span title="Health book expires in about {{ employee.is_health_book_expiring }} days."
+                            class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                        {% elif employee.is_health_book_expiring == 0 and warning_x_days_left %}
+                        <span title="Health book expires within 24 hours!"
+                            class="glyphicon glyphicon-exclamation-sign employee-list "></span>
+                        {% elif employee.is_health_book_expiring.1 %}
+                        <span title="Health book expired {{ employee.is_health_book_expiring.1 }} days ago!"
+                            class="glyphicon glyphicon-warning-sign employee-list "></span>
+                        {% endif %}
+                        <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
+                    </td>
+                    <td class="sorttable_numeric" align="center" valign="middle">
+                        {% if employee.all_unpaid_salaries == 0 %}
+                        0.00
+                        {% elif employee.all_unpaid_salaries != 0 and employee.all_unpaid_salaries != None %}
+                        {{ employee.all_unpaid_salaries }}
+                        {% else %}
+                        No salary data.
+                        {% endif %}
+                    </td>
+                    <td align="right">
+                        <a href="{% url 'employee_edit' employee.id %}">
+                            <span title="Edit employee {{ employee }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                        <a href="{% url 'employee_delete' employee.id %}">
+                            <span title="Delete employee {{ employee }}" class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        {% if page_obj.has_other_pages %}
+            <ul class="pagination">
+            {% for i in paginator.page_range %}
+                {% if forloop.counter == 1 %}
+                    {% if page_obj.has_previous %}
+                        <li class="pg-clickable">
+                            <input id="pg-previous" type="radio"  class="vis-hidden"
+                                name="pg" value="{{ page_obj.previous_page_number }}"/>
+                            <label class="my-button clickable" for="pg-previous">&laquo; Previous</label>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <label class="my-button">&laquo; Previous</label>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% if page_obj.number == i %}
+                    <li class="active pg-clickable">
+                        <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
+                           name="pg" value="{{i}}"/>
+                        <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
+                    </li>
+                {% else %}
+                    <li class="pg-clickable">
+                        <input id="pg-{{i}}" type="radio"  class="vis-hidden"
+                           name="pg" value="{{i}}"/>
+                        <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
+                    </li>
+                {% endif %}
+                {% if forloop.last %}
+                    {% if page_obj.has_next %}
+                        <li class="pg-clickable">
+                            <input id="pg-next" type="radio"  class="vis-hidden"
+                                name="pg" value="{{ page_obj.next_page_number }}"/>
+                            <label class="my-button clickable" for="pg-next">Next &raquo;</label>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <label class="my-button">Next &raquo;</label>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul><br/>
+        {% endif %}
+    </div>
+</div>
+</form>
