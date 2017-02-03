@@ -20,7 +20,8 @@
             <label class="my-button clickable" onclick="uncheckFilters();">Clear filters</label>
         </form>
     </div>
-    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" action="{% url 'employees' %}">
+    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
+    action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
         <div class="panel-body filter-forms">
             {% if position_sale %}
             <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
