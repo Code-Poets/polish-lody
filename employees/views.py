@@ -151,8 +151,10 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 'page_obj': page_obj,
                 'orderby': order,
             }
+            if qset.count() == 0:
+                context['empty_qset'] = True
+
             context['ajax_request'] = True
-            print(context)
             return self.response_class(
                 request = self.request,
                 template = self.get_template_names(),
@@ -160,6 +162,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 **response_kwargs
             )
         else:
+            response = super(EmployeeList, self).render_to_response(context, **response_kwargs)
             return super(EmployeeList, self).render_to_response(context, **response_kwargs)
 
     def get_paginate_by(self, queryset):
@@ -235,10 +238,12 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             queryset = queryset.exclude(id__in=exclude_list)
 
         if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
-                or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None):
+                or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
+                    and self.request.is_ajax() is False:
             messages.add_message(self.request, messages.WARNING,
                                  "No employee meets the search criteria. "
                                  "Widen your search or check filter for typos.")
+
         return queryset
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
@@ -411,7 +416,6 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def form_valid(self, form, **kwargs):
         form_validation = super(EmployeeUpdate, self).form_valid(form)
-        print(self.get_queryset().first())
         messages.add_message(self.request, messages.SUCCESS,
                              "Changes saved for employee %s" % (self.get_queryset().first()))
         return form_validation

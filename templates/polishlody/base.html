@@ -37,7 +37,10 @@
 
             <div class="container-fluid">
                 {% block header_block %}{% endblock %}
-                {% bootstrap_messages %}
+                {% block placeholder_block %}{% endblock %}
+                <div id="msg">
+                    {% bootstrap_messages %}
+                </div>
                 {% block body_block %}{% endblock %}
                 {% block load_block %}{% endblock %}
                 {% block footer_block %}{% endblock %}
@@ -51,11 +54,13 @@
                 <p>Code Poets | 2016</p>
             </div>
         </footer>
-    <script src="{% static 'js/submit-delay.js' %}"></script>
-    <script src="{% static 'js/ajax-reload-table.js' %}"></script>
-    <script src="{% static 'js/ajax-email-verify.js' %}"></script>
-    <script src="{% static 'js/uncheck-filters.js' %}"></script>
-    <script src="{% static 'js/pagination.js' %}"></script>
-    <script src="{% static 'js/pagination-per-page.js' %}"></script>
+        <script src="{% static 'js/submit-delay.js' %}"></script>
+        <script src="{% static 'js/ajax-reload-table.js' %}"></script>
+        <script src="{% static 'js/ajax-email-verify.js' %}"></script>
+        <script src="{% static 'js/uncheck-filters.js' %}"></script>
+        <script src="{% static 'js/pagination.js' %}"></script>
+        <script src="{% static 'js/pagination-per-page.js' %}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </body>
 </html>
