@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
-from .forms import EmployeeForm, EmployeeChangeForm, MonthForm
+from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
 from .models import Employee, Month
 from .mixins import OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
@@ -512,6 +512,56 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                                  "Specified month has already been assigned to employee %s." %
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
+
+class MonthApprove(LoginRequiredMixin, UpdateView):
+     form_class = MonthApproveForm
+     success_url = reverse_lazy('employee_detail')
+     template_name = 'employees/month_approve.html'
+     
+     def get_queryset(self, **kwargs):
+         try:
+             return Month.objects.filter(pk = self.kwargs['pk'])
+         except:
+             messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+             return HttpResponseRedirect('../')
+     def get_success_url(self, **kwargs):
+         try:
+             employee_object = self.get_object().employee
+             redirector = employee_object.pk
+             return reverse_lazy('employee_detail', kwargs={'pk': redirector})
+         except:
+             return '../'
+
+     def get_context_data(self, **kwargs):
+         try:
+             context = super(MonthApprove, self).get_context_data(**kwargs)
+             employee_object = self.get_object().employee
+             context['employee'] = employee_object
+             return context
+         except:
+             messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+             return HttpResponseRedirect('../')
+     def get_initial(self):
+         initial = super(MonthApprove, self).get_initial()
+         initial = initial.copy()
+         initial['month_is_approved'] = True
+         return initial
+
+     def form_valid(self, form):
+         form_validation = super(MonthApprove, self).form_valid(form)
+         messages.add_message(self.request, messages.SUCCESS,
+                             "Successfully approved month %s in year %s." %
+                             (self.object.month_name(), self.object.year))
+         return form_validation
+
+     def form_invalid(self, form, **kwargs):
+         employee_object = self.get_object().employee
+
+         if "already exists" in str(form.errors):
+             messages.add_message(self.request, messages.ERROR,
+                                  "Specified month has already been assigned to employee %s." %
+                                  (employee_object.full_name()))
+         return HttpResponseRedirect('')
 
 class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Employee

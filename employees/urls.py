@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^employees/per_page=(?P<per_page>[0-9]+)page=(?P<page>[0-9]+)/$', views.EmployeeList.as_view()),
     url(r'^(?P<pk>\d+)/per_page=(?P<per_page>[0-9]+)page=(?P<page>[0-9]+)/$', views.EmployeeList.as_view()),
     url(r'^new/emailverify/$', views.ajax_verify_email, name='emailverify')
+    url(r'^appr_month/(?P<pk>\d+)/$', views.MonthApprove.as_view(), name='month_approve'),
 ]
 
 handler404 = 'employees.views.pl_404_view'

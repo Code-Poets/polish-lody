@@ -343,7 +343,15 @@
                                 {{ month.month_detail }}
                             </td>
                             <td align="center" valign="middle">
-                                {{ month.hours_worked_in_this_month }}
+                                {{ month.hours_worked_in_this_month }} 
+			        {% if month.month_is_approved %}
+			            <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
+				{% else %}
+				    {% if not user.is_staff %}
+				        <a href="{% url 'month_approve' month.id %}">
+					<span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+				    {% endif %}
+                                {% endif %}
                             </td>
                             <td align="center" valign="middle">
                                 {{ month.rate_per_hour_this_month }}
@@ -370,6 +378,14 @@
                             </td>
                             <td bgcolor="#ffcccc" align="center" valign="middle">
                                 {{ month.hours_worked_in_this_month }}
+				{% if month.month_is_approved %}
+				    <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
+				{% else %}                                    
+				    {% if not user.is_staff %}
+				        <a href="{% url 'month_approve' month.id %}">
+				        <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+				    {% endif %}
+				{% endif %}
                             </td>
                             <td bgcolor="#ffcccc" align="center" valign="middle">
                                 {{ month.rate_per_hour_this_month }}
@@ -399,6 +415,14 @@
                             </td>
                             <td bgcolor="#e6ffe6" align="center" valign="middle">
                                 {{ month.hours_worked_in_this_month }}
+				{% if month.month_is_approved %}
+                                    <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
+				{% else %}
+				    {% if not user.is_staff %}
+				        <a href="{% url 'month_approve' month.id %}">
+			                <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+			            {% endif %}
+                                {% endif %}
                             </td>
                             <td bgcolor="#e6ffe6" align="center" valign="middle">
                                 {{ month.rate_per_hour_this_month }}

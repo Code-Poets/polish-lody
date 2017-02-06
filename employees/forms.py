@@ -63,3 +63,11 @@ class MonthForm(ModelForm):
         widgets = {
             'salary_is_paid': RadioSelect(renderer=HorizontalRadioRenderer)
         }
+
+class MonthApproveForm(ModelForm):
+    class Meta:
+        model = Month
+        fields = ['month_is_approved',]
+        widgets = {
+                    'month_is_approved' : forms.HiddenInput()
+                    }                       

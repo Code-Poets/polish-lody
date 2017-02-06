@@ -1,0 +1,52 @@
+{% extends 'polishlody/base.html' %}
+{% block body_block %}
+<center>
+<h4>
+    Are you sure you want to approve this month?
+</h4>                 
+<table>
+<tr>
+   <td>
+       Month:
+   </td>
+   <td>
+       {{ month.month_name }} {{ month.month_year }}
+   </td>
+</tr>
+
+<tr>  
+   <td>
+       Hours worked in this month:
+   </td>
+   <td>
+       {{ month.hours_worked_in_this_month }}
+   </td>
+</tr>
+<tr>
+   <td>
+       Rate per hour this month:
+   </td>
+   <td>
+       {{ month.rate_per_hour_this_month }}
+   </td>
+</tr>
+</table>
+</center>
+<br>
+<form method="POST">
+{% csrf_token %}
+ <center>
+    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">Cancel</a>
+    {% for e in form %}
+    <div class="form-group">
+
+	<label class="col-sm-2 control-label"></label>
+	<div class="col-sm-2 radio-select">
+	    {{ e }}
+	</div>
+    </div>
+    {% endfor %}
+ </center>
+</form>
+{% endblock %}
