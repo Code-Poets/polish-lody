@@ -38,42 +38,45 @@ $('#id_password2').focusout(function() {
 
     } else if ( pass1 === pass2 ) {
         $('input[name=submit]').attr('disabled', false);
-        $('#id_password2').attr('data-toggle', false);
-        $('#id_password2').attr('data-placement', false);
-        $('#id_password2').attr('data-content', false);
+        $('#id_password2').attr('data-toggle', '');
+        $('#id_password2').attr('data-placement', '');
+        $('#id_password2').attr('data-content', '');
         $('#id_password1').removeClass('already-exists');
         $('#id_password2').removeClass('already-exists');
         $('#id_password2').popover('hide');
     }
 })
-
-$('#id_first_name').focusout(function() {
-    var input = $('#id_first_name').val();
-    if ( input === '') {
-        $('#id_first_name').attr('data-toggle', 'popover');
-        $('#id_first_name').attr('data-placement', 'bottom');
-        $('#id_first_name').attr('data-content', 'This field is required.');
-        $('#id_first_name').popover('show');
-    } else {
-        $('#id_first_name').attr('data-toggle', false);
-        $('#id_first_name').attr('data-placement', false);
-        $('#id_first_name').attr('data-content', false);
-        $('#id_first_name').popover('hide');
-    }
+$(document).ready(function() {
+    $('#id_first_name').on('blur', function() {
+        var f_name = $('#id_first_name').val();
+        if ( f_name === '') {
+            $('#id_first_name').attr('data-toggle', 'popover');
+            $('#id_first_name').attr('data-placement', 'bottom');
+            $('#id_first_name').attr('data-content', 'This field is required.');
+            $('#id_first_name').popover('show');
+        } else {
+            $('#id_first_name').attr('data-toggle', '');
+            $('#id_first_name').attr('data-placement', '');
+            $('#id_first_name').attr('data-content', '');
+            $('#id_first_name').popover('hide');
+        }
+    });
 });
-$('#id_last_name').focusout(function() {
-    var input2 = $('#id_first_name').val();
-    if ( input2 === '') {
-        $('#id_last_name').attr('data-toggle', 'popover');
-        $('#id_last_name').attr('data-placement', 'bottom');
-        $('#id_last_name').attr('data-content', 'This field is required.');
-        $('#id_last_name').popover('show');
-    } else {
-        $('#id_last_name').attr('data-toggle', false);
-        $('#id_last_name').attr('data-placement', false);
-        $('#id_last_name').attr('data-content', false);
-        $('#id_last_name').popover('hide');
-    }
+$(document).ready(function() {
+    $('#id_last_name').on('blur', function() {
+        var l_name = $('#id_last_name').val();
+        if ( l_name === '') {
+            $('#id_last_name').attr('data-toggle', 'popover');
+            $('#id_last_name').attr('data-placement', 'bottom');
+            $('#id_last_name').attr('data-content', 'This field is required.');
+            $('#id_last_name').popover('show');
+        } else {
+            $('#id_last_name').attr('data-toggle', '');
+            $('#id_last_name').attr('data-placement', '');
+            $('#id_last_name').attr('data-content', '');
+            $('#id_last_name').popover('hide');
+        }
+    });
 });
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
