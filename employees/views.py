@@ -250,6 +250,48 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
     model = Month
     template_name = 'employees/employee_detail.html'
 
+    def get_template_names(self, **kwargs):
+        if self.request.is_ajax():
+            names = ['employees/employee_detail_table.html']
+        else:
+            names = ['employees/employee_detail.html']
+        return names
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax():
+            qset = context['object_list']
+            orderby = context['orderby']
+            try:
+                page_obj = context['page_obj']
+                paginator = context['paginator']
+            except:
+                pass
+            try:
+                years = context['years']
+            except:
+                pass
+            context = {
+                'months': qset,
+                'paginator': paginator,
+                'page_obj': page_obj,
+                'orderby': orderby,
+                'years': years,
+            }
+            print(qset)
+            if qset.count() == 0:
+                context['empty_qset'] = True
+
+            context['ajax_request'] = True
+            return self.response_class(
+                request = self.request,
+                template = self.get_template_names(),
+                context = context,
+                **response_kwargs
+            )
+        else:
+            response = super(EmployeeDetail, self).render_to_response(context, **response_kwargs)
+            return super(EmployeeDetail, self).render_to_response(context, **response_kwargs)
+
     def get_paginate_by(self, queryset):
         try:
             per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
@@ -307,7 +349,8 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 month_queryset = month_queryset.exclude(salary_is_paid=True)
             if hide_unpaid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=False)
-            if month_queryset.count() == 0 and not employee.month_set.all().count() == 0:
+            if month_queryset.count() == 0 and not employee.month_set.all().count() == 0 \
+                and self.request.is_ajax() is False:
                 messages.add_message(self.request, messages.WARNING,
                                      "Employee has no months which satisfy specified criteria. Check filters again.")
         else:
@@ -513,7 +556,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class MonthApprove(LoginRequiredMixin, UpdateView):
+class MonthApprove(LoginRequiredMixin, OwnershipMixin, UpdateView):
      form_class = MonthApproveForm
      success_url = reverse_lazy('employee_detail')
      template_name = 'employees/month_approve.html'
@@ -541,6 +584,7 @@ class MonthApprove(LoginRequiredMixin, UpdateView):
          except:
              messages.add_message(self.request, messages.ERROR, "This month does not exist!")
              return HttpResponseRedirect('../')
+
      def get_initial(self):
          initial = super(MonthApprove, self).get_initial()
          initial = initial.copy()

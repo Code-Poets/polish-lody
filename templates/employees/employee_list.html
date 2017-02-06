@@ -112,6 +112,32 @@
                 make_request();
             });
         {% endfor %}
+
+        function gatherFilters() {
+            console.log({
+                order: $('input[name=order]:checked', '#auto-submit-form').val(),
+                employee_filter: $('#employee_filter').val(),
+                position_sale: $('input[name=position_sale]:checked').val(),
+                position_other: $('input[name=position_other]:checked').val(),
+                position_production: $('input[name=position_production]:checked').val(),
+                hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
+                hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
+                per_page: $('select[name=per_page]').val(),
+                page: $('input[name=pg]:checked').val(),
+            })
+
+            return {
+                order: $('input[name=order]:checked', '#auto-submit-form').val(),
+                employee_filter: $('#employee_filter').val(),
+                position_sale: $('input[name=position_sale]:checked').val(),
+                position_other: $('input[name=position_other]:checked').val(),
+                position_production: $('input[name=position_production]:checked').val(),
+                hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
+                hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
+                per_page: $('select[name=per_page]').val(),
+                page: $('input[name=pg]:checked').val(),
+            }
+        }
     </script>
 
     {% elif not messages %}
