@@ -9,7 +9,10 @@ class OwnershipMixin(object):
         self.args = args
         self.kwargs = kwargs
         current_user = self.request.user._wrapped if hasattr(self.request.user, '_wrapped') else self.request.user
-        employee = Employee.objects.get(pk=self.kwargs.get('pk'))
+        try:
+            employee = Employee.objects.get(pk=self.kwargs.get('pk'))
+        except Employee.DoesNotExist:
+            employee = self.get_object().employee
         object_owner = getattr(employee, 'email')
         if str(current_user) != str(object_owner) and not current_user.is_staff:
             return HttpResponseRedirect('../')
