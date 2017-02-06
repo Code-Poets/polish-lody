@@ -116,6 +116,7 @@ class Month(models.Model):
     salary_is_paid = models.BooleanField(default=False, verbose_name=u'Paid?', choices=bool_choices)
     hours_worked_in_this_month = models.DecimalField(decimal_places=1, max_digits=4, default=0,
                                                     validators=[MaxValueValidator(720), MinValueValidator(0)])
+    month_is_approved = models.BooleanField(default=False, verbose_name=u'Approved?', choices=bool_choices)
     rate_per_hour_this_month = models.DecimalField(decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
 

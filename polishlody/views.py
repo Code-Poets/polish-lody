@@ -10,7 +10,7 @@ def password_reset_confirm(request, **kwargs):
     uid = int(base64.b64decode(kwargs["uidb64"] + '=='))
     userobject = MyUser.objects.filter(id = uid)[0]
     response = views.password_reset_confirm(request, template_name="registration/password_reset_confirm.html", **kwargs) 
-    if request.method == 'POST' and response.status_code == 302: #userobject.password is not None:
+    if request.method == 'POST' and response.status_code == 302:
        username = userobject.get_username()
        password = request.POST['new_password1']
        user = authenticate(username = username, password = password)
