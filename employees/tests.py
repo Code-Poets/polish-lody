@@ -8,11 +8,15 @@ from .models import Employee, Month
 from datetime import datetime, date
 import random
 import time
+
+# FIXME: This method should not be applied globally(@Kamil)
 User = get_user_model()
+
+# FIXME: Admin should be loaded from fixtures
 def admin_login(self):
     admin = User.objects.create_superuser(email="test_admin@polishlody.pl", password="codepassword")
     admin.save()
-    return self.c.login(username='test_admin@polishlody.pl', password='codepassword')
+    return self.client.login(username='test_admin@polishlody.pl', password='codepassword')
 
 class EmployeeMethodTests(TestCase):
     start_date = date.today()
@@ -447,9 +451,52 @@ class MonthFilterTests(TestCase):
                                  ['<Month: March 2017>','<Month: February 2017>','<Month: January 2017>'])
         response = self.c.get(url + "?2018=on")
         self.assertQuerysetEqual(response.context['months'],
-                                 ['<Month: January 2018>'])
+      
+                           ['<Month: January 2018>'])
 
+class MonthApproveTests(TestCase):
 
+    fixtures = ['fikstura_approve.yaml']
+    def test_approve_month_page_should_be_accessible_to_employee(self):
+        # print(User.objects.all())
+        # print(Employee.objects.all())
+        employee = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.filter(employee = employee.id).order_by('id')[0]
 
+        success = self.client.login(username = employee.email, password = 'codepassword')
+        assert success
 
+        url = reverse('month_approve', kwargs={'pk': month.id})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
 
+    def test_approve_month_page_should_be_inaccessible_to_staff(self):
+        employee_admin = User.objects.get(email = 'admin@polishlody.com')
+        employee = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.filter(employee = employee.id).order_by('id')[0]
+        
+        success = self.client.login(username = employee_admin.email, password = 'codepassword')
+        assert success
+
+        url = reverse('month_approve', kwargs={'pk': month.id})
+        response = self.client.get(url)
+        
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_approve_month_page_should_be_inaccessible_to_wrong_employee(self):
+        employee_1 = Employee.objects.get(email = 'a.shep@mail.com')
+        employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.filter(employee = employee_2.id).order_by('id')[0]
+
+        success = self.client.login(username = employee_1.email, password = 'codepassword')
+        assert success
+
+        url = reverse('month_approve', kwargs={'pk': month.id})
+        response = self.client.get(url)
+        
+        self.assertNotEqual(response.status_code, 200)
+
+    #def test_approving_month_again_should_not_raise_error():
+
+    #def test_approve_icon_should_be_invisible_to_staff():
