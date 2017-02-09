@@ -18,6 +18,7 @@ from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
+from django.http import JsonResponse
 
 def ajax_verify_email(request):
     if request.POST and request.is_ajax():
@@ -28,6 +29,17 @@ def ajax_verify_email(request):
                 }), content_type='application/json')
         return HttpResponse('')
     return HttpResponse('')
+
+def ajax_verify_date(request, **kwargs):
+    year = request.GET.get('year')
+    month = request.GET.get('month')
+    empid = request.GET.get('employee_id')
+    emp = Employee.objects.get(id=int(empid))
+    employee_month_query = emp.month_set.all()
+    data = {
+        'is_date': employee_month_query.filter(month=month, year=year).exists()
+    }
+    return JsonResponse(data)
 
 def make_year_list_for_filtering_in_emp_detail(employee):
     months = employee.month_set.all()

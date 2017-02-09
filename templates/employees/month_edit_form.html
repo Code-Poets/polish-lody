@@ -76,6 +76,12 @@
             </form>
         </div>
     </div>
+    <script>
+        function getPk() {
+            var employeeID= {{ employee.pk }}
+            return employeeID
+        }
+    </script>
 {% else %}
 
     <div class="panel panel-danger">
