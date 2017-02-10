@@ -16,7 +16,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="post" class="form-horizontal">
+            <form method="post" class="form-horizontal" id="monthform">
                 {% csrf_token %}
                 {% for e in form %}
                 {% if e.label == "Employee" %}
@@ -73,5 +73,12 @@
             var employeeID= {{ employee.pk }}
             return employeeID
         }
+
+        function resetmontform() { //function to reset form after site reload
+            document.getElementById('monthform').reset();
+        }
+        resetmontform();
+        var yearinit = null;
+        var monthinit = null;
     </script>
 {% endblock %}

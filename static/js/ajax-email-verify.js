@@ -37,34 +37,45 @@ function ajaxVerifyDate() {
     var verify_month = $('#id_month').val();
     var month_text = $('#id_month :selected').text();
     var employee_id = getPk();
-    $.ajax({
-        url: '../../employees/dateverify/',
-        data: {year: verify_year,
-                month: verify_month,
-                employee_id: employee_id
-                },
-        type: "GET",
-        success: function(response) {
-            if(response.is_date) {
-                $('#id_year').addClass('already-exists');
-                $('#id_month').addClass('already-exists');
-                // $('input[name=submit]').attr('disabled', true);
-                $('#id_year').attr('data-toggle', 'popover')
-                $('#id_year').attr('data-placement', 'right');
-                $('#id_year').attr('data-content',month_text +' '+ verify_year +' already exist.');
-                $('#id_year').popover('show');
+    if(verify_year == yearinit && verify_month == monthinit){
+        $('input[name=submit]').attr('disabled', false);
+        $('#id_year').removeClass('already-exists');
+        $('#id_month').removeClass('already-exists');
+        $('#id_year').removeAttr('data-toggle');
+        $('#id_year').removeAttr('data-placement');
+        $('#id_year').removeAttr('data-content');
+        $('#id_year').popover('hide');
+        return ;
+    } else {
+        $.ajax({
+            url: '../../employees/dateverify/',
+            data: {year: verify_year,
+                    month: verify_month,
+                    employee_id: employee_id
+                    },
+            type: "GET",
+            success: function(response) {
+                if(response.is_date) {
+                    $('#id_year').addClass('already-exists');
+                    $('#id_month').addClass('already-exists');
+                    $('input[name=submit]').attr('disabled', true);
+                    $('#id_year').attr('data-toggle', 'popover')
+                    $('#id_year').attr('data-placement', 'right');
+                    $('#id_year').attr('data-content',month_text +' '+ verify_year +' already exists.');
+                    $('#id_year').popover('show');
+                }
+                else {
+                    $('input[name=submit]').attr('disabled', false);
+                    $('#id_year').removeClass('already-exists');
+                    $('#id_month').removeClass('already-exists');
+                    $('#id_year').removeAttr('data-toggle');
+                    $('#id_year').removeAttr('data-placement');
+                    $('#id_year').removeAttr('data-content');
+                    $('#id_year').popover('hide');
+                }
             }
-            else {
-                // $('input[name=submit]').attr('disabled', false);
-                $('#id_year').removeClass('already-exists');
-                $('#id_month').removeClass('already-exists');
-                $('#id_year').removeAttr('data-toggle');
-                $('#id_year').removeAttr('data-placement');
-                $('#id_year').removeAttr('data-content');
-                $('#id_year').popover('hide');
-            }
-        }
-    });
+        });
+    }
 }
 
 $('#id_password2').focusout(function() {

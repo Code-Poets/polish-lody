@@ -22,7 +22,7 @@
 {% if month %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="post" class="form-horizontal">
+            <form method="post" class="form-horizontal" id="monthform">
                 {% for error in form.non_field_errors %}
                     <div class="alert alert-danger" role="alert">
                         {{ error }}
@@ -81,6 +81,13 @@
             var employeeID= {{ employee.pk }}
             return employeeID
         }
+
+        function resetmontform() {
+            document.getElementById('monthform').reset();
+        }
+        resetmontform();
+        var yearinit = $('#id_year').val();
+        var monthinit = $('#id_month').val();
     </script>
 {% else %}
 
