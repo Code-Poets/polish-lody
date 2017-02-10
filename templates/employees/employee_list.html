@@ -9,8 +9,8 @@
     </center>
 </div>
 {% endblock %}
-
 {% block body_block %}
+{% if all_employee_list is not None %}
     <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
     <a name="employee-table"></a>
@@ -59,7 +59,6 @@
             {% endif %}
             <label class="my-button clickable" for="chk_unpaid">Show only employees who weren't paid yet.</label>
             Search for employee: <input type="text" class="clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
-
             <select hidden name="per_page" class="clickable" id="per-page">
                 {% for number in paginate_by_numbers %}
                     {% if current_paginate_by_number == number %}
@@ -69,16 +68,12 @@
                     {% endif %}
                 {% endfor %}
             </select>
-
             <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
         </div>
-        
+        {% endif %}
 {% endblock %}
-
 {% block load_block %}
-    {% if all_employee_list %}
-        {% include 'employees/employee_list_table.html' %}       
-    {% endif %}
+    {% include 'employees/employee_list_table.html' %}       
 {% endblock %}
 {% block footer_block %}
     {% if all_employee_list %}
@@ -112,20 +107,7 @@
                 make_request();
             });
         {% endfor %}
-
         function gatherFilters() {
-            console.log({
-                order: $('input[name=order]:checked', '#auto-submit-form').val(),
-                employee_filter: $('#employee_filter').val(),
-                position_sale: $('input[name=position_sale]:checked').val(),
-                position_other: $('input[name=position_other]:checked').val(),
-                position_production: $('input[name=position_production]:checked').val(),
-                hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
-                hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
-                per_page: $('select[name=per_page]').val(),
-                page: $('input[name=pg]:checked').val(),
-            })
-
             return {
                 order: $('input[name=order]:checked', '#auto-submit-form').val(),
                 employee_filter: $('#employee_filter').val(),
@@ -139,7 +121,6 @@
             }
         }
     </script>
-
     {% elif not messages %}
     <p>The list of employees is empty, you can change it by <a href="{% url 'employee_new' %}">adding a new employee.</a></p>
     {% endif %}

@@ -43,26 +43,47 @@ function ajax_setup() {
     })
 };
 
-
-
 function make_request() {
-    var params = gatherFilters();
-    $.get({
+    try {
+        var params = gatherFilters();
+    } 
+    catch(err) {
+        var params = { };
+    }
+    $.ajax({
         url: '',
         data: params,
         dataType: "html",
+        method: "GET",
+        timeout: 5000,
         success: function(content) {
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");
-            console.log('great success');
             if(content.indexOf('<p>') !== -1) {
-                console.log('wtf');
-                var template = $('#hidden-template').html();
-                $('#msg').replaceWith(template);
+                var errTemplate = $('#none-found-template').html();
+                $('#msg').replaceWith(errTemplate);
             } else {
                 $('#msg').replaceWith('<div id="msg"></div>');
             }
         }
+    }).fail(function(jqXHR){
+        $(".loading-icon").css("opacity", "0");
+        ajaxErrorHandler(jqXHR);
     });
-    
+}
+function ajaxErrorHandler(jqXHR) {
+    if (jqXHR.status === 500) {
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
+            '<span>An internal server error occurred. If the issue persists, contact system administrator.</span></div>');
+    } else if (jqXHR.status === 404) {
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
+            '<span>It seems that you tried to access something that does not exist.</span></div>');
+    } else {
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
+            '<span>An unexpected error occurred.</span></div>');
+    }
+    $('#msg').replaceWith(errTemplate);
 }

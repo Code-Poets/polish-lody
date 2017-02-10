@@ -20,8 +20,8 @@ import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 
 def ajax_verify_email(request):
-    if request.GET and request.is_ajax():
-        email = request.GET.get('data')
+    if request.POST and request.is_ajax():
+        email = request.POST.get('email')
         if Employee.objects.filter(email=email).exists():
             return HttpResponse(json.dumps({
                 "status":1
@@ -36,7 +36,10 @@ def make_year_list_for_filtering_in_emp_detail(employee):
         if not month.year in years:
             years.append(month.year)
     sorted_years = sorted(years)
-    return sorted_years[::-1]
+    if len(years) != 0:
+        return sorted_years[::-1]
+    else:
+        return False
 
 def position_list_and_filtering(self, queryset):
     positions = {
@@ -138,6 +141,8 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
+            raise Http404
+            raise NameError("FAIL")
             qset = context['all_employee_list']
             order = context['orderby']
             try:
@@ -153,7 +158,6 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             }
             if qset.count() == 0:
                 context['empty_qset'] = True
-
             context['ajax_request'] = True
             return self.response_class(
                 request = self.request,
@@ -243,7 +247,6 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             messages.add_message(self.request, messages.WARNING,
                                  "No employee meets the search criteria. "
                                  "Widen your search or check filter for typos.")
-
         return queryset
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
@@ -277,10 +280,8 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 'orderby': orderby,
                 'years': years,
             }
-            print(qset)
             if qset.count() == 0:
                 context['empty_qset'] = True
-
             context['ajax_request'] = True
             return self.response_class(
                 request = self.request,
@@ -312,7 +313,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         hide_unpaid_filter = self.request.GET.get('hide_unpaid_months_filter')
         clear_filters = self.request.GET.get('clear_filters')
         selected_years = self.get_selected_years()
-
         if clear_filters is None:
             if order == 'newest':
                 month_queryset = employee.month_set.all().order_by('-year', '-month')
@@ -337,7 +337,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 month_queryset = employee.month_set.all().order_by('rate_per_hour_this_month')
             elif order == 'rph-down':
                 month_queryset = employee.month_set.all().order_by('-rate_per_hour_this_month')
-
             else:
                 try:
                     month_queryset = employee.month_set.all().order_by(order)
@@ -398,7 +397,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['per_page'] = self.request.GET.get('per_page') or 10
-
         return context
 
 class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
@@ -688,5 +686,3 @@ def pl_500_view(request):
     response = render(request, template)
     response.status_code = 500
     return response
-
-

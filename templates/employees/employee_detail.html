@@ -13,14 +13,9 @@
         <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
     </div>
 {% endblock %}
-
-
 {% block body_block %}
-
     {% if employee %}
-
         <div class="panel panel-default">
-
             <div class="panel-body">
                 <table class="table">
                     <tr>
@@ -54,14 +49,14 @@
                         <td>
                             {{ employee.contract_exp_date }}
                             {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
-                            <span title="Contract expires in about {{ employee.is_contract_expiring }} days."
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_contract_expiring == 0 %}
-                            <span title="Contract expires within 24 hours!"
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_contract_expiring.1 %}
-                            <span title="Contract expired {{ employee.is_contract_expiring.1 }} days ago!"
-                                class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                                <span title="Contract expires in about {{ employee.is_contract_expiring }} days."
+                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                                {% elif employee.is_contract_expiring == 0 %}
+                                <span title="Contract expires within 24 hours!"
+                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                                {% elif employee.is_contract_expiring.1 %}
+                                <span title="Contract expired {{ employee.is_contract_expiring.1 }} days ago!"
+                                    class="glyphicon glyphicon-warning-sign employee-detail"></span>
                             {% endif %}
                         </td>
                     </tr>
@@ -73,14 +68,14 @@
                         <td>
                             {{ employee.health_book_exp_date }}
                             {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
-                            <span title="Health book expires in about {{ employee.is_health_book_expiring }} days."
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_health_book_expiring == 0 %}
-                            <span title="Health book expires within 24 hours!"
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_health_book_expiring.1 %}
-                            <span title="Health book expired {{ employee.is_health_book_expiring.1 }} days ago!"
-                                class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                                <span title="Health book expires in about {{ employee.is_health_book_expiring }} days."
+                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                                {% elif employee.is_health_book_expiring == 0 %}
+                                <span title="Health book expires within 24 hours!"
+                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
+                                {% elif employee.is_health_book_expiring.1 %}
+                                <span title="Health book expired {{ employee.is_health_book_expiring.1 }} days ago!"
+                                    class="glyphicon glyphicon-warning-sign employee-detail"></span>
                             {% endif %}
                         </td>
                         {% else %}
@@ -108,19 +103,19 @@
                     {% if month %}
                     <tr>
                         {% if employee.all_unpaid_months_salary == 0 %}
-                        <td bgcolor="#e6ffe6">
-                            Sum of all unpaid months:
-                        </td>
-                        <td bgcolor="#e6ffe6">
-                            {{ employee.all_unpaid_months_salary }}zł
-                        </td>
+                            <td bgcolor="#e6ffe6">
+                                Sum of all unpaid months:
+                            </td>
+                            <td bgcolor="#e6ffe6">
+                                {{ employee.all_unpaid_months_salary }}zł
+                            </td>
                         {% else %}
-                        <td bgcolor="#ffcccc">
-                            Sum of all unpaid months:
-                        </td>
-                        <td bgcolor="#ffcccc">
-                            {{ employee.all_unpaid_months_salary }}zł
-                        </td>
+                            <td bgcolor="#ffcccc">
+                                Sum of all unpaid months:
+                            </td>
+                            <td bgcolor="#ffcccc">
+                                {{ employee.all_unpaid_months_salary }}zł
+                            </td>
                         {% endif %}
                     </tr>
                     {% endif %}
@@ -128,7 +123,6 @@
                 {% if user.is_staff %}
                     <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Month</a><br><br>
                 {% endif %}
-
             </div>
             <a name="month-table"></a>
             <center>
@@ -137,17 +131,13 @@
 
             <div class="panel-body">
             {% if years %}
-
-
             <div class="panel-body filter-forms">
                 <form>
                     <input class="vis-hidden" type="checkbox" value="Clear filters"/>
                     <label class="my-button clickable" onclick="uncheckFilters();">Clear filters</label>
                 </form>
-            
             <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" action="{% url 'employee_detail' employee.id %}">
                 <span>Show year:</span>
-
                     {% if selected_years %}
                         {% if years_5 %}
                             {% for year in years %}
@@ -189,7 +179,6 @@
                                                name="yr{{ year }}" />
                                     {% endif %}
                                         <label class="my-button dont-show-those clickable" id="{{ year }}" for="year_{{ year }}">{{ year }}</label>
-
                                 {% endif %}
                             {% endfor %}
                             {% if years_hidden %}
@@ -201,7 +190,6 @@
                                 </button>
                             {% endif %}
                         {% endif %}
-
                         {% else %}
                             {% for year in years %}
                                 <input id="year_{{ year }}" type="checkbox" class="vis-hidden"
@@ -221,7 +209,6 @@
                             </button>
                             {% endif %}
                         {% endif %}
-
                         {% if hide_unpaid_months_filter %}
                         <input id="paid_months" checked type="checkbox" class="vis-hidden"
                                name="hide_unpaid_months_filter" />
@@ -247,11 +234,11 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
-                        
                     </div>
                 </div>
             {% endif %}
     {% include 'employees/employee_detail_table.html' %}
+    {% if years is not False %}
     <div class='panel-body'>
         <span>Months per page:</span><br/>
         <ul class="pagination paginate">
@@ -272,6 +259,7 @@
             {% endfor %}
         </ul><br/>
     </div>
+    {% endif %}
     {% else %}
         <p>Employee not found</p><br/>
     {% endif %}
@@ -294,20 +282,20 @@
                 $('#collapse-btn').css("display", "none");
             });
         });
-
         {% for number in paginate_by_numbers %}
-            $('#per-page-{{number}}').bind('click', function(){
-                $('.page-no').removeClass('active');
-                $('#per-page-{{number}}').addClass('active');
-                $('input[name=pg]:checked').prop('checked', false);
-                $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
-                make_request();
-            });
+        $('#per-page-{{number}}').bind('click', function(){
+            $('.page-no').removeClass('active');
+            $('#per-page-{{number}}').addClass('active');
+            $('input[name=pg]:checked').prop('checked', false);
+            $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
+            make_request();
+        });
         {% endfor %}
-
+        {% if years is not False %}
         function gatherFilters() {
+            var orderby = $('input[name=order]:checked').val();
             return {
-                order: $('input[name=order]:checked').val(),
+                order: orderby,
                 {% for year in years %}
                     {{ year }}: $('input[name=yr{{year}}]:checked').val(),
                 {% endfor %}
@@ -317,6 +305,6 @@
                 page: $('input[name=pg]:checked').val(),
             }
         }
+        {% endif %}
     </script>
-    
 {% endblock %}

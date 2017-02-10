@@ -1,9 +1,11 @@
 function ajaxVerify() {
     var verifyemail = $('#id_email').val();
-    $.ajax({
-        url: 'new/emailverify',
-        data: {data: verifyemail},
-        type: "GET",
+    $.post({
+        url: 'new/emailverify/',
+        data: {
+            email: verifyemail,
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
         success: function(response) {
             if(response.status === 1) {
                 $('.verify-email').show(500);
@@ -16,10 +18,16 @@ function ajaxVerify() {
             }
             else {
                 $('input[name=submit]').attr('disabled', false);
+                $('#id_email').removeAttr('data-toggle')
+                $('#id_email').removeAttr('data-placement');
+                $('#id_email').removeAttr('data-content')
                 $('.verify-email').hide(500);
                 $('#id_email').removeClass('already-exists');
                 $('#id_email').popover('hide');
             }
+        },
+        error: function(thrownError) {
+            console.log(thrownError);
         }
     });
 }
@@ -38,9 +46,9 @@ $('#id_password2').focusout(function() {
 
     } else if ( pass1 === pass2 ) {
         $('input[name=submit]').attr('disabled', false);
-        $('#id_password2').attr('data-toggle', '');
-        $('#id_password2').attr('data-placement', '');
-        $('#id_password2').attr('data-content', '');
+        $('#id_password2').removeAttr('data-toggle');
+        $('#id_password2').removeAttr('data-placement');
+        $('#id_password2').removeAttr('data-content');
         $('#id_password1').removeClass('already-exists');
         $('#id_password2').removeClass('already-exists');
         $('#id_password2').popover('hide');
@@ -55,9 +63,9 @@ $(document).ready(function() {
             $('#id_first_name').attr('data-content', 'This field is required.');
             $('#id_first_name').popover('show');
         } else {
-            $('#id_first_name').attr('data-toggle', '');
-            $('#id_first_name').attr('data-placement', '');
-            $('#id_first_name').attr('data-content', '');
+            $('#id_first_name').removeAttr('data-toggle');
+            $('#id_first_name').removeAttr('data-placement');
+            $('#id_first_name').removeAttr('data-content');
             $('#id_first_name').popover('hide');
         }
     });
@@ -78,9 +86,9 @@ $(document).ready(function() {
         }
     });
 });
-$(document).ready(function() {
-    $('[data-toggle="popover"]').popover();
-});
+// $(document).ready(function() {
+//     $('[data-toggle="popover"]').popover();
+// });
 
 var timer;
 $('#id_email').on('change blur keyup input', function() {

@@ -96,179 +96,176 @@
                 {% if empty_qset is not True %}
                     {% for month in months %}
                         {% if month.salary_is_paid is False and month.calculating_salary_for_this_month == 0 %}
-                        <tr>
-                            <td>
-                                {{ month.month_detail }}
-                            </td>
-                            <td align="center" valign="middle">
-                                {{ month.hours_worked_in_this_month }} 
-                        {% if month.month_is_approved %}
-                            <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
-                        {% else %}
-                            {% if not user.is_staff %}
-                                <a href="{% url 'month_approve' month.id %}">
-                            <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
-                            {% endif %}
-                        {% endif %}
-                            </td>
-                            <td align="center" valign="middle">
-                                {{ month.rate_per_hour_this_month }}
-                            </td>
-                            <td align="center" valign="middle">
-                                <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
-                            </td >
-                            <td align="center" valign="middle">
-                                {{ month.calculating_salary_for_this_month }}
-                            </td>
-                            {% if user.is_staff %}
-                            <td align="right">
-                                <a href="{% url 'month_edit' month.id %}">
-                            <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                                <a href="{% url 'month_delete' month.id %}">
-                            <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash"></span></a>
+                            <tr>
+                                <td>
+                                    {{ month.month_detail }}
                                 </td>
-                            {% endif %}
-                        </tr>
-                        {% elif month.salary_is_paid is False %}
-                        <tr>
-                            <td bgcolor="#ffcccc">
-                                {{ month.month_detail }}
-                            </td>
-                            <td bgcolor="#ffcccc" align="center" valign="middle">
-                                {{ month.hours_worked_in_this_month }}
+                                <td align="center" valign="middle">
+                                    {{ month.hours_worked_in_this_month }} 
                             {% if month.month_is_approved %}
                                 <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
-                            {% else %}                                    
-                                {% if not user.is_staff %}
-                                    <a href="{% url 'month_approve' month.id %}">
-                                    <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
-                                {% endif %}
-                            {% endif %}
-                            </td>
-                            <td bgcolor="#ffcccc" align="center" valign="middle">
-                                {{ month.rate_per_hour_this_month }}
-                            </td>
-                            <td bgcolor="#ffcccc" align="center" valign="middle">
-                                <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
-                            </td>
-                            <td bgcolor="#ffcccc" align="center" valign="middle">
-                                {{ month.calculating_salary_for_this_month }}
-                            </td>
-
-                            {% if user.is_staff %}
-                            <td bgcolor="#ffcccc" align="right">
-                                <a href="{% url 'month_edit' month.id %}">
-                            <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                                <a href="{% url 'month_delete' month.id %}">
-                            <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash"></span></a>
-                                </td>
-                            {% endif %}
-
-                        </tr>
-
-                        {% elif month.salary_is_paid is True %}
-                        <tr>
-                            <td bgcolor="#e6ffe6">
-                                {{ month.month_detail }}
-                            </td>
-                            <td bgcolor="#e6ffe6" align="center" valign="middle">
-                                {{ month.hours_worked_in_this_month }}
-                            {% if month.month_is_approved %}
-                                                <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
                             {% else %}
                                 {% if not user.is_staff %}
                                     <a href="{% url 'month_approve' month.id %}">
+                                <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                                {% endif %}
+                            {% endif %}
+                                </td>
+                                <td align="center" valign="middle">
+                                    {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td align="center" valign="middle">
+                                    <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
+                                </td >
+                                <td align="center" valign="middle">
+                                    {{ month.calculating_salary_for_this_month }}
+                                </td>
+                                {% if user.is_staff %}
+                                <td align="right">
+                                    <a href="{% url 'month_edit' month.id %}">
+                                <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                    <a href="{% url 'month_delete' month.id %}">
+                                <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% elif month.salary_is_paid is False %}
+                            <tr>
+                                <td bgcolor="#ffcccc">
+                                    {{ month.month_detail }}
+                                </td>
+                                <td bgcolor="#ffcccc" align="center" valign="middle">
+                                    {{ month.hours_worked_in_this_month }}
+                                {% if month.month_is_approved %}
+                                    <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
+                                {% else %}                                    
+                                    {% if not user.is_staff %}
+                                        <a href="{% url 'month_approve' month.id %}">
                                         <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
                                     {% endif %}
                                 {% endif %}
-                            </td>
-                            <td bgcolor="#e6ffe6" align="center" valign="middle">
-                                {{ month.rate_per_hour_this_month }}
-                            </td>
-                            <td bgcolor="#e6ffe6" align="center" valign="middle">
-                                <span class="glyphicon glyphicon-ok icon-true" aria-hidden="true"></span>
-                            </td>
-                            <td bgcolor="#e6ffe6" align="center" valign="middle">
-                                {{ month.calculating_salary_for_this_month }}
-                            </td>
-                            {% if user.is_staff %}
-                            <td bgcolor="#e6ffe6" align="right">
-                                <a href="{% url 'month_edit' month.id %}">
-                            <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-                                <a href="{% url 'month_delete' month.id %}">
-                            <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash"></span></a>
                                 </td>
-                            {% endif %}
-                        </tr>
+                                <td bgcolor="#ffcccc" align="center" valign="middle">
+                                    {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td bgcolor="#ffcccc" align="center" valign="middle">
+                                    <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
+                                </td>
+                                <td bgcolor="#ffcccc" align="center" valign="middle">
+                                    {{ month.calculating_salary_for_this_month }}
+                                </td>
+
+                                {% if user.is_staff %}
+                                <td bgcolor="#ffcccc" align="right">
+                                    <a href="{% url 'month_edit' month.id %}">
+                                <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                    <a href="{% url 'month_delete' month.id %}">
+                                <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% elif month.salary_is_paid is True %}
+                            <tr>
+                                <td bgcolor="#e6ffe6">
+                                    {{ month.month_detail }}
+                                </td>
+                                <td bgcolor="#e6ffe6" align="center" valign="middle">
+                                    {{ month.hours_worked_in_this_month }}
+                                {% if month.month_is_approved %}
+                                                    <span class="glyphicon glyphicon-ok-sign icon-true" title="Hours approved" aria-hidden="true"></span>
+                                {% else %}
+                                    {% if not user.is_staff %}
+                                        <a href="{% url 'month_approve' month.id %}">
+                                            <span title="Approve hours for month {{ month.month_detail }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td bgcolor="#e6ffe6" align="center" valign="middle">
+                                    {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td bgcolor="#e6ffe6" align="center" valign="middle">
+                                    <span class="glyphicon glyphicon-ok icon-true" aria-hidden="true"></span>
+                                </td>
+                                <td bgcolor="#e6ffe6" align="center" valign="middle">
+                                    {{ month.calculating_salary_for_this_month }}
+                                </td>
+                                {% if user.is_staff %}
+                                <td bgcolor="#e6ffe6" align="right">
+                                    <a href="{% url 'month_edit' month.id %}">
+                                <span title="Edit month {{ month.month_detail }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                    <a href="{% url 'month_delete' month.id %}">
+                                <span title="Delete month {{ month.month_detail }}" class="glyphicon glyphicon-trash">
+                                </span></a>
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-            </table>
-            {% else %}
-                <div class="alert alert-warning alert-dismissable" id="msg">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span>There are no months which satisfy specified criteria.</span>
+            {% elif empty_qset is True %}
+                <div id="msg">
+                    <p>No matches found.</p>
                 </div>
-
             {% endif %}
-        <div class="panel-body">
-        {% if page_obj.has_other_pages %}
-            <ul class="pagination">
-                {% for i in paginator.page_range %}
-                    {% if forloop.counter == 1 %}
-                        {% if page_obj.has_previous %}
-                            <li class="pg-clickable">
-                                <input id="pg-previous" type="radio"  class="vis-hidden"
-                                    name="pg" value="{{ page_obj.previous_page_number }}"/>
-                                <label class="my-button clickable" for="pg-previous">&laquo; Previous</label>
+            </table>
+            <div class="panel-body">
+            {% if page_obj.has_other_pages %}
+                <ul class="pagination">
+                    {% for i in paginator.page_range %}
+                        {% if forloop.counter == 1 %}
+                            {% if page_obj.has_previous %}
+                                <li class="pg-clickable">
+                                    <input id="pg-previous" type="radio"  class="vis-hidden"
+                                        name="pg" value="{{ page_obj.previous_page_number }}"/>
+                                    <label class="my-button clickable" for="pg-previous">&laquo; Previous</label>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <label class="my-button">&laquo; Previous</label>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% if page_obj.number == i %}
+                            <li class="active pg-clickable">
+                                <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
+                                   name="pg" value="{{i}}"/>
+                                <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
                             </li>
                         {% else %}
-                            <li class="disabled">
-                                <label class="my-button">&laquo; Previous</label>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% if page_obj.number == i %}
-                        <li class="active pg-clickable">
-                            <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
-                               name="pg" value="{{i}}"/>
-                            <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
-                        </li>
-                    {% else %}
-                        <li class="pg-clickable">
-                            <input id="pg-{{i}}" type="radio"  class="vis-hidden"
-                               name="pg" value="{{i}}"/>
-                            <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
-                        </li>
-                    {% endif %}
-                    {% if forloop.last %}
-                        {% if page_obj.has_next %}
                             <li class="pg-clickable">
-                                <input id="pg-next" type="radio"  class="vis-hidden"
-                                    name="pg" value="{{ page_obj.next_page_number }}"/>
-                                <label class="my-button clickable" for="pg-next">Next &raquo;</label>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <label class="my-button">Next &raquo;</label>
+                                <input id="pg-{{i}}" type="radio"  class="vis-hidden"
+                                   name="pg" value="{{i}}"/>
+                                <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
                             </li>
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </ul><br/>
-        {% endif %}
+                        {% if forloop.last %}
+                            {% if page_obj.has_next %}
+                                <li class="pg-clickable">
+                                    <input id="pg-next" type="radio"  class="vis-hidden"
+                                        name="pg" value="{{ page_obj.next_page_number }}"/>
+                                    <label class="my-button clickable" for="pg-next">Next &raquo;</label>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <label class="my-button">Next &raquo;</label>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul><br/>
+            {% endif %}
         </div>
+    </div>
+    {% else %}
+        <span>It looks like there are no months yet.
+            {% if user.is_staff %}
+                <a href="{% url 'month_new' employee.pk %}">Add first month for this employee.</a>
+            {% endif %}
+        </span>
         <script id="hidden-template" type="text/x-custom-template">
             <div class="alert alert-warning alert-dismissable" id="msg">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <span>There are no months which satisfy specified criteria.</span>
             </div>
         </script>
-            </div>
-        {% else %}
-            <span>It looks like there are no months yet.
-                {% if user.is_staff %}
-                    <a href="{% url 'month_new' employee.pk %}">Add first month for this employee.</a>
-                {% endif %}
-            </span>
-        {% endif %}
+    {% endif %}
