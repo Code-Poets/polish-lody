@@ -141,8 +141,6 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
-            raise Http404
-            raise NameError("FAIL")
             qset = context['all_employee_list']
             order = context['orderby']
             try:
