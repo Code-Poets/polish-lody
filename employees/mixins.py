@@ -9,10 +9,7 @@ class OwnershipMixin(object):
         self.args = args
         self.kwargs = kwargs
         current_user = self.request.user._wrapped if hasattr(self.request.user, '_wrapped') else self.request.user
-        try:
-            employee = Employee.objects.get(pk=self.kwargs.get('pk'))
-        except Employee.DoesNotExist:
-            employee = self.get_object().employee
+        employee = Employee.objects.get(pk=self.kwargs.get('pk'))
         object_owner = getattr(employee, 'email')
         if str(current_user) != str(object_owner) and not current_user.is_staff:
             return HttpResponseRedirect('../')
@@ -28,3 +25,16 @@ class StaffRequiredMixin(object):
         if not request.user.is_staff:
             return HttpResponseRedirect('../')
         return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+class MonthOwnershipMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        current_user = self.request.user._wrapped if hasattr(self.request.user, '_wrapped') else self.request.user
+        employee = self.get_object().employee
+        object_owner = getattr(employee, 'email')
+        if str(current_user) != str(object_owner):
+            return HttpResponseRedirect('../')
+        return super(MonthOwnershipMixin, self).dispatch(request, *args, **kwargs)

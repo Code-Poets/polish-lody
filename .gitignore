@@ -5,6 +5,7 @@ db.sqlite3
 *.map
 /pl-py3
 /.idea
-/staticfiles
+/staticfiles/*
+!/staticfiles/main.css
 
 /polishlody/settings/local.py

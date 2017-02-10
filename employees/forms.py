@@ -58,7 +58,7 @@ class EmployeeChangeForm(ModelForm):
 class MonthForm(ModelForm):
     class Meta:
         model = Month
-        exclude = []
+        exclude = ['month_is_approved']
 
         widgets = {
             'salary_is_paid': RadioSelect(renderer=HorizontalRadioRenderer)

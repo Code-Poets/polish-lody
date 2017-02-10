@@ -14,7 +14,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
 from .models import Employee, Month
-from .mixins import OwnershipMixin, StaffRequiredMixin
+from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
@@ -554,7 +554,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                                  (employee_object.full_name()))
         return HttpResponseRedirect('')
 
-class MonthApprove(LoginRequiredMixin, OwnershipMixin, UpdateView):
+class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
      form_class = MonthApproveForm
      success_url = reverse_lazy('employee_detail')
      template_name = 'employees/month_approve.html'
