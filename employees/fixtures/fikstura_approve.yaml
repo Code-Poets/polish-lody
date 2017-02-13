@@ -18,9 +18,9 @@
     password: pbkdf2_sha256$30000$fvwZBrg9Fhat$Ih2p6UIjZqlasWMrlpxotrmJhmYOhNOc0Lm1FwvEVb0=
     last_login: "2017-01-04 13:24:59Z"
     is_superuser: false
-    email: jakub@polishlody.com
-    first_name: Jakub
-    last_name: Czachura
+    email: z_niewypal@polishlody.com
+    first_name: Zenon
+    last_name: Niewypal
     is_staff: true
     is_active: true
     date_joined: "2017-01-03 15:46:58Z"
@@ -181,7 +181,7 @@
     employee: 3 
     month: 1 
     salary_is_paid: false 
-    hours_worked_in_this_month: '0.0'
+    hours_worked_in_this_month: '100.0'
     month_is_approved: true 
     rate_per_hour_this_month: '11.00'
 - model: employees.month

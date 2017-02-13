@@ -458,8 +458,7 @@ class MonthApproveTests(TestCase):
 
     fixtures = ['fikstura_approve.yaml']
     def test_approve_month_page_should_be_accessible_to_employee(self):
-        # print(User.objects.all())
-        # print(Employee.objects.all())
+        
         employee = Employee.objects.get(email = 'zbigniew@polishlody.com')
         month = Month.objects.filter(employee = employee.id).order_by('id')[0]
 
@@ -472,6 +471,7 @@ class MonthApproveTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_approve_month_page_should_be_inaccessible_to_staff(self):
+        
         employee_admin = User.objects.get(email = 'admin@polishlody.com')
         employee = Employee.objects.get(email = 'zbigniew@polishlody.com')
         month = Month.objects.filter(employee = employee.id).order_by('id')[0]
@@ -485,6 +485,7 @@ class MonthApproveTests(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_approve_month_page_should_be_inaccessible_to_wrong_employee(self):
+        
         employee_1 = Employee.objects.get(email = 'a.shep@mail.com')
         employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
         month = Month.objects.filter(employee = employee_2.id).order_by('id')[0]
@@ -494,9 +495,83 @@ class MonthApproveTests(TestCase):
 
         url = reverse('month_approve', kwargs={'pk': month.id})
         response = self.client.get(url)
+        #print(url)
+        self.assertNotEqual(response.status_code, 200)  
+    
+    def test_month_approval_status_should_become_false_after_hours_worked_in_month_change_by_staff(self):
         
-        self.assertNotEqual(response.status_code, 200)
+        employee_1 = Employee.objects.get(email = 'z_niewypal@polishlody.com')
+        employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.get(pk = 5)
+        
+        assert employee_1.is_staff == True
+        assert month.month_is_approved == True
 
-    #def test_approving_month_again_should_not_raise_error():
+        success = self.client.login(username = employee_1.email, password = 'codepassword')
+        assert success 
+        
+        url = reverse('month_edit', kwargs={'pk': month.id})
+        
+        data = {'employee': employee_2.id, 
+                'salary_is_paid': False, 
+                'hours_worked_in_this_month': 101, 
+                'rate_per_hour_this_month': 11,
+                'year': 2017,
+                'month': 1}
+        
+        response_post = self.client.post(url, data = data)
+        month.refresh_from_db()
+        
+        self.assertEqual(month.month_is_approved, False)
 
-    #def test_approve_icon_should_be_invisible_to_staff():
+    def test_month_approval_status_should_become_false_after_hours_worked_in_month_and_other_fields_change_by_staff(self):
+        
+        employee_1 = Employee.objects.get(email = 'z_niewypal@polishlody.com')
+        employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.get(pk = 5)
+        
+        assert employee_1.is_staff == True
+        assert month.month_is_approved == True
+
+        success = self.client.login(username = employee_1.email, password = 'codepassword')
+        assert success 
+        
+        url = reverse('month_edit', kwargs={'pk': month.id})
+        
+        data = {'employee': employee_2.id, 
+                'salary_is_paid': False, 
+                'hours_worked_in_this_month': 101, 
+                'rate_per_hour_this_month': 12,
+                'year': 2018,
+                'month': 2}
+        
+        response_post = self.client.post(url, data = data)
+        month.refresh_from_db()
+        
+        self.assertEqual(month.month_is_approved, False)
+
+    def month_approval_status_should_remain_true_if_salary_paid_is_true(self):
+        
+        employee_1 = Employee.objects.get(email = 'z_niewypal@polishlody.pl')
+        employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
+        month = Month.objects.get(pk = 4)
+
+        assert employee_1.is_staff == True
+        assert month.month_is_approved == True
+
+        success = self.client.login(username = employee_1.email, password = 'codepassword')
+        assert success
+
+        url = reverse('month_edit', kwargs={'pk': month.id})
+        
+        data = {'employee': employee_2.id, 
+                'salary_is_paid': True, 
+                'hours_worked_in_this_month': 153, 
+                'rate_per_hour_this_month': 11,
+                'year': 2016,
+                'month': 12}
+        
+        response_post = self.client.post(url, data = data)
+        month.refresh_from_db()
+        
+        self.assertEqual(month.month_is_approved, True)        
