@@ -441,7 +441,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     def form_valid(self, form, **kwargs):
         form_validation = super(EmployeeUpdate, self).form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                            "Changes saved for employee %s." % (self.get_queryset().first()))
+            "Changes saved for employee %s." % (self.get_queryset().first()))
         return form_validation
 
 class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):

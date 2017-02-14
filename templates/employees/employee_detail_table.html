@@ -118,6 +118,9 @@
                                 <td align="center">
                                     {{ month.rate_per_hour_this_month }}
                                 </td>
+                                <td align="center" valign="middle">
+                                    {{ month.bonuses }}
+                                </td>
                                 <td align="center">
                                     <span class="glyphicon glyphicon-remove icon-false" title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
                                 </td >
@@ -156,6 +159,9 @@
                                     {{ month.rate_per_hour_this_month }}
                                 </td>
                                 <td align="center">
+                                    {{ month.bonuses }}
+                                </td>
+                                <td align="center">
                                     <span class="glyphicon glyphicon-remove icon-false" title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
                                 </td>
                                 <td align="center">
@@ -190,6 +196,9 @@
                                 </td>
                                 <td align="center">
                                     {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td align="center">
+                                    {{ month.bonuses }}
                                 </td>
                                 <td align="center">
                                     <span class="glyphicon glyphicon-ok icon-true" title="{% trans 'Month paid' %}" aria-hidden="true"></span>

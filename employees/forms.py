@@ -37,7 +37,8 @@ class EmployeeForm(AuthUserCreationForm):
     class Meta:
         model = Employee
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type']
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
+         'address']
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
@@ -49,7 +50,8 @@ class EmployeeChangeForm(ModelForm):
     class Meta:
         model = Employee
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type']
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
+         'address']
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),

@@ -48,6 +48,11 @@ class Employee(MyUser):
                               choices=position_choices)
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
+    bank_account_number = models.CharField(max_length = 26, blank = True, null = True, default = None)
+
+    phone_contact_number = models.CharField(max_length = 12, blank = True, null = True, default = None)
+
+    address = models.CharField(max_length = 64, null=True, blank=True, default=None)
 
     def months_dict(self):
         months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
@@ -120,6 +125,7 @@ class Month(models.Model):
     month_is_approved = models.BooleanField(_(u'Approved?'),default=False, choices=bool_choices)
     rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'),decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
+    bonuses = models.DecimalField(decimal_places = 2, max_digits = 7, default = 0, validators = [MinValueValidator(0)])
 
     def __str__(self):
         return self.months_dict[self.month] + " " + str(self.year)
@@ -140,7 +146,7 @@ class Month(models.Model):
         return self.months_dict[self.month]
 
     def calculating_salary_for_this_month(self):
-        return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month), 2)
+        return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month + self.bonuses), 2)
 
     class Meta:
         unique_together = (("employee", "month", "year"),)
