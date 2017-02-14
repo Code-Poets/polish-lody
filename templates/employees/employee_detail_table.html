@@ -66,6 +66,27 @@
                                for="rph-down"></label>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
+                    Bonuses (zł)
+                        {% if orderby == 'tbp-up' %}
+                        <input id="tbp-up" checked type="radio" class="sorting sort-up"
+                                       name="order" value="tbp-up"/>
+                        {% else %}
+                        <input id="tbp-up" type="radio" class="sorting sort-up"
+                                       name="order" value="tbp-up"/>
+                        {% endif %}
+                        <label title="Sort by bonuses ascending" class="glyphicon glyphicon-chevron-up clickable"
+                               for="tbp-up"></label>
+                        {% if orderby == 'tbp-down' %}
+                        <input id="tbp-down" checked type="radio" class="sorting sort-down"
+                                       name="order" value="tbp-down"/>
+                        {% else %}
+                        <input id="tbp-down" type="radio" class="sorting sort-down"
+                                       name="order" value="tbp-down"/>
+                        {% endif %}
+                        <label title="Sort by bonuses descending" class="glyphicon glyphicon-chevron-down clickable"
+                               for="tbp-down"></label>
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
                     Was salary paid?
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
@@ -115,6 +136,9 @@
                                     {{ month.rate_per_hour_this_month }}
                                 </td>
                                 <td align="center" valign="middle">
+                                    {{ month.bonuses }}
+                                </td>
+                                <td align="center" valign="middle">
                                     <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
                                 </td >
                                 <td align="center" valign="middle">
@@ -147,6 +171,9 @@
                                 </td>
                                 <td bgcolor="#ffcccc" align="center" valign="middle">
                                     {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td bgcolor="#ffcccc" align="center" valign="middle">
+                                    {{ month.bonuses }}
                                 </td>
                                 <td bgcolor="#ffcccc" align="center" valign="middle">
                                     <span class="glyphicon glyphicon-remove icon-false" aria-hidden="true"></span>
@@ -182,6 +209,9 @@
                                 </td>
                                 <td bgcolor="#e6ffe6" align="center" valign="middle">
                                     {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td bgcolor="#e6ffe6" align="center" valign="middle">
+                                    {{ month.bonuses }}
                                 </td>
                                 <td bgcolor="#e6ffe6" align="center" valign="middle">
                                     <span class="glyphicon glyphicon-ok icon-true" aria-hidden="true"></span>

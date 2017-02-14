@@ -457,6 +457,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         form_validation = super(EmployeeUpdate, self).form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
                              "Changes saved for employee %s" % (self.get_queryset().first()))
+        print(form.cleaned_data)
         return form_validation
 
 class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
@@ -543,7 +544,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                              "Successfully edited month %s in year %s." %
                              (self.object.month_name(), self.object.year))
         
-        if 'hours_worked_in_this_month' in form.changed_data and self.object.salary_is_paid != True:
+        if 'hours_worked_in_this_month' or 'bonuses' in form.changed_data and self.object.salary_is_paid != True:
             month = Month.objects.get(pk = self.object.id)
             month.month_is_approved = False
             month.save()
