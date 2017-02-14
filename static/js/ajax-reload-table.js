@@ -60,7 +60,7 @@ function make_request() {
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");
             if(content.indexOf('<p>') !== -1) {
-                var errTemplate = $('#none-found-template').html();
+                var errTemplate = $('#hidden-template').html();
                 $('#msg').replaceWith(errTemplate);
             } else {
                 $('#msg').replaceWith('<div id="msg"></div>');
@@ -87,3 +87,4 @@ function ajaxErrorHandler(jqXHR) {
     }
     $('#msg').replaceWith(errTemplate);
 }
+

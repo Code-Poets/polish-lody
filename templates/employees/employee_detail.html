@@ -237,6 +237,8 @@
                     </div>
                 </div>
             {% endif %}
+        <div id="msg">
+        </div>
     {% include 'employees/employee_detail_table.html' %}
     {% if years is not False %}
     <div class='panel-body'>
@@ -306,5 +308,6 @@
             }
         }
         {% endif %}
+        
     </script>
 {% endblock %}

@@ -132,9 +132,6 @@ $(document).ready(function() {
         }
     });
 });
-// $(document).ready(function() {
-//     $('[data-toggle="popover"]').popover();
-// });
 
 var timer;
 $('#id_email').on('change blur keyup input', function() {
