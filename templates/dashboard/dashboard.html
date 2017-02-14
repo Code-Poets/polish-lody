@@ -9,10 +9,17 @@
             <div class="panel-heading"><h4>Employees</h4></div>
             <div class="panel-body">
                 {% if user.is_staff %}
-                    <a href="{% url 'employees' %}">Employee list</a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'employees' %}">Employee list</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'sales' %}">Sales</a>
+                        </li>
+                    </ul>
                     <a href="{% url 'employee_new' %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a>
                 {% elif user.employee.id == user.pk %}
-                    <a href="{% url 'employee_detail' user.pk%}">My Details</a>
+                    <a href="{% url 'employee_detail' user.pk %}">My Details</a>
                 {% else%}
                     <a>Your have no power here!!!</a>
                 {% endif %}

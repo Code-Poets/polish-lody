@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^employees/', include('employees.urls')),
     url(r'^weather/', include('weather.urls')),
+    url(r'^sales/', include('sales.urls')),
 ]
 handler404 = 'employees.views.pl_404_view'
 handler500 = 'employees.views.pl_500_view'
