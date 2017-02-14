@@ -98,15 +98,17 @@
         </ul><br/>
     </div>
     <script>
-        {% for number in paginate_by_numbers %}
-            $('#per-page-{{number}}').bind('click', function(){
+        $(function() {
+            {% for number in paginate_by_numbers %}
+            $('#per-page-{{number}}').click(function(){
                 $('.page-no').removeClass('active');
                 $('#per-page-{{number}}').addClass('active');
                 $('input[name=pg]:checked').prop('checked', false);
                 $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
                 make_request();
             });
-        {% endfor %}
+            {% endfor %}
+        });
         function gatherFilters() {
             return {
                 order: $('input[name=order]:checked', '#auto-submit-form').val(),
