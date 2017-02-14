@@ -25,6 +25,7 @@
             <nav class="navbar navbar-inverse">
                 <div class="container">
                     <a href="/dashboard" class="navbar-brand">Polish-Lody</a>
+                    <a href="#" id="weather" rel="popover" data-placement="bottom" data-original-title="Weather in Wrocław"></a>
                     <p class="navbar-text navbar-right">
                     {% if user.is_authenticated %}
                         Logged in as - {{ user.email }} | <a href="{% url 'password_change' %}">Change Password</a> | <a href="{% url 'logout' %}">Log out</a>

@@ -180,3 +180,5 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') #my gmail password
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') #my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'polishlody team'
+
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')

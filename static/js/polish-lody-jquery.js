@@ -30,3 +30,34 @@ $(document).ready(function() {
     $.datepicker.setDefaults($.datepicker.regional['pl']);
 
 });
+
+$(document).ready(function(){
+
+    var cTemp;
+    var api = "http://api.openweathermap.org/data/2.5/weather?lat=51.1&lon=17&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    console.log(api);
+    $.getJSON(api, function(data){
+        var weatherType = data.weather[0].description;
+        var windSpeed = ((data.wind.speed)*3.6).toFixed(0);
+        var kTemp = data.main.temp;
+        var pressure = data.main.pressure;
+        var humidity = data.main.humidity;
+        var clouds = data.clouds.all;
+        var icon = data.weather[0].icon;
+        var iconSrc = "http://openweathermap.org/img/w/" + icon + ".png";
+
+        cTemp = (kTemp - 273).toFixed(0);
+
+        $("#weatherType").html(weatherType);
+        $("#windSpeed").html("wind: " + windSpeed + " km/h");
+        $("#cTemp").html(cTemp + " &#8451");
+        $("#pressure").html("pressure: "+ pressure + " hPa")
+        $("#humidity").html("humidity: "+ humidity + " %")
+        $("#clouds").html("cloudiness: "+ clouds + " %")
+        $("#weather").prepend('<img src="'+ iconSrc+ '">');
+    }); //get JSON api function
+
+    $('#weather').popover({trigger:"hover"});
+    $('#weather').attr('data-content', 'kTemp');
+
+});

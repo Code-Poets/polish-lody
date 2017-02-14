@@ -22,4 +22,29 @@
     <div class="col-md-4">
     </div>
 
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4>Current Weather in Wrocław<a id="weather"></a></h4></div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    <li class="btn btn-default" id="weatherType"></li>
+                    <li class="btn btn-default" id="cTemp"></li>
+                    <li class="btn btn-default" id="pressure"></li>
+                    <li class="btn btn-default" id="humidity"></li>
+                    <li class="btn btn-default" id="windSpeed"></li>
+                    <li class="btn btn-default" id="clouds"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+
+    <script>
+        function getWeatherApi() {
+            var weather_api_key = 'dfab07a2d2cea2d6179fd5f8770a90cb'
+            return weather_api_key
+        }
+    </script>
+
 {% endblock %}
