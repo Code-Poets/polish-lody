@@ -23,11 +23,15 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <form method="post" class="form-horizontal">
-                {% for error in form.non_field_errors %}
+                {% if form.errors %}
                     <div class="alert alert-danger" role="alert">
-                        {{ error }}
+                        {{ form.year.errors }}
+                        {{ form.month.errors }}
+                        {{ form.salary_is_paid.errors }}
+                        {{ form.hours_worked_in_this_month.errors }}
+                        {{ form.rate_per_hour_this_month.errors }}
                     </div>
-                {% endfor %}
+                {% endif %}
                 {% csrf_token %}
                 {% for e in form %}
                 {% if e.label == "Employee" %}

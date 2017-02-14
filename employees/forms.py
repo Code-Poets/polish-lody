@@ -39,10 +39,11 @@ class EmployeeForm(AuthUserCreationForm):
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
         widgets = {
-                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
-                    }
+            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
+            'rate_per_hour'         : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+        }
 
 class EmployeeChangeForm(ModelForm):
     class Meta:
@@ -50,10 +51,10 @@ class EmployeeChangeForm(ModelForm):
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type']
         widgets = {
-                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
-                    }
+            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
+        }
 
 class MonthForm(ModelForm):
     class Meta:
@@ -61,7 +62,9 @@ class MonthForm(ModelForm):
         exclude = ['month_is_approved']
 
         widgets = {
-            'salary_is_paid': RadioSelect(renderer=HorizontalRadioRenderer)
+            'salary_is_paid'                : RadioSelect(renderer=HorizontalRadioRenderer),
+            'hours_worked_in_this_month'    : forms.NumberInput(attrs={'min':'0', 'max':'720', 'step':'0.25'}),
+            'rate_per_hour_this_month'      : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
         }
 
 class MonthApproveForm(ModelForm):
@@ -69,5 +72,5 @@ class MonthApproveForm(ModelForm):
         model = Month
         fields = ['month_is_approved',]
         widgets = {
-                    'month_is_approved' : forms.HiddenInput()
-                    }                       
+            'month_is_approved'     : forms.HiddenInput()
+        }                       
