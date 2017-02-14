@@ -125,6 +125,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 'page_obj': page_obj,
                 'orderby': order,
             }
+            context['warning_x_days_left'] = WARNING_DAYS_LEFT
             if qset.count() == 0:
                 context['empty_qset'] = True
             context['ajax_request'] = True
@@ -249,6 +250,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 'orderby': orderby,
                 'years': years,
             }
+            context['warning_x_days_left'] = WARNING_DAYS_LEFT
             if qset.count() == 0:
                 context['empty_qset'] = True
             context['ajax_request'] = True
