@@ -23,7 +23,7 @@ function ajaxVerify() {
                 $('#id_email').removeAttr('data-content')
                 $('.verify-email').hide(500);
                 $('#id_email').removeClass('already-exists');
-                $('#id_email').popover('hide');
+                $('#id_email').popover('destroy');
             }
         },
         error: function(thrownError) {
@@ -44,7 +44,7 @@ function ajaxVerifyDate() {
         $('#id_year').removeAttr('data-toggle');
         $('#id_year').removeAttr('data-placement');
         $('#id_year').removeAttr('data-content');
-        $('#id_year').popover('hide');
+        $('#id_year').popover('destroy');
         return ;
     } else {
         $.ajax({
@@ -71,7 +71,7 @@ function ajaxVerifyDate() {
                     $('#id_year').removeAttr('data-toggle');
                     $('#id_year').removeAttr('data-placement');
                     $('#id_year').removeAttr('data-content');
-                    $('#id_year').popover('hide');
+                    $('#id_year').popover('destroy');
                 }
             }
         });
