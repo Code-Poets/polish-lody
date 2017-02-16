@@ -24,27 +24,53 @@
 
     <div class="col-md-8">
         <div class="panel panel-default">
-            <div class="panel-heading"><h4>Current Weather in Wrocław<a id="weather"></a></h4></div>
+            <div class="panel-heading"><h4>Weather App</h4></div>
             <div class="panel-body">
-                <ul class="list-unstyled">
-                    <li class="btn btn-default" id="weatherType"></li>
-                    <li class="btn btn-default" id="cTemp"></li>
-                    <li class="btn btn-default" id="pressure"></li>
-                    <li class="btn btn-default" id="humidity"></li>
-                    <li class="btn btn-default" id="windSpeed"></li>
-                    <li class="btn btn-default" id="clouds"></li>
-                </ul>
+                <table class="table table-bordered table-striped ">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <a href="{% url 'weather_forecast' %}"> Weather forecast</a><br>
+                <a href="{% url 'weather_forecastdaily' %}"> Weather forecastdaily</a>
             </div>
         </div>
     </div>
     <div class="col-md-4">
     </div>
 
-    <script>
-        function getWeatherApi() {
-            var weather_api_key = 'dfab07a2d2cea2d6179fd5f8770a90cb'
-            return weather_api_key
-        }
-    </script>
 
+
+
+    <script type="text/javascript">
+    var weather_api = "http://api.openweathermap.org/data/2.5/forecast/daily?q=wroclaw&units=metric&lang=pl&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    $.getJSON(weather_api, function(data){
+        var forecast = [];
+        forecast.push("<tr>");
+        $.each(data.list, function(key, val){
+            var date = new Date(val.dt*1000);
+            var days = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
+            var day = days[date.getDay()];
+            if(key == 0) {
+                day = "Today";
+            }
+            var months = ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'];
+            var month = months[date.getMonth()];
+            forecast.push("<th>"+day+"<br>"+date.getDate()+" "+month+"</th>");
+        });
+        forecast.push("</tr>");
+        forecast.push("<tr>");
+        $.each(data.list, function(key, val){
+            var icon = val.weather[0].icon;
+            var iconSrc = "http://openweathermap.org/img/w/" + icon + ".png";
+            forecast.push("<td class=text-center>"+'<img src="'+ iconSrc+ '">'+"</td>");
+        });
+        forecast.push("</tr>");
+        forecast.push("<tr>");
+        $.each(data.list, function(key, val){
+            forecast.push("<td>"+"od "+(val.temp.min).toFixed(0)+"&#8451"+" do "+(val.temp.max).toFixed(0)+"&#8451");
+        });
+        forecast.push("</tr>");
+        $("table").append($(forecast.join('')));
+    }); //get JSON weather_api function
+    </script>
 {% endblock %}

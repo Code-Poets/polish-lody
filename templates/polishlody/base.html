@@ -25,7 +25,22 @@
             <nav class="navbar navbar-inverse">
                 <div class="container">
                     <a href="/dashboard" class="navbar-brand">Polish-Lody</a>
-                    <a href="#" id="weather" rel="popover" data-placement="bottom" data-original-title="Weather in Wrocław"></a>
+                    <a href="#" id="weather" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-popover-content="#current_weather_popover"></a>
+                    <!-- Content for Weather Popover #1 -->
+                    <div id="current_weather_popover" class="hidden">
+                        <div class="popover-heading">Weather in Wrocław:</div>
+                        <div class="popover-body">
+                            <ul class="list-unstyled">
+                                <li id="weatherType"></li>
+                                <li id="cTemp1"></li>
+                                <li id="pressure"></li>
+                                <li id="humidity"></li>
+                                <li id="windSpeed"></li>
+                                <li id="clouds"></li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <p class="navbar-text navbar-right">
                     {% if user.is_authenticated %}
                         Logged in as - {{ user.email }} | <a href="{% url 'password_change' %}">Change Password</a> | <a href="{% url 'logout' %}">Log out</a>

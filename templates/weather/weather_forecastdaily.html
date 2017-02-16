@@ -1,0 +1,61 @@
+{% extends 'polishlody/base.html' %}
+
+{% block title %}Weather forcastdaily{% endblock %}
+        
+{% block header_block %}
+<div class="panel panel-heading panel-default">
+    <center>
+        <h4>Weather forcastdaily</h4>
+    </center>
+</div>
+{% endblock %}
+
+{% block body_block %}
+
+    <div class="container">
+        <table class="table table-bordered table-striped table-hover ">
+            <thead>
+            <tr>
+                <th class="text-center">Data</th>
+                <th class="text-center">Śr Temp Dzień [&#8451]</th>
+                <th class="text-center">Min Temp [&#8451]</th>
+                <th class="text-center">Max Temp [&#8451]</th>
+                <th class="text-center">Śr Temp Noc [&#8451]</th>
+                <th class="text-center">Cisnienie [hPa]</th>
+                <th class="text-center">Wilgotność [%]</th>
+                <th class="text-center">Wiatr [km/h]</th>
+                <th class="text-center">Zachmurzenie [%]</th>
+                <th class="text-center">Opis</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+    var weather_api = "http://api.openweathermap.org/data/2.5/forecast/daily?q=wroclaw&units=metric&lang=pl&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    $.getJSON(weather_api, function(data){
+        var forecast = [];
+        $.each(data.list, function(key, val){
+            var date = new Date(val.dt*1000);
+            var days = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+            var day = days[date.getDay()]
+            var finaldate = (date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate());
+            forecast.push("<tr>");
+            forecast.push("<td>"+day+"<br>"+finaldate+"</td>");
+            forecast.push("<td>"+val.temp.day.toFixed(0)+"</td>");
+            forecast.push("<td>"+val.temp.min.toFixed(0)+"</td>");
+            forecast.push("<td>"+val.temp.max.toFixed(0)+"</td>");
+            forecast.push("<td>"+val.temp.eve.toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.pressure).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.humidity)+"</td>");
+            forecast.push("<td>"+(val.speed * 3.6).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.clouds)+"</td>");
+            forecast.push("<td>"+val.weather[0].description+"</td>");
+            forecast.push("</tr>");
+        });
+        $("table").append($(forecast.join('')));
+    }); //get JSON weather_api function
+    </script>
+    
+{% endblock %}

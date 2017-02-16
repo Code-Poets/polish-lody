@@ -1,0 +1,51 @@
+{% extends 'polishlody/base.html' %}
+
+{% block title %}Weather forcast{% endblock %}
+        
+{% block header_block %}
+<div class="panel panel-heading panel-default">
+    <center>
+        <h4>Weather forecast</h4>
+    </center>
+</div>
+{% endblock %}
+
+{% block body_block %}
+
+    <div class="container">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Data</th>
+                <th>Temp [&#8451]</th>
+                <th>Cisnienie [hPa]</th>
+                <th>Wilgotność [%]</th>
+                <th>Wiatr [km/h]</th>
+                <th>Zachmurzenie [%]</th>
+                <th>Opis</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+    var weather_api = "http://api.openweathermap.org/data/2.5/forecast?lat=51.1&lon=17&units=metric&lang=pl&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    $.getJSON(weather_api, function(data){
+        var forecast = [];
+        $.each(data.list, function(key, val){
+            forecast.push("<tr>");
+            forecast.push("<td>"+val.dt_txt+"</td>");
+            forecast.push("<td>"+(val.main.temp).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.main.pressure).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.main.humidity)+"</td>");
+            forecast.push("<td>"+(val.wind.speed * 3.6).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.clouds.all)+"</td>");
+            forecast.push("<td>"+val.weather[0].description+"</td>");
+            forecast.push("</tr>");
+        });
+        $("table").append($(forecast.join('')));
+    }); //get JSON weather_api function
+    </script>
+    
+{% endblock %}
