@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-@login_required
-def weather_index(request):
-    return render(request, 'weather/weather_index.html', {})
 
-@login_required
-def weather_forecast(request):
-    return render(request, 'weather/weather_forecast.html', {})
+class WeatherIndex(LoginRequiredMixin, TemplateView):
+	template_name = "weather/weather_index.html"
 
-@login_required
-def weather_forecastdaily(request):
-    return render(request, 'weather/weather_forecastdaily.html', {})
+class WeatherForecast(LoginRequiredMixin, TemplateView):
+	template_name = "weather/weather_forecast.html"
+
+class WeatherForecastDaily(LoginRequiredMixin, TemplateView):
+	template_name = "weather/weather_forecastdaily.html"

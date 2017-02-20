@@ -4,7 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^$',                      views.weather_index,           name='weather_index'),
-    url(r'^forecast$',              views.weather_forecast,        name='weather_forecast'),
-    url(r'^forecastdaily$',         views.weather_forecastdaily,   name='weather_forecastdaily'),
+    url(r'^$',                      views.WeatherIndex.as_view(),  			name='weather_index'),
+    url(r'^forecast$',              views.WeatherForecast.as_view(),        name='weather_forecast'),
+    url(r'^forecastdaily$',         views.WeatherForecastDaily.as_view(),   name='weather_forecastdaily'),
 ]

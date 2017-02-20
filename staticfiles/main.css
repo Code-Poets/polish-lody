@@ -24,6 +24,10 @@ html, body {
   .navbar-brand:hover {
     color: #000 !important; }
 
+#navbar-link {
+  color: #4d7ac1 !important;
+  font-size: 120%; }
+
 /* Wrap */
 #wrap {
   min-height: 100%;
@@ -242,4 +246,7 @@ input[type=radio]:selected + label.my-button {
   background: linear-gradient(to bottom, #d6ffb2 5%, #7bd900 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900',GradientType=0); }
 
-/*# sourceMappingURL=../../../../../static/main.css.map */
+.disableClick {
+  pointer-events: none; }
+
+/*# sourceMappingURL=../../../../../../../static/main.css.map */

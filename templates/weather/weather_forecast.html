@@ -16,13 +16,13 @@
         <table class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
-                <th>Data</th>
+                <th>Date</th>
                 <th>Temp [&#8451]</th>
-                <th>Cisnienie [hPa]</th>
-                <th>Wilgotność [%]</th>
-                <th>Wiatr [km/h]</th>
-                <th>Zachmurzenie [%]</th>
-                <th>Opis</th>
+                <th>Pressure [hPa]</th>
+                <th>Humidity [%]</th>
+                <th>Wind [km/h]</th>
+                <th>Cloudiness [%]</th>
+                <th>Description</th>
             </tr>
             </thead>
             <tbody></tbody>
@@ -30,13 +30,14 @@
     </div>
 
     <script type="text/javascript">
-    var weather_api = "http://api.openweathermap.org/data/2.5/forecast?lat=51.1&lon=17&units=metric&lang=pl&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    var weather_api = "http://api.openweathermap.org/data/2.5/forecast?id=3081368&units=metric&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
     $.getJSON(weather_api, function(data){
         var forecast = [];
         $.each(data.list, function(key, val){
+            var temp = Math.round(val.main.temp);
             forecast.push("<tr>");
             forecast.push("<td>"+val.dt_txt+"</td>");
-            forecast.push("<td>"+(val.main.temp).toFixed(0)+"</td>");
+            forecast.push("<td>"+temp.toFixed(0)+"</td>");
             forecast.push("<td>"+(val.main.pressure).toFixed(0)+"</td>");
             forecast.push("<td>"+(val.main.humidity)+"</td>");
             forecast.push("<td>"+(val.wind.speed * 3.6).toFixed(0)+"</td>");

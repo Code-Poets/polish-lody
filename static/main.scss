@@ -30,6 +30,11 @@ html, body {
     } 
 }
 
+#navbar-link {
+    color: #4d7ac1 !important;
+    font-size: 120%;
+}
+
 /* Wrap */
 
 #wrap {
@@ -285,4 +290,8 @@ input[type=radio]:selected + label.my-button {
     background:-ms-linear-gradient(top, #d6ffb2 5%, #7bd900 100%);
     background:linear-gradient(to bottom, #d6ffb2 5%, #7bd900 100%);
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900',GradientType=0);
+}
+
+.disableClick{
+    pointer-events: none;
 }

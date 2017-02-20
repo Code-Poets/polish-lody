@@ -33,11 +33,11 @@ $(document).ready(function() {
 
 $(document).ready(function(){
 
-    var api = "http://api.openweathermap.org/data/2.5/weather?lat=51.1&lon=17&units=metric&lang=pl&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
+    var api = "http://api.openweathermap.org/data/2.5/weather?id=3081368&units=metric&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
     $.getJSON(api, function(data){
         var weatherType = data.weather[0].description;
         var windSpeed = ((data.wind.speed)*3.6).toFixed(0);
-        var cTemp = (data.main.temp).toFixed(0);
+        var cTemp = Math.round(data.main.temp);
         var pressure = (data.main.pressure).toFixed(0);
         var humidity = data.main.humidity;
         var clouds = data.clouds.all;
@@ -46,8 +46,8 @@ $(document).ready(function(){
 
         $("#weatherType").html(weatherType);
         $("#windSpeed").html("wind: " + windSpeed + " km/h");
-        $("#cTemp1").html("temp: " + cTemp + " &#8451");
-        $("#cTemp2").html(cTemp + " &#8451");
+        $("#cTemp1").html("temp: " + cTemp.toFixed(0) + " &#8451");
+        $("#cTemp2").html(cTemp.toFixed(0) + " &#8451");
         $("#pressure").html("pressure: "+ pressure + " hPa")
         $("#humidity").html("humidity: "+ humidity + " %")
         $("#clouds").html("cloudiness: "+ clouds + " %")
@@ -64,5 +64,19 @@ $(document).ready(function(){
           var title = $(this).attr("data-popover-content");
           return $(title).children(".popover-heading").html();
         }
+    })
+    .on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(".popover").on("mouseleave", function () {
+            $(_this).popover('hide');
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover("hide");
+            }
+        }, 300);
     });
 });
