@@ -2,19 +2,150 @@
 
 {% block title %}Sales index{% endblock %}
 
-{% block body_block %}
+{% block header_block %}
 <div class="panel panel-heading panel-default">
     <center>
         <h4>
-            Sales index
+            Sales overview
         </h4>
     </center>
 </div>
+{% endblock %}
 
-<center>
-    <p>
-        This is the sales index. It feels empty in here. Add new features!
-    </p>
-</center>
+{% block body_block %}
 
+<div class="shops">
+{% for shop in shops %}
+    <div class="sales column">
+        <div class="column-contents">
+            <h3 class="shop-name">{{ shop.shop_name }}</h3><br>
+            <table class="table bestsellers">
+                <tr>
+                    <td>
+                        Bestsellers:
+                    </td>
+                    {% for icecream in bestsellers_1 %}
+                        {% if forloop.counter <= 3 %}
+                            <td class="cell-clickable">
+                                <div>
+                                {{ icecream }}
+                                </div>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+            <div id="line_chart{{forloop.counter}}" style="width:100%;height:250px;">
+            </div>
+            <div class="totals">
+                <div class="total sold-yesterday">
+                    <p>Sold yesterday:</p>
+                    <span class="total-sold-number">
+                        <strong>
+                            42
+                        </strong>
+                    </span>
+                </div>
+                <div class="total sold-today">
+                    <p>Sold today:</p>
+                    <span class="total-sold-number">
+                        <strong>
+                            33
+                        </strong>
+                    </span>
+                </div>
+                <div class="total sold-total">
+                    <p>Total sold:</p>
+                    <span class="total-sold-number">
+                        <strong>
+                            79
+                        </strong>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart1);
+      google.charts.setOnLoadCallback(drawChart2);
+
+      function drawChart1() {
+        var data = google.visualization.arrayToDataTable([
+            ['Day', 'Amount sold', { role: 'annotation'}],
+            {% for l in graph_data %}
+                ['{{l.0|safe}}',{{l.1|safe}}, '{{l.1|safe}}'],
+            {% endfor %}
+            ]
+        );
+
+        data.addColumn({type: 'string', role: 'annotation'});
+        var options = {
+          title: 'Ice cream sales',
+          theme: 'maximized',
+          interpolateNulls: true,
+          series: {
+            0: { color: '#9b2900'}
+          },
+          hAxis: {
+              showTextEvery: 2,
+              gridlines: {
+                  count: 0,
+              },
+              baselineColor: '#BFBFBF'
+          },
+          vAxis: {
+            gridlines: {
+                  count: 0,
+              },
+          },
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('line_chart1'));
+
+        chart.draw(data, options);
+      }
+
+      function drawChart2() {
+        var data = google.visualization.arrayToDataTable([
+            ['Day', 'Amount sold'],
+            {% for series in graph_data %}
+            ['{{series.0|safe}}',{{series.1}}],
+            {% endfor %}
+            ]
+        );
+
+        var options = {
+          title: 'Ice cream sales',
+          theme: 'maximized',
+          interpolateNulls: true,
+          series: {
+            0: { color: '#9b2900'}
+          },
+          hAxis: {
+              showTextEvery: 2,
+              gridlines: {
+                  count: 0,
+              },
+              baselineColor: '#BFBFBF'
+          },
+          vAxis: {
+            gridlines: {
+                  
+              },
+          },
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('line_chart2'));
+
+        chart.draw(data, options);
+      }
+    </script>
 {% endblock %}

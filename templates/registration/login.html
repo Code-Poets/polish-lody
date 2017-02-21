@@ -5,7 +5,7 @@
 
 {% block body_block %}
     
-    <form method="post">
+    <form method="post" id="form-login">
         <center>
             {% csrf_token %}
             {% for error in form.non_field_errors %}
@@ -16,12 +16,12 @@
             
             <div class="login-form">
                 <h2>Login</h2><br>
-                {{ form.username|add_class:"form-control"|attr:"placeholder:Email" }}<br>
+                {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
                 {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}<br>
-                <button type="submit" class="btn btn-primary btn-login">Login</button>
+                <button type="submit" class="btn login-btn">Login</button><br>
+            <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it!</a></p>
             </div>
         </center>
     </form>
-    <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it!</a></p>
 
 {% endblock %}

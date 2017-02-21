@@ -11,54 +11,89 @@
 {% endblock %}
 {% block body_block %}
 {% if all_employee_list is not None %}
-    <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
-    <a name="employee-table"></a>
-    <div class="panel-body filter-forms">
+    <div>
+        <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
+
+                    <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+    </div>
+
+    <!-- <div class="filter-forms">
         <form>
             <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-            <label class="my-button clickable" onclick="uncheckFilters();">Clear filters</label>
+            <label class="my-button" onclick="uncheckFilters();">Reset filters</label>
         </form>
-    </div>
+    </div> -->
     <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
-        <div class="panel-body filter-forms">
-            {% if position_sale %}
-                <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
-            {% else %}
-                <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
-            {% endif %}
-            <label class="my-button clickable" for="pos_sale">Sale</label>
-            {% if position_production %}
-                <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
-            {% else %}
-                <input id="pos_production" type="checkbox" class="vis-hidden" name="position_production">
-            {% endif %}
-            <label class="my-button clickable" for="pos_production">Production</label>
-            {% if position_other %}
-                <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
-            {% else %}
-                <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
-            {% endif %}
-            <label class="my-button clickable" for="pos_other">Other</label>
-
-            {% if hide_zero_salary_months %}
-                <input id="chk_paid" checked type="checkbox" class="vis-hidden"
-                   name="hide_zero_salary_months" />
-            {% else %}
-                <input id="chk_paid" type="checkbox" class="vis-hidden"
-                   name="hide_zero_salary_months" />
-            {% endif %}
-            <label class="my-button clickable" for="chk_paid">Show only employees who have been paid already.</label>
-            {% if hide_paid_employees_filter %}
-                <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
-                   name="hide_paid_employees_filter" />
-            {% else %}
-                <input id="chk_unpaid" type="checkbox"  class="vis-hidden"
-                   name="hide_paid_employees_filter" />
-            {% endif %}
-            <label class="my-button clickable" for="chk_unpaid">Show only employees who weren't paid yet.</label>
-            Search for employee: <input type="text" class="clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
+        <div class="filter-forms">
+            <ul class="filters">
+                <li class="filter">
+                    Find employee: <input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
+                </li>
+                <li class="filter">
+                    {% if position_sale %}
+                        <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
+                    {% else %}
+                        <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
+                    {% endif %}
+                    <label class="my-button clickable" for="pos_sale">
+                        Sale
+                    </label>
+                </li>
+                <li class="filter" class="filter">
+                    {% if position_production %}
+                        <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
+                    {% else %}
+                        <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success" name="position_production">
+                    {% endif %}
+                    <label class="my-button clickable" for="pos_production">
+                        Production
+                    </label>
+                </li>
+                <li class="filter">
+                    {% if position_other %}
+                        <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
+                    {% else %}
+                        <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
+                    {% endif %}
+                    <label class="my-button clickable" for="pos_other">
+                        Other
+                    </label>
+                </li>
+                <li class="filter">
+                    {% if hide_zero_salary_months %}
+                        <input id="chk_paid" checked type="checkbox" class="vis-hidden"
+                           name="hide_zero_salary_months" />
+                    {% else %}
+                        <input id="chk_paid" type="checkbox" class="vis-hidden"
+                           name="hide_zero_salary_months" />
+                    {% endif %}
+                    <label class="my-button clickable" for="chk_paid">
+                        Paid
+                    </label>
+                </li>
+                <li class="filter">
+                    {% if hide_paid_employees_filter %}
+                        <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
+                           name="hide_paid_employees_filter" />
+                    {% else %}
+                        <input id="chk_unpaid" type="checkbox"  class="vis-hidden"
+                           name="hide_paid_employees_filter" />
+                    {% endif %}
+                    <label class="my-button clickable" for="chk_unpaid">
+                        Not paid
+                    </label>
+                </li>
+                <li class="filter">
+                    <input class="vis-hidden" type="checkbox" value="Clear filters"/>
+                    <label class="my-button reset-filters">
+                        Reset filters
+                    </label>
+                </li>
+                <li class="filter">
+                </li>
+            </ul>            
             <select hidden name="per_page" class="clickable" id="per-page">
                 {% for number in paginate_by_numbers %}
                     {% if current_paginate_by_number == number %}
@@ -68,8 +103,10 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+            
+            
         </div>
+            
         {% endif %}
 {% endblock %}
 {% block load_block %}
@@ -77,7 +114,7 @@
 {% endblock %}
 {% block footer_block %}
     {% if all_employee_list %}
-    <div class='panel-body'>
+    <div>
         <span>Employees per page:</span><br/>
         <ul class="pagination paginate">
             {% for number in paginate_by_numbers %}
