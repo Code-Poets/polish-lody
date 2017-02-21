@@ -4,7 +4,7 @@ from .models import Date, Shop, IceCream, IceCreamCosts
 
 class DateAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['date', 'date_shop']}),
+        (None, {'fields': ['date']}),
     ]
 
 class ShopAdmin(admin.ModelAdmin):
@@ -15,13 +15,18 @@ class ShopAdmin(admin.ModelAdmin):
 
 class IceCreamAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Ice cream details', {'fields': ['icecream_shop','icecream_name']})
+        ('Ice cream details', {'fields': ['icecream_name',
+                                          'icecream_standard_price']})
     ]
 
 class IceCreamCostsAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Ice cream cost', {'fields': ['icecream_date','icecream_price','icecream_production_cost',
-                                          'icecream_amount_sold']})
+        ('Ice cream cost', {'fields': ['icecream',
+                                       'icecream_shop',
+                                       'icecream_date',
+                                       'icecream_price',
+                                       'icecream_production_cost',
+                                       'icecream_amount_sold']})
     ]
 
 admin.site.register(Date, DateAdmin)
