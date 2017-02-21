@@ -26,7 +26,11 @@
         <div class="panel panel-default">
             <div class="panel-heading"><h4>Weather App</h4></div>
             <div class="panel-body">
-                <table class="table table-bordered table-striped ">
+                <table class="table table-bordered table-striped " id="owmapi">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table class="table table-bordered table-striped" id="apixu">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -75,7 +79,43 @@
             forecast.push("<td>"+"from "+(mintemp).toFixed(0)+"&#8451"+" to "+(maxtemp).toFixed(0)+"&#8451");
         });
         forecast.push("</tr>");
-        $("table").append($(forecast.join('')));
+        $("#owmapi").append($(forecast.join('')));
+    }); //get JSON weather_api function
+    </script>
+
+    <script type="text/javascript">
+    var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
+    $.getJSON(weather_apixu, function(data){
+        var forecast = [];
+        forecast.push("<tr>");
+        $.each(data.forecast.forecastday, function(key, val){
+            var date = new Date(val.date_epoch*1000);
+            var days_pl = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
+            var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            var day = days[date.getDay()];
+            if(key == 0) {
+                day = "Today";
+            }
+            var months_pl = ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'];
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var month = months[date.getMonth()];
+            forecast.push("<th>"+day+"<br>"+date.getDate()+" "+month+"</th>");
+        });
+        forecast.push("</tr>");
+        forecast.push("<tr>");
+        $.each(data.forecast.forecastday, function(key, val){
+            var icon = val.day.condition.icon;
+            forecast.push("<td class=text-center>"+'<img src="https:'+ icon+ '">'+"</td>");
+        });
+        forecast.push("</tr>");
+        forecast.push("<tr>");
+        $.each(data.forecast.forecastday, function(key, val){
+            var mintemp = Math.round(val.day.mintemp_c);
+            var maxtemp = Math.round(val.day.maxtemp_c);
+            forecast.push("<td>"+"from "+(mintemp).toFixed(0)+"&#8451"+" to "+(maxtemp).toFixed(0)+"&#8451");
+        });
+        forecast.push("</tr>");
+        $("#apixu").append($(forecast.join('')));
     }); //get JSON weather_api function
     </script>
 {% endblock %}
