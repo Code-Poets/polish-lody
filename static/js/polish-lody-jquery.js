@@ -33,24 +33,26 @@ $(document).ready(function() {
 
 $(document).ready(function(){
 
-    var api = "http://api.openweathermap.org/data/2.5/weather?id=3081368&units=metric&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
-    $.getJSON(api, function(data){
-        var weatherType = data.weather[0].description;
-        var windSpeed = ((data.wind.speed)*3.6).toFixed(0);
-        var cTemp = Math.round(data.main.temp);
-        var pressure = (data.main.pressure).toFixed(0);
-        var humidity = data.main.humidity;
-        var clouds = data.clouds.all;
-        var icon = data.weather[0].icon;
-        var iconSrc = "http://openweathermap.org/img/w/" + icon + ".png";
+    var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
+    $.getJSON(weather_apixu, function(data){
+        var weatherType = data.current.condition.text;
+        var windSpeed = (data.current.wind_kph).toFixed(0);
+        var cTemp = Math.round(data.current.temp_c);
+        var feelslikeTemp = Math.round(data.current.feelslike_c);
+        var pressure = (data.current.pressure_mb).toFixed(0);
+        var humidity = data.current.humidity;
+        var clouds = data.current.cloud;
+        var icon = data.current.condition.icon;
+        var iconSrc = "http:" + icon;
 
         $("#weatherType").html(weatherType);
         $("#windSpeed").html("wind: " + windSpeed + " km/h");
         $("#cTemp1").html("temp: " + cTemp.toFixed(0) + " &#8451");
         $("#cTemp2").html(cTemp.toFixed(0) + " &#8451");
-        $("#pressure").html("pressure: "+ pressure + " hPa")
-        $("#humidity").html("humidity: "+ humidity + " %")
-        $("#clouds").html("cloudiness: "+ clouds + " %")
+        $("#feelslikeTemp").html("feels like: " + feelslikeTemp.toFixed(0) + " &#8451");
+        $("#pressure").html("pressure: "+ pressure + " hPa");
+        $("#humidity").html("humidity: "+ humidity + " %");
+        $("#clouds").html("cloudiness: "+ clouds + " %");
         $("#weather").prepend('<img src="'+ iconSrc+ '">');
     }); //get JSON api function
 

@@ -17,14 +17,14 @@
             <thead>
             <tr>
                 <th class="text-center" style="vertical-align:middle;">Date</th>
-                <th class="text-center" style="vertical-align:middle;">Day Avg Temp [&#8451]</th>
+                <th class="text-center" style="vertical-align:middle;">Avg Temp [&#8451]</th>
                 <th class="text-center" style="vertical-align:middle;">Min Temp [&#8451]</th>
                 <th class="text-center" style="vertical-align:middle;">Max Temp [&#8451]</th>
-                <th class="text-center" style="vertical-align:middle;">Night Avg Temp [&#8451]</th>
-                <th class="text-center" style="vertical-align:middle;">Pressure [hPa]</th>
                 <th class="text-center" style="vertical-align:middle;">Humidity [%]</th>
-                <th class="text-center" style="vertical-align:middle;">Wind [km/h]</th>
-                <th class="text-center" style="vertical-align:middle;">Cloudiness [%]</th>
+                <th class="text-center" style="vertical-align:middle;">Max Wind [km/h]</th>
+                <th class="text-center" style="vertical-align:middle;">Total Precipitation [mm]</th>
+                <th class="text-center" style="vertical-align:middle;">Sunrise</th>
+                <th class="text-center" style="vertical-align:middle;">Sunset</th>
                 <th class="text-center" style="vertical-align:middle;">Description</th>
             </tr>
             </thead>
@@ -33,30 +33,29 @@
     </div>
 
     <script type="text/javascript">
-    var weather_api = "http://api.openweathermap.org/data/2.5/forecast/daily?id=3081368&units=metric&appid=dfab07a2d2cea2d6179fd5f8770a90cb";
-    $.getJSON(weather_api, function(data){
+    var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
+    $.getJSON(weather_apixu, function(data){
         var forecast = [];
-        $.each(data.list, function(key, val){
-            var date = new Date(val.dt*1000);
+        $.each(data.forecast.forecastday, function(key, val){
+            var date = new Date(val.date_epoch*1000);
             var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
             var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             var day = days[date.getDay()];
             var finaldate = (date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate());
-            var daytemp = Math.round(val.temp.day);
-            var mintemp = Math.round(val.temp.min);
-            var maxtemp = Math.round(val.temp.max);
-            var evetemp = Math.round(val.temp.eve);
+            var avgtemp = Math.round(val.day.avgtemp_c);
+            var mintemp = Math.round(val.day.mintemp_c);
+            var maxtemp = Math.round(val.day.maxtemp_c);
             forecast.push("<tr>");
             forecast.push("<td>"+day+"<br>"+finaldate+"</td>");
-            forecast.push("<td>"+daytemp.toFixed(0)+"</td>");
+            forecast.push("<td>"+avgtemp.toFixed(0)+"</td>");
             forecast.push("<td>"+mintemp.toFixed(0)+"</td>");
             forecast.push("<td>"+maxtemp.toFixed(0)+"</td>");
-            forecast.push("<td>"+evetemp.toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.pressure).toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.humidity)+"</td>");
-            forecast.push("<td>"+(val.speed * 3.6).toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.clouds)+"</td>");
-            forecast.push("<td>"+val.weather[0].description+"</td>");
+            forecast.push("<td>"+(val.day.avghumidity)+"</td>");
+            forecast.push("<td>"+(val.day.maxwind_kph).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.day.totalprecip_mm).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.astro.sunrise)+"</td>");
+            forecast.push("<td>"+(val.astro.sunset)+"</td>");
+            forecast.push("<td>"+val.day.condition.text+"</td>");
             forecast.push("</tr>");
         });
         $("table").append($(forecast.join('')));
