@@ -176,7 +176,7 @@
     {% if empty_qset is True %}
         <p>No matches found.</p>
     {% endif %}
-    <div>
+    <div class="paginated">
         {% if page_obj.has_other_pages %}
             <ul class="pagination">
             {% for i in paginator.page_range %}
@@ -185,11 +185,11 @@
                         <li class="pg-clickable">
                             <input id="pg-previous" type="radio"  class="vis-hidden"
                                 name="pg" value="{{ page_obj.previous_page_number }}"/>
-                            <label class="my-button clickable" for="pg-previous">&laquo; Previous</label>
+                            <label class="my-button previous clickable" for="pg-previous">&laquo; Previous</label>
                         </li>
                     {% else %}
                         <li class="disabled">
-                            <label class="my-button">&laquo; Previous</label>
+                            <label class="my-button previous disabled">&laquo; Previous</label>
                         </li>
                     {% endif %}
                 {% endif %}
@@ -197,7 +197,7 @@
                     <li class="active pg-clickable">
                         <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
                            name="pg" value="{{i}}"/>
-                        <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
+                        <label class="my-button clickable pg-active" for="pg-{{i}}">{{i}}</label>
                     </li>
                 {% else %}
                     <li class="pg-clickable">
@@ -208,15 +208,15 @@
                 {% endif %}
                 {% if forloop.last %}
                     {% if page_obj.has_next %}
-                        <li class="pg-clickable">
-                            <input id="pg-next" type="radio"  class="vis-hidden"
-                                name="pg" value="{{ page_obj.next_page_number }}"/>
-                            <label class="my-button clickable" for="pg-next">Next &raquo;</label>
-                        </li>
+                    <li class="pg-clickable">
+                        <input id="pg-next" type="radio"  class="vis-hidden"
+                            name="pg" value="{{ page_obj.next_page_number }}"/>
+                        <label class="my-button next clickable" for="pg-next">Next &raquo;</label>
+                    </li>
                     {% else %}
-                        <li class="disabled">
-                            <label class="my-button">Next &raquo;</label>
-                        </li>
+                    <li class="disabled">
+                        <label class="my-button next disabled">Next &raquo;</label>
+                    </li>
                     {% endif %}
                 {% endif %}
             {% endfor %}
@@ -229,6 +229,6 @@
             <span>No employee meets the search criteria. Widen your search or check filter for typos.</span>
         </div>
     </script>
-</div>
+    </div>
 </form>
 

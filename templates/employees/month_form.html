@@ -14,43 +14,43 @@
 {% endblock %}
 {% block body_block %}
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="panel panel-heading panel-default">
+        <div class="form-container">
             <form method="post" class="form-horizontal" id="monthform">
                 {% csrf_token %}
                 {% for e in form %}
                 {% if e.label == "Employee" %}
                     <div class="form-group" hidden>
-                        <label class="col-sm-2 control-label">{{ e.label }}</label>
-                        <div class="col-sm-2">
+                        <label class="col-sm-4 control-label">{{ e.label }}</label>
+                        <div class="col-sm-4">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
                 {% elif e.label == "Hours worked in this month" %}
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Hours worked:</label>
-                        <div class="col-sm-2">
+                        <label class="col-sm-4 control-label">Hours worked:</label>
+                        <div class="col-sm-4">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
                 {% elif e.label == "Rate per hour this month" %}
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Rate per hour:</label>
-                        <div class="col-sm-2 form-field">
+                        <label class="col-sm-4 control-label">Rate per hour:</label>
+                        <div class="col-sm-4 form-field">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
                 {% elif e.label == "Paid?" %}
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">{{ e.label }}</label>
-                        <div class="col-sm-2 radio-select">
+                        <label class="col-sm-4 control-label">{{ e.label }}</label>
+                        <div class="col-sm-4 radio-select">
                             {{ e }}
                         </div>
                     </div>
                 {% else %}
                 <div class="form-group">
-                        <label class="col-sm-2 control-label">{{ e.label }}:</label>
-                        <div class="col-sm-2 form-field">
+                        <label class="col-sm-4 control-label">{{ e.label }}:</label>
+                        <div class="col-sm-4 form-field">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
@@ -65,7 +65,6 @@
                 <br>
             </form>
         </div>
-
     </div>
 
     <script>

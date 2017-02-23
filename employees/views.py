@@ -112,6 +112,7 @@ def order_by_unpaid_salaries(name_filter, descending):
     return query
 
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
+    
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
 

@@ -5,9 +5,9 @@
 {% block body_block %}
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4>Employees</h4>
+        <div class="panel panel-heading panel-default">
+            <div>
+                <h4>Dashboard</h4>
             </div>
             <div class="panel-body">
                 {% if user.is_staff %}
@@ -16,10 +16,10 @@
                             <a href="{% url 'employees' %}">Employee list</a>
                         </li>
                         <li>
-                            <a href="{% url 'sales' %}">Sales</a>
+                            <!-- <a disabled href="{% url 'sales' %}">Sales (under construction)</a> -->
+                            Sales (under construction)
                         </li>
                     </ul>
-                    <a href="{% url 'employee_new' %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a>
                 {% elif user.employee.id == user.pk %}
                     <a href="{% url 'employee_detail' user.pk %}">My Details</a>
                 {% else%}

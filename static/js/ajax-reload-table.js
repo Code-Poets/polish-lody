@@ -3,18 +3,28 @@ var form = $('#auto-submit-form');
 var delay = form.attr('data-submit-delay');
 $(document).ready(function submit(e) {
     $('.clickable').bind('click keydown', function(){
-        var submitForm = $('#auto-submit-form');
         clearTimeout(timer);
         $('.loading-icon').css('opacity','1');
         timer = setTimeout(function(){
-            make_request();
+            try {
+                var parameters = gatherFilters();
+                delete parameters.page;
+            } 
+            catch(err) {
+                var parameters = { };
+            }
+            makeRequest(parameters);
         }, delay);
     });
-    $('input[type=radio]').bind('click', function() {
-        clearTimeout(timer);
+    $('input[name=order], input[name=pg]').bind('click', function() {
+            try {
+                var parameters = gatherFilters();
+            } 
+            catch(err) {
+                var parameters = { };
+            }
         $('.loading-icon').css('opacity','1');
-        var submitForm = $('#auto-submit-form');
-        make_request();
+        makeRequest(parameters);
     })
     $('.reset-filters').bind('click', function() {
         uncheckFilters(timer);
@@ -23,29 +33,39 @@ $(document).ready(function submit(e) {
 
 $(document).ajaxComplete(function submit(e) {
     $('.clickable').bind('click keydown', function(){
-        var submitForm = $('#auto-submit-form');
         clearTimeout(timer);
         $('.loading-icon').css('opacity','1');
         timer = setTimeout(function(){
-            make_request();
+            try {
+                var parameters = gatherFilters();
+                delete parameters.page;
+            } 
+            catch(err) {
+                var parameters = { };
+            }
+            makeRequest(parameters);
         }, delay);
     });
-    $('input[type=radio]').bind('click', function() {
+    $('input[name=order], input[name=pg]').bind('click', function() {
+        try {
+            var parameters = gatherFilters();
+        } 
+        catch(err) {
+            var parameters = { };
+        }
         clearTimeout(timer);
         $('.loading-icon').css('opacity','1');
-        var submitForm = $('#auto-submit-form');
-        make_request();
+        makeRequest(parameters);
     });
     $('.reset-filters').bind('click', function() {
         uncheckFilters(timer);
     });
 });
 
-function ajax_setup() {
+function ajaxSetup() {
     $('input[type=radio]').bind('click', function() {
         clearTimeout(timer);
-        var submitForm = $('#auto-submit-form');
-        make_request();
+        makeRequest();
     })
 };
 
@@ -56,33 +76,22 @@ $(document).ready(function() {
     })
 })
 
-function toggleOk() {
-    
-}
-
 function uncheckFilters(timer) {
     clearTimeout(timer)
-    // timer.stop();
     $('input[type="checkbox"]:checked').prop('checked',false);
     $('input:text').val('');
     $('input:text').attr('placeholder', '');
     $('.loading-icon').css('opacity', '1');
-    make_request();
+    makeRequest();
 }
 
-function make_request() {
-    try {
-        var params = gatherFilters();
-    } 
-    catch(err) {
-        var params = { };
-    }
+function makeRequest(parameters) {
     $.ajax({
         url: '',
-        data: params,
+        data: parameters,
         dataType: "html",
         method: "GET",
-        timeout: 5000,
+        timeout: 10000,
         success: function(content) {
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");

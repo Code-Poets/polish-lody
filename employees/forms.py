@@ -63,7 +63,7 @@ class MonthForm(ModelForm):
 
         widgets = {
             'salary_is_paid'                : RadioSelect(renderer=HorizontalRadioRenderer),
-            'hours_worked_in_this_month'    : forms.NumberInput(attrs={'min':'0', 'max':'720', 'step':'0.25'}),
+            'hours_worked_in_this_month'    : forms.NumberInput(attrs={'min':'0', 'max':'720', 'step':'0.1'}),
             'rate_per_hour_this_month'      : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
         }
 

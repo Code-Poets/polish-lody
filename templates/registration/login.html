@@ -1,27 +1,26 @@
-{% extends 'polishlody/base.html' %}
+{% extends 'registration/login_base.html' %}
+
 {% load widget_tweaks %}
 
-{% block title %}Login page{% endblock %}
-
 {% block body_block %}
-    
-    <form method="post" id="form-login">
-        <center>
-            {% csrf_token %}
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-            
-            <div class="login-form">
-                <h2>Login</h2><br>
-                {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
-                {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}<br>
-                <button type="submit" class="btn login-btn">Login</button><br>
-            <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it!</a></p>
+<form method="post" id="form-login">
+    <center>
+        {% csrf_token %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
             </div>
-        </center>
-    </form>
+        {% endfor %}
+        <div class="login-form">
+            <h2>Login</h2><br>
+            {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
+            {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}<br>
+            <button type="submit" class="btn login-btn">Login</button><br>
+        <p>Forgot your password? 
+            <a href="{% url 'password_reset' %}">Click here to reset it!</a>
+        </p>
+        </div>
+    </center>
+</form>
 
 {% endblock %}

@@ -5,20 +5,21 @@
 {% block header_block %}
 <div class="panel panel-heading panel-default">
     <h4>
-        {% if employee %}
-            {{ employee.full_name }}
-        <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
-        {% else %}
-            New employee
-        <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
-        {% endif %}
-        <p class="append-here"></p>
+        <center>
+            {% if employee %}
+                {{ employee.full_name }}
+            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+            {% else %}
+                New employee
+            <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
+            {% endif %}
+        </center>
     </h4>
 </div>
 {% endblock %}
 {% block body_block %}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="panel panel-heading panel-default">
+        <div class="form-container">
             <form method="post" class="form-horizontal">
                 {% csrf_token %}
                 {% for error in form.non_field_errors %}
@@ -41,22 +42,22 @@
                 {% for e in form %}
                     <div class="form-group">
                         {% if e.label == 'Email address' or e.label == 'First name' or e.label == 'Last name' %}
-                        <label class="col-sm-2 control-label">{{ e.label }}<span class="required"> *</span></label>
-                        <div class="input-group col-sm-9">
+                        <label class="col-sm-4 control-label">{{ e.label }}<span class="required"> *</span></label>
+                        <div class="input-group col-sm-6">
                             {{ e|add_class:"form-control" }}
                             {% if e.label == 'Email address' %}
                                 <span class="glyphicon glyphicon-remove icon-false verify-email"></span>
                             {% endif %}
                         </div>
                         {% elif e.label == 'Contract start date' or e.label == 'Contract exp date' or e.label == 'Health book exp date' %}
-                        <label class="col-sm-2 control-label">{{ e.label }}</label>
-                        <div class="input-group col-sm-9">
+                        <label class="col-sm-4 control-label">{{ e.label }}</label>
+                        <div class="input-group col-sm-6">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             {{ e|add_class:"form-control" }}
                         </div>
                         {% else %}
-                        <label class="col-sm-2 control-label">{{ e.label }}</label>
-                        <div class="input-group col-sm-9 ">
+                        <label class="col-sm-4 control-label">{{ e.label }}</label>
+                        <div class="input-group col-sm-6 ">
                             {{ e|add_class:"form-control" }}
                         </div>
                         {% endif %}

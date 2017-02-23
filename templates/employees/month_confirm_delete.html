@@ -10,27 +10,33 @@
 {% block body_block %}
 
     {% if month %}
-    <div class="panel panel-danger">
-        <div class="panel-heading">
-            <h4>Confirmation</h4>
-        </div>
-        <div class="panel-body">
-            <form method="post">
-                {% csrf_token %}
-                Are you sure you want to delete {{ object.month_detail }}?<br><br>
-                {% if employee %}
-                <a href="{% url 'employee_detail' employee.id %}"><input type="submit" name="submit" value="Yes" class="btn btn-danger"></a>
-                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">No, take me back to the employee detail</a>
-                {% endif %}
-            </form>
-        </div>
-    </div>
-    {% else %}
-    <div class="panel panel-danger">
-        <div class="panel-body">
-            <p>The month you are trying to delete does not exist anymore.</p>
-            <a href="{% url 'employees' %}" class="btn btn-default">Back to the employee list</a>
-        </div>
+    <div class="panel panel-heading panel-danger">
+        <center>
+            <div>
+                <h4>Confirmation</h4>
+            </div>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    Are you sure you want to delete {{ object.month_detail }}?<br>
+                    <p class="warning">
+                        Any data related to this month will be lost forever.
+                    </p>
+                    <br>
+                    {% if employee %}
+                    <a href="{% url 'employee_detail' employee.id %}"><input type="submit" name="submit" value="Yes" class="btn btn-danger"></a>
+                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">No, take me back to the employee detail</a>
+                    {% endif %}
+                </form>
+            </div>
+            </div>
+            {% else %}
+            <div class="panel panel-danger">
+            <div class="panel-body">
+                <p>The month you are trying to delete does not exist anymore.</p>
+                <a href="{% url 'employees' %}" class="btn btn-default">Back to the employee list</a>
+            </div>
+        </center>
     </div>
 
     {% endif %}

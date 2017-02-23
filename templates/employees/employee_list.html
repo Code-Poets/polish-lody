@@ -17,13 +17,6 @@
 
                     <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
-
-    <!-- <div class="filter-forms">
-        <form>
-            <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-            <label class="my-button" onclick="uncheckFilters();">Reset filters</label>
-        </form>
-    </div> -->
     <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
         <div class="filter-forms">
@@ -142,7 +135,14 @@
                 $('#per-page-{{number}}').addClass('active');
                 $('input[name=pg]:checked').prop('checked', false);
                 $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
-                make_request();
+                try {
+                    var parameters = gatherFilters();
+                    delete parameters.page;
+                } 
+                catch(err) {
+                    var parameters = { };
+                }
+                makeRequest(parameters);
             });
             {% endfor %}
         });
