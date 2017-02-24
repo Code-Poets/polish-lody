@@ -632,31 +632,14 @@ ul.weather-conditions li {
 #logo {
     display: inline-block;
     background-image: url('images/logo_polish-lody3.png');
-    /*background-image: url('images/logo_polish-lody_small.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
     width: 160px;
-    /*width: 200px;*/
     position: absolute;
     left: 10%;
     top: 5px;
-    /*top: 5px;*/
 }
-
-
-/*wersja druga*/
-/*#logo {
-    display: inline-block;
-    background-image: url('images/logo_polish-lody_small.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: 85%;
-    width: 200px;
-    position: absolute;
-    left: 10%;
-    top: 10px;
-}*/
 
 .bestsellers {
     border-top: 0px;
