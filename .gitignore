@@ -7,5 +7,6 @@ db.sqlite3
 /.idea
 /staticfiles/*
 !/staticfiles/main.css
+!/staticfiles/login.css
 
 /polishlody/settings/local.py
