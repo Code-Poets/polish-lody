@@ -243,6 +243,9 @@ input[type="checkbox"]:checked + label.my-button {
 }
 
 thead {
+    th {
+        border-bottom: none !important;
+    }
     tr {
         background-color: #CCD8AE;
     }
@@ -603,6 +606,18 @@ img {
     max-height: 100%;
 }
 
+#weather {
+    height: 32px;
+    width: 32px;
+}
+
+ul.weather-conditions li {
+    height: 32px;
+    #forecast {
+        font-size: 14px;
+    }
+}
+
 .menu-right {
     display: inline-block;
     float: right;
@@ -617,18 +632,18 @@ img {
 #logo {
     display: inline-block;
     background-image: url('images/logo_polish-lody3.png');
+    /*background-image: url('images/logo_polish-lody_small.png');*/
     background-repeat: no-repeat;
     background-size: contain;
-    height: 85%;
+    height: 100%;
     width: 160px;
+    /*width: 200px;*/
     position: absolute;
     left: 10%;
     top: 5px;
+    /*top: 5px;*/
 }
 
-.weather {
-    display: inline-block;
-}
 
 /*wersja druga*/
 /*#logo {
@@ -656,6 +671,11 @@ ul.topnav {
 
 ul.topnav li {
     float: left;
+}
+
+
+.responsive-icon {
+    font-size: 23px;
 }
 
 ul.topnav li a, #logged-in {

@@ -27,31 +27,31 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-    </div>
+    
+        <div class="col-md-4">
+        </div>
 
-    <div class="col-md-8">
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4>Weather App</h4></div>
-            <div class="panel-body">
-                <table class="table table-bordered table-striped " id="owmapi">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-                <table class="table table-bordered table-striped" id="apixu">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-                <div id="chart_div"></div>
-                <a href="{% url 'weather_forecast' %}">7 days/ 1 hour forecast</a><br>
-                <a href="{% url 'weather_forecastdaily' %}">7 days forecast</a>
-            </div>
+        <div class="panel panel-heading panel-default">
+            <h4>Weather forecast</h4>
+            <br>
+            <table class="table" id="owmapi">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            <table class="table " id="apixu">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            <br>
+            <div id="chart_div"></div>
+            <br>
+            <a href="{% url 'weather_forecast' %}">7 days/ 1 hour forecast</a><br>
+            <a href="{% url 'weather_forecastdaily' %}">7 days forecast</a>
+        </div>
+
+        <div class="col-md-4">
         </div>
     </div>
-    <div class="col-md-4">
-    </div>
-
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
