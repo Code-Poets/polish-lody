@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'sass_processor',
     'widget_tweaks',
-    'sales,'
+    'sales',
 ]
 
 MIDDLEWARE = [
