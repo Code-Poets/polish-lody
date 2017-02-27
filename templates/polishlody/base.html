@@ -18,6 +18,7 @@
         <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
         <script src="{% static 'js/jquery-ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/polish-lody-jquery.js' %}"></script>
+        <script src="{% static 'lscache-master/lscache.js' %}"></script>
     </head>
 
     <body>
@@ -37,7 +38,7 @@
                             <div id="current_weather_popover" class="hidden">
                                 <div id="popover-heading" class="popover-heading">Weather in Wrocław:</div>
                                     <div class="popover-body">
-                                        <ul class="weather-conditions col-sm-8">
+                                        <ul class="weather-conditions col-sm-9">
                                             <li id="weatherType"></li>
                                             <li id="cTemp1"></li>
                                             <li id="feelslikeTemp"></li>
@@ -45,6 +46,7 @@
                                             <li id="humidity"></li>
                                             <li id="windSpeed"></li>
                                             <li id="clouds"></li>
+
                                             <li id="forecast">
                                                 <a id="navbar-link" href="{% url 'weather_forecast' %}">Check forecast</a>
                                             </li>

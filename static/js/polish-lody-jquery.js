@@ -32,13 +32,11 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
-
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    if (sessionStorage.getItem('weatherData')==null) {
+    if (localStorage.getItem('lscache-navbarWeatherData')==null) {
         $.getJSON(weather_apixu, function(data) {
-            var dataToStore = JSON.stringify(data);
-            sessionStorage.setItem('weatherData', dataToStore);
-            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            lscache.set('navbarWeatherData', data, 60);
+            var localWeatherData = JSON.parse(localStorage.getItem('lscache-navbarWeatherData'));
             NavbarWeatherData();
         });
     } else {
@@ -46,15 +44,15 @@ $(document).ready(function(){
     }
 
     function NavbarWeatherData(){
-        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
-        var weatherType = sessionData.current.condition.text;
-        var windSpeed = (sessionData.current.wind_kph).toFixed(0);
-        var cTemp = Math.round(sessionData.current.temp_c);
-        var feelslikeTemp = Math.round(sessionData.current.feelslike_c);
-        var pressure = (sessionData.current.pressure_mb).toFixed(0);
-        var humidity = sessionData.current.humidity;
-        var clouds = sessionData.current.cloud;
-        var icon = sessionData.current.condition.icon;
+        var localData = JSON.parse(localStorage.getItem('lscache-navbarWeatherData'));
+        var weatherType = localData.current.condition.text;
+        var windSpeed = (localData.current.wind_kph).toFixed(0);
+        var cTemp = Math.round(localData.current.temp_c);
+        var feelslikeTemp = Math.round(localData.current.feelslike_c);
+        var pressure = (localData.current.pressure_mb).toFixed(0);
+        var humidity = localData.current.humidity;
+        var clouds = localData.current.cloud;
+        var icon = localData.current.condition.icon;
         var iconSrc = "http:" + icon;
 
         $("#weatherType").html(weatherType);

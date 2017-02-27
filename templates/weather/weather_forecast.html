@@ -41,21 +41,21 @@
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    if (sessionStorage.getItem('weatherData')==null) {
+    lscache.flushExpired();
+    if (localStorage.getItem('lscache-weatherData')==null) {
         $.getJSON(weather_apixu, function(data) {
-            var dataToStore = JSON.stringify(data);
-            sessionStorage.setItem('weatherData', dataToStore);
-            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            lscache.set('weatherData', data, 360);
+            var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
             PopulateTableForcast();
         });
     } else {
         PopulateTableForcast();
     }
     function PopulateTableForcast() {
-        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+        var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
         var forecast = [];
         for (var i=0; i<7; i++){
-            var date = new Date(sessionData.forecast.forecastday[i].date_epoch*1000);
+            var date = new Date(localWeatherData.forecast.forecastday[i].date_epoch*1000);
             var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
             var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             var day = days[date.getDay()];
@@ -67,7 +67,7 @@
             $("#day"+i).html(day);
         }
         var day_selected = $('#day_selected :selected').val();
-        $.each(sessionData.forecast.forecastday[day_selected].hour, function(key, val){
+        $.each(localWeatherData.forecast.forecastday[day_selected].hour, function(key, val){
 
             // console.log(val);
             var temp = Math.round(val.temp_c);

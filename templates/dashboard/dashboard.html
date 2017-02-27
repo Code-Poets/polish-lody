@@ -55,21 +55,21 @@
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    if (sessionStorage.getItem('weatherData')==null) {
+    lscache.flushExpired();
+    if (localStorage.getItem('lscache-weatherData')==null) {
         $.getJSON(weather_apixu, function(data) {
-            var dataToStore = JSON.stringify(data);
-            sessionStorage.setItem('weatherData', dataToStore);
-            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            lscache.set('weatherData', data, 360);
+            var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
             PopulateTableDashboard();
         });
     } else {
         PopulateTableDashboard();
     }
     function PopulateTableDashboard(){
-        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+        var localData = JSON.parse(localStorage.getItem('lscache-weatherData'));
         var forecast = [];
         forecast.push("<tr>");
-        $.each(sessionData.forecast.forecastday, function(key, val){
+        $.each(localData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
             var days_pl = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
             var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -84,13 +84,13 @@
         });
         forecast.push("</tr>");
         forecast.push("<tr>");
-        $.each(sessionData.forecast.forecastday, function(key, val){
+        $.each(localData.forecast.forecastday, function(key, val){
             var icon = val.day.condition.icon;
             forecast.push("<td class=text-center>"+'<img src="https:'+ icon+ '">'+"</td>");
         });
         forecast.push("</tr>");
         forecast.push("<tr>");
-        $.each(sessionData.forecast.forecastday, function(key, val){
+        $.each(localData.forecast.forecastday, function(key, val){
             var mintemp = Math.round(val.day.mintemp_c);
             var maxtemp = Math.round(val.day.maxtemp_c);
             forecast.push("<td>"+"from "+(mintemp).toFixed(0)+"&#8451"+" to "+(maxtemp).toFixed(0)+"&#8451");

@@ -503,7 +503,8 @@ img {
   width: 32px; }
 
 ul.weather-conditions li {
-  height: 32px; }
+  height: 32px;
+  margin-left: 10%; }
   ul.weather-conditions li #forecast {
     font-size: 14px; }
 
