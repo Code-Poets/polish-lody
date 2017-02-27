@@ -34,9 +34,22 @@
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    $.getJSON(weather_apixu, function(data){
+    if (sessionStorage.getItem('weatherData')==null) {
+        $.getJSON(weather_apixu, function(data) {
+            var dataToStore = JSON.stringify(data);
+            sessionStorage.setItem('weatherData', dataToStore);
+            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            PopulateTableForcastDaily();
+        });
+    } else {
+        console.log("exists");
+        PopulateTableForcastDaily();
+    }
+    function PopulateTableForcastDaily() {
+        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+        console.log(sessionData);
         var forecast = [];
-        $.each(data.forecast.forecastday, function(key, val){
+        $.each(sessionData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
             var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
             var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -59,7 +72,7 @@
             forecast.push("</tr>");
         });
         $("table").append($(forecast.join('')));
-    }); //get JSON weather_api function
+    }
     </script>
     
 {% endblock %}

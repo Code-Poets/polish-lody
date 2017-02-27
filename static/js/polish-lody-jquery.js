@@ -34,15 +34,27 @@ $(document).ready(function() {
 $(document).ready(function(){
 
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    $.getJSON(weather_apixu, function(data){
-        var weatherType = data.current.condition.text;
-        var windSpeed = (data.current.wind_kph).toFixed(0);
-        var cTemp = Math.round(data.current.temp_c);
-        var feelslikeTemp = Math.round(data.current.feelslike_c);
-        var pressure = (data.current.pressure_mb).toFixed(0);
-        var humidity = data.current.humidity;
-        var clouds = data.current.cloud;
-        var icon = data.current.condition.icon;
+    if (sessionStorage.getItem('weatherData')==null) {
+        $.getJSON(weather_apixu, function(data) {
+            var dataToStore = JSON.stringify(data);
+            sessionStorage.setItem('weatherData', dataToStore);
+            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            NavbarWeatherData();
+        });
+    } else {
+        NavbarWeatherData();
+    }
+
+    function NavbarWeatherData(){
+        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+        var weatherType = sessionData.current.condition.text;
+        var windSpeed = (sessionData.current.wind_kph).toFixed(0);
+        var cTemp = Math.round(sessionData.current.temp_c);
+        var feelslikeTemp = Math.round(sessionData.current.feelslike_c);
+        var pressure = (sessionData.current.pressure_mb).toFixed(0);
+        var humidity = sessionData.current.humidity;
+        var clouds = sessionData.current.cloud;
+        var icon = sessionData.current.condition.icon;
         var iconSrc = "http:" + icon;
 
         $("#weatherType").html(weatherType);
@@ -54,7 +66,7 @@ $(document).ready(function(){
         $("#humidity").html("humidity: "+ humidity + " %");
         $("#clouds").html("cloudiness: "+ clouds + " %");
         $("#weather").prepend('<img src="'+ iconSrc+ '">');
-    }); //get JSON api function
+    }
 
     $('#weather').popover({
         html : true,

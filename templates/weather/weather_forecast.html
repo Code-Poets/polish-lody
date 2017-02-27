@@ -41,40 +41,48 @@
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    changeDayTable();
-    function changeDayTable() {
-            $.getJSON(weather_apixu, function(data){
-                var forecast = [];
-                for (var i=0; i<7; i++){
-                    var date = new Date(data.forecast.forecastday[i].date_epoch*1000);
-                    var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
-                    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-                    var day = days[date.getDay()];
-                    if(i == 0) {
-                        day = "Today";
-                    } else if(i == 1){
-                        day = "Tomorrow";
-                    }
-                    $("#day"+i).html(day);
-                }
-                var day_selected = $('#day_selected :selected').val();
-                $.each(data.forecast.forecastday[day_selected].hour, function(key, val){
-
-                    // console.log(val);
-                    var temp = Math.round(val.temp_c);
-                    forecast.push("<tr>");
-                    forecast.push("<td>"+val.time+"</td>");
-                    forecast.push("<td>"+temp.toFixed(0)+"</td>");
-                    forecast.push("<td>"+(val.pressure_mb).toFixed(0)+"</td>");
-                    forecast.push("<td>"+(val.humidity)+"</td>");
-                    forecast.push("<td>"+(val.wind_kph).toFixed(0)+"</td>");
-                    forecast.push("<td>"+(val.cloud)+"</td>");
-                    forecast.push("<td>"+val.condition.text+"</td>");
-                    forecast.push("</tr>");
-                });
-                $("table").append($(forecast.join('')));
-            }); //get JSON weather_api function
+    if (sessionStorage.getItem('weatherData')==null) {
+        $.getJSON(weather_apixu, function(data) {
+            var dataToStore = JSON.stringify(data);
+            sessionStorage.setItem('weatherData', dataToStore);
+            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            PopulateTableForcast();
+        });
+    } else {
+        PopulateTableForcast();
+    }
+    function PopulateTableForcast() {
+        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+        var forecast = [];
+        for (var i=0; i<7; i++){
+            var date = new Date(sessionData.forecast.forecastday[i].date_epoch*1000);
+            var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            var day = days[date.getDay()];
+            if(i == 0) {
+                day = "Today";
+            } else if(i == 1){
+                day = "Tomorrow";
+            }
+            $("#day"+i).html(day);
         }
+        var day_selected = $('#day_selected :selected').val();
+        $.each(sessionData.forecast.forecastday[day_selected].hour, function(key, val){
+
+            // console.log(val);
+            var temp = Math.round(val.temp_c);
+            forecast.push("<tr>");
+            forecast.push("<td>"+val.time+"</td>");
+            forecast.push("<td>"+temp.toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.pressure_mb).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.humidity)+"</td>");
+            forecast.push("<td>"+(val.wind_kph).toFixed(0)+"</td>");
+            forecast.push("<td>"+(val.cloud)+"</td>");
+            forecast.push("<td>"+val.condition.text+"</td>");
+            forecast.push("</tr>");
+        });
+        $("table").append($(forecast.join('')));
+    }
 
     $('#day_selected').change(function(){
         location.reload();

@@ -55,10 +55,21 @@
 
     <script type="text/javascript">
     var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    $.getJSON(weather_apixu, function(data){
+    if (sessionStorage.getItem('weatherData')==null) {
+        $.getJSON(weather_apixu, function(data) {
+            var dataToStore = JSON.stringify(data);
+            sessionStorage.setItem('weatherData', dataToStore);
+            var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
+            PopulateTableDashboard();
+        });
+    } else {
+        PopulateTableDashboard();
+    }
+    function PopulateTableDashboard(){
+        var sessionData = JSON.parse(sessionStorage.getItem('weatherData'));
         var forecast = [];
         forecast.push("<tr>");
-        $.each(data.forecast.forecastday, function(key, val){
+        $.each(sessionData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
             var days_pl = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
             var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -73,19 +84,19 @@
         });
         forecast.push("</tr>");
         forecast.push("<tr>");
-        $.each(data.forecast.forecastday, function(key, val){
+        $.each(sessionData.forecast.forecastday, function(key, val){
             var icon = val.day.condition.icon;
             forecast.push("<td class=text-center>"+'<img src="https:'+ icon+ '">'+"</td>");
         });
         forecast.push("</tr>");
         forecast.push("<tr>");
-        $.each(data.forecast.forecastday, function(key, val){
+        $.each(sessionData.forecast.forecastday, function(key, val){
             var mintemp = Math.round(val.day.mintemp_c);
             var maxtemp = Math.round(val.day.maxtemp_c);
             forecast.push("<td>"+"from "+(mintemp).toFixed(0)+"&#8451"+" to "+(maxtemp).toFixed(0)+"&#8451");
         });
         forecast.push("</tr>");
         $("#apixu").append($(forecast.join('')));
-    }); //get JSON weather_api function
+    }
     </script>
 {% endblock %}
