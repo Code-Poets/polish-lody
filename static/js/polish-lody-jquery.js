@@ -53,7 +53,7 @@ $(document).ready(function(){
         var humidity = localData.current.humidity;
         var clouds = localData.current.cloud;
         var icon = localData.current.condition.icon;
-        var iconSrc = "http:" + icon;
+        var iconSrc = "https:" + icon;
 
         $("#weatherType").html(weatherType);
         $("#windSpeed").html("wind: " + windSpeed + " km/h");
