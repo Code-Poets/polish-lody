@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from .models import Employee, Month
+from .models import City, Employee, Month
 
 from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm
 from django import forms
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
+
+admin.site.register(City)
 
 class EmployeeCreateAdminForm(AuthUserCreationForm):
 
@@ -80,7 +82,6 @@ class EmployeeAdmin(AuthUserAdmin):
             )
 
 admin.site.register(Employee, EmployeeAdmin)
-
 
 
 def make_month_paid(modeladmin, request, queryset):

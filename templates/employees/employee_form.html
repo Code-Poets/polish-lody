@@ -36,6 +36,9 @@
                         {{ form.contract_start_date.errors }}
                         {{ form.contract_exp_date.errors }}
                         {{ form.health_book_exp_date.errors }}
+                        {{ form.bank_account_number.errors }}
+                        {{ form.phone_contact_number.errors }}
+                        {{ form.address_zip_code.errors }}
                     </div>
                 {% endif %}
                 {% for e in form %}
@@ -54,6 +57,13 @@
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             {{ e|add_class:"form-control" }}
                         </div>
+                        <!-->
+                        {% elif e.label == 'Address city' %}
+                        <label class="col-sm-2 control-label"> Address city </label>
+                        <div class="input-group col-sm-9 ">
+                            {{ e|add_class:"form-control" }}
+                        </div>
+                        </-->
                         {% else %}
                         <label class="col-sm-2 control-label">{{ e.label }}</label>
                         <div class="input-group col-sm-9 ">
@@ -69,9 +79,32 @@
                         <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger">Delete employee</a>
                     {% else %}
                     {% endif %}
+                    
                 </center>
                 <br>
             </form>
         </div>
     </div>
+
+<script>
+
+$(document).ready(function(){
+    $('#id_bank_account_number').mask('00 0000 0000 0000 0000 0000 0000')
+    $('#id_phone_contact_number').mask('+00 000 000 000')
+    $('#id_address_zip_code').mask('00-000');
+
+});
+
+</script>
+
+
+<script>
+$(function() {
+  $("#id_address_city").autocomplete({
+    source: "edit/autocomplete/",
+    minLength: 3,
+  });
+});
+</script>
+
 {% endblock %}

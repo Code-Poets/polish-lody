@@ -1,0 +1,108 @@
+- model: employees.employee
+  pk: 2
+  fields:
+    rate_per_hour: '10.00'
+    contract_start_date: 2016-11-20
+    contract_exp_date: 2017-12-19
+    health_book_exp_date: 2017-12-19
+    gender: Male
+    position: Production
+    contract_type: Fixed-term employment contract
+    groups: []
+    user_permissions: []
+- model: employees.employee
+  pk: 3
+  fields:
+    rate_per_hour: '11.00'
+    contract_start_date: 2015-12-29
+    contract_exp_date: 2017-12-19
+    health_book_exp_date: 2017-02-28
+    gender: Male
+    position: Sale
+    contract_type: Non-fixed-term employment contract
+    groups: []
+    user_permissions: []
+- model: employees.employee
+  pk: 6
+  fields:
+    rate_per_hour: '15.00'
+    contract_start_date: 2016-11-20
+    contract_exp_date: 2017-12-19
+    health_book_exp_date: 2017-12-19
+    gender: Male
+    position: Other
+    contract_type: Fixed-term employment contract
+    groups: []
+    user_permissions: []
+- model: employees.employee
+  pk: 7
+  fields:
+    rate_per_hour: '3.50'
+    contract_start_date: 2016-01-12
+    contract_exp_date: 2017-02-28
+    health_book_exp_date: 2017-12-12
+    gender: Male
+    position: Sale
+    contract_type: Non-fixed-term employment contract
+    groups: []
+    user_permissions: []
+- model: employees.employee
+  pk: 8
+  fields:
+    rate_per_hour: '20.00'
+    contract_start_date: 2183-11-07
+    contract_exp_date: 2186-11-07
+    health_book_exp_date: 2187-12-15
+    gender: Male
+    position: Other
+    contract_type: Other
+    groups: []
+    user_permissions: []
+- model: employees.month
+  pk: 2
+  fields: {year: 2016, employee: 3, month: 11, salary_is_paid: true, hours_worked_in_this_month: '160.0',
+    month_is_approved: true, rate_per_hour_this_month: '11.00'}
+- model: employees.month
+  pk: 3
+  fields: {year: 2017, employee: 2, month: 1, salary_is_paid: false, hours_worked_in_this_month: '40.0',
+    month_is_approved: false, rate_per_hour_this_month: '10.00'}
+- model: employees.month
+  pk: 4
+  fields: {year: 2016, employee: 3, month: 12, salary_is_paid: true, hours_worked_in_this_month: '152.0',
+    month_is_approved: true, rate_per_hour_this_month: '11.00'}
+- model: employees.month
+  pk: 5
+  fields: {year: 2017, employee: 3, month: 1, salary_is_paid: false, hours_worked_in_this_month: '0.0',
+    month_is_approved: true, rate_per_hour_this_month: '11.00'}
+- model: employees.month
+  pk: 6
+  fields: {year: 2017, employee: 6, month: 1, salary_is_paid: false, hours_worked_in_this_month: '0.0',
+    month_is_approved: false, rate_per_hour_this_month: '15.00'}
+- model: employees.month
+  pk: 7
+  fields: {year: 2016, employee: 6, month: 12, salary_is_paid: false, hours_worked_in_this_month: '144.0',
+    month_is_approved: false, rate_per_hour_this_month: '15.00'}
+- model: employees.month
+  pk: 8
+  fields: {year: 2016, employee: 6, month: 11, salary_is_paid: true, hours_worked_in_this_month: '140.0',
+    month_is_approved: false, rate_per_hour_this_month: '15.00'}
+- model: employees.month
+  pk: 9
+  fields: {year: 2017, employee: 6, month: 2, salary_is_paid: false, hours_worked_in_this_month: '0.0',
+    month_is_approved: false, rate_per_hour_this_month: '15.00'}
+- model: employees.month
+  pk: 10
+  fields: {year: 2016, employee: 7, month: 12, salary_is_paid: true, hours_worked_in_this_month: '111.0',
+    month_is_approved: false, rate_per_hour_this_month: '3.50'}
+- model: employees.month
+  pk: 11
+  fields: {year: 2017, employee: 7, month: 1, salary_is_paid: false, hours_worked_in_this_month: '720.0',
+    month_is_approved: true, rate_per_hour_this_month: '3.50'}
+- model: employees.month
+  pk: 12
+  fields: {year: 2185, employee: 8, month: 9, salary_is_paid: true, hours_worked_in_this_month: '150.0',
+    month_is_approved: true, rate_per_hour_this_month: '20.00'}
+- model: employees.month
+  pk: 13
+  fields: {year: 2185, employee: 8, month: 10, salary_is_paid: false, hours_worked_in_this_month: '200.0',
+    month_is_approved: true, rate_per_hour_this_month: '20.00'}

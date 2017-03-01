@@ -19,6 +19,24 @@ from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 
+def ajax_autocomplete(request):
+    import ipdb;ipdb.set_trace()
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        cities = City.objects.filter(name__istartswith = query )
+        results = []
+        for name in cities:
+            name_json = {}
+            name_json['name'] = name.name
+            results.append(name_json)
+        data = json.dumps(results)
+        #data = json.dumps(list(City.objects.filter(name__istartswith = q ).values('name')))
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
 def ajax_verify_email(request):
     if request.POST and request.is_ajax():
         email = request.POST.get('email')
@@ -440,7 +458,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
-
+    #import ipdb;ipdb.set_trace()
     model = Employee
     form_class = EmployeeChangeForm
     success_url = reverse_lazy('employees')
