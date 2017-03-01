@@ -1,6 +1,6 @@
 from django.forms import ModelForm, RadioSelect, SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm
-from employees.models import Employee, Month
+from employees.models import City, Employee, Month
 from django.utils.safestring import mark_safe
 from django import forms
 from functools import partial
@@ -38,25 +38,36 @@ class EmployeeForm(AuthUserCreationForm):
         model = Employee
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
-         'address']
+         'address_street', 'address_zip_code', 'address_city']
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
             'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
             'rate_per_hour'         : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+            'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
+            'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
+            'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'})
         }
 
 class EmployeeChangeForm(ModelForm):
+    #def __init__(self, *args, **kwargs):
+    #super().__init__(*args, **kwargs)
+
     class Meta:
         model = Employee
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
-         'address']
+         'address_street', 'address_zip_code', 'address_city']
         widgets = {
-            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'})
-        }
+
+                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
+                    'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
+                    'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
+                    'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'}),
+                    'address_city'          : forms.TextInput()
+                    }
 
 class MonthForm(ModelForm):
     class Meta:

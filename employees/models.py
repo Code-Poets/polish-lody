@@ -6,7 +6,10 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import time
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from users.models import MyUser
+#from cities_light.models import City, Country
+import re
 
 def is_expiring(exp_date):
     if exp_date is not None:
@@ -18,6 +21,56 @@ def is_expiring(exp_date):
             return days_left
         elif 0 > days_left:
             return [days_left, days_left*(-1)]
+
+def sanity_check(account_number):
+    #import ipdb;ipdb.set_trace()
+    assert isinstance(account_number, str) 
+    assert len(account_number) == 32
+    assert account_number.replace(' ', '').isdigit()
+    
+    account_number_sans_checksum = account_number.replace(' ', '')[2:]
+    original_checksum = int(account_number[0:2])
+    new_checksum = 98 - (int(account_number_sans_checksum + '252100') % 97)
+
+    assert new_checksum >= 0
+
+    if new_checksum < 10:
+        new_checksum = int('0' + str(new_checksum))
+
+    if original_checksum != new_checksum:
+        print('The account number is invalid!')
+        raise ValidationError("The bank account number you entered is invalid") #Placeholder
+
+def phone_check(phone_number):
+    
+    assert isinstance(zip_code, str)
+    assert len(zip_code) == 15
+    assert zip_code.isalnum()
+
+    pattern = re.compile('^+[0-9]{2}[/s][0-9]{3}[/s][0-9]{3}[/s][0-9]$')
+
+    if not pattern.match(zip_code):
+        print('The phone number is invalid!')
+        raise ValidationError("The zip code you entered is invalid") #Placeholder        
+
+def zip_check(zip_code):
+    
+    assert isinstance(zip_code, str)
+    assert len(zip_code) == 6
+    assert zip_code.replace('-','').isdigit()
+
+    pattern = re.compile('^[0-9]{2}-[0-9]{3}$')
+
+    if not pattern.match(zip_code):
+        print('The zip code is invalid!')
+        raise ValidationError("The zip code you entered is invalid") #Placeholder        
+
+class City(models.Model):
+
+    name = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return self.name
 
 class Employee(MyUser):
 
@@ -48,11 +101,15 @@ class Employee(MyUser):
                               choices=position_choices)
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
-    bank_account_number = models.CharField(max_length = 26, blank = True, null = True, default = None)
+    bank_account_number = models.CharField(max_length = 32, blank = True, null = True, default = None, validators = [sanity_check])
 
-    phone_contact_number = models.CharField(max_length = 12, blank = True, null = True, default = None)
+    phone_contact_number = models.CharField(max_length = 15, blank = True, null = True, default = None)
 
-    address = models.CharField(max_length = 64, null=True, blank=True, default=None)
+    address_street = models.CharField(max_length = 16, null=True, blank=True, default=None)
+
+    address_zip_code = models.CharField(max_length = 6, blank = True, null = True, default = None, validators = [zip_check])
+
+    address_city = models.ForeignKey(City, null=True, blank=True, on_delete = models.CASCADE) #limit_choices_to = limit_city_choices)
 
     def months_dict(self):
         months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
