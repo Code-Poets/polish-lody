@@ -52,6 +52,7 @@ class EmployeeForm(AuthUserCreationForm):
                                                                         'autofocus required title' : ' __-___'
                                                                         }
                                                                 ),
+                    'address_city'          : forms.TextInput()
                     }
 
 class EmployeeChangeForm(ModelForm):

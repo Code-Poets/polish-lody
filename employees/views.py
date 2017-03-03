@@ -22,22 +22,15 @@ from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 def ajax_autocomplete(request):
     if request.is_ajax():
         query = request.GET.get('query', '')
-        #print(query)
-        
-        cities = City.objects.filter(name__istartswith = query)
-        #print(cities)
-        results = []
-        for name in cities:
-            #name_json = {}
-            #name_json = name.name
-            results.append(name.name)
+    
         data = json.dumps({
 
-            #"query": "Unit",
-            "suggestions": results})
-        
-        #data = json.dumps(list(City.objects.filter(name__istartswith = query).values('name')))
-        #print(data)
+            "suggestions" :
+            
+            [city.name for city in City.objects.filter(name__istartswith = query)]
+            
+            })
+    
     else:
         data = 'fail'
     mimetype = 'application/json'

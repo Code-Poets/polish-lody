@@ -3,6 +3,18 @@
 
 {% block title %}Employee{% endblock %}
 {% block header_block %}
+
+<style type="text/css">
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #819839; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+</style>
+
 <div class="panel panel-heading panel-default">
     <h4>
         {% if employee %}
@@ -99,12 +111,18 @@ $(document).ready(function(){
 
 
 <script>
+
 $(function() {
+  
   $("#id_address_city").autocomplete({
-    serviceUrl: "autocomplete/",
+    
+    serviceUrl: "/employees/autocomplete/",
     minChars: 3
+
   });
+
 });
+
 </script>
 
 {% endblock %}
