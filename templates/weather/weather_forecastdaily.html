@@ -1,11 +1,11 @@
 {% extends 'polishlody/base.html' %}
-
-{% block title %}Weather forcastdaily{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Weather forcastdaily' %}{% endblock %}
         
 {% block header_block %}
 <div class="panel panel-heading panel-default">
     <center>
-        <h4>Weather forcastdaily</h4>
+        <h4>{% trans 'Weather forcastdaily' %}</h4>
     </center>
 </div>
 {% endblock %}
@@ -13,19 +13,19 @@
 {% block body_block %}
     <!-- Usunąć z tabeli klasy table-bordered i table-striped, żeby tabela bardziej przypominała pozostałe tabelki na stronie -->
     <div class="container">
-        <table class="table table-bordered table-striped table-hover ">
+        <table class="table table-bordered table-hover ">
             <thead>
             <tr>
-                <th class="text-center" style="vertical-align:middle;">Date</th>
-                <th class="text-center" style="vertical-align:middle;">Avg Temp [&#8451]</th>
-                <th class="text-center" style="vertical-align:middle;">Min Temp [&#8451]</th>
-                <th class="text-center" style="vertical-align:middle;">Max Temp [&#8451]</th>
-                <th class="text-center" style="vertical-align:middle;">Humidity [%]</th>
-                <th class="text-center" style="vertical-align:middle;">Max Wind [km/h]</th>
-                <th class="text-center" style="vertical-align:middle;">Total Precipitation [mm]</th>
-                <th class="text-center" style="vertical-align:middle;">Sunrise</th>
-                <th class="text-center" style="vertical-align:middle;">Sunset</th>
-                <th class="text-center" style="vertical-align:middle;">Description</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Date' %}</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Avg Temp ' %}[&#8451]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Min Temp ' %}[&#8451]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Max Temp ' %}[&#8451]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Humidity ' %}[%]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Max Wind ' %}[km/h]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Total Precipitation ' %}[mm]</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Sunrise' %}</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Sunset' %}</th>
+                <th class="text-center" style="vertical-align:middle;">{% trans 'Description' %}</th>
             </tr>
             </thead>
             <tbody></tbody>
@@ -51,7 +51,7 @@
         $.each(localWeatherData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
             var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
-            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            var days = ["{% trans 'Sunday' %}", "{% trans 'Monday' %}","{% trans 'Tuesday' %}", "{% trans 'Wednesday' %}", "{% trans 'Thursday' %}", "{% trans 'Friday' %}" , "{% trans 'Saturday' %}"];
             var day = days[date.getDay()];
             var finaldate = (date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate());
             var avgtemp = Math.round(val.day.avgtemp_c);

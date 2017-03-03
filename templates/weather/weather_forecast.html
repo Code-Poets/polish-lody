@@ -1,11 +1,11 @@
 {% extends 'polishlody/base.html' %}
-
-{% block title %}Weather forcast{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Weather forcast' %}{% endblock %}
         
 {% block header_block %}
 <div class="panel panel-heading panel-default">
     <center>
-        <h4>Weather forecast</h4>
+        <h4>{% trans 'Weather forecast' %}</h4>
     </center>
 </div>
 {% endblock %}
@@ -23,16 +23,16 @@
             <option value="5" id="day5"></option>
             <option value="6" id="day6"></option>
         </select>
-        <table class="table table-bordered table-striped table-hover">
+        <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp [&#8451]</th>
-                <th>Pressure [hPa]</th>
-                <th>Humidity [%]</th>
-                <th>Wind [km/h]</th>
-                <th>Cloudiness [%]</th>
-                <th>Description</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Temp ' %}[&#8451]</th>
+                <th>{% trans 'Pressure ' %}[hPa]</th>
+                <th>{% trans 'Humidity ' %}[%]</th>
+                <th>{% trans 'Wind ' %}[km/h]</th>
+                <th>{% trans 'Cloudiness ' %}[%]</th>
+                <th>{% trans 'Description' %}</th>
             </tr>
             </thead>
             <tbody></tbody>
@@ -57,12 +57,12 @@
         for (var i=0; i<7; i++){
             var date = new Date(localWeatherData.forecast.forecastday[i].date_epoch*1000);
             var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
-            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            var days = ["{% trans 'Sunday' %}","{% trans 'Monday' %}","{% trans 'Tuesday' %}","{% trans 'Wednesday' %}","{% trans 'Thursday' %}","{% trans 'Friday' %}","{% trans 'Saturday' %}"];
             var day = days[date.getDay()];
             if(i == 0) {
-                day = "Today";
+                day = "{% trans 'Today' %}";
             } else if(i == 1){
-                day = "Tomorrow";
+                day = "{% trans 'Tomorrow' %}";
             }
             $("#day"+i).html(day);
         }
