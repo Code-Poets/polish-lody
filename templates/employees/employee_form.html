@@ -103,8 +103,8 @@ $(document).ready(function(){
 <script>
 $(function() {
   $("#id_address_city").autocomplete({
-    source: "edit/autocomplete/",
-    minLength: 3,
+    serviceUrl: "autocomplete/",
+    minChars: 3
   });
 });
 </script>

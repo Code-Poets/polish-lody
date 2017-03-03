@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
-from .models import Employee, Month
+from .models import City, Employee, Month
 from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
 from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
@@ -22,17 +22,24 @@ from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 from django.http import JsonResponse
 
 def ajax_autocomplete(request):
-    import ipdb;ipdb.set_trace()
     if request.is_ajax():
-        query = request.GET.get('term', '')
-        cities = City.objects.filter(name__istartswith = query )
+        query = request.GET.get('query', '')
+        #print(query)
+        
+        cities = City.objects.filter(name__istartswith = query)
+        #print(cities)
         results = []
         for name in cities:
-            name_json = {}
-            name_json['name'] = name.name
-            results.append(name_json)
-        data = json.dumps(results)
-        #data = json.dumps(list(City.objects.filter(name__istartswith = q ).values('name')))
+            #name_json = {}
+            #name_json = name.name
+            results.append(name.name)
+        data = json.dumps({
+
+            #"query": "Unit",
+            "suggestions": results})
+        
+        #data = json.dumps(list(City.objects.filter(name__istartswith = query).values('name')))
+        #print(data)
     else:
         data = 'fail'
     mimetype = 'application/json'
