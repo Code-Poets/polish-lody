@@ -3,7 +3,8 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Welcome{% endblock %} | Polish lody</title>
+        {% load i18n %}
+        <title>{% block title %}{% trans 'Welcome' %}{% endblock %} | Polish lody</title>
         {% load static %}
         {# Load the tag library #}
         {% load bootstrap3 %}
@@ -26,7 +27,7 @@
             <nav class="navbar navbar-inverse">
                 <div class="navbar-left menu-left">
                 <div class="container">
-                    <a href="/dashboard" id="logo">
+                    <a href="{% url 'dashboard' %}" id="logo">
                     </a>
                 </div>
                 
@@ -36,19 +37,18 @@
                         <li>
                             <!-- Content for Weather Popover #1 -->
                             <div id="current_weather_popover" class="hidden">
-                                <div id="popover-heading" class="popover-heading">Weather in Wrocław:</div>
+                                <div id="popover-heading" class="popover-heading">{% trans 'Weather in Wrocław:' %}</div>
                                     <div class="popover-body">
                                         <ul class="weather-conditions col-sm-9">
-                                            <li id="weatherType"></li>
-                                            <li id="cTemp1"></li>
-                                            <li id="feelslikeTemp"></li>
-                                            <li id="pressure"></li>
-                                            <li id="humidity"></li>
-                                            <li id="windSpeed"></li>
-                                            <li id="clouds"></li>
-
+                                            <li><a id="weatherType"></a></li>
+                                            <li><a id="cTemp1"></a></li>
+                                            <li><a id="feelslikeTemp"></a></li>
+                                            <li><a id="pressure"></a></li>
+                                            <li><a id="humidity"></a></li>
+                                            <li><a id="windSpeed"></a></li>
+                                            <li><a id="clouds"></a></li>
                                             <li id="forecast">
-                                                <a id="navbar-link" href="{% url 'weather_forecast' %}">Check forecast</a>
+                                                <a id="navbar-link" href="{% url 'weather_forecast' %}">{% trans 'Check forecast' %}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -58,9 +58,9 @@
                                 <a id="cTemp2" class="disableClick"></a>
                             </div>
                         </li>
-                        <li><span id="logged-in">Logged in as - {{ user.email }}</span>
-                        <li><a href="{% url 'password_change' %}">Change password</a></li>
-                        <li><a href="{% url 'logout' %}">Log out</a></li>
+                        <li><span id="logged-in">{% trans 'Logged in as - ' %}{{ user.email }}</span>
+                        <li><a href="{% url 'password_change' %}">{% trans 'Change password' %}</a></li>
+                        <li><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
                         <li class="icon">
                             <a href="{% url 'weather_forecast' %}">
                                 <span class="glyphicon glyphicon-cloud responsive-icon" title="Check weather forecast"></span>
@@ -82,7 +82,7 @@
                             </a>
                         </li>
                         {% else %}
-                        <li><a href="/" id="log-in">Log in</a></li>
+                        <li><a href="{% url 'login' %}" id="log-in">{% trans 'Log in' %}</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -109,7 +109,7 @@
                     <img src="{% static 'images/logo_polish-lody2.png' %}">
                 </div>
                 <div class="container polish-lody">
-                    <a href="http://facebook.com/profile.php?id=741893515863130">polish lody on facebook</a>
+                    <a href="http://facebook.com/profile.php?id=741893515863130">{% trans 'polish lody on facebook' %}</a>
                 </div>
             </div>
         </footer>

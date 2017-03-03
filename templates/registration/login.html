@@ -1,7 +1,7 @@
 {% extends 'registration/login_base.html' %}
 
 {% load widget_tweaks %}
-
+{% load i18n %}
 {% block body_block %}
 <form method="post" id="form-login">
     <center>
@@ -15,9 +15,9 @@
             <h2>Login</h2><br>
             {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
             {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}<br>
-            <button type="submit" class="btn login-btn">Login</button><br>
-        <p>Forgot your password? 
-            <a href="{% url 'password_reset' %}">Click here to reset it!</a>
+            <button type="submit" class="btn login-btn">{% trans 'Login' %}</button><br>
+        <p>{% trans 'Forgot your password?' %}
+            <a href="{% url 'password_reset' %}">{% trans 'Click here to reset it!' %}</a>
         </p>
         </div>
     </center>

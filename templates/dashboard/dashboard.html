@@ -1,27 +1,27 @@
 {% extends 'polishlody/base.html' %}
-
-{% block title %}Manager dashboard{% endblock %}
+{% load i18n %}
+{% block title %}{% trans 'Manager dashboard' %}{% endblock %}
         
 {% block body_block %}
 
     <div class="container">
         <div class="panel panel-heading panel-default">
             <div>
-                <h4>Dashboard</h4>
+                <h4>{% blocktrans %}Dashboard{% endblocktrans %}</h4>
             </div>
             <div class="panel-body">
                 {% if user.is_staff %}
                     <ul>
                         <li>
-                            <a href="{% url 'employees' %}">Employee list</a>
+                            <a href="{% url 'employees' %}">{% trans 'Employee list' %}</a>
                         </li>
                         <li>
                             <!-- <a disabled href="{% url 'sales' %}">Sales (under construction)</a> -->
-                            Sales (under construction)
+                            {% trans 'Sales (under construction)' %}
                         </li>
                     </ul>
                 {% elif user.employee.id == user.pk %}
-                    <a href="{% url 'employee_detail' user.pk %}">My Details</a>
+                    <a href="{% url 'employee_detail' user.pk %}">{% trans 'My Details' %}</a>
                 {% else%}
                     <a>Your have no power here!!!</a>
                 {% endif %}
@@ -32,7 +32,7 @@
         </div>
 
         <div class="panel panel-heading panel-default">
-            <h4>Weather forecast</h4>
+            <h4>{% trans 'Weather forecast' %}</h4>
             <br>
             <table class="table" id="owmapi">
                 <thead></thead>
@@ -45,8 +45,8 @@
             <br>
             <div id="chart_div"></div>
             <br>
-            <a href="{% url 'weather_forecast' %}">7 days/ 1 hour forecast</a><br>
-            <a href="{% url 'weather_forecastdaily' %}">7 days forecast</a>
+            <a href="{% url 'weather_forecast' %}">{% trans '7 days/ 1 hour forecast' %}</a><br>
+            <a href="{% url 'weather_forecastdaily' %}">{% trans '7 days forecast' %}</a>
         </div>
 
         <div class="col-md-4">
@@ -71,14 +71,12 @@
         forecast.push("<tr>");
         $.each(localData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
-            var days_pl = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
-            var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            var days = ["{% trans 'Sun' %}","{% trans 'Mon' %}","{% trans 'Tue' %}","{% trans 'Wed' %}","{% trans 'Thu' %}","{% trans 'Fri' %}","{% trans 'Sat' %}"];
             var day = days[date.getDay()];
             if(key == 0) {
-                day = "Today";
+                day = "{% trans 'Today' %}";
             }
-            var months_pl = ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'];
-            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var months = ["{% trans 'Jan' %}", "{% trans 'Feb' %}", "{% trans 'Mar' %}", "{% trans 'Apr' %}", "{% trans 'May' %}", "{% trans 'Jun' %}", "{% trans 'Jul' %}", "{% trans 'Aug' %}", "{% trans 'Sep' %}", "{% trans 'Oct' %}", "{% trans 'Nov' %}", "{% trans 'Dec' %}"];
             var month = months[date.getMonth()];
             forecast.push("<th>"+day+"<br>"+date.getDate()+" "+month+"</th>");
         });
@@ -93,7 +91,7 @@
         $.each(localData.forecast.forecastday, function(key, val){
             var mintemp = Math.round(val.day.mintemp_c);
             var maxtemp = Math.round(val.day.maxtemp_c);
-            forecast.push("<td>"+"from "+(mintemp).toFixed(0)+"&#8451"+" to "+(maxtemp).toFixed(0)+"&#8451");
+            forecast.push("<td>"+"{% trans ' from ' %}"+(mintemp).toFixed(0)+"&#8451"+"{% trans ' to ' %}"+(maxtemp).toFixed(0)+"&#8451");
         });
         forecast.push("</tr>");
         $("#apixu").append($(forecast.join('')));
