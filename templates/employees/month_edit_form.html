@@ -1,7 +1,8 @@
 {% extends 'polishlody/base.html' %}
 {% load widget_tweaks %}
+{% load i18n %}
 {% block title %}
-{% if month %}Editing month {{ month.month_name }} {{ month.year }}
+{% if month %}{% trans 'Editing month' %} {{ month.get_month_display }} {{ month.year }}
 {% else %}404
 {% endif %}
 {% endblock %}
@@ -12,9 +13,9 @@
     <center>
         <h4>
             {% if employee and month %}
-            Editing {{ month.month_name }} {{ month.year }} for {{ employee }}
+            {% trans 'Editing' %} {{ month.get_month_display }} {{ month.year }} {% trans 'for' %} {{ employee }}
             {% endif %}
-            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
         </h4>
     </center>
 </div>
@@ -43,21 +44,21 @@
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
-                {% elif e.label == "Hours worked in this month" %}
+                {% elif e.html_name == "hours_worked_in_this_month" %}
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Hours worked:</label>
+                        <label class="col-sm-4 control-label">{% trans 'Hours worked:' %}</label>
                         <div class="col-sm-4">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
-                {% elif e.label == "Rate per hour this month" %}
+                {% elif e.html_name == "rate_per_hour_this_month" %}
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Rate per hour:</label>
+                        <label class="col-sm-4 control-label">{% trans 'Rate per hour:' %}</label>
                         <div class="col-sm-4 form-field">
                             {{ e|add_class:"form-control" }}
                         </div>
                     </div>
-                {% elif e.label == "Paid?" %}
+                {% elif e.html_name == "salary_is_paid" %}
                     <div class="form-group">
                         <label class="col-sm-4 control-label">{{ e.label }}</label>
                         <div class="col-sm-4 radio-select">
@@ -75,8 +76,8 @@
                 {% endfor %}
                 <br>
                 <center>
-                    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
-                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">Cancel</a>
+                    <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
+                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
                 </center>
                 <br>
             </form>

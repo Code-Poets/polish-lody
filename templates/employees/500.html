@@ -1,17 +1,18 @@
 {% extends 'polishlody/base.html' %}
 {% load widget_tweaks %}
+{% load i18n %}
 
-{% block title %}500 Internal Server Error{% endblock %}
+{% block title %}{% trans '500 Internal Server Error' %}{% endblock %}
         
 {% block body_block %}
 
         <div class="not-found">
             <h4>
-                <strong>Don't worry! It probably is not your fault. Meanwhile, you should go back to the employee list.</strong>
+                <strong>{% trans "Don't worry! It probably is not your fault. Meanwhile, you should go back to dashboard." %}</strong>
             </h4>
         </div>
         <div class="not-found">
-            <a href="{% url 'employees' %}" class="btn btn-default" >Back to employee list</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-default" >{% trans 'Back to dashboard' %}</a>
         </div>
 
 {% endblock %}

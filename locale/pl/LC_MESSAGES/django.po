@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 11:32+0000\n"
+"POT-Creation-Date: 2017-03-07 14:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,15 +27,16 @@ msgstr "Mężczyzna"
 msgid "Female"
 msgstr "Kobieta"
 
-#: employees/models.py:29
+#: employees/models.py:29 templates/employees/employee_list.html:45
 msgid "Production"
 msgstr "Produkcja"
 
-#: employees/models.py:30
+#: employees/models.py:30 templates/employees/employee_list.html:35
 msgid "Sale"
 msgstr "Sprzedaż"
 
 #: employees/models.py:31 employees/models.py:36
+#: templates/employees/employee_list.html:55
 msgid "Other"
 msgstr "Inne"
 
@@ -75,6 +76,87 @@ msgstr "pozycja"
 msgid "contract type"
 msgstr "typ umowy"
 
+#: employees/models.py:93
+msgid "January"
+msgstr ""
+
+#: employees/models.py:94
+msgid "February"
+msgstr ""
+
+#: employees/models.py:95
+msgid "March"
+msgstr ""
+
+#: employees/models.py:96
+msgid "April"
+msgstr ""
+
+#: employees/models.py:97 templates/dashboard/dashboard.html:79
+msgid "May"
+msgstr ""
+
+#: employees/models.py:98
+msgid "June"
+msgstr ""
+
+#: employees/models.py:99
+msgid "July"
+msgstr ""
+
+#: employees/models.py:100
+msgid "August"
+msgstr ""
+
+#: employees/models.py:101
+msgid "September"
+msgstr ""
+
+#: employees/models.py:102
+msgid "October"
+msgstr ""
+
+#: employees/models.py:103
+msgid "November"
+msgstr ""
+
+#: employees/models.py:104
+msgid "December"
+msgstr ""
+
+#: employees/models.py:107 templates/employees/employee_confirm_delete.html:21
+#: templates/employees/month_confirm_delete.html:27
+msgid "Yes"
+msgstr ""
+
+#: employees/models.py:108
+msgid "No"
+msgstr ""
+
+#: employees/models.py:114
+msgid "year"
+msgstr "rok"
+
+#: employees/models.py:116
+msgid "Month"
+msgstr "Miesiąc"
+
+#: employees/models.py:117
+msgid "Paid?"
+msgstr "Zapłacono?"
+
+#: employees/models.py:118
+msgid "hours worked in this month"
+msgstr "godzin przepracowanych w tym miesiącu"
+
+#: employees/models.py:120
+msgid "Approved?"
+msgstr "Zaakceptowano?"
+
+#: employees/models.py:121
+msgid "rate per hour this month"
+msgstr "stawka godzinowa w tym miesiącu"
+
 #: polishlody/pass_validators.py:11
 #, python-format
 msgid "This password must contain at least %(min_length)d characters."
@@ -85,11 +167,11 @@ msgstr ""
 msgid "Your password must contain at least %(min_length)d characters."
 msgstr ""
 
-#: polishlody/settings/local.py:132
+#: polishlody/settings/local.py:132 polishlody/settings/productions.py:132
 msgid "English"
 msgstr ""
 
-#: polishlody/settings/local.py:133
+#: polishlody/settings/local.py:133 polishlody/settings/productions.py:133
 msgid "Polish"
 msgstr ""
 
@@ -102,6 +184,8 @@ msgid "Dashboard"
 msgstr "Tablica"
 
 #: templates/dashboard/dashboard.html:16
+#: templates/employees/employee_list.html:4
+#: templates/employees/employee_list.html:9
 msgid "Employee list"
 msgstr "Lista Pracowników"
 
@@ -176,10 +260,6 @@ msgid "Apr"
 msgstr ""
 
 #: templates/dashboard/dashboard.html:79
-msgid "May"
-msgstr ""
-
-#: templates/dashboard/dashboard.html:79
 msgid "Jun"
 msgstr ""
 
@@ -215,6 +295,493 @@ msgstr " od "
 msgid " to "
 msgstr " do "
 
+#: templates/employees/404.html:5
+msgid "404 Page Not Found"
+msgstr "404 Strona nie istnieje"
+
+#: templates/employees/404.html:11
+msgid "It seems that you tried to modify something that does not exist."
+msgstr "Zdaje się że próbujesz zmodyfikować coś co nie istnieje."
+
+#: templates/employees/404.html:15 templates/employees/500.html:15
+#: templates/registration/change-password-done.html:8
+msgid "Back to dashboard"
+msgstr "Powrót do tablicy"
+
+#: templates/employees/500.html:5
+msgid "500 Internal Server Error"
+msgstr "500 Wewnętrzny Błąd Serwera"
+
+#: templates/employees/500.html:11
+msgid ""
+"Don't worry! It probably is not your fault. Meanwhile, you should go back to "
+"dashboard."
+msgstr ""
+"Spokojnie! Prawdopodobnie to nie Twoja wina. Tymczasem, wróć do panelu "
+"głównego."
+
+#: templates/employees/employee_confirm_delete.html:4
+#: templates/employees/employee_confirm_delete.html:11
+#: templates/employees/month_confirm_delete.html:5
+#: templates/employees/month_confirm_delete.html:16
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: templates/employees/employee_confirm_delete.html:16
+msgid "Are you sure you want to delete employee "
+msgstr "Czy na pewno chcesz usunąć pracownika "
+
+#: templates/employees/employee_confirm_delete.html:18
+msgid "This is irreversible! Employee data will be lost forever."
+msgstr "Ten proces jest nieodwracalny! Dane pracownika zostaną utracone."
+
+#: templates/employees/employee_confirm_delete.html:22
+#: templates/employees/month_confirm_delete.html:37
+msgid "Back to the employee list"
+msgstr "Powrót do listy pracowników"
+
+#: templates/employees/employee_detail.html:4
+msgid "Details"
+msgstr "Detale"
+
+#: templates/employees/employee_detail.html:11
+#: templates/employees/employee_list_table.html:176
+msgid "Edit employee"
+msgstr "Edytuj pracownika"
+
+#: templates/employees/employee_detail.html:14
+#: templates/employees/employee_form.html:71
+#: templates/employees/employee_list_table.html:178
+msgid "Delete employee"
+msgstr "Usuń pracownika"
+
+#: templates/employees/employee_detail.html:18
+#: templates/employees/employee_form.html:12
+#: templates/employees/employee_form.html:15
+#: templates/employees/month_edit_form.html:18
+#: templates/employees/month_form.html:12
+msgid "Back"
+msgstr "Wróć"
+
+#: templates/employees/employee_detail.html:27
+msgid "Email:"
+msgstr ""
+
+#: templates/employees/employee_detail.html:35
+#: templates/employees/month_edit_form.html:56
+#: templates/employees/month_form.html:39
+msgid "Rate per hour:"
+msgstr "Stawka godzinowa:"
+
+#: templates/employees/employee_detail.html:41
+#: templates/employees/employee_detail.html:53
+#: templates/employees/employee_detail.html:75
+#: templates/employees/employee_detail.html:99
+#: templates/employees/employee_detail.html:111
+#: templates/employees/employee_detail.html:123
+msgid "Not specified"
+msgstr "Nieokreślone"
+
+#: templates/employees/employee_detail.html:47
+msgid "Contract start date:"
+msgstr "Data rozpoczęcia umowy:"
+
+#: templates/employees/employee_detail.html:59
+msgid "Contract expiration date:"
+msgstr "Data wygaśnięcia umowy:"
+
+#: templates/employees/employee_detail.html:81
+msgid "Health book expiration date:"
+msgstr "Data wygaśnięcia książeczki zdrowia:"
+
+#: templates/employees/employee_detail.html:105
+msgid "Position:"
+msgstr "Pozycja:"
+
+#: templates/employees/employee_detail.html:117
+msgid "Contract type:"
+msgstr "Typ umowy:"
+
+#: templates/employees/employee_detail.html:131
+msgid " Add Month"
+msgstr " Dodaj Miesiąc"
+
+#: templates/employees/employee_detail.html:142
+msgid "Show year:"
+msgstr "Pokaż rok:"
+
+#: templates/employees/employee_detail.html:162
+#: templates/employees/employee_detail.html:200
+#: templates/employees/employee_detail.html:224
+msgid "Expand year options"
+msgstr "Rozwiń listę lat"
+
+#: templates/employees/employee_detail.html:167
+#: templates/employees/employee_detail.html:205
+#: templates/employees/employee_detail.html:229
+msgid "Collapse list"
+msgstr "Zwiń listę"
+
+#: templates/employees/employee_detail.html:242
+msgid "Hide unpaid months."
+msgstr "Ukryj nieopłacone miesiące."
+
+#: templates/employees/employee_detail.html:252
+msgid "Hide paid months."
+msgstr "Ukryj opłacone miesiące."
+
+#: templates/employees/employee_detail.html:256
+#: templates/employees/employee_list.html:85
+msgid "Reset filters"
+msgstr "Zresetuj filtry"
+
+#: templates/employees/employee_detail.html:274
+msgid "Months per page:"
+msgstr "Ilość miesięcy na stronę:"
+
+#: templates/employees/employee_detail.html:295
+msgid "Employee not found"
+msgstr "Nie odnaleziono pracownika"
+
+#: templates/employees/employee_detail_table.html:8
+msgid "Month and year"
+msgstr "Miesiąc i rok"
+
+#: templates/employees/employee_detail_table.html:16
+msgid "Sort by most recent months"
+msgstr "Sortuj według najnowszych miesięcy"
+
+#: templates/employees/employee_detail_table.html:25
+msgid "Sort by least recent months"
+msgstr "Sortuj według najstarszych miesięcy"
+
+#: templates/employees/employee_detail_table.html:29
+msgid "Hours worked"
+msgstr "Przepracowane godziny"
+
+#: templates/employees/employee_detail_table.html:37
+msgid "Sort by hours worked ascending"
+msgstr "Sortuj po przepracowanych godzinach rosnąco"
+
+#: templates/employees/employee_detail_table.html:46
+msgid "Sort by hours worked descending"
+msgstr "Sortuj po przepracowanych godzinach malejąco"
+
+#: templates/employees/employee_detail_table.html:50
+msgid "Rate per hour"
+msgstr "Stawka godzinowa"
+
+#: templates/employees/employee_detail_table.html:58
+msgid "Sort by rate per hour ascending"
+msgstr "Sortuj po stawce godzinowej rosnąco"
+
+#: templates/employees/employee_detail_table.html:67
+msgid "Sort by rate per hour descending"
+msgstr "Sortuj po stawce godzinowej malejąco"
+
+#: templates/employees/employee_detail_table.html:71
+msgid "Was salary paid?"
+msgstr "Zapłacono?"
+
+#: templates/employees/employee_detail_table.html:74
+msgid "To be paid"
+msgstr "Do zapłacenia"
+
+#: templates/employees/employee_detail_table.html:82
+msgid "Sort by salary ascending"
+msgstr "Sortuj po wypłacie rosnąco"
+
+#: templates/employees/employee_detail_table.html:91
+msgid "Sort by salary descending"
+msgstr "Sortuj po wypłacie malejąco"
+
+#: templates/employees/employee_detail_table.html:110
+#: templates/employees/employee_detail_table.html:146
+#: templates/employees/employee_detail_table.html:183
+msgid "Hours approved"
+msgstr "Godziny zaakceptowane"
+
+#: templates/employees/employee_detail_table.html:114
+#: templates/employees/employee_detail_table.html:150
+#: templates/employees/employee_detail_table.html:187
+msgid "Approve hours for month"
+msgstr "Zaakceptuj godziny dla miesiąca"
+
+#: templates/employees/employee_detail_table.html:122
+#: templates/employees/employee_detail_table.html:159
+msgid "Not paid yet"
+msgstr "Niezapłacono"
+
+#: templates/employees/employee_detail_table.html:130
+#: templates/employees/employee_detail_table.html:167
+#: templates/employees/employee_detail_table.html:203
+msgid "Edit month"
+msgstr "Edycja miesiąca"
+
+#: templates/employees/employee_detail_table.html:133
+#: templates/employees/employee_detail_table.html:170
+#: templates/employees/employee_detail_table.html:206
+msgid "Delete month"
+msgstr "Usuń miesiąc"
+
+#: templates/employees/employee_detail_table.html:195
+msgid "Month paid"
+msgstr "Miesiąc opłacony"
+
+#: templates/employees/employee_detail_table.html:226
+#: templates/employees/employee_detail_table.html:230
+#: templates/employees/employee_list_table.html:197
+#: templates/employees/employee_list_table.html:201
+msgid "Previous"
+msgstr "Poprzednia"
+
+#: templates/employees/employee_detail_table.html:252
+#: templates/employees/employee_detail_table.html:256
+#: templates/employees/employee_list_table.html:223
+#: templates/employees/employee_list_table.html:227
+msgid "Next"
+msgstr "Następna"
+
+#: templates/employees/employee_detail_table.html:267
+msgid "It looks like there are no months yet."
+msgstr "Wygląda na to, że żaden miesiąc nie został jeszcze dodany."
+
+#: templates/employees/employee_detail_table.html:269
+msgid "Add first month for this employee."
+msgstr "Dodaj pierwszy miesiąc dla tego pracownika."
+
+#: templates/employees/employee_form.html:5
+msgid "Employee"
+msgstr "Pracownik"
+
+#: templates/employees/employee_form.html:14
+msgid "New employee"
+msgstr "Nowy pracownik"
+
+#: templates/employees/employee_form.html:69
+#: templates/employees/month_approve.html:49
+#: templates/employees/month_edit_form.html:79
+#: templates/employees/month_form.html:62
+msgid "Submit"
+msgstr "Zatwierdź"
+
+#: templates/employees/employee_list.html:17
+msgid " Add employee"
+msgstr " Dodaj pracownika"
+
+#: templates/employees/employee_list.html:26
+msgid "Find employee: "
+msgstr "Wyszukaj pracownika: "
+
+#: templates/employees/employee_list.html:67
+msgid "Paid"
+msgstr "Opłaceni"
+
+#: templates/employees/employee_list.html:79
+msgid "Not paid"
+msgstr "Nieopłaceni"
+
+#: templates/employees/employee_list.html:112
+msgid "Employees per page:"
+msgstr "Ilość pracowników na stronę:"
+
+#: templates/employees/employee_list.html:165
+msgid "The list of employees is empty, you can change it by "
+msgstr "Lista pracowników jest pusta, możesz to zmienić poprzez "
+
+#: templates/employees/employee_list.html:165
+msgid "adding a new employee."
+msgstr "dodanie nowego pracownika."
+
+#: templates/employees/employee_list_table.html:7
+msgid "Full name"
+msgstr "Imię i nazwisko"
+
+#: templates/employees/employee_list_table.html:15
+msgid "Sort alphabetically ascending"
+msgstr "Sortuj alfabetycznie rosnąco"
+
+#: templates/employees/employee_list_table.html:24
+msgid "Sort alphabetically descending"
+msgstr "Sortuj alfabetycznie malejąco"
+
+#: templates/employees/employee_list_table.html:28
+msgid "Rate per hour "
+msgstr "Stawka godzinowa "
+
+#: templates/employees/employee_list_table.html:36
+msgid "Sort ascending"
+msgstr "Sortuj rosnąco"
+
+#: templates/employees/employee_list_table.html:45
+msgid "Sort descending"
+msgstr "Sortuj malejąco"
+
+#: templates/employees/employee_list_table.html:49
+msgid "Position"
+msgstr "Pozycja"
+
+#: templates/employees/employee_list_table.html:52
+msgid "Contract expiration date"
+msgstr "Data wygaśnięcia umowy"
+
+#: templates/employees/employee_list_table.html:60
+msgid "Sort by contract expiration date ascending"
+msgstr "Sortuj po dacie wygaśnięcia kontraktu rosnąco"
+
+#: templates/employees/employee_list_table.html:69
+msgid "Sort by contract expiration date descending"
+msgstr "Sortuj po dacie wygaśnięcia kontraktu malejąco"
+
+#: templates/employees/employee_list_table.html:73
+msgid "Health book expiration date"
+msgstr "Data wygaśnięcia książeczki zdrowia"
+
+#: templates/employees/employee_list_table.html:81
+msgid "Sort by health book expiration date ascending"
+msgstr "Sortuj po dacie wygaśnięcia książeczki zdrowia rosnąco"
+
+#: templates/employees/employee_list_table.html:90
+msgid "Sort by health book expiration date descending"
+msgstr "Sortuj po dacie wygaśnięcia książeczki zdrowia malejąco"
+
+#: templates/employees/employee_list_table.html:94
+msgid "Total unpaid salaries "
+msgstr "Suma niewypłaconych pensji "
+
+#: templates/employees/employee_list_table.html:102
+msgid "Sort by unpaid salaries ascending"
+msgstr "Sortuj po niewypłaconych wypłatach rosnąco"
+
+#: templates/employees/employee_list_table.html:111
+msgid "Sort by unpaid salaries descending"
+msgstr "Sortuj po niewypłaconych wypłatach malejąco"
+
+#: templates/employees/employee_list_table.html:135
+msgid "Contract expires in about"
+msgstr "Umowa wygaśnie za około"
+
+#: templates/employees/employee_list_table.html:135
+#: templates/employees/employee_list_table.html:151
+msgid "days."
+msgstr "dni."
+
+#: templates/employees/employee_list_table.html:138
+msgid "Contract expires within 24 hours!"
+msgstr "Umowa wygaśnie w ciągu 24 godzin!"
+
+#: templates/employees/employee_list_table.html:141
+msgid "Contract expired yesterday!"
+msgstr "Umowa wygasła wczoraj!"
+
+#: templates/employees/employee_list_table.html:144
+msgid "Contract expired"
+msgstr "Umowa wygasła"
+
+#: templates/employees/employee_list_table.html:144
+#: templates/employees/employee_list_table.html:160
+msgid "days ago!"
+msgstr "dni temu!"
+
+#: templates/employees/employee_list_table.html:151
+msgid "Health book expires in about"
+msgstr "Książeczka zdrowia wygaśnie za około"
+
+#: templates/employees/employee_list_table.html:154
+msgid "Health book expires within 24 hours!"
+msgstr "Książeczka zdrowia wygaśnie w ciągu 24 godzin!"
+
+#: templates/employees/employee_list_table.html:157
+msgid "Health book expired yesterday!"
+msgstr "Książeczka zdrowia wygasła wczoraj!"
+
+#: templates/employees/employee_list_table.html:160
+msgid "Health book expired"
+msgstr "Książeczka zdrowia wygasła"
+
+#: templates/employees/employee_list_table.html:171
+msgid "No salary data."
+msgstr "Brak danych."
+
+#: templates/employees/employee_list_table.html:186
+msgid "No matches found."
+msgstr "Nie znaleziono wyników."
+
+#: templates/employees/employee_list_table.html:238
+msgid ""
+"No employee meets the search criteria. Widen your search or check filter for "
+"typos."
+msgstr ""
+"Żaden z pracowników nie spełnia szukanych kryteriów. Zwiększ kryteria "
+"wyszukiwań albo sprawdź czy nie zrobiłeś/-aś literówki."
+
+#: templates/employees/month_approve.html:9
+msgid "Are you sure you want to approve this month?"
+msgstr "Czy na pewno chcesz zatwierdzić ten miesiąc?"
+
+#: templates/employees/month_approve.html:14
+msgid "Employee:"
+msgstr "Pracownik:"
+
+#: templates/employees/month_approve.html:21
+msgid "Month:"
+msgstr "Miesiąc:"
+
+#: templates/employees/month_approve.html:30
+msgid "Hours worked in this month:"
+msgstr "Godzin przepracowanych w tym miesiącu:"
+
+#: templates/employees/month_approve.html:38
+msgid "Rate per hour this month:"
+msgstr "Stawka godzinowa w tym miesiącu:"
+
+#: templates/employees/month_approve.html:50
+#: templates/employees/month_edit_form.html:80
+#: templates/employees/month_form.html:64
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: templates/employees/month_confirm_delete.html:21
+msgid "Are you sure you want to delete"
+msgstr "Czy na pewno chcesz usunąć"
+
+#: templates/employees/month_confirm_delete.html:23
+msgid "Any data related to this month will be lost forever."
+msgstr "Wszystkie dane związane z tym miesiącem zostaną usunięte bezpowrotnie."
+
+#: templates/employees/month_confirm_delete.html:28
+msgid "No, take me back to the employee detail"
+msgstr "Nie, zabierz mnie do strony pracownika"
+
+#: templates/employees/month_confirm_delete.html:36
+msgid "The month you are trying to delete does not exist anymore."
+msgstr "Miesiąc który próbujesz usunąć już nie istnieje."
+
+#: templates/employees/month_edit_form.html:5
+msgid "Editing month"
+msgstr "Edycja miesiąca"
+
+#: templates/employees/month_edit_form.html:16
+msgid "Editing"
+msgstr "Edytujesz"
+
+#: templates/employees/month_edit_form.html:16
+msgid "for"
+msgstr "dla"
+
+#: templates/employees/month_edit_form.html:49
+#: templates/employees/month_form.html:32
+msgid "Hours worked:"
+msgstr "Przepracowane godziny:"
+
+#: templates/employees/month_form.html:5
+msgid "Create new month"
+msgstr "Stwórz nowy miesiąc"
+
+#: templates/employees/month_form.html:10
+msgid "New month for"
+msgstr "Nowy miesiąc dla"
+
 #: templates/polishlody/base.html:7 templates/registration/login_base.html:7
 msgid "Welcome"
 msgstr "Witajcie"
@@ -231,14 +798,22 @@ msgstr "Sprawdź prognozę"
 msgid "Logged in as - "
 msgstr "Jesteś zalogowany jako - "
 
-#: templates/polishlody/base.html:62
+#: templates/polishlody/base.html:62 templates/polishlody/base.html:76
 #: templates/registration/change-password.html:9
 msgid "Change password"
 msgstr ""
 
-#: templates/polishlody/base.html:63
+#: templates/polishlody/base.html:63 templates/polishlody/base.html:71
 msgid "Log out"
 msgstr ""
+
+#: templates/polishlody/base.html:66
+msgid "Check weather forecast"
+msgstr "Sprawdź prognozę pogody"
+
+#: templates/polishlody/base.html:81
+msgid "Logged in as"
+msgstr "Zalogowany jako"
 
 #: templates/polishlody/base.html:85
 msgid "Log in"
@@ -255,10 +830,6 @@ msgstr "Gotowe"
 #: templates/registration/change-password-done.html:7
 msgid "Your password was changed."
 msgstr ""
-
-#: templates/registration/change-password-done.html:8
-msgid "Back to dashboard"
-msgstr "Powrót do tablicy"
 
 #: templates/registration/change-password.html:4
 msgid "Password change"
@@ -544,3 +1115,16 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
+
+#~ msgid " Previous"
+#~ msgstr " Poprzednia"
+
+#, fuzzy
+#~| msgid "Back to the employee list"
+#~ msgid "Back to employee list"
+#~ msgstr "Powrót do listy pracowników"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgid "Don"
+#~ msgstr "Gotowe"

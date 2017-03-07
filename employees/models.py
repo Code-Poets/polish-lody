@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from datetime import date
 from django.db import models, transaction
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 import time
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
 from users.models import MyUser
@@ -21,31 +22,31 @@ def is_expiring(exp_date):
 class Employee(MyUser):
 
     gender_choices = (
-        ("Male", "Male"),
-        ("Female", "Female"),
+        ("Male", _("Male")),
+        ("Female", _("Female")),
     )
     position_choices = (
-        ("Production", "Production"),
-        ("Sale", "Sale"),
-        ("Other", "Other"),
+        ("Production", _("Production")),
+        ("Sale", _("Sale")),
+        ("Other", _("Other")),
     )
     contract_choices = (
-        ("Fixed-term employment contract", "Fixed-term employment contract"),
-        ("Non-fixed-term employment contract", "Non-fixed-term employment contract"),
-        ("Other", "Other"),
+        ("Fixed-term employment contract", _("Fixed-term employment contract")),
+        ("Non-fixed-term employment contract", _("Non-fixed-term employment contract")),
+        ("Other", _("Other")),
     )
 
-    rate_per_hour = models.DecimalField(max_digits=7, decimal_places=2, blank=True, default=0, validators=[
+    rate_per_hour = models.DecimalField(_('rate per hour'),max_digits=7, decimal_places=2, blank=True, default=0, validators=[
         MinValueValidator(0)
     ])
-    contract_start_date = models.DateField(blank=True, default=timezone.now, null=True)# alter if needed
-    contract_exp_date = models.DateField(blank=True, default=None, null=True)
-    health_book_exp_date = models.DateField(blank=True, default=None, null=True)
-    gender = models.CharField(max_length=16, null=True, blank=True, default=None,
+    contract_start_date = models.DateField(_('contract start date'),blank=True, default=timezone.now, null=True)# alter if needed
+    contract_exp_date = models.DateField(_('contract exp date'),blank=True, default=None, null=True)
+    health_book_exp_date = models.DateField(_('health book exp date'),blank=True, default=None, null=True)
+    gender = models.CharField(_('gender'),max_length=16, null=True, blank=True, default=None,
                               choices=gender_choices)
-    position = models.CharField(max_length=16, null=True, blank=True, default=None,
+    position = models.CharField(_('position'),max_length=16, null=True, blank=True, default=None,
                               choices=position_choices)
-    contract_type = models.CharField(blank=True, null=True, default=None, max_length=64,
+    contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
 
     def months_dict(self):
@@ -89,35 +90,35 @@ class Employee(MyUser):
 class Month(models.Model):
 
     month_choices = (
-        (1, "January"),
-        (2, "February"),
-        (3, "March"),
-        (4, "April"),
-        (5, "May"),
-        (6, "June"),
-        (7, "July"),
-        (8, "August"),
-        (9, "September"),
-        (10, "October"),
-        (11, "November"),
-        (12, "December"),
+        (1, _("January")),
+        (2, _("February")),
+        (3, _("March")),
+        (4, _("April")),
+        (5, _("May")),
+        (6, _("June")),
+        (7, _("July")),
+        (8, _("August")),
+        (9, _("September")),
+        (10, _("October")),
+        (11, _("November")),
+        (12, _("December")),
     )
     bool_choices = (
-        (True, 'Yes'),
-        (False, 'No'),
+        (True, _('Yes')),
+        (False, _('No')),
         )
     default_year = date.today().year
     default_month = date.today().month
     months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
                    7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
-    year = models.PositiveIntegerField(default=default_year, validators=[MaxValueValidator(9999)])
+    year = models.PositiveIntegerField(_('year'),default=default_year, validators=[MaxValueValidator(9999)])
     employee = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
-    month = models.IntegerField(choices=month_choices, default=default_month, verbose_name=u'Month')
-    salary_is_paid = models.BooleanField(default=False, verbose_name=u'Paid?', choices=bool_choices)
-    hours_worked_in_this_month = models.DecimalField(decimal_places=1, max_digits=4, default=0,
+    month = models.IntegerField(_(u'Month'),choices=month_choices, default=default_month)
+    salary_is_paid = models.BooleanField(_(u'Paid?'),default=False, choices=bool_choices)
+    hours_worked_in_this_month = models.DecimalField(_('hours worked in this month'),decimal_places=1, max_digits=4, default=0,
                                                     validators=[MaxValueValidator(720), MinValueValidator(0)])
-    month_is_approved = models.BooleanField(default=False, verbose_name=u'Approved?', choices=bool_choices)
-    rate_per_hour_this_month = models.DecimalField(decimal_places=2, max_digits=7, default=0,
+    month_is_approved = models.BooleanField(_(u'Approved?'),default=False, choices=bool_choices)
+    rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'),decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
 
     def __str__(self):

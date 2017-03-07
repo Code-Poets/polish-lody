@@ -1,11 +1,12 @@
 {% extends 'polishlody/base.html' %}
+{% load i18n %}
 
-{% block title %}Employee list{% endblock %}
+{% block title %}{% trans 'Employee list' %}{% endblock %}
 
 {% block header_block %}
 <div class="panel panel-heading panel-default">
     <center>
-        <h4>Employee list</h4>
+        <h4>{% trans 'Employee list' %}</h4>
     </center>
 </div>
 {% endblock %}
@@ -13,7 +14,7 @@
 {% if all_employee_list is not None %}
     <div>
         <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add employee</a><br><br>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a><br><br>
 
                     <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
@@ -22,7 +23,7 @@
         <div class="filter-forms">
             <ul class="filters">
                 <li class="filter">
-                    Find employee: <input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
+                    {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
                 </li>
                 <li class="filter">
                     {% if position_sale %}
@@ -31,7 +32,7 @@
                         <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
                     {% endif %}
                     <label class="my-button clickable" for="pos_sale">
-                        Sale
+                        {% trans 'Sale' %}
                     </label>
                 </li>
                 <li class="filter" class="filter">
@@ -41,7 +42,7 @@
                         <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success" name="position_production">
                     {% endif %}
                     <label class="my-button clickable" for="pos_production">
-                        Production
+                        {% trans 'Production' %}
                     </label>
                 </li>
                 <li class="filter">
@@ -51,7 +52,7 @@
                         <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
                     {% endif %}
                     <label class="my-button clickable" for="pos_other">
-                        Other
+                        {% trans 'Other' %}
                     </label>
                 </li>
                 <li class="filter">
@@ -63,7 +64,7 @@
                            name="hide_zero_salary_months" />
                     {% endif %}
                     <label class="my-button clickable" for="chk_paid">
-                        Paid
+                        {% trans 'Paid' %}
                     </label>
                 </li>
                 <li class="filter">
@@ -75,13 +76,13 @@
                            name="hide_paid_employees_filter" />
                     {% endif %}
                     <label class="my-button clickable" for="chk_unpaid">
-                        Not paid
+                        {% trans 'Not paid' %}
                     </label>
                 </li>
                 <li class="filter">
                     <input class="vis-hidden" type="checkbox" value="Clear filters"/>
                     <label class="my-button reset-filters">
-                        Reset filters
+                        {% trans 'Reset filters' %}
                     </label>
                 </li>
                 <li class="filter">
@@ -108,7 +109,7 @@
 {% block footer_block %}
     {% if all_employee_list %}
     <div>
-        <span>Employees per page:</span><br/>
+        <span>{% trans 'Employees per page:' %}</span><br/>
         <ul class="pagination paginate">
             {% for number in paginate_by_numbers %}
                 {% if current_paginate_by_number == number %}
@@ -161,6 +162,6 @@
         }
     </script>
     {% elif not messages %}
-    <p>The list of employees is empty, you can change it by <a href="{% url 'employee_new' %}">adding a new employee.</a></p>
+    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
     {% endif %}
 {% endblock %}

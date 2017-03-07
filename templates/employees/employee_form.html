@@ -1,17 +1,18 @@
 {% extends 'polishlody/base.html' %}
 {% load widget_tweaks %}
+{% load i18n %}
 
-{% block title %}Employee{% endblock %}
+{% block title %}{% trans 'Employee' %}{% endblock %}
 {% block header_block %}
 <div class="panel panel-heading panel-default">
     <h4>
         <center>
             {% if employee %}
                 {{ employee.full_name }}
-            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">Back</a>
+            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
             {% else %}
-                New employee
-            <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
+                {% trans 'New employee' %}
+            <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
             {% endif %}
         </center>
     </h4>
@@ -41,7 +42,7 @@
                 {% endif %}
                 {% for e in form %}
                     <div class="form-group">
-                        {% if e.label == 'Email address' or e.label == 'First name' or e.label == 'Last name' %}
+                        {% if e.html_name == 'email' or e.html_name == 'first_name' or e.html_name == 'last_name' %}
                         <label class="col-sm-4 control-label">{{ e.label }}<span class="required"> *</span></label>
                         <div class="input-group col-sm-6">
                             {{ e|add_class:"form-control" }}
@@ -49,7 +50,7 @@
                                 <span class="glyphicon glyphicon-remove icon-false verify-email"></span>
                             {% endif %}
                         </div>
-                        {% elif e.label == 'Contract start date' or e.label == 'Contract exp date' or e.label == 'Health book exp date' %}
+                        {% elif e.html_name == 'contract_start_date' or e.html_name == 'contract_exp_date' or e.html_name == 'health_book_exp_date' %}
                         <label class="col-sm-4 control-label">{{ e.label }}</label>
                         <div class="input-group col-sm-6">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -65,9 +66,9 @@
                 {% endfor %}
                 <br>
                 <center>
-                    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                    <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
                     {% if employee and user.is_staff %}
-                        <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger">Delete employee</a>
+                        <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger">{% trans 'Delete employee' %}</a>
                     {% else %}
                     {% endif %}
                 </center>

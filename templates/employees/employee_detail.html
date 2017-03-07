@@ -1,20 +1,21 @@
 {% extends 'polishlody/base.html' %}
+{% load i18n %}
 
-{% block title %}Details{% endblock %}
+{% block title %}{% trans 'Details' %}{% endblock %}
 
 {% block header_block %}
     <div class="panel panel-heading panel-default">
         <h4>{{ employee.full_name }}
         {% if user.is_staff %}
             <a href="{% url 'employee_edit' employee.id %}">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true" title="Edit employee"></span>
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true" title="{% trans 'Edit employee' %}"></span>
             </a>
             <a href="{% url 'employee_delete' employee.id %}"> 
-                <span class="glyphicon glyphicon-trash" title="Delete employee"></span>
+                <span class="glyphicon glyphicon-trash" title="{% trans 'Delete employee' %}"></span>
             </a>
         {% endif %}
         </h4>
-        <a href="{% url 'employees' %}" class="btn btn-default">Back</a>
+        <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
     </div>
 {% endblock %}
 {% block body_block %}
@@ -23,7 +24,7 @@
             <table class="table">
                 <tr>
                     <td>
-                        Email:
+                        {% trans 'Email:' %}
                     </td>
                     <td>
                         {{ employee.email }}
@@ -31,31 +32,31 @@
                 </tr>
                 <tr>
                     <td>
-                        Rate per hour:
+                        {% trans 'Rate per hour:' %}
                     </td>
                     <td>
                         {% if employee.rate_per_hour %}
                             {{ employee.rate_per_hour }}zł
                         {% else %}
-                            Not specified
+                            {% trans 'Not specified' %}
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Contract start date:
+                        {% trans 'Contract start date:' %}
                     </td>
                     <td>
                         {% if employee.contract_start_date %}
                         {{ employee.contract_start_date }}
                         {% else %}
-                            Not specified
+                            {% trans 'Not specified' %}
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Contract expiration date:
+                        {% trans 'Contract expiration date:' %}
                     </td>
                     <td>
                         {% if employee.contract_exp_date %}
@@ -71,13 +72,13 @@
                                     class="glyphicon glyphicon-warning-sign employee-detail"></span>
                             {% endif %}
                         {% else %}
-                            Not specified
+                            {% trans 'Not specified' %}
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Health book expiration date:
+                        {% trans 'Health book expiration date:' %}
                     </td>
                     {% if employee.is_health_book_expiring %}
                     <td>
@@ -95,31 +96,39 @@
                     </td>
                     {% else %}
                     <td>
-                        {{ employee.health_book_exp_date }}
+                        {% trans 'Not specified' %}
                     </td>
                     {% endif %}
                 </tr>
                 <tr>
                     <td>
-                        Position:
+                        {% trans 'Position:' %}
                     </td>
                     <td>
-                        {{ employee.position }}
+                        {% if employee.get_position_display %}
+                            {{ employee.get_position_display }}
+                        {% else %}
+                            {% trans 'Not specified' %}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Contract type:
+                        {% trans 'Contract type:' %}
                     </td>
                     <td>
-                        {{ employee.contract_type }}
+                        {% if employee.get_position_display %}
+                            {{ employee.get_contract_type_display }}
+                        {% else %}
+                            {% trans 'Not specified' %}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
         </div>
     <div>
         {% if user.is_staff %}
-            <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Month</a>
+            <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add Month' %}</a>
         {% endif %}
         <img class="loading-icon" src="../../static/images/loading-icon.svg">
         <br><br>
@@ -130,7 +139,7 @@
     {% if years %}
         <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" action="{% url 'employee_detail' employee.id %}">
             <div class="filter-forms">
-            <span>Show year:</span>
+            <span>{% trans 'Show year:' %}</span>
                 {% if selected_years %}
                     <div class="filter-forms">
                         <ul class="filters">
@@ -150,12 +159,12 @@
                                 {% if years_hidden %}
                                 <li class="filter">
                                     <button type="button" class="my-button dont-show-those" id="hide-btn">
-                                        <b>Expand year options</b>
+                                        <b>{% trans 'Expand year options' %}</b>
                                     </button>
                                 </li>
                                 <li class="filter">
                                     <button type="button" class="my-button" id="collapse-btn">
-                                        <b>Collapse list</b>
+                                        <b>{% trans 'Collapse list' %}</b>
                                     </button>
                                 </li>
                                 {% endif %}
@@ -188,12 +197,12 @@
                                 {% if years_hidden %}
                                 <li class="filter">
                                     <button type="button" class="my-button" id="hide-btn">
-                                        <b>Expand year options</b>
+                                        <b>{% trans 'Expand year options' %}</b>
                                     </button>
                                 </li>
                                 <li class="filter">
                                     <button type="button" class="my-button dont-show-those" id="collapse-btn">
-                                        <b>Collapse list</b>
+                                        <b>{% trans 'Collapse list' %}</b>
                                     </button>
                                 </li>
                                 {% endif %}
@@ -212,12 +221,12 @@
                                 {% if years_hidden %}
                                 <li class="filter">
                                     <label class="my-button" id="hide-btn">
-                                        <b>Expand year options</b>
+                                        <b>{% trans 'Expand year options' %}</b>
                                     </label>
                                 </li>
                                 <li class="filter">
                                     <label class="my-button dont-show-those" id="collapse-btn">
-                                        <b>Collapse list</b>
+                                        <b>{% trans 'Collapse list' %}</b>
                                     </label>
                                 </li>
                                 {% endif %}
@@ -230,7 +239,7 @@
                                 <input id="paid_months" type="checkbox" class="vis-hidden"
                                        name="hide_unpaid_months_filter" />
                                 {% endif %}
-                                <label class="my-button clickable" for="paid_months">Hide unpaid months.</label>
+                                <label class="my-button clickable" for="paid_months">{% trans 'Hide unpaid months.' %}</label>
                             </li>
                             <li class="filter">
                                 {% if hide_paid_months_filter %}
@@ -240,11 +249,11 @@
                                 <input id="unpaid_months" type="checkbox"  class="vis-hidden"
                                        name="hide_paid_months_filter" />
                                 {% endif %}
-                                <label class="my-button clickable" for="unpaid_months">Hide paid months.</label>
+                                <label class="my-button clickable" for="unpaid_months">{% trans 'Hide paid months.' %}</label>
                             </li>
                             <li class="filter">
                                 <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-                                <label class="my-button clickable" onclick="uncheckFilters();">Reset filters</label>
+                                <label class="my-button clickable" onclick="uncheckFilters();">{% trans 'Reset filters' %}</label>
                             </li>
                             <br/>
                             <select hidden name="per_page">
@@ -262,7 +271,7 @@
     {% include 'employees/employee_detail_table.html' %}
     {% if years is not False %}
     <div>
-        <span>Months per page:</span><br/>
+        <span>{% trans 'Months per page:' %}</span><br/>
         <ul class="pagination paginate">
             {% for number in paginate_by_numbers %}
                 {% if current_paginate_by_number == number %}
@@ -283,7 +292,7 @@
     </div>
     {% endif %}
     {% else %}
-        <p>Employee not found</p><br/>
+        <p>{% trans 'Employee not found' %}</p><br/>
     {% endif %}
     <script>
         $(document).ready(function(e) {

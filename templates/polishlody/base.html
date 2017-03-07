@@ -61,24 +61,30 @@
                         <li><span id="logged-in">{% trans 'Logged in as - ' %}{{ user.email }}</span>
                         <li><a href="{% url 'password_change' %}">{% trans 'Change password' %}</a></li>
                         <li><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
+                        {% get_current_language as LANGUAGE_CODE %}
+                        <li>{% if LANGUAGE_CODE == "en" %}
+                            <a href="/pl{{ request.get_full_path|slice:'3:'}}"><img src="{% static 'images/United-States-icon.png' %}"></a>
+                        {% else %}
+                            <a href="/en{{ request.get_full_path|slice:'3:'}}"><img src="{% static 'images/Poland-icon.png' %}"></a>
+                        {% endif %}</li>
                         <li class="icon">
                             <a href="{% url 'weather_forecast' %}">
-                                <span class="glyphicon glyphicon-cloud responsive-icon" title="Check weather forecast"></span>
+                                <span class="glyphicon glyphicon-cloud responsive-icon" title="{% trans 'Check weather forecast' %}"></span>
                             </a>
                         </li>
                         <li class="icon">
                             <a href="{% url 'logout' %}">
-                                <span class="glyphicon glyphicon-off responsive-icon" title="Log out"></span>
+                                <span class="glyphicon glyphicon-off responsive-icon" title="{% trans 'Log out' %}"></span>
                             </a>
                         </li>
                         <li class="icon">
                             <a href="{% url 'password_change' %}">
-                                <span class="glyphicon glyphicon-edit responsive-icon" title="Change password"></span>
+                                <span class="glyphicon glyphicon-edit responsive-icon" title="{% trans 'Change password' %}"></span>
                             </a>
                         </li>
                         <li class="icon">
                             <a>
-                                <span class="glyphicon glyphicon-user responsive-icon" title="Logged in as {{ user.email }}"></span>
+                                <span class="glyphicon glyphicon-user responsive-icon" title="{% trans 'Logged in as' %} {{ user.email }}"></span>
                             </a>
                         </li>
                         {% else %}
