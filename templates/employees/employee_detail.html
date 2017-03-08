@@ -61,15 +61,18 @@
                     <td>
                         {% if employee.contract_exp_date %}
                             {{ employee.contract_exp_date }}
-                            {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
-                                <span title="Contract expires in about {{ employee.is_contract_expiring }} days."
-                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                                {% elif employee.is_contract_expiring == 0 %}
-                                <span title="Contract expires within 24 hours!"
-                                    class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                                {% elif employee.is_contract_expiring.1 %}
-                                <span title="Contract expired {{ employee.is_contract_expiring.1 }} days ago!"
-                                    class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                            {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}
+                                <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"
+                                    class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
+                                <span title="{% trans 'Contract expires within 24 hours!' %}"
+                                    class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring.1 == 1%}
+                                <span title="{% trans 'Contract expired yesterday!' %}"
+                                    class="glyphicon glyphicon-warning-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring.1 %}
+                                <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
+                                    class="glyphicon glyphicon-warning-sign employee-list"></span>
                             {% endif %}
                         {% else %}
                             {% trans 'Not specified' %}
@@ -84,14 +87,17 @@
                     <td>
                         {{ employee.health_book_exp_date }}
                         {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
-                            <span title="Health book expires in about {{ employee.is_health_book_expiring }} days."
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_health_book_expiring == 0 %}
-                            <span title="Health book expires within 24 hours!"
-                                class="glyphicon glyphicon-exclamation-sign employee-detail"></span>
-                            {% elif employee.is_health_book_expiring.1 %}
-                            <span title="Health book expired {{ employee.is_health_book_expiring.1 }} days ago!"
-                                class="glyphicon glyphicon-warning-sign employee-detail"></span>
+                            <span title="{% trans 'Health book expires in about' %} {{ employee.is_health_book_expiring }} {% trans 'days.' %}"
+                                class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                        {% elif employee.is_health_book_expiring == 0 and warning_x_days_left %}
+                            <span title="{% trans 'Health book expires within 24 hours!' %}"
+                                class="glyphicon glyphicon-exclamation-sign employee-list "></span>
+                        {% elif employee.is_health_book_expiring.1 == 1 %}
+                            <span title="{% trans 'Health book expired yesterday!' %}"
+                                class="glyphicon glyphicon-warning-sign employee-list "></span>
+                        {% elif employee.is_health_book_expiring.1 %}
+                            <span title="{% trans 'Health book expired' %} {{ employee.is_health_book_expiring.1 }} {% trans 'days ago!' %}"
+                                class="glyphicon glyphicon-warning-sign employee-list "></span>
                         {% endif %}
                     </td>
                     {% else %}
