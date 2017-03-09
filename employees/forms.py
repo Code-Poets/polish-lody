@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 from django import forms
 from functools import partial
 from datetime import datetime 
+from django.core.exceptions import ValidationError
 
 dateinput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -19,7 +20,7 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
 class EmployeeForm(AuthUserCreationForm):
 
     def __init__(self, *args, **kwargs):
-        super(EmployeeForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['password1'].required = False
         self.fields['password2'].required = False
         # If one field gets autocompleted but not the other, our 'neither
@@ -29,16 +30,29 @@ class EmployeeForm(AuthUserCreationForm):
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
-        password2 = super(EmployeeForm, self).clean_password2()
+        password2 = super().clean_password2()
         if bool(password1) ^ bool(password2):
             raise forms.ValidationError("Fill out both fields")
         return password2
 
+    address_city = forms.CharField(max_length = 50, required = False)
+    
+    def clean_address_city(self):
+        import ipdb;ipdb.set_trace()
+        value = self.cleaned_data['address_city']
+        try:
+            value = City.objects.get(name = value)
+        except:
+            raise ValidationError('Please type a valid city as provided by the list of suggestions')
+        return value    
+
     class Meta:
         model = Employee
+
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
          'address_street', 'address_zip_code', 'address_city']
+
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
@@ -51,23 +65,33 @@ class EmployeeForm(AuthUserCreationForm):
         }
 
 class EmployeeChangeForm(ModelForm):
-    #def __init__(self, *args, **kwargs):
-    #super().__init__(*args, **kwargs)
+
+    address_city = forms.CharField(max_length = 50, required = False)
+    
+    def clean_address_city(self):
+        import ipdb;ipdb.set_trace()
+        value = self.cleaned_data['address_city']
+        try:
+            value = City.objects.get(name = value)
+        except:
+            raise ValidationError('Please type a valid city as provided by the list of suggestions')
+        return value    
 
     class Meta:
         model = Employee
+
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
          'address_street', 'address_zip_code', 'address_city']
-        widgets = {
 
-                    'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
-                    'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
-                    'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
-                    'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'}),
-                    'address_city'          : forms.TextInput()
+        widgets = {
+            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
+            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
+            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
+            'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
+            'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
+            'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'}),
+            'address_city'          : forms.TextInput()
         }
 
 class MonthForm(ModelForm):

@@ -52,7 +52,10 @@
                         {{ form.health_book_exp_date.errors }}
                         {{ form.bank_account_number.errors }}
                         {{ form.phone_contact_number.errors }}
-                        {{ form.address_zip_code.errors }}
+                        {{ form.address_zip_code.errors }} 
+                        {% if form.address_city.errors %}
+                        Please type a valid city as provided by the list of suggestions
+                        {% endif %}                   
                     </div>
                 {% endif %}
                 {% for e in form %}

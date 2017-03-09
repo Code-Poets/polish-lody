@@ -67,7 +67,7 @@ def zip_check(zip_code):
 
 class City(models.Model):
 
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length = 50, null = True, blank = True, default = None, unique = True)
 
     def __str__(self):
         return self.name
@@ -102,14 +102,14 @@ class Employee(MyUser):
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
     bank_account_number = models.CharField(max_length = 32, blank = True, null = True, default = None, validators = [sanity_check])
-
+ 
     phone_contact_number = models.CharField(max_length = 15, blank = True, null = True, default = None)
 
     address_street = models.CharField(max_length = 16, null=True, blank=True, default=None)
 
     address_zip_code = models.CharField(max_length = 6, blank = True, null = True, default = None, validators = [zip_check])
 
-    address_city = models.ForeignKey(City, null=True, blank=True, on_delete = models.CASCADE) #limit_choices_to = limit_city_choices)
+    address_city = models.ForeignKey(City, max_length = 26, null=True, blank=True, default = None)
 
     def months_dict(self):
         months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',

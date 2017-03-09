@@ -38,7 +38,6 @@ def ajax_autocomplete(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
-
 def ajax_verify_email(request):
     if request.POST and request.is_ajax():
         email = request.POST.get('email')
@@ -167,8 +166,8 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 **response_kwargs
             )
         else:
-            response = super(EmployeeList, self).render_to_response(context, **response_kwargs)
-            return super(EmployeeList, self).render_to_response(context, **response_kwargs)
+            response = super().render_to_response(context, **response_kwargs)
+            return super().render_to_response(context, **response_kwargs)
 
     def get_paginate_by(self, queryset):
         try:
@@ -178,7 +177,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         return per_page
 
     def get_context_data(self, **kwargs):
-        context = super(EmployeeList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         employee_list = context['all_employee_list']
         paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
         page = self.request.GET.get('page')
@@ -292,8 +291,8 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 **response_kwargs
             )
         else:
-            response = super(EmployeeDetail, self).render_to_response(context, **response_kwargs)
-            return super(EmployeeDetail, self).render_to_response(context, **response_kwargs)
+            response = super().render_to_response(context, **response_kwargs)
+            return super().render_to_response(context, **response_kwargs)
 
     def get_paginate_by(self, queryset):
         try:
@@ -362,7 +361,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         return month_queryset
 
     def get_context_data(self, **kwargs):
-        context = super(EmployeeDetail, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         month_list = context['object_list']
         context['employee'] = Employee.objects.get(pk=self.kwargs.get('pk'))
         paginator = Paginator(month_list, self.get_paginate_by(month_list))
@@ -417,10 +416,10 @@ class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         else:
             reset_password = False
 
-        super(EmployeeCreate, self).form_valid(form)
+        super().form_valid(form)
 
         try:
-            form_validation = super(EmployeeCreate, self).form_valid(form)
+            form_validation = super().form_valid(form)
             if reset_password:
                 reset_form = PasswordResetForm({'email': obj.email})
                 assert reset_form.is_valid()
@@ -443,7 +442,7 @@ class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
-    #import ipdb;ipdb.set_trace()
+    
     model = Employee
     form_class = EmployeeChangeForm
     success_url = reverse_lazy('employees')
@@ -451,13 +450,24 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def get_queryset(self, **kwargs):
         try:
-            return Employee.objects.filter(pk=self.kwargs['pk'])
+            return Employee.objects.filter(pk=self.kwargs['pk'])        
         except:
             messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
             return HttpResponseRedirect('../')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial = initial.copy()
+        employee_object = self.get_queryset()
+        city_object = employee_object[0].address_city
+        initial['address_city'] = city_object
+        
+        return initial
+
     def form_valid(self, form, **kwargs):
-        form_validation = super(EmployeeUpdate, self).form_valid(form)
+        
+        form_validation = super().form_valid(form)
+
         messages.add_message(self.request, messages.SUCCESS,
             "Changes saved for employee %s." % (self.get_queryset().first()))
         return form_validation
@@ -472,12 +482,12 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         self.employee_object = Employee.objects.get(pk=self.kwargs['pk'])
-        context = super(MonthCreate, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['employee'] = self.employee_object
         return context
 
     def get_initial(self):
-        initial = super(MonthCreate, self).get_initial()
+        initial = super().get_initial()
         initial = initial.copy()
         employee_object = Employee.objects.get(pk=self.kwargs['pk'])
         initial['rate_per_hour_this_month'] = employee_object.rate_per_hour
@@ -485,11 +495,21 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         return initial
 
     def form_valid(self, form, **kwargs):
-        form_validation = super(MonthCreate, self).form_valid(form)
-        messages.add_message(self.request, messages.SUCCESS,
-                            "Successfully created month %s in year %s" %
-                            (self.object.month_name(), self.object.year))
-        return form_validation
+        employee_object = Employee.objects.get(pk=self.kwargs['pk'])
+        form.employee = employee_object.full_name()
+        self.object = form.save(commit=False)
+        try:
+            form_validation = super().form_valid(form)
+            messages.add_message(self.request, messages.SUCCESS,
+                                 "Successfully created month %s in year %s" %
+                                 (self.object.month_name(), self.object.year))
+            return form_validation
+        except:
+            if "already exists" in str(form.errors):
+                messages.add_message(self.request, messages.ERROR,
+                                     "Specified month has already been assigned to employee %s." %
+                                     (employee_object.full_name()))
+            return HttpResponseRedirect('')
 
     def form_invalid(self, form, **kwargs):
         response = super(MonthCreate, self).form_invalid(form, **kwargs)
@@ -522,7 +542,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         try:
-            context = super(MonthUpdate, self).get_context_data(**kwargs)
+            context = super().get_context_data(**kwargs)
             employee_object = self.get_object().employee
             context['employee'] = employee_object           
             return context
@@ -531,7 +551,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             return HttpResponseRedirect('../')
 
     def form_valid(self, form, **kwargs):
-        form_validation = super(MonthUpdate, self).form_valid(form)
+        form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
                             "Successfully edited month %s in year %s." %
                             (self.object.month_name(), self.object.year))
@@ -570,7 +590,7 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         try:
-            context = super(MonthApprove, self).get_context_data(**kwargs)
+            context = super().get_context_data(**kwargs)
             employee_object = self.get_object().employee
             context['employee'] = employee_object
             return context
@@ -579,13 +599,13 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
             return HttpResponseRedirect('../')
 
     def get_initial(self):
-        initial = super(MonthApprove, self).get_initial()
+        initial = super().get_initial()
         initial = initial.copy()
         initial['month_is_approved'] = True
         return initial
 
     def form_valid(self, form):
-        form_validation = super(MonthApprove, self).form_valid(form)
+        form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
                             "Successfully approved month %s in year %s." %
                             (self.object.month_name(), self.object.year))
@@ -626,7 +646,7 @@ class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             return '../'
 
     def get_context_data(self, **kwargs):
-        context = super(MonthDelete, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         try:
             employee_object = self.get_object().employee
             context['employee'] = employee_object
