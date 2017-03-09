@@ -60,7 +60,7 @@ class EmployeeForm(AuthUserCreationForm):
             'rate_per_hour'         : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
-            'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'})
+            'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
             'address_city'          : forms.TextInput()
         }
 
@@ -90,7 +90,7 @@ class EmployeeChangeForm(ModelForm):
             'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
-            'address_zip_code'      : forms.TextInput(attrs = {'title' : ' __-___'}),
+            'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
             'address_city'          : forms.TextInput()
         }
 

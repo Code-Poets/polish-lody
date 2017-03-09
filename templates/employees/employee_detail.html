@@ -125,58 +125,49 @@
                     <td>
                         {% if employee.get_position_display %}
                             {{ employee.get_contract_type_display }}
+                        {% else %}
+                            {% trans 'Not specified' %}
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Address city
+                        Bank account number:
+                    </td>
+                    <td>
+                        {{ employee.bank_account_number }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Phone contact number:
+                    </td>
+                    <td>
+                        {{ employee.address_phone_contact_number }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address - street:
+                    </td>
+                    <td>
+                        {{ employee.address_street }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address - zip-code:
+                    </td>
+                    <td>
+                        {{ employee.address_zip_code }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address - city:
                     </td>
                     <td>
                         {{ employee.address_city }}
-                    </td>
-                </tr>
-                </table>
-                {% if user.is_staff %}
-                    <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Month</a><br><br>
-                {% endif %}
-            </div>
-            <a name="month-table"></a>
-            <center>
-                <img class="loading-icon" src="../../static/images/loading-icon.svg">
-            </center>
-            <div class="panel-body">
-            {% if years %}
-            <div class="panel-body filter-forms">
-                <form>
-                    <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-                    <label class="my-button clickable" onclick="uncheckFilters();">Clear filters</label>
-                </form>
-            <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" action="{% url 'employee_detail' employee.id %}">
-                <span>Show year:</span>
-                    {% if selected_years %}
-                        {% if years_5 %}
-                            {% for year in years %}
-                                {% if year in selected_years %}
-                                    <input id="year_{{ year }}" checked type="checkbox" class="vis-hidden clickable"
-                                           name="yr{{ year }}" />
-                                {% else %}
-                                    <input id="year_{{ year }}" type="checkbox" class="vis-hidden clickable"
-                                           name="yr{{ year }}" />
-                                {% endif %}
-                                    <label class="my-button clickable" id="{{ year }}" for="year_{{ year }}">{{ year }}</label>
-                            {% endfor %}
-                            {% if years_hidden %}
-                                <button type="button" class="my-button dont-show-those" id="hide-btn">
-                                    <b>Expand year options</b>
-                                </button>
-                                <button type="button" class="my-button" id="collapse-btn">
-                                    <b>Collapse list</b>
-                                </button>
-                            {% endif %}
-                        {% else %}
-                            {% trans 'Not specified' %}
-                        {% endif %}
                     </td>
                 </tr>
             </table>
