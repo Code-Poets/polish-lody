@@ -617,7 +617,7 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR,
                                 "Specified month has already been assigned to employee %s." %
                                 (employee_object.full_name()))
-        return super(MonthApprove, self).form_invalid(form, **kwargs)
+        return super().form_invalid(form, **kwargs)
 
 class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Employee
