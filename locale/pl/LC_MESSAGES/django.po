@@ -857,6 +857,30 @@ msgstr "Witajcie"
 msgid "Weather in Wrocław:"
 msgstr "Pogoda we Wrocławiu:"
 
+#: templates/polishlody/base.html:44
+msgid "temp"
+msgstr "temp"
+
+#: templates/polishlody/base.html:45
+msgid "feels like"
+msgstr "odczuwalna"
+
+#: templates/polishlody/base.html:46
+msgid "pressure"
+msgstr "ciśnienie"
+
+#: templates/polishlody/base.html:47
+msgid "humidity"
+msgstr "wilgotność"
+
+#: templates/polishlody/base.html:48
+msgid "wind"
+msgstr "wiatr"
+
+#: templates/polishlody/base.html:49
+msgid "cloudiness"
+msgstr "zachmurzenie"
+
 #: templates/polishlody/base.html:51
 msgid "Check forecast"
 msgstr "Sprawdź prognozę"

@@ -12,6 +12,7 @@
         {% bootstrap_css %}
         {% bootstrap_javascript %}
         {% load sass_tags %}
+        {% get_current_language as LANGUAGE_CODE %}
         <link href="{% sass_src 'main.scss' %}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href='{% static "js/jquery-ui/jquery-ui.css" %}' />
         <link rel="stylesheet" href='{% static "js/jquery-ui/jquery-ui.theme.css" %}' />
@@ -20,6 +21,9 @@
         <script src="{% static 'js/jquery-ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/polish-lody-jquery.js' %}"></script>
         <script src="{% static 'lscache-master/lscache.js' %}"></script>
+        <script type="text/javascript">
+            var template_lang = "{{LANGUAGE_CODE}}";
+        </script>
     </head>
 
     <body>
@@ -39,14 +43,14 @@
                             <div id="current_weather_popover" class="hidden">
                                 <div id="popover-heading" class="popover-heading">{% trans 'Weather in Wrocław:' %}</div>
                                     <div class="popover-body">
-                                        <ul class="weather-conditions col-sm-9">
+                                        <ul class="weather-conditions col-sm-10" style="list-style: disc;">
                                             <li><a id="weatherType"></a></li>
-                                            <li><a id="cTemp1"></a></li>
-                                            <li><a id="feelslikeTemp"></a></li>
-                                            <li><a id="pressure"></a></li>
-                                            <li><a id="humidity"></a></li>
-                                            <li><a id="windSpeed"></a></li>
-                                            <li><a id="clouds"></a></li>
+                                            <li><a>{% trans 'temp' %}:</a><a id="cTemp1"></a></li>
+                                            <li><a>{% trans 'feels like' %}:</a><a id="feelslikeTemp"></a></li>
+                                            <li><a>{% trans 'pressure' %}:</a><a id="pressure"></a></li>
+                                            <li><a>{% trans 'humidity' %}:</a><a id="humidity"></a></li>
+                                            <li><a>{% trans 'wind' %}:</a><a id="windSpeed"></a></li>
+                                            <li><a>{% trans 'cloudiness' %}:</a><a id="clouds"></a></li>
                                             <li id="forecast">
                                                 <a id="navbar-link" href="{% url 'weather_forecast' %}">{% trans 'Check forecast' %}</a>
                                             </li>
@@ -61,11 +65,10 @@
                         <li><span id="logged-in">{% trans 'Logged in as - ' %}{{ user.email }}</span>
                         <li><a href="{% url 'password_change' %}">{% trans 'Change password' %}</a></li>
                         <li><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
-                        {% get_current_language as LANGUAGE_CODE %}
                         <li>{% if LANGUAGE_CODE == "en" %}
-                            <a href="/pl{{ request.get_full_path|slice:'3:'}}"><img src="{% static 'images/United-States-icon.png' %}"></a>
+                            <a href="{% url 'languageChange' %}"><img src="{% static 'images/United-States-icon.png' %}"></a>
                         {% else %}
-                            <a href="/en{{ request.get_full_path|slice:'3:'}}"><img src="{% static 'images/Poland-icon.png' %}"></a>
+                            <a href="{% url 'languageChange' %}"><img src="{% static 'images/Poland-icon.png' %}"></a>
                         {% endif %}</li>
                         <li class="icon">
                             <a href="{% url 'weather_forecast' %}">

@@ -33,20 +33,24 @@
     </div>
 
     <script type="text/javascript">
-    var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    lscache.flushExpired();
-    if (localStorage.getItem('lscache-weatherData')==null) {
-        $.getJSON(weather_apixu, function(data) {
-            // var dataToStore = JSON.stringify(data);
-            lscache.set('weatherData', data, 360);
-            var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+    $(document).ready(function(){
+        var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
+        lscache.flushExpired();
+        if (localStorage.getItem('lscache-weatherData')==null) {
+            $.getJSON(weather_apixu, function(data) {
+                // var dataToStore = JSON.stringify(data);
+                lscache.set('weatherData', data, 360);
+                var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+                PopulateTableForcastDaily();
+            });
+        } else {
             PopulateTableForcastDaily();
-        });
-    } else {
-        PopulateTableForcastDaily();
-    }
+        }
+    });
+
     function PopulateTableForcastDaily() {
         var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+        var WeatherConditionsTrans = JSON.parse(sessionStorage.getItem('conditions_trans'));
         var forecast = [];
         $.each(localWeatherData.forecast.forecastday, function(key, val){
             var date = new Date(val.date_epoch*1000);
@@ -67,7 +71,15 @@
             forecast.push("<td>"+(val.day.totalprecip_mm).toFixed(0)+"</td>");
             forecast.push("<td>"+(val.astro.sunrise)+"</td>");
             forecast.push("<td>"+(val.astro.sunset)+"</td>");
-            forecast.push("<td>"+val.day.condition.text+"</td>");
+            if (template_lang=="pl" && sessionStorage.getItem('conditions_trans')!=null) {
+                $.each(WeatherConditionsTrans, function(key2,val2){
+                    if(val2.code == val.day.condition.code){
+                        forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                    }
+                });
+            } else {
+                forecast.push("<td>"+val.day.condition.text+"</td>");
+            }
             forecast.push("</tr>");
         });
         $("table").append($(forecast.join('')));

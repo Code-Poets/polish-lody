@@ -45,7 +45,34 @@ $(document).ready(function(){
 
     function NavbarWeatherData(){
         var localData = JSON.parse(localStorage.getItem('lscache-navbarWeatherData'));
-        var weatherType = localData.current.condition.text;
+        if(template_lang == "pl"){
+            function readTextFile(file, callback) {
+                var rawFile = new XMLHttpRequest();
+                rawFile.overrideMimeType("application/json");
+                rawFile.open("GET", file, true);
+                rawFile.onreadystatechange = function() {
+                    if (rawFile.readyState === 4 && rawFile.status == "200") {
+                        callback(rawFile.responseText);
+                    }
+                }
+                rawFile.send(null);
+            }
+            readTextFile("../../static/js/conditions.json", function(text){
+                var data = JSON.parse(text);
+                if(sessionStorage.getItem('conditions_trans')==null){
+                    sessionStorage.setItem('conditions_trans',JSON.stringify(data));
+                }
+                $.each(data, function(key, val){
+                    if(val.code == localData.current.condition.code){
+                        weatherType = val.languages[19].day_text
+                        $("#weatherType").html(weatherType);
+                    }
+                });
+            });
+        } else {
+            var weatherType = localData.current.condition.text;
+            $("#weatherType").html(weatherType);
+        }
         var windSpeed = (localData.current.wind_kph).toFixed(0);
         var cTemp = Math.round(localData.current.temp_c);
         var feelslikeTemp = Math.round(localData.current.feelslike_c);
@@ -55,14 +82,13 @@ $(document).ready(function(){
         var icon = localData.current.condition.icon;
         var iconSrc = "https:" + icon;
 
-        $("#weatherType").html(weatherType);
-        $("#windSpeed").html("wind: " + windSpeed + " km/h");
-        $("#cTemp1").html("temp: " + cTemp.toFixed(0) + " &#8451");
+        $("#windSpeed").html(windSpeed + " km/h");
+        $("#cTemp1").html(cTemp.toFixed(0) + " &#8451");
         $("#cTemp2").html(cTemp.toFixed(0) + " &#8451");
-        $("#feelslikeTemp").html("feels like: " + feelslikeTemp.toFixed(0) + " &#8451");
-        $("#pressure").html("pressure: "+ pressure + " hPa");
-        $("#humidity").html("humidity: "+ humidity + " %");
-        $("#clouds").html("cloudiness: "+ clouds + " %");
+        $("#feelslikeTemp").html(feelslikeTemp.toFixed(0) + " &#8451");
+        $("#pressure").html(pressure + " hPa");
+        $("#humidity").html(humidity + " %");
+        $("#clouds").html(clouds + " %");
         $("#weather").prepend('<img src="'+ iconSrc+ '">');
     }
 

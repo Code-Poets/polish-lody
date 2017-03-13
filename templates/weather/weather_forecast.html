@@ -53,6 +53,7 @@
     }
     function PopulateTableForcast() {
         var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+        var WeatherConditionsTrans = JSON.parse(sessionStorage.getItem('conditions_trans'));
         var forecast = [];
         for (var i=0; i<7; i++){
             var date = new Date(localWeatherData.forecast.forecastday[i].date_epoch*1000);
@@ -68,8 +69,6 @@
         }
         var day_selected = $('#day_selected :selected').val();
         $.each(localWeatherData.forecast.forecastday[day_selected].hour, function(key, val){
-
-            // console.log(val);
             var temp = Math.round(val.temp_c);
             forecast.push("<tr>");
             forecast.push("<td>"+val.time+"</td>");
@@ -78,7 +77,19 @@
             forecast.push("<td>"+(val.humidity)+"</td>");
             forecast.push("<td>"+(val.wind_kph).toFixed(0)+"</td>");
             forecast.push("<td>"+(val.cloud)+"</td>");
-            forecast.push("<td>"+val.condition.text+"</td>");
+            if (template_lang=="pl" && sessionStorage.getItem('conditions_trans')!=null) {
+                $.each(WeatherConditionsTrans, function(key2,val2){
+                    if((val2.day).toLowerCase() == (val.condition.text).toLowerCase()){
+                        forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                    } else if ((val2.night).toLowerCase() == (val.condition.text).toLowerCase()){
+                        forecast.push("<td>"+val2.languages[19].night_text+"</td>");
+                    } else if (val2.code == val.condition.code){
+                        forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                    }
+                });
+            } else {
+                forecast.push("<td>"+val.condition.text+"</td>");
+            }
             forecast.push("</tr>");
         });
         $("table").append($(forecast.join('')));

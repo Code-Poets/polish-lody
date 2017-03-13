@@ -21,10 +21,6 @@ from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
-
-]
-
-urlpatterns += i18n_patterns(
     url(r'^$', auth_views.login,{'redirect_authenticated_user': True}, name='login'),
     url(r'^accounts/login/$', RedirectView.as_view(url='/')),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
@@ -39,7 +35,10 @@ urlpatterns += i18n_patterns(
     url(r'^employees/', include('employees.urls')),
     url(r'^weather/', include('weather.urls')),
     url(r'^sales/', include('sales.urls')),
-)
+]
+
+# urlpatterns += i18n_patterns(
+# )
 
 handler404 = 'employees.views.pl_404_view'
 handler500 = 'employees.views.pl_500_view'

@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.dashboard, name='dashboard'),
+    url(r'^langchange/$', views.languageChange, name='languageChange'),
 ] 
