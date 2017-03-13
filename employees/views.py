@@ -20,6 +20,7 @@ import re
 from django.db import IntegrityError
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 from django.http import JsonResponse
+from django.utils.translation import ugettext_lazy as _
 
 def ajax_autocomplete(request):
     if request.is_ajax():
@@ -469,7 +470,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         form_validation = super().form_valid(form)
 
         messages.add_message(self.request, messages.SUCCESS,
-            "Changes saved for employee %s." % (self.get_queryset().first()))
+            _("Changes saved for employee %s.") % (self.get_queryset().first()))
         return form_validation
 
 class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):

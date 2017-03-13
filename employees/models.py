@@ -8,7 +8,7 @@ import time
 from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from users.models import MyUser
-#from cities_light.models import City, Country
+
 import re
 
 def is_expiring(exp_date):
@@ -23,7 +23,7 @@ def is_expiring(exp_date):
             return [days_left, days_left*(-1)]
 
 def sanity_check(account_number):
-    #import ipdb;ipdb.set_trace()
+
     assert isinstance(account_number, str) 
     assert len(account_number) == 32
     assert account_number.replace(' ', '').isdigit()
@@ -39,7 +39,7 @@ def sanity_check(account_number):
 
     if original_checksum != new_checksum:
         print('The account number is invalid!')
-        raise ValidationError("The bank account number you entered is invalid") #Placeholder
+        raise ValidationError(_("The bank account number you entered is invalid")) #Placeholder
 
 def phone_check(phone_number):
     
@@ -51,7 +51,7 @@ def phone_check(phone_number):
 
     if not pattern.match(zip_code):
         print('The phone number is invalid!')
-        raise ValidationError("The zip code you entered is invalid") #Placeholder        
+        raise ValidationError(_("The zip code you entered is invalid")) #Placeholder        
 
 def zip_check(zip_code):
     
@@ -101,15 +101,17 @@ class Employee(MyUser):
                               choices=position_choices)
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
-    bank_account_number = models.CharField(max_length = 32, blank = True, null = True, default = None, validators = [sanity_check])
+    
+    address_city = models.ForeignKey(City, max_length = 30, null=True, blank=True, verbose_name = _('City'), default = None)
+
+    address_street = models.CharField(_('Street'),max_length = 16, null=True, blank=True, default=None)
+
+    address_zip_code = models.CharField(_('Zip code'),max_length = 6, blank = True, null = True, default = None, validators = [zip_check])
+    
+    bank_account_number = models.CharField(_('Bank account number'),max_length = 32, blank = True, null = True, default = None, validators = [sanity_check])
  
-    phone_contact_number = models.CharField(max_length = 15, blank = True, null = True, default = None)
+    phone_contact_number = models.CharField(_('Phone contact number'),max_length = 15, blank = True, null = True, default = None)
 
-    address_street = models.CharField(max_length = 16, null=True, blank=True, default=None)
-
-    address_zip_code = models.CharField(max_length = 6, blank = True, null = True, default = None, validators = [zip_check])
-
-    address_city = models.ForeignKey(City, max_length = 26, null=True, blank=True, default = None)
 
     def months_dict(self):
         months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
@@ -182,7 +184,7 @@ class Month(models.Model):
     month_is_approved = models.BooleanField(_(u'Approved?'),default=False, choices=bool_choices)
     rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'),decimal_places=2, max_digits=7, default=0,
                                                    validators=[MinValueValidator(0)])
-    bonuses = models.DecimalField(decimal_places = 2, max_digits = 7, default = 0, validators = [MinValueValidator(0)])
+    bonuses = models.DecimalField(_('Bonuses'), decimal_places = 2, max_digits = 7, default = 0, validators = [MinValueValidator(0)])
 
     def __str__(self):
         return self.months_dict[self.month] + " " + str(self.year)

@@ -132,23 +132,23 @@
                 </tr>
                 <tr>
                     <td>
-                        Bank account number:
+                        {% trans 'City' %}:
                     </td>
                     <td>
-                        {{ employee.bank_account_number }}
+                        {% if employee.address_city == None %}
+
+
+
+                        {% else %}
+
+                        {{ employee.address_city }}
+
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Phone contact number:
-                    </td>
-                    <td>
-                        {{ employee.address_phone_contact_number }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Address - street:
+                        {% trans 'Street'%}:
                     </td>
                     <td>
                         {{ employee.address_street }}
@@ -156,7 +156,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Address - zip-code:
+                        {% trans 'Zip-code' %}:
                     </td>
                     <td>
                         {{ employee.address_zip_code }}
@@ -164,10 +164,18 @@
                 </tr>
                 <tr>
                     <td>
-                        Address - city:
+                        {% trans 'Bank account number' %}:
                     </td>
                     <td>
-                        {{ employee.address_city }}
+                        {{ employee.bank_account_number }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% trans 'Phone contact number' %}:
+                    </td>
+                    <td>
+                        {{ employee.address_phone_contact_number }}
                     </td>
                 </tr>
             </table>

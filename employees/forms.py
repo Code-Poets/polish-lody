@@ -6,6 +6,7 @@ from django import forms
 from functools import partial
 from datetime import datetime 
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 dateinput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -38,20 +39,26 @@ class EmployeeForm(AuthUserCreationForm):
     address_city = forms.CharField(max_length = 50, required = False)
     
     def clean_address_city(self):
-        import ipdb;ipdb.set_trace()
+        
         value = self.cleaned_data['address_city']
-        try:
-            value = City.objects.get(name = value)
-        except:
-            raise ValidationError('Please type a valid city as provided by the list of suggestions')
+        
+        if value == '':
+           value = None 
+
+        else:
+            try:
+                value = City.objects.get(name = value)
+            except:
+                raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
+        
         return value    
 
     class Meta:
         model = Employee
 
         fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
-         'address_street', 'address_zip_code', 'address_city']
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'address_city', 'address_street',
+          'address_zip_code', 'bank_account_number', 'phone_contact_number']
 
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
@@ -66,23 +73,29 @@ class EmployeeForm(AuthUserCreationForm):
 
 class EmployeeChangeForm(ModelForm):
 
-    address_city = forms.CharField(max_length = 50, required = False)
+    address_city = forms.CharField(max_length = 50, required = False, label = _('City'))
     
     def clean_address_city(self):
-        import ipdb;ipdb.set_trace()
+        
         value = self.cleaned_data['address_city']
-        try:
-            value = City.objects.get(name = value)
-        except:
-            raise ValidationError('Please type a valid city as provided by the list of suggestions')
+
+        if value == '':
+           value = None 
+
+        else:
+            try:
+                value = City.objects.get(name = value)
+            except:
+                raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
+        
         return value    
 
     class Meta:
         model = Employee
 
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type', 'bank_account_number', 'phone_contact_number',
-         'address_street', 'address_zip_code', 'address_city']
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'address_city', 'address_street', 'address_zip_code', 'bank_account_number', 
+         'phone_contact_number']
 
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),

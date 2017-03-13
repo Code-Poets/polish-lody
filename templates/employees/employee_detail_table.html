@@ -68,6 +68,27 @@
                                    for="rph-down"></label>
                     </td>
                     <td class="cursor-hover" align="center" valign="middle">
+                        {% trans 'Bonuses' %} (zł)
+                            {% if orderby == 'rph-up' %}
+                            <input id="rph-up" checked type="radio" class="sorting sort-up"
+                                           name="order" value="rph-up"/>
+                            {% else %}
+                            <input id="rph-up" type="radio" class="sorting sort-up"
+                                           name="order" value="rph-up"/>
+                            {% endif %}
+                            <label title="{% trans 'Sort by bonuses ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
+                                   for="rph-up"></label>
+                            {% if orderby == 'rph-down' %}
+                            <input id="rph-down" checked type="radio" class="sorting sort-down"
+                                           name="order" value="rph-down"/>
+                            {% else %}
+                            <input id="rph-down" type="radio" class="sorting sort-down"
+                                           name="order" value="rph-down"/>
+                            {% endif %}
+                            <label title="{% trans 'Sort by bonuses descending' %}" class="glyphicon glyphicon-chevron-down clickable"
+                                   for="rph-down"></label>
+                    </td>
+                    <td class="cursor-hover" align="center" valign="middle">
                         {% trans 'Was salary paid?' %}
                     </td>
                     <td class="cursor-hover" align="center" valign="middle">
