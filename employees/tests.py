@@ -4,7 +4,7 @@ from django.test import TestCase, Client, RequestFactory
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from datetime import datetime, timedelta, date
-from .models import Employee, Month
+from .models import City, Employee, Month
 from datetime import datetime, date
 import random
 import time
@@ -457,6 +457,7 @@ class MonthFilterTests(TestCase):
 class MonthApproveTests(TestCase):
 
     fixtures = ['fikstura_approve.yaml']
+
     def test_approve_month_page_should_be_accessible_to_employee(self):
         
         employee = Employee.objects.get(email = 'zbigniew@polishlody.com')
@@ -550,7 +551,7 @@ class MonthApproveTests(TestCase):
         
         self.assertEqual(month.month_is_approved, False)
 
-    def month_approval_status_should_remain_true_if_salary_paid_is_true(self):
+    def test_month_approval_status_should_remain_true_if_salary_paid_is_true(self):
         
         employee_1 = Employee.objects.get(email = 'z_niewypal@polishlody.pl')
         employee_2 = Employee.objects.get(email = 'zbigniew@polishlody.com')
@@ -575,3 +576,24 @@ class MonthApproveTests(TestCase):
         month.refresh_from_db()
         
         self.assertEqual(month.month_is_approved, True)        
+
+class CityAutocompleteTests(TestCase):
+
+    fixtures = ['fikstura_approve.yaml', 'fikstura_cities_test.json']
+
+    def test_user_query_should_be_registered_by_view(self):
+
+        print('test')
+
+        employee_1 = Employee.objects.get(email = 'z_niewypal@polishlody.com')
+        assert employee_1.is_staff == True
+
+        success = self.client.login(username = employee_1.email, password = 'codepassword')
+        assert success
+
+        url = reverse('employee_new')
+
+        response = self.client.get(url, query = 'Wro')
+
+        print(response)
+        import ipdb;ipdb.set_trace()

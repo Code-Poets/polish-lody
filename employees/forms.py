@@ -36,7 +36,7 @@ class EmployeeForm(AuthUserCreationForm):
             raise forms.ValidationError("Fill out both fields")
         return password2
 
-    address_city = forms.CharField(max_length = 50, required = False)
+    address_city = forms.CharField(max_length = 50, required = False, label = _('City'))
     
     def clean_address_city(self):
         

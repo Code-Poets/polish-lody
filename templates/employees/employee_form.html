@@ -54,7 +54,7 @@
                         {{ form.phone_contact_number.errors }}
                         {{ form.address_zip_code.errors }} 
                         {% if form.address_city.errors %}
-                        Please type a valid city as provided by the list of suggestions
+                        {% trans 'Please type a valid city as provided by the list of suggestions' %}
                         {% endif %}                   
                     </div>
                 {% endif %}
@@ -74,13 +74,6 @@
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             {{ e|add_class:"form-control" }}
                         </div>
-                        <!-->
-                        {% elif e.label == 'Address city' %}
-                        <label class="col-sm-2 control-label"> Address city </label>
-                        <div class="input-group col-sm-9 ">
-                            {{ e|add_class:"form-control" }}
-                        </div>
-                        </-->
                         {% else %}
                         <label class="col-sm-4 control-label">{{ e.label }}</label>
                         <div class="input-group col-sm-6 ">

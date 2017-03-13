@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-13 14:52+0000\n"
+"POT-Creation-Date: 2017-03-13 16:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,182 +19,184 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: employees/forms.py:52 employees/forms.py:89
-msgid "Please type a valid city as provided by the list of suggestions"
-msgstr ""
-
-#: employees/forms.py:76 employees/models.py:105
+#: employees/forms.py:39 employees/forms.py:76 employees/models.py:101
 #: templates/employees/employee_detail.html:135
 msgid "City"
 msgstr "Miejscowość"
 
-#: employees/models.py:42
+#: employees/forms.py:52 employees/forms.py:89
+#: templates/employees/employee_form.html:57
+msgid "Please type a valid city as provided by the list of suggestions"
+msgstr "Podaj istniejące miasto, sugerując się listą podpowiedzi"
+
+#: employees/models.py:41
 msgid "The bank account number you entered is invalid"
 msgstr "Podany numer konta jest nieprawidłowy"
 
-#: employees/models.py:54
-msgid "The zip code you entered is invalid"
-msgstr "Podany kod pocztowy jest nieprawidłowy"
+#: employees/models.py:52
+msgid "The phone number you entered is invalid"
+msgstr "Podany numer telefonu jest nieprawidłowy"
 
-#: employees/models.py:78
+#: employees/models.py:74
 msgid "Male"
 msgstr "Mężczyzna"
 
-#: employees/models.py:79
+#: employees/models.py:75
 msgid "Female"
 msgstr "Kobieta"
 
-#: employees/models.py:82 templates/employees/employee_list.html:45
+#: employees/models.py:78 templates/employees/employee_list.html:45
 msgid "Production"
 msgstr "Produkcja"
 
-#: employees/models.py:83 templates/employees/employee_list.html:35
+#: employees/models.py:79 templates/employees/employee_list.html:35
 msgid "Sale"
 msgstr "Sprzedaż"
 
-#: employees/models.py:84 employees/models.py:89
+#: employees/models.py:80 employees/models.py:85
 #: templates/employees/employee_list.html:55
 msgid "Other"
 msgstr "Inne"
 
-#: employees/models.py:87
+#: employees/models.py:83
 msgid "Fixed-term employment contract"
 msgstr "Umowa na czas określony"
 
-#: employees/models.py:88
+#: employees/models.py:84
 msgid "Non-fixed-term employment contract"
 msgstr "Umowa na czas nieokreślony"
 
-#: employees/models.py:92
+#: employees/models.py:88
 msgid "rate per hour"
 msgstr "stawka godzinowa"
 
-#: employees/models.py:95
+#: employees/models.py:91
 msgid "contract start date"
 msgstr "data rozpoczęcia umowy"
 
-#: employees/models.py:96
+#: employees/models.py:92
 msgid "contract exp date"
 msgstr "data wygaśnięcia umowy"
 
-#: employees/models.py:97
+#: employees/models.py:93
 msgid "health book exp date"
 msgstr "data wygaśnięcia książeczki zdrowia"
 
-#: employees/models.py:98
+#: employees/models.py:94
 msgid "gender"
 msgstr "płeć"
 
-#: employees/models.py:100
+#: employees/models.py:96
 msgid "position"
 msgstr "pozycja"
 
-#: employees/models.py:102
+#: employees/models.py:98
 msgid "contract type"
 msgstr "typ umowy"
 
-#: employees/models.py:107 templates/employees/employee_detail.html:149
+#: employees/models.py:103 templates/employees/employee_detail.html:151
 msgid "Street"
 msgstr "Ulica"
 
-#: employees/models.py:109
+#: employees/models.py:105 templates/employees/employee_detail.html:159
 msgid "Zip code"
 msgstr "Kod pocztowy"
 
-#: employees/models.py:111 templates/employees/employee_detail.html:165
+#: employees/models.py:107 templates/employees/employee_detail.html:167
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
-#: employees/models.py:113 templates/employees/employee_detail.html:173
+#: employees/models.py:109 templates/employees/employee_detail.html:175
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
 
-#: employees/models.py:157
+#: employees/models.py:153
 msgid "January"
 msgstr ""
 
-#: employees/models.py:158
+#: employees/models.py:154
 msgid "February"
 msgstr ""
 
-#: employees/models.py:159
+#: employees/models.py:155
 msgid "March"
 msgstr ""
 
-#: employees/models.py:160
+#: employees/models.py:156
 msgid "April"
 msgstr ""
 
-#: employees/models.py:161 templates/dashboard/dashboard.html:79
+#: employees/models.py:157 templates/dashboard/dashboard.html:79
 msgid "May"
 msgstr ""
 
-#: employees/models.py:162
+#: employees/models.py:158
 msgid "June"
 msgstr ""
 
-#: employees/models.py:163
+#: employees/models.py:159
 msgid "July"
 msgstr ""
 
-#: employees/models.py:164
+#: employees/models.py:160
 msgid "August"
 msgstr ""
 
-#: employees/models.py:165
+#: employees/models.py:161
 msgid "September"
 msgstr ""
 
-#: employees/models.py:166
+#: employees/models.py:162
 msgid "October"
 msgstr ""
 
-#: employees/models.py:167
+#: employees/models.py:163
 msgid "November"
 msgstr ""
 
-#: employees/models.py:168
+#: employees/models.py:164
 msgid "December"
 msgstr ""
 
-#: employees/models.py:171 templates/employees/employee_confirm_delete.html:21
+#: employees/models.py:167 templates/employees/employee_confirm_delete.html:21
 #: templates/employees/month_confirm_delete.html:27
 msgid "Yes"
 msgstr ""
 
-#: employees/models.py:172
+#: employees/models.py:168
 msgid "No"
 msgstr ""
 
-#: employees/models.py:178
+#: employees/models.py:174
 msgid "year"
 msgstr "rok"
 
-#: employees/models.py:180
+#: employees/models.py:176
 msgid "Month"
 msgstr "Miesiąc"
 
-#: employees/models.py:181
+#: employees/models.py:177
 msgid "Paid?"
 msgstr "Zapłacono?"
 
-#: employees/models.py:182
+#: employees/models.py:178
 msgid "hours worked in this month"
 msgstr "godzin przepracowanych w tym miesiącu"
 
-#: employees/models.py:184
+#: employees/models.py:180
 msgid "Approved?"
 msgstr "Zaakceptowano?"
 
-#: employees/models.py:185
+#: employees/models.py:181
 msgid "rate per hour this month"
 msgstr "stawka godzinowa w tym miesiącu"
 
-#: employees/models.py:187 templates/employees/employee_detail_table.html:71
+#: employees/models.py:183 templates/employees/employee_detail_table.html:71
 msgid "Bonuses"
 msgstr "premie"
 
 #: employees/views.py:473
+#, python-format
 msgid "Changes saved for employee %s."
 msgstr "Zapisano zmiany dla pracownika %s."
 
@@ -391,7 +393,7 @@ msgid "Edit employee"
 msgstr "Edytuj pracownika"
 
 #: templates/employees/employee_detail.html:14
-#: templates/employees/employee_form.html:96
+#: templates/employees/employee_form.html:89
 #: templates/employees/employee_list_table.html:178
 msgid "Delete employee"
 msgstr "Usuń pracownika"
@@ -497,48 +499,44 @@ msgstr "Pozycja:"
 msgid "Contract type:"
 msgstr "Typ umowy:"
 
-#: templates/employees/employee_detail.html:157
-msgid "Zip-code"
-msgstr ""
-
-#: templates/employees/employee_detail.html:183
+#: templates/employees/employee_detail.html:185
 msgid " Add Month"
 msgstr " Dodaj Miesiąc"
 
-#: templates/employees/employee_detail.html:194
+#: templates/employees/employee_detail.html:196
 msgid "Show year:"
 msgstr "Pokaż rok:"
 
-#: templates/employees/employee_detail.html:214
-#: templates/employees/employee_detail.html:252
-#: templates/employees/employee_detail.html:276
+#: templates/employees/employee_detail.html:216
+#: templates/employees/employee_detail.html:254
+#: templates/employees/employee_detail.html:278
 msgid "Expand year options"
 msgstr "Rozwiń listę lat"
 
-#: templates/employees/employee_detail.html:219
-#: templates/employees/employee_detail.html:257
-#: templates/employees/employee_detail.html:281
+#: templates/employees/employee_detail.html:221
+#: templates/employees/employee_detail.html:259
+#: templates/employees/employee_detail.html:283
 msgid "Collapse list"
 msgstr "Zwiń listę"
 
-#: templates/employees/employee_detail.html:294
+#: templates/employees/employee_detail.html:296
 msgid "Hide unpaid months."
 msgstr "Ukryj nieopłacone miesiące."
 
-#: templates/employees/employee_detail.html:304
+#: templates/employees/employee_detail.html:306
 msgid "Hide paid months."
 msgstr "Ukryj opłacone miesiące."
 
-#: templates/employees/employee_detail.html:308
+#: templates/employees/employee_detail.html:310
 #: templates/employees/employee_list.html:85
 msgid "Reset filters"
 msgstr "Zresetuj filtry"
 
-#: templates/employees/employee_detail.html:326
+#: templates/employees/employee_detail.html:328
 msgid "Months per page:"
 msgstr "Ilość miesięcy na stronę:"
 
-#: templates/employees/employee_detail.html:347
+#: templates/employees/employee_detail.html:349
 msgid "Employee not found"
 msgstr "Nie odnaleziono pracownika"
 
@@ -665,7 +663,7 @@ msgstr "Pracownik"
 msgid "New employee"
 msgstr "Nowy pracownik"
 
-#: templates/employees/employee_form.html:94
+#: templates/employees/employee_form.html:87
 #: templates/employees/month_approve.html:49
 #: templates/employees/month_edit_form.html:79
 #: templates/employees/month_form.html:62
@@ -1180,6 +1178,9 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
+
+#~ msgid "The zip code you entered is invalid"
+#~ msgstr "Podany kod pocztowy jest nieprawidłowy"
 
 #~ msgid "bonuses"
 #~ msgstr "premie"
