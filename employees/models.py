@@ -43,7 +43,6 @@ def sanity_check(account_number):
 def phone_check(phone_number):
     
     assert isinstance(phone_number, str)
-    import ipdb;ipdb.set_trace()
     
     pattern = re.compile('^\+[0-9]{2}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}$')
     
@@ -59,7 +58,7 @@ def zip_check(zip_code):
 
     if not pattern.match(zip_code):
         print('The zip code is invalid!')
-        raise ValidationError("The zip code you entered is invalid")  
+        raise ValidationError(_("The zip code you entered is invalid"))  
 
 class City(models.Model):
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-13 16:32+0000\n"
+"POT-Creation-Date: 2017-03-13 17:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: employees/forms.py:39 employees/forms.py:76 employees/models.py:101
+#: employees/forms.py:39 employees/forms.py:76 employees/models.py:100
 #: templates/employees/employee_detail.html:135
 msgid "City"
 msgstr "Miejscowość"
@@ -33,165 +33,169 @@ msgstr "Podaj istniejące miasto, sugerując się listą podpowiedzi"
 msgid "The bank account number you entered is invalid"
 msgstr "Podany numer konta jest nieprawidłowy"
 
-#: employees/models.py:52
+#: employees/models.py:51
 msgid "The phone number you entered is invalid"
 msgstr "Podany numer telefonu jest nieprawidłowy"
 
-#: employees/models.py:74
+#: employees/models.py:61
+msgid "The zip code you entered is invalid"
+msgstr "Podany kod pocztowy jest nieprawidłowy"
+
+#: employees/models.py:73
 msgid "Male"
 msgstr "Mężczyzna"
 
-#: employees/models.py:75
+#: employees/models.py:74
 msgid "Female"
 msgstr "Kobieta"
 
-#: employees/models.py:78 templates/employees/employee_list.html:45
+#: employees/models.py:77 templates/employees/employee_list.html:45
 msgid "Production"
 msgstr "Produkcja"
 
-#: employees/models.py:79 templates/employees/employee_list.html:35
+#: employees/models.py:78 templates/employees/employee_list.html:35
 msgid "Sale"
 msgstr "Sprzedaż"
 
-#: employees/models.py:80 employees/models.py:85
+#: employees/models.py:79 employees/models.py:84
 #: templates/employees/employee_list.html:55
 msgid "Other"
 msgstr "Inne"
 
-#: employees/models.py:83
+#: employees/models.py:82
 msgid "Fixed-term employment contract"
 msgstr "Umowa na czas określony"
 
-#: employees/models.py:84
+#: employees/models.py:83
 msgid "Non-fixed-term employment contract"
 msgstr "Umowa na czas nieokreślony"
 
-#: employees/models.py:88
+#: employees/models.py:87
 msgid "rate per hour"
 msgstr "stawka godzinowa"
 
-#: employees/models.py:91
+#: employees/models.py:90
 msgid "contract start date"
 msgstr "data rozpoczęcia umowy"
 
-#: employees/models.py:92
+#: employees/models.py:91
 msgid "contract exp date"
 msgstr "data wygaśnięcia umowy"
 
-#: employees/models.py:93
+#: employees/models.py:92
 msgid "health book exp date"
 msgstr "data wygaśnięcia książeczki zdrowia"
 
-#: employees/models.py:94
+#: employees/models.py:93
 msgid "gender"
 msgstr "płeć"
 
-#: employees/models.py:96
+#: employees/models.py:95
 msgid "position"
 msgstr "pozycja"
 
-#: employees/models.py:98
+#: employees/models.py:97
 msgid "contract type"
 msgstr "typ umowy"
 
-#: employees/models.py:103 templates/employees/employee_detail.html:151
+#: employees/models.py:102 templates/employees/employee_detail.html:151
 msgid "Street"
 msgstr "Ulica"
 
-#: employees/models.py:105 templates/employees/employee_detail.html:159
+#: employees/models.py:104 templates/employees/employee_detail.html:159
 msgid "Zip code"
 msgstr "Kod pocztowy"
 
-#: employees/models.py:107 templates/employees/employee_detail.html:167
+#: employees/models.py:106 templates/employees/employee_detail.html:167
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
-#: employees/models.py:109 templates/employees/employee_detail.html:175
+#: employees/models.py:108 templates/employees/employee_detail.html:175
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
 
-#: employees/models.py:153
+#: employees/models.py:152
 msgid "January"
 msgstr ""
 
-#: employees/models.py:154
+#: employees/models.py:153
 msgid "February"
 msgstr ""
 
-#: employees/models.py:155
+#: employees/models.py:154
 msgid "March"
 msgstr ""
 
-#: employees/models.py:156
+#: employees/models.py:155
 msgid "April"
 msgstr ""
 
-#: employees/models.py:157 templates/dashboard/dashboard.html:79
+#: employees/models.py:156 templates/dashboard/dashboard.html:79
 msgid "May"
 msgstr ""
 
-#: employees/models.py:158
+#: employees/models.py:157
 msgid "June"
 msgstr ""
 
-#: employees/models.py:159
+#: employees/models.py:158
 msgid "July"
 msgstr ""
 
-#: employees/models.py:160
+#: employees/models.py:159
 msgid "August"
 msgstr ""
 
-#: employees/models.py:161
+#: employees/models.py:160
 msgid "September"
 msgstr ""
 
-#: employees/models.py:162
+#: employees/models.py:161
 msgid "October"
 msgstr ""
 
-#: employees/models.py:163
+#: employees/models.py:162
 msgid "November"
 msgstr ""
 
-#: employees/models.py:164
+#: employees/models.py:163
 msgid "December"
 msgstr ""
 
-#: employees/models.py:167 templates/employees/employee_confirm_delete.html:21
+#: employees/models.py:166 templates/employees/employee_confirm_delete.html:21
 #: templates/employees/month_confirm_delete.html:27
 msgid "Yes"
 msgstr ""
 
-#: employees/models.py:168
+#: employees/models.py:167
 msgid "No"
 msgstr ""
 
-#: employees/models.py:174
+#: employees/models.py:173
 msgid "year"
 msgstr "rok"
 
-#: employees/models.py:176
+#: employees/models.py:175
 msgid "Month"
 msgstr "Miesiąc"
 
-#: employees/models.py:177
+#: employees/models.py:176
 msgid "Paid?"
 msgstr "Zapłacono?"
 
-#: employees/models.py:178
+#: employees/models.py:177
 msgid "hours worked in this month"
 msgstr "godzin przepracowanych w tym miesiącu"
 
-#: employees/models.py:180
+#: employees/models.py:179
 msgid "Approved?"
 msgstr "Zaakceptowano?"
 
-#: employees/models.py:181
+#: employees/models.py:180
 msgid "rate per hour this month"
 msgstr "stawka godzinowa w tym miesiącu"
 
-#: employees/models.py:183 templates/employees/employee_detail_table.html:71
+#: employees/models.py:182 templates/employees/employee_detail_table.html:71
 msgid "Bonuses"
 msgstr "premie"
 
@@ -1178,9 +1182,6 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
-
-#~ msgid "The zip code you entered is invalid"
-#~ msgstr "Podany kod pocztowy jest nieprawidłowy"
 
 #~ msgid "bonuses"
 #~ msgstr "premie"
