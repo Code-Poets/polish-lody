@@ -197,7 +197,7 @@ msgstr "stawka godzinowa w tym miesiącu"
 
 #: employees/models.py:182 templates/employees/employee_detail_table.html:71
 msgid "Bonuses"
-msgstr "premie"
+msgstr "Premie"
 
 #: employees/views.py:473
 #, python-format
@@ -214,11 +214,11 @@ msgstr "Hasło musi zawierać przynajmniej %(min_length)d znaków"
 msgid "Your password must contain at least %(min_length)d characters."
 msgstr "Twoje hasło musi zawierać przynajmniej %(min_length)d znaków"
 
-#: polishlody/settings/local.py:124 polishlody/settings/productions.py:132
+#: polishlody/settings/local.py:132 polishlody/settings/productions.py:132
 msgid "English"
 msgstr ""
 
-#: polishlody/settings/local.py:125 polishlody/settings/productions.py:133
+#: polishlody/settings/local.py:133 polishlody/settings/productions.py:133
 msgid "Polish"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgid "Sat"
 msgstr "Sob"
 
 #: templates/dashboard/dashboard.html:77
-#: templates/weather/weather_forecast.html:63
+#: templates/weather/weather_forecast.html:64
 msgid "Today"
 msgstr ""
 
@@ -502,6 +502,10 @@ msgstr "Pozycja:"
 #: templates/employees/employee_detail.html:123
 msgid "Contract type:"
 msgstr "Typ umowy:"
+
+#: templates/employees/employee_detail.html:159
+msgid "Zip-code"
+msgstr ""
 
 #: templates/employees/employee_detail.html:185
 msgid " Add Month"
@@ -853,64 +857,64 @@ msgstr "Nowy miesiąc dla"
 msgid "Welcome"
 msgstr "Witajcie"
 
-#: templates/polishlody/base.html:40
+#: templates/polishlody/base.html:44
 msgid "Weather in Wrocław:"
 msgstr "Pogoda we Wrocławiu:"
 
-#: templates/polishlody/base.html:44
+#: templates/polishlody/base.html:48
 msgid "temp"
 msgstr "temp"
 
-#: templates/polishlody/base.html:45
+#: templates/polishlody/base.html:49
 msgid "feels like"
 msgstr "odczuwalna"
 
-#: templates/polishlody/base.html:46
+#: templates/polishlody/base.html:50
 msgid "pressure"
 msgstr "ciśnienie"
 
-#: templates/polishlody/base.html:47
+#: templates/polishlody/base.html:51
 msgid "humidity"
 msgstr "wilgotność"
 
-#: templates/polishlody/base.html:48
+#: templates/polishlody/base.html:52
 msgid "wind"
 msgstr "wiatr"
 
-#: templates/polishlody/base.html:49
+#: templates/polishlody/base.html:53
 msgid "cloudiness"
 msgstr "zachmurzenie"
 
-#: templates/polishlody/base.html:51
+#: templates/polishlody/base.html:55
 msgid "Check forecast"
 msgstr "Sprawdź prognozę"
 
-#: templates/polishlody/base.html:61
+#: templates/polishlody/base.html:65
 msgid "Logged in as - "
 msgstr "Jesteś zalogowany jako - "
 
-#: templates/polishlody/base.html:62 templates/polishlody/base.html:82
+#: templates/polishlody/base.html:66 templates/polishlody/base.html:85
 #: templates/registration/change-password.html:9
 msgid "Change password"
 msgstr ""
 
-#: templates/polishlody/base.html:63 templates/polishlody/base.html:77
+#: templates/polishlody/base.html:67 templates/polishlody/base.html:80
 msgid "Log out"
 msgstr ""
 
-#: templates/polishlody/base.html:72
+#: templates/polishlody/base.html:75
 msgid "Check weather forecast"
 msgstr "Sprawdź prognozę pogody"
 
-#: templates/polishlody/base.html:87
+#: templates/polishlody/base.html:90
 msgid "Logged in as"
 msgstr "Zalogowany jako"
 
-#: templates/polishlody/base.html:91
+#: templates/polishlody/base.html:94
 msgid "Log in"
 msgstr ""
 
-#: templates/polishlody/base.html:118
+#: templates/polishlody/base.html:121
 msgid "polish lody on facebook"
 msgstr "polish lody na facebooku"
 
@@ -1085,42 +1089,42 @@ msgstr "Zachmurzenie "
 msgid "Description"
 msgstr "Opis"
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Sunday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Monday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Tuesday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Wednesday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Thursday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Friday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:60
-#: templates/weather/weather_forecastdaily.html:54
+#: templates/weather/weather_forecast.html:61
+#: templates/weather/weather_forecastdaily.html:58
 msgid "Saturday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:65
+#: templates/weather/weather_forecast.html:66
 msgid "Tomorrow"
 msgstr "Jutro"
 
