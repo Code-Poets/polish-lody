@@ -33,7 +33,7 @@ class EmployeeForm(AuthUserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = super().clean_password2()
         if bool(password1) ^ bool(password2):
-            raise forms.ValidationError("Fill out both fields")
+            raise forms.ValidationError(_("Fill out both fields"))
         return password2
 
     address_city = forms.CharField(max_length = 50, required = False, label = _('City'))

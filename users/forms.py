@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm
 from django import forms
+from django.utils.translation import ugettext_lazy as _
  
 from users.models import MyUser
  
@@ -18,7 +19,7 @@ class UserCreationForm(AuthUserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = super(UserCreationForm, self).clean_password2()
         if bool(password1) ^ bool(password2):
-            raise forms.ValidationError("Fill out both fields")
+            raise forms.ValidationError(_("Fill out both fields"))
         return password2
 
     class Meta:
