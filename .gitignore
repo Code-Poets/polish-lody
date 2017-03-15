@@ -9,5 +9,6 @@ db.sqlite3
 !/staticfiles/main.css
 !/staticfiles/login.css
 locale/pl/LC_MESSAGES/django.mo
+locale/pl/LC_MESSAGES/djangojs.mo
 
 /polishlody/settings/local.py

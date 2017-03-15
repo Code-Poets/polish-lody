@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
+from django.views.i18n import JavaScriptCatalog
 from . import views
 
 urlpatterns = [
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^employees/', include('employees.urls')),
     url(r'^weather/', include('weather.urls')),
     url(r'^sales/', include('sales.urls')),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
 
 # urlpatterns += i18n_patterns(

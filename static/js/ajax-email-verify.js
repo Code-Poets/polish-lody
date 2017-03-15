@@ -13,7 +13,7 @@ function ajaxVerify() {
                 $('input[name=submit]').attr('disabled', true);
                 $('#id_email').attr('data-toggle', 'popover')
                 $('#id_email').attr('data-placement', 'bottom');
-                $('#id_email').attr('data-content', 'This e-mail address is already used.');
+                $('#id_email').attr('data-content', gettext('This e-mail address is already used.'));
                 $('#id_email').popover('show');
             }
             else {
@@ -61,7 +61,7 @@ function ajaxVerifyDate() {
                     $('input[name=submit]').attr('disabled', true);
                     $('#id_year').attr('data-toggle', 'popover')
                     $('#id_year').attr('data-placement', 'right');
-                    $('#id_year').attr('data-content',month_text +' '+ verify_year +' already exists.');
+                    $('#id_year').attr('data-content',month_text +' '+ verify_year + gettext(' already exists.'));
                     $('#id_year').popover('show');
                 }
                 else {
@@ -85,7 +85,7 @@ $('#id_password2').focusout(function() {
         $('input[name=submit]').attr('disabled', true);
         $('#id_password2').attr('data-toggle', 'popover');
         $('#id_password2').attr('data-placement', 'bottom');
-        $('#id_password2').attr('data-content', 'Passwords do not match.');
+        $('#id_password2').attr('data-content', gettext('Passwords do not match.'));
         $('#id_password1').addClass('already-exists');
         $('#id_password2').addClass('already-exists');
         $('#id_password2').popover('show');
@@ -106,7 +106,7 @@ $(document).ready(function() {
         if ( f_name === '') {
             $('#id_first_name').attr('data-toggle', 'popover');
             $('#id_first_name').attr('data-placement', 'bottom');
-            $('#id_first_name').attr('data-content', 'This field is required.');
+            $('#id_first_name').attr('data-content', gettext('This field is required.'));
             $('#id_first_name').popover('show');
         } else {
             $('#id_first_name').removeAttr('data-toggle');
@@ -122,7 +122,7 @@ $(document).ready(function() {
         if ( l_name === '') {
             $('#id_last_name').attr('data-toggle', 'popover');
             $('#id_last_name').attr('data-placement', 'bottom');
-            $('#id_last_name').attr('data-content', 'This field is required.');
+            $('#id_last_name').attr('data-content', gettext('This field is required.'));
             $('#id_last_name').popover('show');
         } else {
             $('#id_last_name').attr('data-toggle', '');
