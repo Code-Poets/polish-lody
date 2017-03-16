@@ -431,12 +431,11 @@ class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
                     email_template_name='registration/password_set_email.html',
                 )
             messages.add_message(self.request, messages.SUCCESS,
-                                 "Successfully created employee %s" % self.object.full_name())
+                                 _("Successfully created employee %s") % self.object.full_name())
             return form_validation
         except:
-            if "already exists" in str(form.errors):
-                messages.add_message(self.request, messages.ERROR,
-                                    "Specified e-mail address has already been assigned to another employee")
+            messages.add_message(self.request, messages.ERROR,
+                                    _("Specified e-mail address has already been assigned to another employee"))
             return HttpResponseRedirect('')
 
     def form_invalid(self, form):
@@ -453,7 +452,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         try:
             return Employee.objects.filter(pk=self.kwargs['pk'])        
         except:
-            messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This employee does not exist!"))
             return HttpResponseRedirect('../')
 
     def get_initial(self):
@@ -502,13 +501,14 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         try:
             form_validation = super().form_valid(form)
             messages.add_message(self.request, messages.SUCCESS,
-                                 "Successfully created month %s in year %s" %
-                                 (self.object.month_name(), self.object.year))
+                                 _("Successfully created month %(month)s %(year)s") % ({
+                                    'month':self.object.get_month_display(),
+                                    'year':self.object.year}))
             return form_validation
         except:
             if "already exists" in str(form.errors):
                 messages.add_message(self.request, messages.ERROR,
-                                     "Specified month has already been assigned to employee %s." %
+                                     _("Specified month has already been assigned to employee %s.") %
                                      (employee_object.full_name()))
             return HttpResponseRedirect('')
 
@@ -517,7 +517,7 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         employee_object = Employee.objects.get(pk=self.kwargs['pk'])
         if "already exists" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                "Specified month has already been assigned to employee %s." %
+                                _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))
         return response
 
@@ -530,7 +530,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         try:
             return Month.objects.filter(pk=self.kwargs['pk'])
         except:
-            messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
 
     def get_success_url(self, **kwargs):
@@ -548,14 +548,15 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             context['employee'] = employee_object           
             return context
         except:
-            messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
 
     def form_valid(self, form, **kwargs):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                            "Successfully edited month %s in year %s." %
-                            (self.object.month_name(), self.object.year))
+                            _("Successfully edited month %(month)s %(year)s.") %({
+                                'month':self.object.get_month_display(),
+                                'year':self.object.year}))
         if 'hours_worked_in_this_month' in form.changed_data and self.object.salary_is_paid != True:
             month = Month.objects.get(pk = self.object.id)
             month.month_is_approved = False
@@ -566,7 +567,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         employee_object = self.get_object().employee
         if "already exists" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                "Specified month has already been assigned to employee %s." %
+                                _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))
         return super(MonthUpdate, self).form_invalid(form, **kwargs)
 
@@ -579,7 +580,7 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
         try:
             return Month.objects.filter(pk = self.kwargs['pk'])
         except:
-            messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
     def get_success_url(self, **kwargs):
         try:
@@ -596,7 +597,7 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
             context['employee'] = employee_object
             return context
         except:
-            messages.add_message(self.request, messages.ERROR, "This month does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
 
     def get_initial(self):
@@ -608,15 +609,16 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
     def form_valid(self, form):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                            "Successfully approved month %s in year %s." %
-                            (self.object.month_name(), self.object.year))
+                            _("Successfully approved month %(month)s %(year)s.") % ({
+                                'month':self.object.get_month_display(),
+                                'year':self.object.year}))
         return form_validation
 
     def form_invalid(self, form, **kwargs):
         employee_object = self.get_object().employee
         if "already exists" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                "Specified month has already been assigned to employee %s." %
+                                _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))
         return super().form_invalid(form, **kwargs)
 
@@ -629,25 +631,17 @@ class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             self.object = self.get_object()
             self.object.delete()
             messages.add_message(self.request, messages.WARNING,
-                                 "Successfully deleted employee %s." % self.object.full_name())
+                                 _("Successfully deleted employee %s.") % self.object.full_name())
         except:
-            messages.add_message(self.request, messages.ERROR, "This employee does not exist!")
+            messages.add_message(self.request, messages.ERROR, _("This employee does not exist!"))
 
         return HttpResponseRedirect(self.success_url)
 
 class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Month
 
-    def get_success_url(self, **kwargs):
-        try:
-            employee_object = self.get_object().employee
-            redirector = employee_object.pk
-            return reverse_lazy('employee_detail', kwargs={'pk': redirector})
-        except AttributeError:
-            return '../'
-
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(MonthDelete, self).get_context_data(**kwargs)
         try:
             employee_object = self.get_object().employee
             context['employee'] = employee_object
@@ -657,11 +651,19 @@ class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            messages.add_message(self.request, messages.WARNING, "Successfully deleted month %s." % self.object.month_name())
-            super(MonthDelete, self).delete(request, *args, **kwargs)
+            employee_object = self.get_object().employee
+            redirector = employee_object.pk
+            success_url = reverse_lazy('employee_detail', kwargs={'pk': redirector})
+            messages.add_message(self.request, messages.WARNING,
+                                             _("Successfully deleted month %(month)s %(year)s.") % ({
+                                                'month':self.get_object().get_month_display(),
+                                                'year':self.get_object().year}))
+            self.object = self.get_object()
+            self.object.delete()
+            return HttpResponseRedirect(success_url)
         except AttributeError:
-            messages.add_message(self.request, messages.ERROR, "This month does not exist!")
-            return HttpResponseRedirect(self.get_success_url())
+            messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
+            HttpResponseRedirect('employees')
 
 def pl_404_view(request):
     template = 'employees/404.html'

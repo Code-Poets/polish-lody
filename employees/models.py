@@ -137,6 +137,9 @@ class Employee(MyUser):
  
     phone_contact_number = models.CharField(_('Phone contact number'),max_length = 15, blank = True, null = True, default = None, validators = [phone_check])
 
+    class Meta:
+        verbose_name = _('employee')
+        verbose_name_plural = _('employees')
 
     def months_dict(self):
         months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
@@ -233,4 +236,6 @@ class Month(models.Model):
         return round((self.rate_per_hour_this_month * self.hours_worked_in_this_month + self.bonuses), 2)
 
     class Meta:
+        verbose_name = _('month')
+        verbose_name_plural = _('months')
         unique_together = (("employee", "month", "year"),)

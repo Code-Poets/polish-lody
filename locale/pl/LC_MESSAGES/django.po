@@ -215,10 +215,67 @@ msgstr "stawka godzinowa w tym miesiącu"
 msgid "Bonuses"
 msgstr "Premie"
 
-#: employees/views.py:473
+#: employees/models.py:213
+msgid "month"
+msgstr "miesiąc"
+
+#: employees/models.py:214
+msgid "months"
+msgstr "miesiące"
+
+#: employees/views.py:434
+#, python-format
+msgid "Successfully created employee %s"
+msgstr "Pomyślnie stworzono pracownika %s."
+
+#: employees/views.py:438
+msgid "Specified e-mail address has already been assigned to another employee"
+msgstr "Podany adres e-mail został już przypisany do innego pracownika"
+
+#: employees/views.py:455 employees/views.py:636
+msgid "This employee does not exist!"
+msgstr "Ten pracownik nie istnieje!"
+
+#: employees/views.py:472
 #, python-format
 msgid "Changes saved for employee %s."
 msgstr "Zapisano zmiany dla pracownika %s."
+
+#: employees/views.py:504
+#, python-format
+msgid "Successfully created month %(month)s %(year)s"
+msgstr "Pomyślnie stworzono miesiąc %(month)s %(year)s."
+
+#: employees/views.py:511 employees/views.py:520 employees/views.py:570
+#: employees/views.py:621
+#, python-format
+msgid "Specified month has already been assigned to employee %s."
+msgstr "Określony miesiąc został już przypisany do pracownika %s."
+
+#: employees/views.py:533 employees/views.py:551 employees/views.py:583
+#: employees/views.py:600 employees/views.py:665
+msgid "This month does not exist!"
+msgstr "Ten miesiąc nie istnieje!"
+
+#: employees/views.py:557
+#, python-format
+msgid "Successfully edited month %(month)s %(year)s."
+msgstr "Pomyślnie edytowano miesiąc %(month)s %(year)s."
+
+#: employees/views.py:612
+#, python-format
+msgid "Successfully approved month %(month)s %(year)s."
+msgstr "Pomyślnie zatwierdzono miesiąc %(month)s %(year)s."
+
+#: employees/views.py:634
+#, python-format
+msgid "Successfully deleted employee %s."
+msgstr "Pomyślnie usunięto pracownika %s."
+
+#: employees/views.py:658
+#, python-format
+msgid "Successfully deleted month %(month)s %(year)s."
+msgstr "Pomyślnie usunięto miesiąc %(month)s %(year)s."
 
 #: polishlody/pass_validators.py:11
 #, python-format
@@ -674,6 +731,10 @@ msgstr "Wygląda na to, że żaden miesiąc nie został jeszcze dodany."
 #: templates/employees/employee_detail_table.html:299
 msgid "Add first month for this employee."
 msgstr "Dodaj pierwszy miesiąc dla tego pracownika."
+
+#: templates/employees/employee_detail_table.html:314
+msgid "There are no months which satisfy specified criteria."
+msgstr "Brak miesięcy, które spełniają określone kryteria."
 
 #: templates/employees/employee_form.html:5
 msgid "Employee"
