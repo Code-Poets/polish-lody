@@ -90,6 +90,10 @@ class City(models.Model):
 
     name = models.CharField(max_length = 50, null = True, blank = True, default = None, unique = True)
 
+    class Meta:
+        verbose_name = _('city')
+        verbose_name_plural = _('cities')
+
     def __str__(self):
         return self.name
 

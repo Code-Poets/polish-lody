@@ -8,7 +8,6 @@ from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 
-admin.site.register(City)
 
 class EmployeeCreateAdminForm(AuthUserCreationForm):
 
@@ -99,3 +98,10 @@ class MonthAdmin(admin.ModelAdmin):
 
 admin.site.register(Month, MonthAdmin)
 
+class CityAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+    class Meta:
+        model = City
+        fields = ["name"]
+
+admin.site.register(City, CityAdmin)
