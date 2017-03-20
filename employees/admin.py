@@ -43,7 +43,8 @@ class EmployeeAdmin(AuthUserAdmin):
         ('Personal info', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_active', 'is_staff')}),
         ('Employee info', {'fields': ('rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type')}),
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'address_city', 'address_street',
+          'address_zip_code', 'bank_account_number', 'phone_contact_number')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
@@ -51,7 +52,8 @@ class EmployeeAdmin(AuthUserAdmin):
         ('Personal info', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_active', 'is_staff')}),
         ('Employee info', {'fields': ('rate_per_hour', 'contract_start_date', 'contract_exp_date',
-         'health_book_exp_date', 'gender', 'position', 'contract_type')}),
+         'health_book_exp_date', 'gender', 'position', 'contract_type', 'address_city', 'address_street',
+          'address_zip_code', 'bank_account_number', 'phone_contact_number')}),
     )
     form = EmployeeChangeAdminForm
     add_form = EmployeeCreateAdminForm

@@ -127,7 +127,7 @@ class Employee(MyUser):
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
     
-    address_city = models.ForeignKey(City, max_length = 30, null=True, blank=True, verbose_name = _('City'), default = None)
+    address_city = models.ForeignKey(City, to_field='name', on_delete=models.SET_NULL, max_length = 30, null=True, blank=True, verbose_name = _('City'), default = None)
 
     address_street = models.CharField(_('Street'),max_length = 16, null=True, blank=True, default=None)
 
