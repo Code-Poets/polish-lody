@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-13 17:07+0000\n"
+"POT-Creation-Date: 2017-03-17 11:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: employees/forms.py:39 employees/forms.py:76 employees/models.py:100
+#: employees/forms.py:36 users/forms.py:22
+msgid "Fill out both fields"
+msgstr "Wpisz hasło w oba pola"
+
+#: employees/forms.py:39 employees/forms.py:76 employees/models.py:126
 #: templates/employees/employee_detail.html:135
 msgid "City"
 msgstr "Miejscowość"
@@ -29,173 +33,185 @@ msgstr "Miejscowość"
 msgid "Please type a valid city as provided by the list of suggestions"
 msgstr "Podaj istniejące miasto, sugerując się listą podpowiedzi"
 
-#: employees/models.py:41
+#: employees/models.py:42
 msgid "The bank account number you entered is invalid"
 msgstr "Podany numer konta jest nieprawidłowy"
 
-#: employees/models.py:51
+#: employees/models.py:46
+msgid "Bank account number cannot contain letters"
+msgstr "Numer konta bankowego nie może zawierać liter"
+
+#: employees/models.py:65
 msgid "The phone number you entered is invalid"
 msgstr "Podany numer telefonu jest nieprawidłowy"
 
-#: employees/models.py:61
+#: employees/models.py:71
+msgid "Phone number cannot contain letters"
+msgstr "Numer telefonu nie może zawierać liter"
+
+#: employees/models.py:83
 msgid "The zip code you entered is invalid"
 msgstr "Podany kod pocztowy jest nieprawidłowy"
 
-#: employees/models.py:73
+#: employees/models.py:86
+msgid "Zip code cannot contain letters"
+msgstr "Kod pocztowy nie może zawierać liter"
+
+#: employees/models.py:99
 msgid "Male"
 msgstr "Mężczyzna"
 
-#: employees/models.py:74
+#: employees/models.py:100
 msgid "Female"
 msgstr "Kobieta"
 
-#: employees/models.py:77 templates/employees/employee_list.html:45
+#: employees/models.py:103 templates/employees/employee_list.html:45
 msgid "Production"
 msgstr "Produkcja"
 
-#: employees/models.py:78 templates/employees/employee_list.html:35
+#: employees/models.py:104 templates/employees/employee_list.html:35
 msgid "Sale"
 msgstr "Sprzedaż"
 
-#: employees/models.py:79 employees/models.py:84
+#: employees/models.py:105 employees/models.py:110
 #: templates/employees/employee_list.html:55
 msgid "Other"
 msgstr "Inne"
 
-#: employees/models.py:82
+#: employees/models.py:108
 msgid "Fixed-term employment contract"
 msgstr "Umowa na czas określony"
 
-#: employees/models.py:83
+#: employees/models.py:109
 msgid "Non-fixed-term employment contract"
 msgstr "Umowa na czas nieokreślony"
 
-#: employees/models.py:87
+#: employees/models.py:113
 msgid "rate per hour"
 msgstr "stawka godzinowa"
 
-#: employees/models.py:90
+#: employees/models.py:116
 msgid "contract start date"
 msgstr "data rozpoczęcia umowy"
 
-#: employees/models.py:91
+#: employees/models.py:117
 msgid "contract exp date"
 msgstr "data wygaśnięcia umowy"
 
-#: employees/models.py:92
+#: employees/models.py:118
 msgid "health book exp date"
 msgstr "data wygaśnięcia książeczki zdrowia"
 
-#: employees/models.py:93
+#: employees/models.py:119
 msgid "gender"
 msgstr "płeć"
 
-#: employees/models.py:95
+#: employees/models.py:121
 msgid "position"
 msgstr "pozycja"
 
-#: employees/models.py:97
+#: employees/models.py:123
 msgid "contract type"
 msgstr "typ umowy"
 
-#: employees/models.py:102 templates/employees/employee_detail.html:151
+#: employees/models.py:128 templates/employees/employee_detail.html:151
 msgid "Street"
 msgstr "Ulica"
 
-#: employees/models.py:104 templates/employees/employee_detail.html:159
+#: employees/models.py:130 templates/employees/employee_detail.html:159
 msgid "Zip code"
 msgstr "Kod pocztowy"
 
-#: employees/models.py:106 templates/employees/employee_detail.html:167
+#: employees/models.py:132 templates/employees/employee_detail.html:167
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
-#: employees/models.py:108 templates/employees/employee_detail.html:175
+#: employees/models.py:134 templates/employees/employee_detail.html:175
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
 
-#: employees/models.py:152
+#: employees/models.py:178
 msgid "January"
 msgstr ""
 
-#: employees/models.py:153
+#: employees/models.py:179
 msgid "February"
 msgstr ""
 
-#: employees/models.py:154
+#: employees/models.py:180
 msgid "March"
 msgstr ""
 
-#: employees/models.py:155
+#: employees/models.py:181
 msgid "April"
 msgstr ""
 
-#: employees/models.py:156 templates/dashboard/dashboard.html:79
+#: employees/models.py:182 templates/dashboard/dashboard.html:79
 msgid "May"
 msgstr ""
 
-#: employees/models.py:157
+#: employees/models.py:183
 msgid "June"
 msgstr ""
 
-#: employees/models.py:158
+#: employees/models.py:184
 msgid "July"
 msgstr ""
 
-#: employees/models.py:159
+#: employees/models.py:185
 msgid "August"
 msgstr ""
 
-#: employees/models.py:160
+#: employees/models.py:186
 msgid "September"
 msgstr ""
 
-#: employees/models.py:161
+#: employees/models.py:187
 msgid "October"
 msgstr ""
 
-#: employees/models.py:162
+#: employees/models.py:188
 msgid "November"
 msgstr ""
 
-#: employees/models.py:163
+#: employees/models.py:189
 msgid "December"
 msgstr ""
 
-#: employees/models.py:166 templates/employees/employee_confirm_delete.html:21
+#: employees/models.py:192 templates/employees/employee_confirm_delete.html:21
 #: templates/employees/month_confirm_delete.html:27
 msgid "Yes"
 msgstr ""
 
-#: employees/models.py:167
+#: employees/models.py:193
 msgid "No"
 msgstr ""
 
-#: employees/models.py:173
+#: employees/models.py:199
 msgid "year"
 msgstr "rok"
 
-#: employees/models.py:175
+#: employees/models.py:201
 msgid "Month"
 msgstr "Miesiąc"
 
-#: employees/models.py:176
+#: employees/models.py:202
 msgid "Paid?"
 msgstr "Zapłacono?"
 
-#: employees/models.py:177
+#: employees/models.py:203
 msgid "hours worked in this month"
 msgstr "godzin przepracowanych w tym miesiącu"
 
-#: employees/models.py:179
+#: employees/models.py:205
 msgid "Approved?"
 msgstr "Zaakceptowano?"
 
-#: employees/models.py:180
+#: employees/models.py:206
 msgid "rate per hour this month"
 msgstr "stawka godzinowa w tym miesiącu"
 
-#: employees/models.py:182 templates/employees/employee_detail_table.html:71
+#: employees/models.py:208 templates/employees/employee_detail_table.html:71
 msgid "Bonuses"
 msgstr "Premie"
 
@@ -214,11 +230,11 @@ msgstr "Hasło musi zawierać przynajmniej %(min_length)d znaków"
 msgid "Your password must contain at least %(min_length)d characters."
 msgstr "Twoje hasło musi zawierać przynajmniej %(min_length)d znaków"
 
-#: polishlody/settings/local.py:132 polishlody/settings/productions.py:132
+#: polishlody/settings/local.py:130 polishlody/settings/productions.py:132
 msgid "English"
 msgstr ""
 
-#: polishlody/settings/local.py:133 polishlody/settings/productions.py:133
+#: polishlody/settings/local.py:131 polishlody/settings/productions.py:133
 msgid "Polish"
 msgstr ""
 
@@ -348,7 +364,7 @@ msgstr "404 Strona nie istnieje"
 
 #: templates/employees/404.html:11
 msgid "It seems that you tried to modify something that does not exist."
-msgstr "Zdaje się że próbujesz zmodyfikować coś co nie istnieje."
+msgstr "Zdaje się, że próbujesz zmodyfikować coś co nie istnieje."
 
 #: templates/employees/404.html:15 templates/employees/500.html:15
 #: templates/registration/change-password-done.html:8
@@ -502,10 +518,6 @@ msgstr "Pozycja:"
 #: templates/employees/employee_detail.html:123
 msgid "Contract type:"
 msgstr "Typ umowy:"
-
-#: templates/employees/employee_detail.html:159
-msgid "Zip-code"
-msgstr ""
 
 #: templates/employees/employee_detail.html:185
 msgid " Add Month"
@@ -1210,6 +1222,11 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
+
+#, fuzzy
+#~| msgid "The phone number you entered is invalid"
+#~ msgid "The phone number you entered is too short"
+#~ msgstr "Podany numer telefonu jest nieprawidłowy"
 
 #~ msgid "bonuses"
 #~ msgstr "premie"

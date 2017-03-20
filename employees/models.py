@@ -25,40 +25,66 @@ def is_expiring(exp_date):
 def sanity_check(account_number):
 
     assert isinstance(account_number, str) 
-    assert account_number.replace(' ', '').isdigit()
     
-    account_number_sans_checksum = account_number.replace(' ', '')[2:]
-    original_checksum = int(account_number[0:2])
-    new_checksum = 98 - (int(account_number_sans_checksum + '252100') % 97)
+    if account_number.replace(' ', '').isdigit():
+    
+        account_number_sans_checksum = account_number.replace(' ', '')[2:]
+        original_checksum = int(account_number[0:2])
+        new_checksum = 98 - (int(account_number_sans_checksum + '252100') % 97)
 
-    assert new_checksum >= 0
+        assert new_checksum >= 0
 
-    if new_checksum < 10:
-        new_checksum = int('0' + str(new_checksum))
+        if new_checksum < 10:
+            new_checksum = int('0' + str(new_checksum))
 
-    if original_checksum != new_checksum:
-        print('The account number is invalid!')
-        raise ValidationError(_("The bank account number you entered is invalid"))
+        if original_checksum != new_checksum:
+            
+            raise ValidationError(_("The bank account number you entered is invalid"))
+
+    else:
+
+        raise ValidationError(_('Bank account number cannot contain letters'))
 
 def phone_check(phone_number):
     
     assert isinstance(phone_number, str)
     
-    pattern = re.compile('^\+[0-9]{2}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}$')
+    phone_number_clean = phone_number.replace(' ','')
+
+    if phone_number_clean.replace('+','').isdigit():
+
+        if len(phone_number) <= 3:
+            phone_number = ''
+
+        else:
+
+            pattern = re.compile('^\+[0-9]{2}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}$')
+            
+            if not pattern.match(phone_number):
+                
+                raise ValidationError(_("The phone number you entered is invalid"))       
+
+        return phone_number
     
-    if not pattern.match(phone_number):
-        print('The phone number is invalid!')
-        raise ValidationError(_("The phone number you entered is invalid"))       
+    else:
+
+        raise ValidationError(_('Phone number cannot contain letters'))
 
 def zip_check(zip_code):
     
     assert isinstance(zip_code, str)
 
-    pattern = re.compile('^[0-9]{2}-[0-9]{3}$')
+    if zip_code.replace('-','').isdigit():
 
-    if not pattern.match(zip_code):
-        print('The zip code is invalid!')
-        raise ValidationError(_("The zip code you entered is invalid"))  
+        pattern = re.compile('^[0-9]{2}-[0-9]{3}$')
+
+        if not pattern.match(zip_code):
+            
+            raise ValidationError(_("The zip code you entered is invalid"))  
+
+    else:
+        raise ValidationError(_('Zip code cannot contain letters'))
+    
 
 class City(models.Model):
 

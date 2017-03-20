@@ -15,10 +15,12 @@ dateinput = partial(forms.DateInput, {'class': 'datepicker'})
 #     end_date = forms.DateField(widget=DateInput())
 
 class HorizontalRadioRenderer(RadioSelect.renderer):
-  def render(self):
-    return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
+    def render(self):
+        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
 class EmployeeForm(AuthUserCreationForm):
+
+    address_city = forms.CharField(max_length = 50, required = False, label = _('City'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,23 +37,24 @@ class EmployeeForm(AuthUserCreationForm):
         if bool(password1) ^ bool(password2):
             raise forms.ValidationError(_("Fill out both fields"))
         return password2
-
-    address_city = forms.CharField(max_length = 50, required = False, label = _('City'))
     
     def clean_address_city(self):
         
-        value = self.cleaned_data['address_city']
+        city_name = self.cleaned_data['address_city']
         
-        if value == '':
-           value = None 
+        if city_name == '':
+            return None 
 
         else:
-            try:
-                value = City.objects.get(name = value)
-            except:
-                raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
+            cities = City.objects.filter(name = city_name)
+            assert len(cities) <= 1
+            if len(cities) == 0:
+
+                city_name.full_clean()
+                city_name.save
+                #raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
         
-        return value    
+            return cities[0]    
 
     class Meta:
         model = Employee
@@ -61,10 +64,10 @@ class EmployeeForm(AuthUserCreationForm):
           'address_zip_code', 'bank_account_number', 'phone_contact_number']
 
         widgets = {
-            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
-            'rate_per_hour'         : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+            'contract_start_date'   : forms.DateInput(attrs = {'class': 'datepicker'}),
+            'contract_exp_date'     : forms.DateInput(attrs = {'class': 'datepicker'}),
+            'health_book_exp_date'  : forms.DateInput(attrs = {'class': 'datepicker'}),
+            'rate_per_hour'         : forms.NumberInput(attrs = {'min':'0','step':'0.1'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
@@ -77,18 +80,21 @@ class EmployeeChangeForm(ModelForm):
     
     def clean_address_city(self):
         
-        value = self.cleaned_data['address_city']
-
-        if value == '':
-           value = None 
+        city_name = self.cleaned_data['address_city']
+        
+        if city_name == '':
+            return None 
 
         else:
-            try:
-                value = City.objects.get(name = value)
-            except:
-                raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
+            cities = City.objects.filter(name = city_name)
+            assert len(cities) <= 1
+            if len(cities) == 0:
+
+                city_name.full_clean()
+                city_name.save
+                #raise ValidationError(_('Please type a valid city as provided by the list of suggestions'))
         
-        return value    
+            return cities[0]    
 
     class Meta:
         model = Employee
@@ -98,9 +104,9 @@ class EmployeeChangeForm(ModelForm):
          'phone_contact_number']
 
         widgets = {
-            'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
-            'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
-            'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
+            'contract_start_date'   : forms.DateInput(attrs = {'class': 'datepicker'}),
+            'contract_exp_date'     : forms.DateInput(attrs = {'class': 'datepicker'}),
+            'health_book_exp_date'  : forms.DateInput(attrs = {'class': 'datepicker'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
@@ -113,9 +119,9 @@ class MonthForm(ModelForm):
         exclude = ['month_is_approved']
 
         widgets = {
-            'salary_is_paid'                : RadioSelect(renderer=HorizontalRadioRenderer),
-            'hours_worked_in_this_month'    : forms.NumberInput(attrs={'min':'0', 'max':'720', 'step':'0.1'}),
-            'rate_per_hour_this_month'      : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+            'salary_is_paid'                : RadioSelect(renderer = HorizontalRadioRenderer),
+            'hours_worked_in_this_month'    : forms.NumberInput(attrs = {'min':'0', 'max':'720', 'step':'0.1'}),
+            'rate_per_hour_this_month'      : forms.NumberInput(attrs = {'min':'0','step':'0.1'}),
         }
 
 class MonthApproveForm(ModelForm):
