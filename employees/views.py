@@ -21,19 +21,30 @@ from django.db import IntegrityError
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
+from functools import reduce
 
 def ajax_autocomplete(request):
     if request.is_ajax():
         query = request.GET.get('query', '')
-    
+        polishquery = query
+        polishqueryarr = []
+        for word, initial in {'A':'Ą','C':'Ć','E':'Ę','L':'Ł','N':'Ń','O':'Ó','S':'Ś','Z':'Ź','Z':'Ż',
+            'a':'ą','c':'ć','e':'ę','l':'ł','n':'ń','o':'ó','s':'ś','z':'ź','z':'ż'}.items():
+            polishquery = query
+            polishquery = polishquery.replace(word,initial)
+            polishqueryarr.append(polishquery)
+        for word, initial in {'A':'Ą','C':'Ć','E':'Ę','L':'Ł','N':'Ń','O':'Ó','S':'Ś','Z':'Ź','Z':'Ż',
+            'a':'ą','c':'ć','e':'ę','l':'ł','n':'ń','o':'ó','s':'ś','z':'ź','z':'ż'}.items():
+            polishquery = polishquery.replace(word,initial)
+            polishqueryarr.append(polishquery)
         data = json.dumps({
 
             "suggestions" :
             
-            [city.name for city in City.objects.filter(name__istartswith = query)]
+            [city.name for city in City.objects.filter(
+                Q(name__icontains = query)|reduce(lambda x, y: x | y, [Q(name__contains=word) for word in polishqueryarr]))]
             
             })
-    
     else:
         data = 'fail'
     mimetype = 'application/json'
