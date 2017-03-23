@@ -128,6 +128,8 @@
                             <td align="center" valign="middle">
                                 {% if employee.position %}
                                     {{ employee.get_position_display }}
+                                {% else %}
+                                    {% trans 'N/A' %}
                                 {% endif %}
                             </td>
                             <td class="employee-list-date">
@@ -144,7 +146,11 @@
                                 <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
                                     class="glyphicon glyphicon-warning-sign employee-list"></span>
                                 {% endif %}
-                                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }}</span>
+                                {% if employee.contract_exp_date %}
+                                    <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }}</span>
+                                {% else %}
+                                    <span style="padding-right:40%">{% trans 'N/A' %}</span>
+                                {% endif %}
                             </td>
                             <td class="employee-list-date">
                                 {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
@@ -160,7 +166,11 @@
                                 <span title="{% trans 'Health book expired' %} {{ employee.is_health_book_expiring.1 }} {% trans 'days ago!' %}"
                                     class="glyphicon glyphicon-warning-sign employee-list "></span>
                                 {% endif %}
-                                <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
+                                {% if employee.health_book_exp_date %}
+                                    <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
+                                {% else %}
+                                    <span style="padding-right:40%">{% trans 'N/A' %}</span>
+                                {% endif %}
                             </td>
                             <td class="sorttable_numeric" align="center" valign="middle">
                                 {% if employee.all_unpaid_salaries == 0 %}
@@ -168,7 +178,7 @@
                                 {% elif employee.all_unpaid_salaries != 0 and employee.all_unpaid_salaries != None %}
                                 {{ employee.all_unpaid_salaries }}
                                 {% else %}
-                                {% trans 'No salary data.' %}
+                                {% trans 'N/A' %}
                                 {% endif %}
                             </td>
                             <td align="right">

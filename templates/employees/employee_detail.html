@@ -38,7 +38,7 @@
                         {% if employee.rate_per_hour %}
                             {{ employee.rate_per_hour }}zł
                         {% else %}
-                            {% trans 'Not specified' %}
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -50,7 +50,7 @@
                         {% if employee.contract_start_date %}
                         {{ employee.contract_start_date }}
                         {% else %}
-                            {% trans 'Not specified' %}
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -75,7 +75,7 @@
                                     class="glyphicon glyphicon-warning-sign employee-list"></span>
                             {% endif %}
                         {% else %}
-                            {% trans 'Not specified' %}
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -102,7 +102,7 @@
                     </td>
                     {% else %}
                     <td>
-                        {% trans 'Not specified' %}
+                        {% trans 'N/A' %}
                     </td>
                     {% endif %}
                 </tr>
@@ -114,7 +114,7 @@
                         {% if employee.get_position_display %}
                             {{ employee.get_position_display }}
                         {% else %}
-                            {% trans 'Not specified' %}
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -126,7 +126,7 @@
                         {% if employee.get_position_display %}
                             {{ employee.get_contract_type_display }}
                         {% else %}
-                            {% trans 'Not specified' %}
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -135,14 +135,10 @@
                         {% trans 'City' %}:
                     </td>
                     <td>
-                        {% if employee.address_city == None %}
-
-
-
+                        {% if employee.address_city %}
+                            {{ employee.address_city }}
                         {% else %}
-
-                        {{ employee.address_city }}
-
+                            {% trans 'N/A' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -151,7 +147,11 @@
                         {% trans 'Street'%}:
                     </td>
                     <td>
-                        {{ employee.address_street }}
+                        {% if employee.address_street %}
+                            {{ employee.address_street }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -159,7 +159,11 @@
                         {% trans 'Zip code' %}:
                     </td>
                     <td>
-                        {{ employee.address_zip_code }}
+                        {% if employee.address_zip_code %}
+                            {{ employee.address_zip_code }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -167,7 +171,11 @@
                         {% trans 'Bank account number' %}:
                     </td>
                     <td>
-                        {{ employee.bank_account_number }}
+                        {% if employee.bank_account_number %}
+                            {{ employee.bank_account_number }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -175,7 +183,11 @@
                         {% trans 'Phone contact number' %}:
                     </td>
                     <td>
-                        {{ employee.address_phone_contact_number }}
+                        {% if employee.address_phone_contact_number %}
+                            {{ employee.address_phone_contact_number }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
