@@ -129,7 +129,7 @@ class Employee(MyUser):
     
     address_city = models.ForeignKey(City, to_field='name', on_delete=models.SET_NULL, max_length = 30, null=True, blank=True, verbose_name = _('City'), default = None)
 
-    address_street = models.CharField(_('Street'),max_length = 16, null=True, blank=True, default=None)
+    address_street = models.CharField(_('Street'),max_length = 80, null=True, blank=True, default=None)
 
     address_zip_code = models.CharField(_('Zip code'),max_length = 6, blank = True, null = True, default = None, validators = [zip_check])
     
