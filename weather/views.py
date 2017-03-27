@@ -9,6 +9,3 @@ class WeatherIndex(LoginRequiredMixin, TemplateView):
 
 class WeatherForecast(LoginRequiredMixin, TemplateView):
 	template_name = "weather/weather_forecast.html"
-
-class WeatherForecastDaily(LoginRequiredMixin, TemplateView):
-	template_name = "weather/weather_forecastdaily.html"

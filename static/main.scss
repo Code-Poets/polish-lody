@@ -222,11 +222,11 @@ li.filter {
     display: inline-block;
     white-space: nowrap;
 }
-label.my-button:hover {
+label.my-button:hover, #day_selected label:hover {
     background-color: #9fb76e;
 }
 
-input[type="checkbox"]:checked + label.my-button {
+input[type="checkbox"]:checked + label.my-button, #day_selected input:checked + span {
     background-color: #819839;
 }
 
@@ -236,6 +236,7 @@ input[type="checkbox"]:checked + label.my-button {
 
 .table {
     border: none;
+    box-shadow: 0px 2px 0.5px #999999;
 }
 
 .ajax-loader {
@@ -293,10 +294,6 @@ tbody {
     }
 }
 
-.table {
-    box-shadow: 0px 2px 0.5px #999999;
-}
-
 .glyphicon-warning-sign {
     color: #ff2e35;
     cursor: help;
@@ -306,6 +303,21 @@ tbody {
     color: #ffac33;
     cursor: help;
 }
+
+.table#pop_table {
+    border: none;
+    box-shadow: 0px 0px 0px;
+}
+
+.table#pop_table tr:nth-child(even) {
+        background-color: white;
+        transition: background-color 0.2s;
+    }
+
+.table#pop_table tr:nth-child(odd) {
+        background-color: white;
+        transition: background-color 0.2s;
+    }
 
 /* */
 
@@ -611,14 +623,6 @@ img {
     width: 32px;
 }
 
-ul.weather-conditions li {
-    height: 32px;
-    margin-left: 10%;
-    #forecast {
-        font-size: 14px;
-    }
-}
-
 .menu-right {
     display: inline-block;
     float: right;
@@ -701,6 +705,40 @@ ul.topnav li.icon {
     display: block;
     text-align: left;
   }
+}
+
+/**/
+
+/* WeatherApp */
+
+.center {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    /*background-color: #DFE6CC;*/
+}
+
+#day_selected label {
+    width:120px;
+    margin:4px;
+    background-color: #AFBF7F;
+    border-radius:4px;
+    border:1px solid #D0D0D0;
+    overflow:auto;
+    color: #fafafa;
+    cursor: pointer;
+}
+
+#day_selected label span {
+    text-align:center;
+    font-size: 16px;
+    padding:13px 0px;
+    display:block;
+}
+
+#day_selected label input {
+    position:fixed;
+    top:-30px;
 }
 
 /**/

@@ -13,7 +13,7 @@
 {% block body_block %}
     <!-- Usunąć z tabeli klasy table-bordered i table-striped, żeby tabela bardziej przypominała pozostałe tabelki na stronie -->
     <div class="container">
-        <table class="table table-bordered table-hover ">
+        <table class="table table-bordered table-hover " id="forecastdaily_table">
             <thead>
             <tr>
                 <th class="text-center" style="vertical-align:middle;">{% trans 'Date' %}</th>
@@ -82,7 +82,7 @@
             }
             forecast.push("</tr>");
         });
-        $("table").append($(forecast.join('')));
+        $("#forecastdaily_table").append($(forecast.join('')));
     }
     </script>
     

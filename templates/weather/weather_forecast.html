@@ -11,20 +11,22 @@
 {% endblock %}
 
 {% block body_block %}
-        <!-- Usunąć z tabeli klasy table-bordered i table-striped, żeby tabela bardziej przypominała pozostałe tabelki na stronie -->
 
     <div class="container">
-        <select name="sometext" id="day_selected">
-            <option value="0" id="day0"></option>
-            <option value="1" id="day1"></option>
-            <option value="2" id="day2"></option>
-            <option value="3" id="day3"></option>
-            <option value="4" id="day4"></option>
-            <option value="5" id="day5"></option>
-            <option value="6" id="day6"></option>
-        </select>
-        <table class="table table-bordered table-hover">
-            <thead>
+        <div class="center">
+            <form name="day_selected" id="day_selected">
+            <label><input type="radio" name="day_selected" value="10" checked><span id="week">{% trans 'Week' %}</span></label>
+            <label><input type="radio" name="day_selected" value="0" ><span id="day0"></span></label>
+            <label><input type="radio" name="day_selected" value="1" ><span id="day1"></span></label>
+            <label><input type="radio" name="day_selected" value="2" ><span id="day2"></span></label>
+            <label><input type="radio" name="day_selected" value="3" ><span id="day3"></span></label>
+            <label><input type="radio" name="day_selected" value="4" ><span id="day4"></span></label>
+            <label><input type="radio" name="day_selected" value="5" ><span id="day5"></span></label>
+            <label><input type="radio" name="day_selected" value="6" ><span id="day6"></span></label>
+            </form>
+        </div>
+        <table class="table table-bordered table-hover" id="forecast_table">
+            <thead id="forecast_table_head">
             <tr>
                 <th>{% trans 'Date' %}</th>
                 <th>{% trans 'Temp ' %}[&#8451]</th>
@@ -35,69 +37,148 @@
                 <th>{% trans 'Description' %}</th>
             </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="forecast_table_body"></tbody>
         </table>
     </div>
 
     <script type="text/javascript">
-    var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
-    lscache.flushExpired();
-    if (localStorage.getItem('lscache-weatherData')==null) {
-        $.getJSON(weather_apixu, function(data) {
-            lscache.set('weatherData', data, 360);
-            var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
-            PopulateTableForcast();
-        });
-    } else {
-        PopulateTableForcast();
-    }
-    function PopulateTableForcast() {
-        var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
-        var WeatherConditionsTrans = JSON.parse(sessionStorage.getItem('conditions_trans'));
-        var forecast = [];
-        for (var i=0; i<7; i++){
-            var date = new Date(localWeatherData.forecast.forecastday[i].date_epoch*1000);
-            var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
-            var days = ["{% trans 'Sunday' %}","{% trans 'Monday' %}","{% trans 'Tuesday' %}","{% trans 'Wednesday' %}","{% trans 'Thursday' %}","{% trans 'Friday' %}","{% trans 'Saturday' %}"];
-            var day = days[date.getDay()];
-            if(i == 0) {
-                day = "{% trans 'Today' %}";
-            } else if(i == 1){
-                day = "{% trans 'Tomorrow' %}";
-            }
-            $("#day"+i).html(day);
+    $(document).ready(function(){
+        var weather_apixu = "https://api.apixu.com/v1/forecast.json?key=e3acfecab7234cd4b26110712172102&q=Wroclaw&days=7";
+        if (sessionStorage.getItem('dayselected')){
+            var day = sessionStorage.getItem('dayselected');
+            $('#day_selected').attr("value",day);
         }
-        var day_selected = $('#day_selected :selected').val();
-        $.each(localWeatherData.forecast.forecastday[day_selected].hour, function(key, val){
-            var temp = Math.round(val.temp_c);
-            forecast.push("<tr>");
-            forecast.push("<td>"+val.time+"</td>");
-            forecast.push("<td>"+temp.toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.pressure_mb).toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.humidity)+"</td>");
-            forecast.push("<td>"+(val.wind_kph).toFixed(0)+"</td>");
-            forecast.push("<td>"+(val.cloud)+"</td>");
-            if (template_lang=="pl" && sessionStorage.getItem('conditions_trans')!=null) {
-                $.each(WeatherConditionsTrans, function(key2,val2){
-                    if((val2.day).toLowerCase() == (val.condition.text).toLowerCase()){
-                        forecast.push("<td>"+val2.languages[19].day_text+"</td>");
-                    } else if ((val2.night).toLowerCase() == (val.condition.text).toLowerCase()){
-                        forecast.push("<td>"+val2.languages[19].night_text+"</td>");
-                    } else if (val2.code == val.condition.code){
-                        forecast.push("<td>"+val2.languages[19].day_text+"</td>");
-                    }
-                });
-            } else {
-                forecast.push("<td>"+val.condition.text+"</td>");
-            }
-            forecast.push("</tr>");
-        });
-        $("table").append($(forecast.join('')));
-    }
+        var day_selected = $("#day_selected input[type='radio']:checked").val();
+        
+        lscache.flushExpired();
+        if (localStorage.getItem('lscache-weatherData')==null) {
+            $.getJSON(weather_apixu, function(data) {
+                lscache.set('weatherData', data, 360);
+                var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+                PopulateTableForcast();
+            });
+        } else {
+            PopulateTableForcast();
+        }
 
-    $('#day_selected').change(function(){
-        location.reload();
+        function PopulateTableForcast() {
+            var localWeatherData = JSON.parse(localStorage.getItem('lscache-weatherData'));
+            var WeatherConditionsTrans = JSON.parse(sessionStorage.getItem('conditions_trans'));
+            $("#forecast_table_head").empty();
+            $("#forecast_table_body").empty();
+            var forecasthead = [];
+            var forecast = [];
+            for (var i=0; i<7; i++){
+                var date = new Date(localWeatherData.forecast.forecastday[i].date_epoch*1000);
+                var days_pl = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+                var days = ["{% trans 'Sunday' %}","{% trans 'Monday' %}","{% trans 'Tuesday' %}","{% trans 'Wednesday' %}","{% trans 'Thursday' %}","{% trans 'Friday' %}","{% trans 'Saturday' %}"];
+                var day = days[date.getDay()];
+                if(i == 0) {
+                    day = "{% trans 'Today' %}";
+                } else if(i == 1){
+                    day = "{% trans 'Tomorrow' %}";
+                }
+                $("#day"+i).text(day);
+            }
+
+            if(day_selected >= 0 && day_selected <= 6) { // Table for specific day
+                forecasthead.push("<tr>");
+                forecasthead.push("<th>"+"{% trans 'Date' %}"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Temp ' %}[&#8451]"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Pressure ' %}[hPa]"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Humidity ' %}[%]"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Wind ' %}[km/h]"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Cloudiness ' %}[%]"+"</th>");
+                forecasthead.push("<th>"+"{% trans 'Description' %}"+"</th>");
+                forecasthead.push("</tr>");
+
+                $("#forecast_table_head").append($(forecasthead.join('')));
+
+                $.each(localWeatherData.forecast.forecastday[day_selected].hour, function(key, val){
+                    var temp = Math.round(val.temp_c);
+                    forecast.push("<tr>");
+                    forecast.push("<td>"+val.time+"</td>");
+                    forecast.push("<td>"+temp.toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.pressure_mb).toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.humidity)+"</td>");
+                    forecast.push("<td>"+(val.wind_kph).toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.cloud)+"</td>");
+                    if (template_lang=="pl" && sessionStorage.getItem('conditions_trans')!=null) {
+                        $.each(WeatherConditionsTrans, function(key2,val2){
+                            if((val2.day).toLowerCase() == (val.condition.text).toLowerCase()){
+                                forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                            } else if ((val2.night).toLowerCase() == (val.condition.text).toLowerCase()){
+                                forecast.push("<td>"+val2.languages[19].night_text+"</td>");
+                            } else if (val2.code == val.condition.code){
+                                forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                            }
+                        });
+                    } else {
+                        forecast.push("<td>"+val.condition.text+"</td>");
+                    }
+                    forecast.push("</tr>");
+                });
+                $("#forecast_table").append($(forecast.join('')));
+            } 
+
+            else { // Table for whole week
+                forecasthead.push("<tr>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Date' %}"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Avg Temp ' %}[&#8451]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Min Temp ' %}[&#8451]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Max Temp ' %}[&#8451]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Humidity ' %}[%]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Max Wind ' %}[km/h]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Total Precipitation ' %}[mm]"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Sunrise' %}"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Sunset' %}"+"</th>");
+                forecasthead.push("<th class='text-center' style='vertical-align:middle;'>"+"{% trans 'Description' %}"+"</th>");
+                forecasthead.push("</tr>");
+
+                $("#forecast_table_head").append($(forecasthead.join('')));
+
+                $.each(localWeatherData.forecast.forecastday, function(key, val){
+                    var date = new Date(val.date_epoch*1000);
+                    var days = ["{% trans 'Sunday' %}", "{% trans 'Monday' %}","{% trans 'Tuesday' %}", "{% trans 'Wednesday' %}", "{% trans 'Thursday' %}", "{% trans 'Friday' %}" , "{% trans 'Saturday' %}"];
+                    var day = days[date.getDay()];
+                    var finaldate = (date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate());
+                    var avgtemp = Math.round(val.day.avgtemp_c);
+                    var mintemp = Math.round(val.day.mintemp_c);
+                    var maxtemp = Math.round(val.day.maxtemp_c);
+                    forecast.push("<tr>");
+                    forecast.push("<td>"+day+"<br>"+finaldate+"</td>");
+                    forecast.push("<td>"+avgtemp.toFixed(0)+"</td>");
+                    forecast.push("<td>"+mintemp.toFixed(0)+"</td>");
+                    forecast.push("<td>"+maxtemp.toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.day.avghumidity)+"</td>");
+                    forecast.push("<td>"+(val.day.maxwind_kph).toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.day.totalprecip_mm).toFixed(0)+"</td>");
+                    forecast.push("<td>"+(val.astro.sunrise)+"</td>");
+                    forecast.push("<td>"+(val.astro.sunset)+"</td>");
+                    if (template_lang=="pl" && sessionStorage.getItem('conditions_trans')!=null) {
+                        $.each(WeatherConditionsTrans, function(key2,val2){
+                            if(val2.code == val.day.condition.code){
+                                forecast.push("<td>"+val2.languages[19].day_text+"</td>");
+                            }
+                        });
+                    } else {
+                        forecast.push("<td>"+val.day.condition.text+"</td>");
+                    }
+                    forecast.push("</tr>");
+                });
+                $("#forecast_table").append($(forecast.join('')));
+            }
+        }
+
+
+        $('#day_selected').on('change', function(){
+            day_selected = $("#day_selected input[type='radio']:checked").val();
+            sessionStorage.setItem("dayselected", day_selected);
+            PopulateTableForcast();
+            $('#day_selected').attr("value",day_selected);
+        });        
     });
+    
     </script>
     
 {% endblock %}
