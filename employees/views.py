@@ -206,7 +206,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context['employee_list'] = employee_pages
         context['orderby'] = self.request.GET.get('order', 'last_name')
         context['position_filter'] = self.request.GET.get('position_filter')
-        context['employee_filter'] = self.request.GET.get('employee_filter') or 'e.g. Darth Vader'
+        context['employee_filter'] = self.request.GET.get('employee_filter') or _('e.g. Darth Vader')
         context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
         context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
         context['per_page'] = self.request.GET.get('per_page') or 10

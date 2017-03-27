@@ -14,14 +14,11 @@
         {% endfor %}
         <div class="login-form">
             <h2>Login
-            {% get_current_language as LANGUAGE_CODE %}
-            {% if LANGUAGE_CODE == "en" %}
-                <a href="{% url 'languageChange' %}"><img src="{% static 'images/United-States-icon.png' %}"></a>
-            {% else %}
-                <a href="{% url 'languageChange' %}"><img src="{% static 'images/Poland-icon.png' %}"></a>
-            {% endif %}</h2>
+                <a href="{% url 'languageChange' %}" title="{% trans 'Change language' %}"><img src="{% static 'images/Poland-English.png' %}"></a></h2>
             <br>
-            {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
+            <div>
+                {{ form.username|add_class:"form-control"|attr:"placeholder:E-mail" }}<br>
+            </div>
             {{ form.password|add_class:"form-control"|attr:"placeholder:Password" }}<br>
             <button type="submit" class="btn login-btn">{% trans 'Login' %}</button><br>
         <p>{% trans 'Forgot your password?' %}
