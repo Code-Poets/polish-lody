@@ -74,6 +74,11 @@
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             {{ e|add_class:"form-control" }}
                         </div>
+                        {% elif e.html_name == "gender" %}
+                        <label class="col-sm-4 control-label">{{ e.label }}</label>
+                        <div class="radio-select col-sm-6 ">
+                            {{ e }}
+                        </div>
                         {% else %}
                         <label class="col-sm-4 control-label">{{ e.label }}</label>
                         <div class="input-group col-sm-6 ">

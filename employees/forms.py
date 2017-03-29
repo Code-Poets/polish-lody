@@ -69,7 +69,8 @@ class EmployeeForm(AuthUserCreationForm):
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
-            'address_city'          : forms.TextInput()
+            'address_city'          : forms.TextInput(),
+            'gender'                : RadioSelect(renderer=HorizontalRadioRenderer),
         }
 
 class EmployeeChangeForm(ModelForm):
@@ -105,7 +106,8 @@ class EmployeeChangeForm(ModelForm):
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
-            'address_city'          : forms.TextInput()
+            'address_city'          : forms.TextInput(),
+            'gender'                : RadioSelect(renderer=HorizontalRadioRenderer),
         }
 
 class MonthForm(ModelForm):
