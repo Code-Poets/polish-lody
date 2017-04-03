@@ -239,19 +239,27 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             queryset = order_by_default(order)
         if sale_position_filter or production_position_filter or other_position_filter:
             queryset = position_list_and_filtering(self, queryset)
+        
+        
+        if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
+            
+            queryset = queryset
 
-        if hide_paid_employees_filter is not None:
-            exclude_list = []
-            for employee in queryset:
-                if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
-                    exclude_list.append(employee.id)
-            queryset = queryset.exclude(id__in=exclude_list)
-        if hide_zero_salary_months_filter is not None:
-            exclude_list = []
-            for employee in queryset:
-                if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
-                    exclude_list.append(employee.id)
-            queryset = queryset.exclude(id__in=exclude_list)
+        else:
+            
+            if hide_paid_employees_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
+                
+            if hide_zero_salary_months_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
 
         if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
                 or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \

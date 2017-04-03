@@ -196,10 +196,11 @@
         {% if user.is_staff %}
             <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add Month' %}</a>
         {% endif %}
-        <img class="loading-icon" src="../../static/images/loading-icon.svg">
+        <img class="loading-icon" src="../../static/images/loading-icon.svg"> 
         <br><br>
     </div>
-    <div id="msg">
+    
+    <div id="msg-table">
 
     </div>
     {% if years %}

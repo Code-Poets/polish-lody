@@ -130,11 +130,16 @@ html, body {
     border-color: #AFBF7F;
     color: #fAFAFA;
     transition: background-color 0.25s;
+    font-weight: bold;
+    margin-left: 4px;
+    padding: 5px;
+  
 }
 .btn-success:hover {
     background-color: #9fb76e;
     border-color: #9fb76e;
     color: #f5f5f5;
+
 }   
 .btn-success:active {
     background-color: #819839 !important;
@@ -216,6 +221,14 @@ div.filter-forms {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.my-button.reset-filters {
+    background-color: #785C49;
+}
+
+.my-button.reset-filters:hover {
+    background-color: #635044;
 }
 
 li.filter {

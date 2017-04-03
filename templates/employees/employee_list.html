@@ -12,6 +12,14 @@
 {% endblock %}
 {% block body_block %}
 {% if all_employee_list is not None %}
+    <div>
+        <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-success pull-right">
+            {% trans 'Back to dashboard' %}</a><br><br>
+ <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+    </div>
+
     <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
         <div class="filter-forms">
@@ -122,7 +130,9 @@
                     </li>
                 {% endif %}
             {% endfor %}
-        </ul><br/>
+        </ul>
+
+        <br/>
     </div>
     <script>
         $(function() {

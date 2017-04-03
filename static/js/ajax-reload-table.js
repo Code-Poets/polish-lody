@@ -14,7 +14,7 @@ $(document).ready(function submit(e) {
                 var parameters = { };
             }
             makeRequest(parameters);
-        }, delay);
+        }, 100);
     });
     $('input[name=order], input[name=pg]').bind('click', function() {
             try {
@@ -82,6 +82,8 @@ function uncheckFilters(timer) {
     $('input:text').val('');
     $('input:text').attr('placeholder', '');
     $('.loading-icon').css('opacity', '1');
+    $('.page-no').removeClass('active');
+    $('#per-page-10').addClass('active');
     makeRequest();
 }
 
@@ -95,12 +97,21 @@ function makeRequest(parameters) {
         success: function(content) {
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");
-            if(content.indexOf('<p>') !== -1) {
-                var errTemplate = $('#hidden-template').html();
-                $('#msg').replaceWith(errTemplate);
+            if(content.indexOf('msg-table') !== -1){
+                if(content.indexOf('<p>') !== -1) {
+                    var errTemplate = $('#hidden-template').html();
+                    $('#msg-table').replaceWith(errTemplate);
+                } else {
+                    $('#msg-table').replaceWith('<div id="msg-table"></div>');
+                }
             } else {
-                $('#msg').replaceWith('<div id="msg"></div>');
-            }
+                if(content.indexOf('<p>') !== -1) {
+                    var errTemplate = $('#hidden-template').html();
+                    $('#msg').replaceWith(errTemplate);
+                } else {
+                    $('#msg').replaceWith('<div id="msg"></div>');
+                }
+            }            
             $("#hidden-template").remove();
         }
     }).fail(function(jqXHR){
@@ -110,18 +121,18 @@ function makeRequest(parameters) {
 }
 function ajaxErrorHandler(jqXHR) {
     if (jqXHR.status === 500) {
-        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg-table">' + 
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
             '<span>An internal server error occurred. If the issue persists, contact system administrator.</span></div>');
     } else if (jqXHR.status === 404) {
-        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg-table">' + 
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
             '<span>It seems that you tried to access something that does not exist.</span></div>');
     } else {
-        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg">' + 
+        var errTemplate = ('<div class="alert alert-warning alert-dismissable" id="msg-table">' + 
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' + 
             '<span>An unexpected error occurred.</span></div>');
     }
-    $('#msg').replaceWith(errTemplate);
+    $('#msg-table').replaceWith(errTemplate);
 }
 
