@@ -33,7 +33,7 @@
 {% block body_block %}
     <div class="panel panel-heading panel-default">
         <div class="form-container">
-            <form method="post" class="form-horizontal">
+            <form method="post">
                 {% csrf_token %}
                 {% for error in form.non_field_errors %}
                     <div class="alert alert-danger" role="alert">
@@ -42,51 +42,148 @@
                 {% endfor %}
                 {% if form.errors %}
                     <div class="alert alert-danger" role="alert">
-                        {{ form.email.errors }}
-                        {{ form.first_name.errors }}
-                        {{ form.last_name.errors }}
-                        {{ form.password1.errors }}
-                        {{ form.password2.errors }}
-                        {{ form.contract_start_date.errors }}
-                        {{ form.contract_exp_date.errors }}
-                        {{ form.health_book_exp_date.errors }}
-                        {{ form.bank_account_number.errors }}
-                        {{ form.phone_contact_number.errors }}
-                        {{ form.address_zip_code.errors }} 
-                        {% if form.address_city.errors %}
-                        {% trans 'Please type a valid city as provided by the list of suggestions' %}
-                        {% endif %}                   
+                    {% for e in form %}
+                        {{e.errors|escape}}
+                    {% endfor %}
                     </div>
                 {% endif %}
-                {% for e in form %}
-                    <div class="form-group">
-                        {% if e.html_name == 'email' or e.html_name == 'first_name' or e.html_name == 'last_name' %}
-                        <label class="col-sm-4 control-label">{{ e.label }}<span class="required"> *</span></label>
-                        <div class="input-group col-sm-6">
-                            {{ e|add_class:"form-control" }}
-                            {% if e.html_name == 'email' %}
-                                <span class="glyphicon glyphicon-remove icon-false verify-email"></span>
-                            {% endif %}
+                <!-- Row for personal data and employee data -->
+                <div class="row">
+                    <div class="col-sm-6"> <!-- Column 1/2, personal data -->
+                    <div class="panel panel-info">
+                    <div class="panel-heading">{% trans 'Personal data' %}</div>
+                    <div class="panel-body">
+                        <div class="col-sm-12 form-group">
+                            <label>{{ form.email.label }}<span class="required"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                {{ form.email|add_class:"form-control" }}
+                            </div>
                         </div>
-                        {% elif e.html_name == 'contract_start_date' or e.html_name == 'contract_exp_date' or e.html_name == 'health_book_exp_date' %}
-                        <label class="col-sm-4 control-label">{{ e.label }}</label>
-                        <div class="input-group col-sm-6">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                            {{ e|add_class:"form-control" }}
+                        {% if form.password1 %}
+                        <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                            <label>{{ form.password1.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                {{ form.password1|add_class:"form-control" }}
+                            </div>
                         </div>
-                        {% elif e.html_name == "gender" %}
-                        <label class="col-sm-4 control-label">{{ e.label }}</label>
-                        <div class="radio-select col-sm-6 ">
-                            {{ e }}
-                        </div>
-                        {% else %}
-                        <label class="col-sm-4 control-label">{{ e.label }}</label>
-                        <div class="input-group col-sm-6 ">
-                            {{ e|add_class:"form-control" }}
+                        <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                            <label>{{ form.password2.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                {{ form.password2|add_class:"form-control" }}
+                            </div>
                         </div>
                         {% endif %}
+                        <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                            <label>{{ form.first_name.label }}<span class="required"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                {{ form.first_name|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                            <label>{{ form.last_name.label }}<span class="required"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                {{ form.last_name|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10 form-group radio-select">
+                            {{form.gender}}
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-12 form-group">
+                            <label>{{ form.phone_contact_number.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                                {{ form.phone_contact_number|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>{{ form.address_city.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                {{ form.address_city|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>{{ form.address_street.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-road"></span></span>
+                                {{ form.address_street|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <label>{{ form.address_zip_code.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                {{ form.address_zip_code|add_class:"form-control" }}
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
+                    </div>
+                    </div>
+
+                    <div class="col-sm-6"> <!-- Column 2/2, employee data -->
+                    <div class="panel panel-success">
+                    <div class="panel-heading">{% trans 'Employee data' %}</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label" for="id_position">{{ form.position.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
+                                {{ form.position|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.contract_type.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
+                                {{ form.contract_type|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.contract_start_date.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                {{ form.contract_start_date|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="">{{ form.contract_exp_date.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                {{ form.contract_exp_date|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.health_book_exp_date.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                {{ form.health_book_exp_date|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.rate_per_hour.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
+                                {{ form.rate_per_hour|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ form.bank_account_number.label }}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-credit-card"></span></span>
+                                {{ form.bank_account_number|add_class:"form-control" }}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div> <!-- End of row -->
                 <br>
                 <center>
                     <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
@@ -94,7 +191,6 @@
                         <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger">{% trans 'Delete employee' %}</a>
                     {% else %}
                     {% endif %}
-                    
                 </center>
                 <br>
             </form>

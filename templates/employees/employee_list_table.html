@@ -6,7 +6,8 @@
                 <td>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
-                    <b>{% trans 'Full name' %}</b>
+                <div style="whitespace: nowrap;">
+                    <b>{% trans 'Full name' %}</b></br>
                     {% if orderby == 'last_name' %}
                         <input id="last-name-up" checked type="radio" class="sorting sort-up"
                                        name="order" value="last_name"/>
@@ -25,9 +26,11 @@
                     {% endif %}
                         <label title="{% trans 'Sort alphabetically descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                                for="last-name-down"></label>
+                </div>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>{% trans 'Rate per hour ' %}(zł)</b>
+                    <div style="whitespace: nowrap;">
                     {% if orderby == 'rate_per_hour' %}
                         <input id="rate-per-hour-up" checked type="radio" class="sorting sort-up"
                                        name="order" value="rate_per_hour"/>
@@ -46,12 +49,14 @@
                     {% endif %}
                         <label title="{% trans 'Sort descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                                for="rate-per-hour-down"></label>
+                    </div>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>{% trans 'Position' %}</b>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>{% trans 'Contract expiration date' %}</b>
+                    <div style="whitespace: nowrap;">
                     {% if orderby == 'contract_exp_date' %}
                         <input id="contract-exp-up" checked type="radio" class="sorting sort-up"
                                        name="order" value="contract_exp_date"/>
@@ -70,9 +75,11 @@
                     {% endif %}
                         <label title="{% trans 'Sort by contract expiration date descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                                for="contract-exp-down"></label>
+                    </div>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>{% trans 'Health book expiration date' %}</b>
+                    <div style="whitespace: nowrap;">
                     {% if orderby == 'health_book_exp_date' %}
                             <input id="health-book-up" checked type="radio" class="sorting sort-up"
                                            name="order" value="health_book_exp_date"/>
@@ -91,9 +98,11 @@
                         {% endif %}
                             <label title="{% trans 'Sort by health book expiration date descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                                    for="health-book-down"></label>
+                    </div>
                 </td>
                 <td class="cursor-hover" align="center" valign="middle">
                     <b>{% trans 'Total unpaid salaries ' %}(zł)</b>
+                    <div style="whitespace: nowrap;">
                     {% if orderby == 'unpaid_salaries' %}
                         <input id="unpaid-salaries-up" checked type="radio" class="sorting sort-up"
                                        name="order" value="unpaid_salaries"/>
@@ -112,6 +121,7 @@
                     {% endif %}
                         <label title="{% trans 'Sort by unpaid salaries descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                                for="unpaid-salaries-down"></label>
+                    </div>
                 </td>
             </tr>
         </thead>

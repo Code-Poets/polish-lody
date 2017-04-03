@@ -17,54 +17,59 @@
 
     <div class="panel panel-heading panel-default">
         <div class="form-container">
-            <form method="post" class="form-horizontal" id="monthform">
-                {% csrf_token %}
-                {% for e in form %}
-                {% if e.label == "Employee" %}
-                    <div class="form-group" hidden>
-                        <label class="col-sm-4 control-label">{{ e.label }}</label>
-                        <div class="col-sm-4">
-                            {{ e|add_class:"form-control" }}
-                        </div>
-                    </div>
-                {% elif e.html_name == "hours_worked_in_this_month" %}
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">{% trans 'Hours worked:' %}</label>
-                        <div class="col-sm-4">
-                            {{ e|add_class:"form-control" }}
-                        </div>
-                    </div>
-                {% elif e.html_name == "rate_per_hour_this_month" %}
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">{% trans 'Rate per hour:' %}</label>
-                        <div class="col-sm-4 form-field">
-                            {{ e|add_class:"form-control" }}
-                        </div>
-                    </div>
-                {% elif e.html_name == "salary_is_paid" %}
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">{{ e.label }}</label>
-                        <div class="col-sm-4 radio-select">
-                            {{ e }}
-                        </div>
-                    </div>
-                {% else %}
-                <div class="form-group">
-                        <label class="col-sm-4 control-label">{{ e.label }}:</label>
-                        <div class="col-sm-4 form-field">
-                            {{ e|add_class:"form-control" }}
-                        </div>
-                    </div>
-                {% endif %}
-                {% endfor %}
-                <br>
-                <center>
-                    <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary" />
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <form method="post" class="form-horizontal" id="monthform">
+                        {% csrf_token %}
+                        {% for e in form %}
+                        {% if e.label == "Employee" %}
+                            <div class="form-group" hidden>
+                                <label class="col-sm-4 control-label">{{ e.label }}</label>
+                                <div class="col-sm-4">
+                                    {{ e|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        {% elif e.html_name == "hours_worked_in_this_month" %}
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{% trans 'Hours worked:' %}</label>
+                                <div class="col-sm-4">
+                                    {{ e|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        {% elif e.html_name == "rate_per_hour_this_month" %}
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{% trans 'Rate per hour:' %}</label>
+                                <div class="col-sm-4 form-field">
+                                    {{ e|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        {% elif e.html_name == "salary_is_paid" %}
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{ e.label }}</label>
+                                <div class="col-sm-4 radio-select">
+                                    {{ e }}
+                                </div>
+                            </div>
+                        {% else %}
+                        <div class="form-group">
+                                <label class="col-sm-4 control-label">{{ e.label }}:</label>
+                                <div class="col-sm-4 form-field">
+                                    {{ e|add_class:"form-control" }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                        <br>
+                        <center>
+                            <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary" />
 
-                    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
-                </center>
-                <br>
-            </form>
+                            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
+                        </center>
+                        <br>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script><!-- javascript strings translations -->

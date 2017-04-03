@@ -73,9 +73,18 @@ html, body {
 
 /* Forms */
 .form-container {
+  /*border:1px solid red;*/
+  padding: 15px;
   margin-top: 15px;
-  margin-left: 25%;
-  width: 50%; }
+  margin-left: 5%;
+  width: 90%; }
+
+@media only screen and (min-width: 1500px) {
+  /* For tablets: */
+  .form-container {
+    margin-left: 15%; }
+  .form-container {
+    width: 70%; } }
 
 /* Buttons */
 .login-form p {
