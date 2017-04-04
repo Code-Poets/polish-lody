@@ -408,7 +408,8 @@ input[type=radio] + .glyphicon-chevron-down {
 .loading-icon {
   display: inline-block;
   opacity: 0;
-  transition: opacity 0.3s; }
+  transition: opacity 0.3s;
+  margin-top: 8px; }
 
 /*PANEL*/
 .panel {
