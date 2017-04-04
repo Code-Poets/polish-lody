@@ -15,6 +15,7 @@ html, body {
   height: 70px;
   line-height: 1.6em;
   padding: 10px 0 6px;
+  margin-bottom: 10px;
   color: #635044;
   border: none;
   border-bottom: 1px solid #D7DFBF; }
@@ -114,7 +115,11 @@ html, body {
   background-color: #AFBF7F;
   border-color: #AFBF7F;
   color: #fAFAFA;
-  transition: background-color 0.25s; }
+  transition: background-color 0.25s;
+  font-weight: bold;
+  font-size: 110%;
+  margin-left: 4px;
+  padding: 5px; }
 
 .btn-success:hover {
   background-color: #9fb76e;
@@ -199,6 +204,12 @@ div.filter-forms {
   user-select: none;
   /* Non-prefixed version, currently
                                   supported by Chrome and Opera */ }
+
+.my-button.reset-filters {
+  background-color: #785C49; }
+
+.my-button.reset-filters:hover {
+  background-color: #635044; }
 
 li.filter {
   display: inline-block;
@@ -399,6 +410,11 @@ input[type=radio] + .glyphicon-chevron-down {
   opacity: 0;
   transition: opacity 0.3s; }
 
+/*PANEL*/
+.panel {
+  margin-bottom: 8px;
+  margin-top: 8px; }
+
 .panel-heading {
   background-color: #f5f5f5;
   border-bottom: 1px solid #bfbfbf;
@@ -410,9 +426,6 @@ p.warning {
 
 div.panel-heading.panel-danger {
   background-color: rgba(201, 48, 44, 0.1); }
-
-.glyphicon-pencil, .glyphicon-trash {
-  color: #635044; }
 
 /*END*/
 /*APPROVAL*/

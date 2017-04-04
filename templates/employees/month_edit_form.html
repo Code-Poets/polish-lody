@@ -15,13 +15,13 @@
             {% if employee and month %}
             {% trans 'Editing' %} {{ month.get_month_display }} {{ month.year }} {% trans 'for' %} {{ employee }}
             {% endif %}
-            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
         </h4>
     </center>
 </div>
 {% endif %}
 {% endblock %}
 {% block body_block %}
+<a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
 {% if month %}
     <div class="panel panel-heading panel-default">
         <div class="form-container">
@@ -80,7 +80,7 @@
                         <br>
                         <center>
                             <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
-                            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
+                            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Cancel' %}</a>
                         </center>
                         <br>
                     </form>

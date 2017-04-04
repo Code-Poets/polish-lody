@@ -5,20 +5,16 @@
 
 {% block header_block %}
     <div class="panel panel-heading panel-default">
-        <h4>{{ employee.full_name }}
-        {% if user.is_staff %}
-            <a href="{% url 'employee_edit' employee.id %}">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true" title="{% trans 'Edit employee' %}"></span>
-            </a>
-            <a href="{% url 'employee_delete' employee.id %}"> 
-                <span class="glyphicon glyphicon-trash" title="{% trans 'Delete employee' %}"></span>
-            </a>
-        {% endif %}
-        </h4>
-        <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
+        <center>
+            <h4>{{ employee.full_name }}</h4>
+        </center>
     </div>
 {% endblock %}
 {% block body_block %}
+<a href="{% url 'employees' %}" class="btn btn-default" style="margin-bottom: 7px;">{% trans 'Back' %}</a>
+{% if user.is_staff %}
+    <a href="{% url 'employee_edit' employee.id %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;{% trans 'Edit employee' %}</a>
+{% endif %}
     {% if employee %}
         <div class="panel-default">
             <table class="table">
@@ -194,9 +190,8 @@
         </div>
     <div>
         {% if user.is_staff %}
-            <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-left"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add Month' %}</a>
+            <a href="{% url 'month_new' employee.pk %}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add Month' %}</a>
         {% endif %}
-        <img class="loading-icon" src="../../static/images/loading-icon.svg"> 
         <br><br>
     </div>
     
@@ -204,6 +199,9 @@
 
     </div>
     {% if years %}
+    <div style="margin-bottom: 7px;">
+        <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+    </div>
         <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" action="{% url 'employee_detail' employee.id %}">
             <div class="filter-forms">
             <span>{% trans 'Show year:' %}</span>

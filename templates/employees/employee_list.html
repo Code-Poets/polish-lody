@@ -12,21 +12,20 @@
 {% endblock %}
 {% block body_block %}
 {% if all_employee_list is not None %}
-    <div>
-        <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
+<a href="{% url 'dashboard' %}" class="btn btn-default">{% trans 'Back' %}</a>
+<a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
-        <a href="{% url 'dashboard' %}" class="btn btn-success pull-right">
-            {% trans 'Back to dashboard' %}</a><br><br>
- <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+    <div style="margin-bottom: 7px;">
+        <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
 
     <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
         <div class="filter-forms">
-            <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
+            <!-- <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
 
-            <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+            <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg"> -->
             <ul class="filters">
                 <li class="filter">
                     {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>

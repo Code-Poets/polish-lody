@@ -21,16 +21,20 @@
         <center>
             {% if employee %}
                 {{ employee.full_name }}
-            <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
             {% else %}
                 {% trans 'New employee' %}
-            <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
             {% endif %}
         </center>
     </h4>
 </div>
 {% endblock %}
 {% block body_block %}
+{% if employee %}
+    <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
+    <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;{% trans 'Delete employee' %}</a>
+{% else %}
+    <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
+{% endif %}
     <div class="panel panel-heading panel-default">
         <div class="form-container">
             <form method="post">
@@ -188,8 +192,9 @@
                 <center>
                     <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
                     {% if employee and user.is_staff %}
-                        <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger">{% trans 'Delete employee' %}</a>
+                        <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Cancel' %}</a>
                     {% else %}
+                        <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
                     {% endif %}
                 </center>
                 <br>
