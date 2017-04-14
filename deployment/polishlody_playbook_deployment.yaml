@@ -1,0 +1,90 @@
+- hosts: polishlody
+  vars_files:
+  - vars.yaml
+  - secrets.yaml
+  - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: root
+      block:
+
+        - name: setup key for docker repository
+          apt_key:
+            keyserver: "{{ docker_keyserver }}"
+            id: "{{ docker_repo_fingerprint }}"
+
+        - name: add docker repository
+          # FIXME: Rewrite into ansible module
+          shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"         
+
+        - name: install docker and related packages
+          apt:
+            update_cache: yes
+            name: "{{ item }}"
+            state: present
+          with_items:
+            - "docker-ce=17.03.1~ce-0~ubuntu-xenial"
+            # needed for ansible docker module
+            - "python-docker=1.8.0-0ubuntu1"
+
+        - name: Download and install docker-compose
+          get_url:
+            url: "https://github.com/docker/compose/releases/download/1.12.0/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+            # FIXME: Why doesn't docker-compose work when placed in /usr/local/bin/ ?
+            dest: /usr/bin/docker-compose
+            mode: 0555
+
+        - name: create staging user for polish-lody
+          user:
+            name: "{{ user }}"
+            createhome: yes
+            groups: docker
+
+        - name: copy deploy key for repo
+          copy:
+            src: secrets/{{ item }}
+            dest: /home/{{ user }}/.ssh/
+            owner: "{{ user }}"
+            mode: 0600
+          with_items:
+            - polishlody_deploy_key
+            - polishlody_deploy_key.pub
+
+        - name: create directory for polish-lody
+          file:
+            path: "{{ build_dir }}"
+            state: directory
+            owner: "{{ user }}"
+            group: "{{ user }}"
+            mode: 0755
+
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+
+        - name: get repo from github
+          git:
+            repo: "git@github.com:Code-Poets/polish-lody.git"
+            dest: "{{ build_dir }}"
+            depth: 1
+            accept_hostkey: yes
+            key_file: /home/{{ user }}/.ssh/polishlody_deploy_key
+            update: yes
+            clone: yes
+            version: "{{ polish_lody_version }}"
+
+        - name: upload local settings
+          template:
+            src: local.py.j2
+            dest: "{{ build_dir }}/polishlody/settings/local.py"
+
+        - name: prepare variable template for docker-compose
+          template:
+            src: docker-compose-env.j2
+            dest: "{{ build_dir }}/deployment/.env"
+
+        - name: run docker-compose build
+          command: docker-compose build
+          args:
+            chdir: "{{ build_dir }}/deployment/"

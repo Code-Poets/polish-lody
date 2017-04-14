@@ -1,0 +1,23 @@
+version: '3'
+services:
+  database:
+    image: postgres
+    volumes:
+      - $DATA_DIR/database:/var/lib/postgresql/data
+    restart: on-failure
+  web:
+    build: ..
+    command: gunicorn polishlody.wsgi --bind 0.0.0.0:8000
+    volumes:
+      - $BUILD_DIR:/code
+    ports:
+      - 8000:$POLISHLODY_PORT
+    depends_on:
+      - database
+    environment:
+      - EMAIL_HOST=
+      - EMAIL_HOST_PASSWORD=
+      - EMAIL_HOST_USER=
+      - WEATHER_API_KEY=
+      - SECRET_KEY
+    restart: on-failure
