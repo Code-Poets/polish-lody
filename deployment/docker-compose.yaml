@@ -3,15 +3,13 @@ services:
   database:
     image: postgres
     volumes:
-      - $DATA_DIR/database:/var/lib/postgresql/data
+      - $POLISH_LODY_DATA_DIR/database:/var/lib/postgresql/data
     restart: on-failure
   web:
     build: ..
     command: gunicorn polishlody.wsgi --bind 0.0.0.0:8000
-    volumes:
-      - $BUILD_DIR:/code
     ports:
-      - 8000:$POLISHLODY_PORT
+      - 8000:$POLISH_LODY_PORT
     depends_on:
       - database
     environment:
@@ -20,4 +18,5 @@ services:
       - EMAIL_HOST_USER=
       - WEATHER_API_KEY=
       - SECRET_KEY
+      - POLISH_LODY_DATABASE
     restart: on-failure

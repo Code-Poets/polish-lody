@@ -1,10 +1,14 @@
+import os
+
+ALLOWED_HOSTS = ['vps396758.ovh.net', 'localhost']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'polishlody',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': database,
+        'HOST': os.environ.get('POLISH_LODY_DATABASE'),
         'PORT': '5432',
 
     }

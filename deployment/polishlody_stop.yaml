@@ -1,0 +1,14 @@
+- hosts: polishlody
+  vars_files:
+  - vars.yaml
+  - secrets.yaml
+  - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+        - name: run docker-compose down
+          command: docker-compose down
+          args:
+            chdir: "{{ build_dir }}/deployment/"

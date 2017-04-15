@@ -1,0 +1,25 @@
+- hosts: polishlody
+  vars_files:
+  - vars.yaml
+  - secrets.yaml
+  - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+
+        - name: run docker-compose build
+          command: docker-compose run database createdb polishlody --user postgres --host database
+          args:
+            chdir: "{{ build_dir }}/deployment/"
+
+        - name: run database migration
+          command: docker-compose run web ./manage.py migrate
+          args:
+            chdir: "{{ build_dir }}/deployment/"
+
+        - name: load data to database
+          command: docker-compose run web ./manage.py loaddata /code/employees/fixtures/fikstura_cities.json
+          args:
+            chdir: "{{ build_dir }}/deployment/"

@@ -1,0 +1,15 @@
+- hosts: polishlody
+  vars_files:
+  - vars.yaml
+  - secrets.yaml
+  - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+
+        - name: run docker-compose build
+          command: docker-compose run database dropdb polishlody --user postgres --host database
+          args:
+            chdir: "{{ build_dir }}/deployment/"

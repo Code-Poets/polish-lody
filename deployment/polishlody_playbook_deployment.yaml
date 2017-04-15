@@ -79,15 +79,15 @@
             src: local.py.j2
             dest: "{{ build_dir }}/polishlody/settings/local.py"
 
-        - name: prepare variable template for docker-compose
-          template:
-            src: docker-compose-env.j2
-            dest: "{{ build_dir }}/deployment/.env"
-
         - name: upload fixture with cities to server
           copy:
             src: fikstura_cities.json
             dest: "{{ build_dir }}/employees/fixtures/"
+
+        - name: prepare variable template for docker-compose
+          template:
+            src: docker-compose-env.j2
+            dest: "{{ build_dir }}/deployment/.env"
 
         - name: run docker-compose build
           command: docker-compose build

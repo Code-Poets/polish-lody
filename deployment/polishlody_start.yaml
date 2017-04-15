@@ -1,0 +1,14 @@
+- hosts: polishlody
+  vars_files:
+  - vars.yaml
+  - secrets.yaml
+  - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+        - name: run docker-compose up in detached mode
+          command: docker-compose up -d
+          args:
+            chdir: "{{ build_dir }}/deployment/"
