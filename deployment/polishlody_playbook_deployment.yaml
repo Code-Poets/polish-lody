@@ -84,9 +84,9 @@
             src: docker-compose-env.j2
             dest: "{{ build_dir }}/deployment/.env"
 
-        - name: upload fiture with cities to server
+        - name: upload fixture with cities to server
           copy:
-            src: fikstura_cities.yaml
+            src: fikstura_cities.json
             dest: "{{ build_dir }}/employees/fixtures/"
 
         - name: run docker-compose build
