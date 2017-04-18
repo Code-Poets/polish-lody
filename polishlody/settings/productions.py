@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'sass_processor',
     'widget_tweaks',
     'sales',
+    'dbbackup', #django-dbbackup
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,12 @@ DATABASES = {
 # Update database configuration with $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+# django-dbbackup options
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backups')}
+DBBACKUP_CLEANUP_KEEP = 14
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
