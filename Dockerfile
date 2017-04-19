@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.6.1
 
 # PYTHONUNBUFFERED disables buffering for python code
 # SECRET_KEY doesn't matter since it's used only for collectstatic
