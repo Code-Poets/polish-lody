@@ -3,21 +3,23 @@ services:
   database:
     image: postgres:9.6.2
     volumes:
-      - $POLISH_LODY_DATA_DIR/database:/var/lib/postgresql/data
+      - $POLISH_LODY_DATA_DIR:/var/lib/postgresql/data
     restart: on-failure
   web:
     # Custom image, see Dockerfile for base image version
     build: ..
-    command: gunicorn polishlody.wsgi --bind 0.0.0.0:8000
-    ports:
-      - 8000:$POLISH_LODY_PORT
+    env_file:
+      - .env
+    command: gunicorn polishlody.wsgi --workers 2 --bind 0.0.0.0:8000
     depends_on:
       - database
-    environment:
-      - EMAIL_HOST=
-      - EMAIL_HOST_PASSWORD=
-      - EMAIL_HOST_USER=
-      - WEATHER_API_KEY=
-      - SECRET_KEY
-      - POLISH_LODY_DATABASE
+    expose:
+      - "8000"
+    restart: on-failure
+  nginx:
+    build: ../nginx/
+    ports:
+      - $POLISH_LODY_PORT:80
+    depends_on:
+      - web
     restart: on-failure

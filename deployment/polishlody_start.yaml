@@ -1,4 +1,4 @@
-- hosts: polishlody
+- hosts: "{{ hosts }}"
   vars_files:
   - vars.yaml
   - secrets.yaml
