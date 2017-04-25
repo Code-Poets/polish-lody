@@ -1,6 +1,6 @@
-build_dir: /srv/http/{{ user }}
+build_dir: /home/{{ user }}/web
 user: polish-lody-{{ instance_name }}
-data_dir: /home/{{ user }}
+data_dir: /home/{{ user }}/database
 database: database
 
 docker_keyserver: https://download.docker.com/linux/ubuntu/gpg
