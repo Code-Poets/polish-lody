@@ -1,13 +1,17 @@
 version: '3'
 services:
   database:
-    image: postgres:9.6.2
+    build:
+      context: ../
+      dockerfile: deployment/database-dockerfile/Dockerfile
     volumes:
       - $POLISH_LODY_DATA_DIR/database:/var/lib/postgresql/data
     restart: on-failure
   web:
     # Custom image, see Dockerfile for base image version
-    build: ..
+    build:
+      context: ../
+      dockerfile: deployment/web-dockerfile/Dockerfile
     command: gunicorn polishlody.wsgi --bind 0.0.0.0:8000
     ports:
       - 8000:$POLISH_LODY_PORT
