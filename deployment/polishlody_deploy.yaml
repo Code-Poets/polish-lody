@@ -53,7 +53,7 @@
 
         - name: create directory for polish-lody
           file:
-            path: "{{ build_dir }}"
+            path: "{{ app_dir }}"
             state: directory
             owner: "{{ user }}"
             group: "{{ user }}"
@@ -66,7 +66,7 @@
         - name: get repo from github
           git:
             repo: "git@github.com:Code-Poets/polish-lody.git"
-            dest: "{{ build_dir }}"
+            dest: "{{ app_dir }}"
             depth: 1
             accept_hostkey: yes
             key_file: /home/{{ user }}/.ssh/polishlody_deploy_key
@@ -77,19 +77,19 @@
         - name: upload local settings
           template:
             src: local.py.j2
-            dest: "{{ build_dir }}/polishlody/settings/local.py"
+            dest: "{{ app_dir }}/polishlody/settings/local.py"
 
         - name: upload fixture with cities to server
           copy:
             src: fikstura_cities.json
-            dest: "{{ build_dir }}/employees/fixtures/"
+            dest: "{{ app_dir }}/employees/fixtures/"
 
         - name: prepare variable template for docker-compose
           template:
             src: docker-compose-env.j2
-            dest: "{{ build_dir }}/deployment/.env"
+            dest: "{{ app_dir }}/deployment/.env"
 
         - name: run docker-compose build
           command: docker-compose build
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"

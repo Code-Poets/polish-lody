@@ -12,14 +12,14 @@
         - name: run docker-compose build
           command: docker-compose run --rm database createdb polishlody --user postgres --host database
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"
 
         - name: run database migration
           command: docker-compose run --rm web ./manage.py migrate
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"
 
         - name: load data to database
           command: docker-compose run --rm web ./manage.py loaddata /code/employees/fixtures/fikstura_cities.json
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"

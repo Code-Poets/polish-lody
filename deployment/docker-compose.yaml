@@ -1,16 +1,31 @@
 version: '3'
+volumes:
+    staticfiles:
 services:
   database:
     image: postgres:9.6.2
     volumes:
       - $POLISH_LODY_DATA_DIR:/var/lib/postgresql/data
     restart: on-failure
+  backup:
+    build:
+      context: ..
+      dockerfile: Dockerfile-backup
+    volumes:
+      - $POLISH_LODY_BACKUP_DIR:/backups  
+    depends_on:
+      - database
+    restart: on-failure
   web:
     # Custom image, see Dockerfile for base image version
-    build: ..
+    build:
+      context: ..
+      dockerfile: Dockerfile-web
     env_file:
       - .env
-    command: gunicorn polishlody.wsgi --workers 2 --bind 0.0.0.0:8000
+    command: 'bash -c "python manage.py check --deploy && cp /code/staticfiles / --recursive && gunicorn polishlody.wsgi --workers 2 --bind 0.0.0.0:8000"'
+    volumes: 
+      - staticfiles:/staticfiles
     depends_on:
       - database
     expose:
@@ -20,6 +35,8 @@ services:
     build: ../nginx/
     ports:
       - $POLISH_LODY_PORT:80
+    volumes: 
+      - staticfiles:/staticfiles
     depends_on:
       - web
     restart: on-failure

@@ -12,4 +12,4 @@
         - name: run docker-compose build
           command: docker-compose run --rm database dropdb polishlody --user postgres --host database
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"
