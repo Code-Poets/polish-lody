@@ -122,7 +122,7 @@ class Employee(MyUser):
     health_book_exp_date = models.DateField(_('health book exp date'),blank=True, default=None, null=True)
     gender = models.CharField(_('gender'),max_length=16, blank=False, null=True, default="Male",
                               choices=gender_choices)
-    position = models.CharField(_('position'),max_length=16, null=True, blank=True, default=None,
+    position = models.CharField(_('position'),max_length=16, null=True, blank=False, default="Other",
                               choices=position_choices)
     contract_type = models.CharField(_('contract type'),blank=True, null=True, default=None, max_length=64,
                                      choices=contract_choices)
