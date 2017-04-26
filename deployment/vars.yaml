@@ -1,7 +1,8 @@
-build_dir: /home/{{ user }}/web
 user: polish-lody-{{ instance_name }}
+app_dir: /home/{{ user }}/web
 data_dir: /home/{{ user }}/database
-database: database
+backup_dir: /home/{{ user }}/backups
+database_name: database
 
 docker_keyserver: https://download.docker.com/linux/ubuntu/gpg
 docker_repo_fingerprint: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88

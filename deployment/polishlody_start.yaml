@@ -11,4 +11,4 @@
         - name: run docker-compose up in detached mode
           command: docker-compose up -d
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"

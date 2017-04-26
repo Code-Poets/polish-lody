@@ -1,6 +1,6 @@
 import os
 
-ALLOWED_HOSTS = ['vps396758.ovh.net', 'localhost', '217.182.206.229']
+ALLOWED_HOSTS = ['localhost', '192.168.8.22']
 
 DATABASES = {
     'default': {
@@ -8,8 +8,10 @@ DATABASES = {
         'NAME': 'polishlody',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': os.environ.get('POLISH_LODY_DATABASE'),
+        'HOST': os.environ.get('POLISH_LODY_DATABASE_NAME'),
         'PORT': '5432',
-
+        'ATOMIC_REQUESTS': True,
     }
 }
+
+ADMINS = [('Jakub', 'jakubczachura+polishlody@gmail.com'), ('Piotr', 'yoowul+polishlody@gmail.com')]

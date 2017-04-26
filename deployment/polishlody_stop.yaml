@@ -11,4 +11,4 @@
         - name: run docker-compose down
           command: docker-compose down
           args:
-            chdir: "{{ build_dir }}/deployment/"
+            chdir: "{{ app_dir }}/deployment/"
