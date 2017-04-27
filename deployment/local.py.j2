@@ -14,4 +14,10 @@ DATABASES = {
     }
 }
 
-ADMINS = [('Jakub', 'jakubczachura+polishlody@gmail.com'), ('Piotr', 'yoowul+polishlody@gmail.com')]
+ADMINS = {{ admins }}
+SECURE_CONTENT_TYPE_NOSNIFF = {{ secure_content_type_nosniff }}
+SECURE_BROWSER_XSS_FILTER = {{ secure_browser_xss_filter }}
+SESSION_COOKIE_SECURE = {{ session_cookie_secure }}
+CSRF_COOKIE_SECURE = {{ csrf_cookie_secure }}
+CSRF_COOKIE_HTTPONLY = {{ csrf_cookie_httponly }}
+X_FRAME_OPTIONS = {{ x_frame_options }}
