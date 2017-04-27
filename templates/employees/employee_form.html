@@ -211,25 +211,33 @@ $(document).ready(function(){
 
 });
 
-document.getElementById("id_address_city").onkeyup = function() {formatCityText()};
+document.getElementById("id_first_name").onkeyup = function() {formatCityText("id_first_name")};
 
-function formatCityText() {
-    var cityhtml = document.getElementById("id_address_city");
-    var city = cityhtml.value;
-    var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C -]/g;
-    city = city.replace(regex, "");
+document.getElementById("id_last_name").onkeyup = function() {formatCityText("id_last_name")};
+
+document.getElementById("id_address_city").onkeyup = function() {formatCityText("id_address_city")};
+
+function formatCityText(data) {
+    var datahtml = document.getElementById(data);
+    var datatext = datahtml.value;
+    if (data=="id_first_name") {
+        var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C]/g;
+    } else {
+        var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C -]/g;
+    }
+    datatext = datatext.replace(regex, "");
     var re = /(-|\s)/g;
-    city = city.toLowerCase().split(re);
-    for (var i=0; i<city.length; i++) {
-        var placeholder = city[i];
+    datatext = datatext.toLowerCase().split(re);
+    for (var i=0; i<datatext.length; i++) {
+        var placeholder = datatext[i];
         var UpLetter = placeholder.charAt(0).toUpperCase();
         placeholder = placeholder.slice(1,placeholder.length);
-        city[i] = UpLetter.concat(placeholder);
+        datatext[i] = UpLetter.concat(placeholder);
       }
-    city = city.join("");
-    cityhtml.value = city;
-
+    datatext = datatext.join("");
+    datahtml.value = datatext;
 }
+
 </script>
 
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script> <!-- javascript strings translations -->
