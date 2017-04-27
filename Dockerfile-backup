@@ -21,4 +21,4 @@ RUN touch /var/log/cron.log
 VOLUME /backups
 
 # Run the command on container startup
-CMD cron
+CMD cron -f

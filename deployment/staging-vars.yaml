@@ -1,2 +1,9 @@
 polish_lody_port: 8000
 polish_lody_version: ovh-deployment
+admins: []
+secure_content_type_nosniff: False
+secure_browser_xss_filter: False
+session_cookie_secure: False
+csrf_cookie_secure: False
+csrf_cookie_httponly: False
+x_frame_options: "'SAMEORIGIN'"

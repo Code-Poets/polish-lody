@@ -1,2 +1,9 @@
 polish_lody_port: 80
 polish_lody_version: v1.0
+admins: "[('Jakub', 'jakubczachura+polishlody@gmail.com'), ('Piotr', 'yoowul+polishlody@gmail.com')]"
+secure_content_type_nosniff: True
+secure_browser_xss_filter: True
+session_cookie_secure: True
+csrf_cookie_secure: True
+csrf_cookie_httponly: True
+x_frame_options: "'DENY'"
