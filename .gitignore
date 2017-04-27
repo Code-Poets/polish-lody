@@ -9,5 +9,3 @@ db.sqlite3
 !/staticfiles/main.css
 !/staticfiles/login.css
 /backups/*
-
-/polishlody/settings/local.py
