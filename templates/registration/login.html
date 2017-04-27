@@ -22,7 +22,7 @@
                 <input id="id_password" name="password" type="password" class="form-control" placeholder="{% trans 'Password' %}"></br>
 
                 <input type="submit" value="{% trans 'Login' %}" class="btn login-btn" />
-                <input type="hidden" name="next" value="{{ next }}" />
+                <input type="hidden" name="next" value="{{ next }}" /></br>
             </form>
             <p>{% trans 'Forgot your password?' %}
                 <a href="{% url 'password_reset' %}">{% trans 'Click here to reset it!' %}</a>

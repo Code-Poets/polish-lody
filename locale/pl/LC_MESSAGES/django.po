@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-04 10:22+0000\n"
+"POT-Creation-Date: 2017-04-27 09:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Fill out both fields"
 msgstr "Wpisz hasło w oba pola"
 
-#: employees/forms.py:39 employees/forms.py:78 employees/models.py:130
+#: employees/forms.py:39 employees/forms.py:78 employees/models.py:133
 #: templates/employees/employee_detail.html:131
 msgid "City"
 msgstr "Miejscowość"
@@ -76,7 +76,7 @@ msgstr "Produkcja"
 msgid "Sale"
 msgstr "Sprzedaż"
 
-#: employees/models.py:109 employees/models.py:114
+#: employees/models.py:109 employees/models.py:117
 #: templates/employees/employee_list.html:60
 msgid "Other"
 msgstr "Inne"
@@ -89,148 +89,160 @@ msgstr "Umowa na czas określony"
 msgid "Non-fixed-term employment contract"
 msgstr "Umowa na czas nieokreślony"
 
-#: employees/models.py:117
+#: employees/models.py:114
+msgid "Contract work"
+msgstr "Umowa o dzieło"
+
+#: employees/models.py:115
+msgid "Fee-for-task contract "
+msgstr "Umowa zlecenie"
+
+#: employees/models.py:116
+msgid "B2B"
+msgstr ""
+
+#: employees/models.py:120
 msgid "rate per hour"
 msgstr "stawka godzinowa"
 
-#: employees/models.py:120
+#: employees/models.py:123
 msgid "contract start date"
 msgstr "data rozpoczęcia umowy"
 
-#: employees/models.py:121
+#: employees/models.py:124
 msgid "contract exp date"
 msgstr "data wygaśnięcia umowy"
 
-#: employees/models.py:122
+#: employees/models.py:125
 msgid "health book exp date"
 msgstr "data wygaśnięcia książeczki zdrowia"
 
-#: employees/models.py:123
+#: employees/models.py:126
 msgid "gender"
 msgstr "płeć"
 
-#: employees/models.py:125
+#: employees/models.py:128
 msgid "position"
 msgstr "pozycja"
 
-#: employees/models.py:127
+#: employees/models.py:130
 msgid "contract type"
 msgstr "typ umowy"
 
-#: employees/models.py:132 templates/employees/employee_detail.html:143
+#: employees/models.py:135 templates/employees/employee_detail.html:143
 msgid "Street"
 msgstr "Ulica"
 
-#: employees/models.py:134 templates/employees/employee_detail.html:155
+#: employees/models.py:137 templates/employees/employee_detail.html:155
 msgid "Zip code"
 msgstr "Kod pocztowy"
 
-#: employees/models.py:136 templates/employees/employee_detail.html:167
+#: employees/models.py:139 templates/employees/employee_detail.html:167
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
-#: employees/models.py:138 templates/employees/employee_detail.html:179
+#: employees/models.py:141 templates/employees/employee_detail.html:179
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
 
-#: employees/models.py:141
+#: employees/models.py:144
 msgid "employee"
 msgstr "pracownik"
 
-#: employees/models.py:142
+#: employees/models.py:145
 msgid "employees"
 msgstr "pracownicy"
 
-#: employees/models.py:185
+#: employees/models.py:188
 msgid "January"
 msgstr ""
 
-#: employees/models.py:186
+#: employees/models.py:189
 msgid "February"
 msgstr ""
 
-#: employees/models.py:187
+#: employees/models.py:190
 msgid "March"
 msgstr ""
 
-#: employees/models.py:188
+#: employees/models.py:191
 msgid "April"
 msgstr ""
 
-#: employees/models.py:189 templates/dashboard/dashboard.html:66
+#: employees/models.py:192 templates/dashboard/dashboard.html:66
 msgid "May"
 msgstr ""
 
-#: employees/models.py:190
+#: employees/models.py:193
 msgid "June"
 msgstr ""
 
-#: employees/models.py:191
+#: employees/models.py:194
 msgid "July"
 msgstr ""
 
-#: employees/models.py:192
+#: employees/models.py:195
 msgid "August"
 msgstr ""
 
-#: employees/models.py:193
+#: employees/models.py:196
 msgid "September"
 msgstr ""
 
-#: employees/models.py:194
+#: employees/models.py:197
 msgid "October"
 msgstr ""
 
-#: employees/models.py:195
+#: employees/models.py:198
 msgid "November"
 msgstr ""
 
-#: employees/models.py:196
+#: employees/models.py:199
 msgid "December"
 msgstr ""
 
-#: employees/models.py:199 templates/employees/employee_confirm_delete.html:21
+#: employees/models.py:202 templates/employees/employee_confirm_delete.html:21
 #: templates/employees/month_confirm_delete.html:27
 msgid "Yes"
 msgstr ""
 
-#: employees/models.py:200
+#: employees/models.py:203
 msgid "No"
 msgstr ""
 
-#: employees/models.py:206
+#: employees/models.py:209
 msgid "year"
 msgstr "rok"
 
-#: employees/models.py:208
+#: employees/models.py:211
 msgid "Month"
 msgstr "Miesiąc"
 
-#: employees/models.py:209
+#: employees/models.py:212
 msgid "Paid?"
 msgstr "Zapłacono?"
 
-#: employees/models.py:210
+#: employees/models.py:213
 msgid "hours worked in this month"
 msgstr "godzin przepracowanych w tym miesiącu"
 
-#: employees/models.py:212
+#: employees/models.py:215
 msgid "Approved?"
 msgstr "Zaakceptowano?"
 
-#: employees/models.py:213
+#: employees/models.py:216
 msgid "rate per hour this month"
 msgstr "stawka godzinowa w tym miesiącu"
 
-#: employees/models.py:215 templates/employees/employee_detail_table.html:72
+#: employees/models.py:218 templates/employees/employee_detail_table.html:78
 msgid "Bonuses"
 msgstr "Premie"
 
-#: employees/models.py:239
+#: employees/models.py:242
 msgid "month"
 msgstr "miesiąc"
 
-#: employees/models.py:240
+#: employees/models.py:243
 msgid "months"
 msgstr "miesiące"
 
@@ -302,11 +314,11 @@ msgstr "Hasło musi zawierać przynajmniej %(min_length)d znaków"
 msgid "Your password must contain at least %(min_length)d characters."
 msgstr "Twoje hasło musi zawierać przynajmniej %(min_length)d znaków"
 
-#: polishlody/settings/local.py:132 polishlody/settings/productions.py:137
+#: polishlody/settings/local.py:139 polishlody/settings/production.py:144
 msgid "English"
 msgstr ""
 
-#: polishlody/settings/local.py:133 polishlody/settings/productions.py:138
+#: polishlody/settings/local.py:140 polishlody/settings/production.py:145
 msgid "Polish"
 msgstr ""
 
@@ -370,7 +382,7 @@ msgid "Sat"
 msgstr "Sob"
 
 #: templates/dashboard/dashboard.html:64
-#: templates/weather/weather_forecast.html:81
+#: templates/weather/weather_forecast.html:79
 msgid "Today"
 msgstr ""
 
@@ -495,8 +507,8 @@ msgid "Email:"
 msgstr ""
 
 #: templates/employees/employee_detail.html:31
-#: templates/employees/month_edit_form.html:59
-#: templates/employees/month_form.html:43
+#: templates/employees/month_edit_form.html:62
+#: templates/employees/month_form.html:50
 msgid "Rate per hour:"
 msgstr "Stawka godzinowa:"
 
@@ -637,118 +649,118 @@ msgstr "Nie odnaleziono pracownika"
 msgid "Month and year"
 msgstr "Miesiąc i rok"
 
-#: templates/employees/employee_detail_table.html:17
+#: templates/employees/employee_detail_table.html:18
 msgid "Sort by most recent months"
 msgstr "Sortuj według najnowszych miesięcy"
 
-#: templates/employees/employee_detail_table.html:26
+#: templates/employees/employee_detail_table.html:27
 msgid "Sort by least recent months"
 msgstr "Sortuj według najstarszych miesięcy"
 
-#: templates/employees/employee_detail_table.html:30
+#: templates/employees/employee_detail_table.html:32
 msgid "Hours worked"
 msgstr "Przepracowane godziny"
 
-#: templates/employees/employee_detail_table.html:38
+#: templates/employees/employee_detail_table.html:41
 msgid "Sort by hours worked ascending"
 msgstr "Sortuj po przepracowanych godzinach rosnąco"
 
-#: templates/employees/employee_detail_table.html:47
+#: templates/employees/employee_detail_table.html:50
 msgid "Sort by hours worked descending"
 msgstr "Sortuj po przepracowanych godzinach malejąco"
 
-#: templates/employees/employee_detail_table.html:51
+#: templates/employees/employee_detail_table.html:55
 msgid "Rate per hour"
 msgstr "Stawka godzinowa"
 
-#: templates/employees/employee_detail_table.html:59
+#: templates/employees/employee_detail_table.html:64
 msgid "Sort by rate per hour ascending"
 msgstr "Sortuj po stawce godzinowej rosnąco"
 
-#: templates/employees/employee_detail_table.html:68
+#: templates/employees/employee_detail_table.html:73
 msgid "Sort by rate per hour descending"
 msgstr "Sortuj po stawce godzinowej malejąco"
 
-#: templates/employees/employee_detail_table.html:80
+#: templates/employees/employee_detail_table.html:87
 msgid "Sort by bonuses ascending"
 msgstr "Sortuj po premiach rosnąco"
 
-#: templates/employees/employee_detail_table.html:89
+#: templates/employees/employee_detail_table.html:96
 msgid "Sort by bonuses descending"
 msgstr "Sortuj po premiach malejąco"
 
-#: templates/employees/employee_detail_table.html:93
+#: templates/employees/employee_detail_table.html:101
 msgid "Was salary paid?"
 msgstr "Zapłacono?"
 
-#: templates/employees/employee_detail_table.html:96
+#: templates/employees/employee_detail_table.html:104
 msgid "To be paid"
 msgstr "Do zapłacenia"
 
-#: templates/employees/employee_detail_table.html:104
+#: templates/employees/employee_detail_table.html:113
 msgid "Sort by salary ascending"
 msgstr "Sortuj po wypłacie rosnąco"
 
-#: templates/employees/employee_detail_table.html:113
+#: templates/employees/employee_detail_table.html:122
 msgid "Sort by salary descending"
 msgstr "Sortuj po wypłacie malejąco"
 
-#: templates/employees/employee_detail_table.html:132
-#: templates/employees/employee_detail_table.html:171
-#: templates/employees/employee_detail_table.html:211
+#: templates/employees/employee_detail_table.html:142
+#: templates/employees/employee_detail_table.html:181
+#: templates/employees/employee_detail_table.html:221
 msgid "Hours approved"
 msgstr "Godziny zaakceptowane"
 
-#: templates/employees/employee_detail_table.html:136
-#: templates/employees/employee_detail_table.html:175
-#: templates/employees/employee_detail_table.html:215
+#: templates/employees/employee_detail_table.html:146
+#: templates/employees/employee_detail_table.html:185
+#: templates/employees/employee_detail_table.html:225
 msgid "Approve hours for month"
 msgstr "Zaakceptuj godziny dla miesiąca"
 
-#: templates/employees/employee_detail_table.html:147
-#: templates/employees/employee_detail_table.html:187
+#: templates/employees/employee_detail_table.html:157
+#: templates/employees/employee_detail_table.html:197
 msgid "Not paid yet"
 msgstr "Niezapłacono"
 
-#: templates/employees/employee_detail_table.html:155
-#: templates/employees/employee_detail_table.html:195
-#: templates/employees/employee_detail_table.html:234
+#: templates/employees/employee_detail_table.html:165
+#: templates/employees/employee_detail_table.html:205
+#: templates/employees/employee_detail_table.html:244
 msgid "Edit month"
 msgstr "Edycja miesiąca"
 
-#: templates/employees/employee_detail_table.html:158
-#: templates/employees/employee_detail_table.html:198
-#: templates/employees/employee_detail_table.html:237
+#: templates/employees/employee_detail_table.html:168
+#: templates/employees/employee_detail_table.html:208
+#: templates/employees/employee_detail_table.html:247
 msgid "Delete month"
 msgstr "Usuń miesiąc"
 
-#: templates/employees/employee_detail_table.html:226
+#: templates/employees/employee_detail_table.html:236
 msgid "Month paid"
 msgstr "Miesiąc opłacony"
 
-#: templates/employees/employee_detail_table.html:258
-#: templates/employees/employee_detail_table.html:262
+#: templates/employees/employee_detail_table.html:268
+#: templates/employees/employee_detail_table.html:272
 #: templates/employees/employee_list_table.html:215
 #: templates/employees/employee_list_table.html:219
 msgid "Previous"
 msgstr "Poprzednia"
 
-#: templates/employees/employee_detail_table.html:284
-#: templates/employees/employee_detail_table.html:288
+#: templates/employees/employee_detail_table.html:294
+#: templates/employees/employee_detail_table.html:298
 #: templates/employees/employee_list_table.html:241
 #: templates/employees/employee_list_table.html:245
 msgid "Next"
 msgstr "Następna"
 
-#: templates/employees/employee_detail_table.html:299
+#: templates/employees/employee_detail_table.html:309
 msgid "It looks like there are no months yet."
 msgstr "Wygląda na to, że żaden miesiąc nie został jeszcze dodany."
 
-#: templates/employees/employee_detail_table.html:301
+#: templates/employees/employee_detail_table.html:311
 msgid "Add first month for this employee."
 msgstr "Dodaj pierwszy miesiąc dla tego pracownika."
 
-#: templates/employees/employee_detail_table.html:314
+#: templates/employees/employee_detail_table.html:324
 msgid "There are no months which satisfy specified criteria."
 msgstr "Brak miesięcy, które spełniają określone kryteria."
 
@@ -774,16 +786,16 @@ msgstr "Dane pracownika"
 
 #: templates/employees/employee_form.html:193
 #: templates/employees/month_approve.html:49
-#: templates/employees/month_edit_form.html:82
-#: templates/employees/month_form.html:66
+#: templates/employees/month_edit_form.html:85
+#: templates/employees/month_form.html:73
 msgid "Submit"
 msgstr "Zatwierdź"
 
 #: templates/employees/employee_form.html:195
 #: templates/employees/employee_form.html:197
 #: templates/employees/month_approve.html:50
-#: templates/employees/month_edit_form.html:83
-#: templates/employees/month_form.html:68
+#: templates/employees/month_edit_form.html:86
+#: templates/employees/month_form.html:75
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -940,8 +952,8 @@ msgstr "Edytujesz"
 msgid "for"
 msgstr "dla"
 
-#: templates/employees/month_edit_form.html:52
-#: templates/employees/month_form.html:36
+#: templates/employees/month_edit_form.html:55
+#: templates/employees/month_form.html:43
 msgid "Hours worked:"
 msgstr "Przepracowane godziny:"
 
@@ -1004,7 +1016,7 @@ msgstr ""
 
 #: templates/polishlody/base.html:67 templates/registration/login.html:17
 msgid "Change language"
-msgstr ""
+msgstr "Zmiana języka"
 
 #: templates/polishlody/base.html:71
 msgid "Check weather forecast"
@@ -1170,112 +1182,112 @@ msgstr "Twoja nazwa użytkownika:"
 msgid "Weather forcast"
 msgstr "Prognoza pogody"
 
-#: templates/weather/weather_forecast.html:20
+#: templates/weather/weather_forecast.html:19
 msgid "Week"
 msgstr "Tydzień"
 
-#: templates/weather/weather_forecast.html:33
-#: templates/weather/weather_forecast.html:90
-#: templates/weather/weather_forecast.html:130
+#: templates/weather/weather_forecast.html:32
+#: templates/weather/weather_forecast.html:88
+#: templates/weather/weather_forecast.html:128
 msgid "Date"
 msgstr "Data"
 
-#: templates/weather/weather_forecast.html:34
-#: templates/weather/weather_forecast.html:91
+#: templates/weather/weather_forecast.html:33
+#: templates/weather/weather_forecast.html:89
 msgid "Temp "
 msgstr ""
 
-#: templates/weather/weather_forecast.html:35
-#: templates/weather/weather_forecast.html:92
+#: templates/weather/weather_forecast.html:34
+#: templates/weather/weather_forecast.html:90
 msgid "Pressure "
 msgstr "Ciśnienie "
 
-#: templates/weather/weather_forecast.html:36
-#: templates/weather/weather_forecast.html:93
-#: templates/weather/weather_forecast.html:134
+#: templates/weather/weather_forecast.html:35
+#: templates/weather/weather_forecast.html:91
+#: templates/weather/weather_forecast.html:132
 msgid "Humidity "
 msgstr "Wilgotność "
 
-#: templates/weather/weather_forecast.html:37
-#: templates/weather/weather_forecast.html:94
+#: templates/weather/weather_forecast.html:36
+#: templates/weather/weather_forecast.html:92
 msgid "Wind "
 msgstr "Wiatr "
 
-#: templates/weather/weather_forecast.html:38
-#: templates/weather/weather_forecast.html:95
+#: templates/weather/weather_forecast.html:37
+#: templates/weather/weather_forecast.html:93
 msgid "Cloudiness "
 msgstr "Zachmurzenie "
 
-#: templates/weather/weather_forecast.html:39
-#: templates/weather/weather_forecast.html:96
-#: templates/weather/weather_forecast.html:139
+#: templates/weather/weather_forecast.html:38
+#: templates/weather/weather_forecast.html:94
+#: templates/weather/weather_forecast.html:137
 msgid "Description"
 msgstr "Opis"
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Sunday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Monday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Tuesday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Wednesday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Thursday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Friday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:78
-#: templates/weather/weather_forecast.html:146
+#: templates/weather/weather_forecast.html:76
+#: templates/weather/weather_forecast.html:144
 msgid "Saturday"
 msgstr ""
 
-#: templates/weather/weather_forecast.html:83
+#: templates/weather/weather_forecast.html:81
 msgid "Tomorrow"
 msgstr "Jutro"
 
-#: templates/weather/weather_forecast.html:131
+#: templates/weather/weather_forecast.html:129
 msgid "Avg Temp "
 msgstr "Śr Temp "
 
-#: templates/weather/weather_forecast.html:132
+#: templates/weather/weather_forecast.html:130
 msgid "Min Temp "
 msgstr "Min Temp "
 
-#: templates/weather/weather_forecast.html:133
+#: templates/weather/weather_forecast.html:131
 msgid "Max Temp "
 msgstr "Maks Temp "
 
-#: templates/weather/weather_forecast.html:135
+#: templates/weather/weather_forecast.html:133
 msgid "Max Wind "
 msgstr "Wiatr Maks "
 
-#: templates/weather/weather_forecast.html:136
+#: templates/weather/weather_forecast.html:134
 msgid "Total Precipitation "
 msgstr "Ilość Opadu "
 
-#: templates/weather/weather_forecast.html:137
+#: templates/weather/weather_forecast.html:135
 msgid "Sunrise"
 msgstr "Wschód"
 
-#: templates/weather/weather_forecast.html:138
+#: templates/weather/weather_forecast.html:136
 msgid "Sunset"
 msgstr "Zachód"
 
