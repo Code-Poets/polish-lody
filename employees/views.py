@@ -525,7 +525,7 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
                                     'year':self.object.year}))
             return form_validation
         except:
-            if "already exists" in str(form.errors):
+            if "errorlist nonfield" in str(form.errors):
                 messages.add_message(self.request, messages.ERROR,
                                      _("Specified month has already been assigned to employee %s.") %
                                      (employee_object.full_name()))
@@ -534,7 +534,7 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     def form_invalid(self, form, **kwargs):
         response = super(MonthCreate, self).form_invalid(form, **kwargs)
         employee_object = Employee.objects.get(pk=self.kwargs['pk'])
-        if "already exists" in str(form.errors):
+        if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
                                 _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))
@@ -584,7 +584,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def form_invalid(self, form, **kwargs):
         employee_object = self.get_object().employee
-        if "already exists" in str(form.errors):
+        if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
                                 _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))
@@ -635,7 +635,7 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
 
     def form_invalid(self, form, **kwargs):
         employee_object = self.get_object().employee
-        if "already exists" in str(form.errors):
+        if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
                                 _("Specified month has already been assigned to employee %s.") %
                                 (employee_object.full_name()))

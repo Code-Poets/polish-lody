@@ -32,7 +32,7 @@
                     </td>
                     <td>
                         {% if employee.rate_per_hour %}
-                            {{ employee.rate_per_hour }}zł
+                            {{ employee.rate_per_hour }} zł
                         {% else %}
                             {% trans 'N/A' %}
                         {% endif %}
@@ -179,8 +179,8 @@
                         {% trans 'Phone contact number' %}:
                     </td>
                     <td>
-                        {% if employee.address_phone_contact_number %}
-                            {{ employee.address_phone_contact_number }}
+                        {% if employee.phone_contact_number %}
+                            {{ employee.phone_contact_number }}
                         {% else %}
                             {% trans 'N/A' %}
                         {% endif %}

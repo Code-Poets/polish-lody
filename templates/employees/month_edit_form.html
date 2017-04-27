@@ -29,16 +29,19 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
                     <form method="post" class="form-horizontal" id="monthform">
+                        {% csrf_token %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
                         {% if form.errors %}
                             <div class="alert alert-danger" role="alert">
-                                {{ form.year.errors }}
-                                {{ form.month.errors }}
-                                {{ form.salary_is_paid.errors }}
-                                {{ form.hours_worked_in_this_month.errors }}
-                                {{ form.rate_per_hour_this_month.errors }}
+                            {% for e in form %}
+                                {{e.errors|escape}}
+                            {% endfor %}
                             </div>
                         {% endif %}
-                        {% csrf_token %}
                         {% for e in form %}
                         {% if e.label == "Employee" %}
                             <div class="form-group" hidden>

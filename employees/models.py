@@ -111,6 +111,9 @@ class Employee(MyUser):
     contract_choices = (
         ("Fixed-term employment contract", _("Fixed-term employment contract")),
         ("Non-fixed-term employment contract", _("Non-fixed-term employment contract")),
+        ("Contract work", _("Contract work")), #umowa o dzieło
+        ("Fee-for-task contract", _("Fee-for-task contract ")), #umowa zlecenie
+        ("B2B", _("B2B")),
         ("Other", _("Other")),
     )
 

@@ -23,6 +23,13 @@
                 <div class="col-lg-8">
                     <form method="post" class="form-horizontal" id="monthform">
                         {% csrf_token %}
+                        {% if form.hours_worked_in_this_month.errors or form.rate_per_hour_this_month.errors or form.bonuses.errors %}
+                            <div class="alert alert-danger" role="alert">
+                            {% for e in form %}
+                                {{e.errors|escape}}
+                            {% endfor %}
+                            </div>
+                        {% endif %}
                         {% for e in form %}
                         {% if e.label == "Employee" %}
                             <div class="form-group" hidden>

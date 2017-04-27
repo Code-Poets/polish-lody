@@ -65,7 +65,7 @@ class EmployeeForm(AuthUserCreationForm):
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
             'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
-            'rate_per_hour'         : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+            'rate_per_hour'         : forms.NumberInput(attrs={'min':'0', 'max':'99999.99', 'step':'0.01'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
@@ -103,6 +103,7 @@ class EmployeeChangeForm(ModelForm):
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
             'contract_exp_date'     : forms.DateInput(attrs={'class': 'datepicker'}),
             'health_book_exp_date'  : forms.DateInput(attrs={'class': 'datepicker'}),
+            'rate_per_hour'         : forms.NumberInput(attrs={'min':'0', 'max':'99999.99', 'step':'0.01'}),
             'bank_account_number'   : forms.TextInput(attrs = {'title' : 'Bank account number must have 26 digits'}),
             'phone_contact_number'  : forms.TextInput(attrs = {'value' : '+48'}),
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
@@ -116,9 +117,11 @@ class MonthForm(ModelForm):
         exclude = ['month_is_approved']
 
         widgets = {
+            'year'                          : forms.NumberInput(attrs={'min':'0', 'max':'9999', 'step':'1'}),
             'salary_is_paid'                : RadioSelect(renderer=HorizontalRadioRenderer),
             'hours_worked_in_this_month'    : forms.NumberInput(attrs={'min':'0', 'max':'720', 'step':'0.1'}),
-            'rate_per_hour_this_month'      : forms.NumberInput(attrs={'min':'0','step':'0.1'}),
+            'rate_per_hour_this_month'      : forms.NumberInput(attrs={'min':'0', 'max':'99999.99', 'step':'0.01'}),
+            'bonuses'                       : forms.NumberInput(attrs={'min':'0', 'max':'99999.99', 'step':'0.01'}),
         }
 
 class MonthApproveForm(ModelForm):
