@@ -89,7 +89,7 @@
             src: docker-compose-env.j2
             dest: "{{ app_dir }}/deployment/.env"
 
-        - name: run docker-compose build
-          command: docker-compose build
+        - name: run docker-compose build for instance
+          command: "docker-compose --project-name {{ instance_name }} build"
           args:
             chdir: "{{ app_dir }}/deployment/"

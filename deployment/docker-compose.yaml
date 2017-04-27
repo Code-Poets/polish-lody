@@ -33,8 +33,6 @@ services:
     restart: on-failure
   nginx:
     build: ../nginx/
-    env_file:
-      - .env
     ports:
       - $POLISH_LODY_PORT:80
     volumes: 
