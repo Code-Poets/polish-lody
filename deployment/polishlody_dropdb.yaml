@@ -9,7 +9,7 @@
       become_user: "{{ user }}"
       block:
 
-        - name: run docker-compose build
-          command: docker-compose run --rm database dropdb polishlody --user postgres --host database
+        - name: drop database
+          command: "docker-compose --project-name {{ instance_name}} run --rm database dropdb polishlody --user postgres --host database"
           args:
             chdir: "{{ app_dir }}/deployment/"

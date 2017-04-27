@@ -9,6 +9,6 @@
       become_user: "{{ user }}"
       block:
         - name: run docker-compose up in detached mode
-          command: docker-compose up -d
+          command: "docker-compose --project-name {{ instance_name }} up -d"
           args:
             chdir: "{{ app_dir }}/deployment/"
