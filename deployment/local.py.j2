@@ -1,6 +1,6 @@
 import os
 
-ALLOWED_HOSTS = ['localhost', '192.168.8.22']
+ALLOWED_HOSTS = ['{{ server_name }}']
 
 DATABASES = {
     'default': {
@@ -13,11 +13,24 @@ DATABASES = {
         'ATOMIC_REQUESTS': True,
     }
 }
-
-ADMINS = {{ admins }}
+ADMINS = [ 
+{% for name_and_email in admins %}
+	('{{ name_and_email.name }}', '{{ name_and_email.email }}'),
+{% endfor %}
+]
 SECURE_CONTENT_TYPE_NOSNIFF = {{ secure_content_type_nosniff }}
 SECURE_BROWSER_XSS_FILTER = {{ secure_browser_xss_filter }}
 SESSION_COOKIE_SECURE = {{ session_cookie_secure }}
 CSRF_COOKIE_SECURE = {{ csrf_cookie_secure }}
 CSRF_COOKIE_HTTPONLY = {{ csrf_cookie_httponly }}
-X_FRAME_OPTIONS = {{ x_frame_options }}
+X_FRAME_OPTIONS = "{{ x_frame_options }}"
+
+EMAIL_USE_TLS = {{ email_use_tls }}
+EMAIL_BACKEND = '{{ email_backend }}'
+MAILGUN_ACCESS_KEY = '{{ mailgun_access_key }}'
+MAILGUN_SERVER_NAME = '{{ mailgun_server_name }}'
+EMAIL_HOST = '{{ email_host }}'
+EMAIL_HOST_PASSWORD = '{{ email_host_password }}'
+
+EMAIL_HOST_USER = '{{ email_host_user }}'
+EMAIL_PORT = {{ email_port }}

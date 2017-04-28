@@ -1,9 +1,22 @@
 polish_lody_port: 8000
 polish_lody_version: ovh-deployment
-admins: []
+server_name: vps396758.ovh.net
+
+admins:
+  - name: Jakub
+    email: jakubczachura+polishlody@gmail.com
+  - name: Piotr
+    email: yoowul+polishlody@gmail.com
 secure_content_type_nosniff: False
 secure_browser_xss_filter: False
 session_cookie_secure: False
 csrf_cookie_secure: False
 csrf_cookie_httponly: False
-x_frame_options: "'SAMEORIGIN'"
+x_frame_options: SAMEORIGIN
+
+email_use_tls: True
+email_backend: django.core.mail.backends.smtp.EmailBackend
+mailgun_server_name:
+email_host: smtp.gmail.com
+email_host_user: polishmietek@gmail.com
+email_port: 587

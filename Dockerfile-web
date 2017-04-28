@@ -6,9 +6,20 @@ ENV PYTHONUNBUFFERED=1 \
     SECRET_KEY=derpy_key \
     POLISH_LODY_DATABASE_NAME=localhost
 
+# install gettext for logging purposes
+RUN apt-get update
+RUN apt-get --assume-yes install gettext=0.19.3-2
+
+# create directory for app code
 RUN mkdir /code
 WORKDIR /code
+
+# copy requirements file and install requirements
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt
+
+# copy app code into code directory
 ADD . /code/
+
+# run collectstatic with django
 RUN /code/manage.py collectstatic --no-input

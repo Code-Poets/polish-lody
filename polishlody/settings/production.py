@@ -28,7 +28,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.herokuapp.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -190,15 +189,6 @@ DATE_INPUT_FORMATS = [
 WARNING_DAYS_LEFT = 30
 FORM_SUBMIT_DELAY = 2000
 
-EMAIL_USE_TLS = True
-# EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_ACCESS_KEY')
-MAILGUN_SERVER_NAME = os.environ.get('MAILGUN_SERVER_NAME')
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'polishlody team'
 
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')

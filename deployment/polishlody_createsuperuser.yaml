@@ -1,0 +1,30 @@
+- hosts: "{{ hosts }}"
+  vars_files:
+    - vars.yaml
+    - "./secrets/{{ instance_name }}-secrets.yaml"
+    - "{{ instance_name }}-vars.yaml"
+
+  tasks:
+    - become: yes
+      become_user: "{{ user }}"
+      block:
+
+        - name: ensure that linked directory exists
+          file:
+            path: "{{ app_dir }}/deployment/secrets"
+            state: directory
+
+        - name: upload superuser fixture
+          copy:
+            src: ./secrets/superuser.yaml
+            dest: "{{ app_dir }}/deployment/secrets/superuser.yaml"
+
+        - name: load superuser fixture
+          command: "docker-compose --project-name {{ instance_name }} run --rm web ./manage.py loaddata /code/deployment/secrets/superuser.yaml"
+          args:
+            chdir: "{{ app_dir }}/deployment/"
+
+        - name: remove superuser fixture
+          file:
+            path: "{{ app_dir }}/deployment/secrets/superuser.yaml"
+            state: absent
