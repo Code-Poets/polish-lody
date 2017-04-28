@@ -23,9 +23,10 @@ services:
       dockerfile: Dockerfile-web
     env_file:
       - .env
-    command: 'bash -c "python manage.py check --deploy && cp /code/staticfiles / --recursive && gunicorn polishlody.wsgi --workers 2 --bind 0.0.0.0:8000"'
+    command: 'bash -c "python manage.py check --deploy && cp /code/staticfiles / --recursive && python manage.py compilemessages && gunicorn polishlody.wsgi --log-level info --workers 2 --bind 0.0.0.0:8000"'
     volumes: 
       - staticfiles:/staticfiles
+      - $POLISH_LODY_APP_DIR/deployment/secrets:/code/web/deployment/secrets
     depends_on:
       - database
     expose:

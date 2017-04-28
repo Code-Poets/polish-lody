@@ -1238,10 +1238,10 @@ msgstr "Powrót do strony logowania."
 #: templates/registration/password_reset_email.html:2
 msgid ""
 "You're receiving this email because you requested a password reset for your "
-"user account at polishlody.com"
+"user account at polishlody.codepoets.it"
 msgstr ""
 "Otrzymujesz ten email ponieważ zażądałeś/-aś zresetowania hasła do Twojego "
-"konta na polishlody.com"
+"konta na polishlody.codepoets.it"
 
 #: templates/registration/password_reset_email.html:4
 #: templates/registration/password_set_email.html:4
@@ -1259,8 +1259,8 @@ msgstr "Dziękujemy za skorzystanie z naszej strony!"
 
 #: templates/registration/password_reset_email.html:12
 #: templates/registration/password_set_email.html:12
-msgid "The polishlody.com team"
-msgstr "Zespół polishlody.com"
+msgid "The polishlody.codepoets.it team"
+msgstr "Zespół polishlody.codepoets.it"
 
 #: templates/registration/password_reset_form.html:11
 msgid ""

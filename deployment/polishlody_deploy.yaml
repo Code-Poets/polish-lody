@@ -1,8 +1,8 @@
 - hosts: "{{ hosts }}"
   vars_files:
-  - vars.yaml
-  - secrets.yaml
-  - "{{ instance_name }}-vars.yaml"
+    - vars.yaml
+    - "./secrets/{{ instance_name }}-secrets.yaml"
+    - "{{ instance_name }}-vars.yaml"
 
   tasks:
     - become: yes
@@ -79,15 +79,31 @@
             src: local.py.j2
             dest: "{{ app_dir }}/polishlody/settings/local.py"
 
+        - name: prepare variable template for docker-compose
+          template:
+            src: docker-compose-env.j2
+            dest: "{{ app_dir }}/deployment/.env"
+
+        - name: prepare nginx config template for docker-compose
+          template:
+            src: nginx-polishlody-conf.j2
+            dest: "{{ app_dir }}/nginx/polishlody.conf"
+
+        - name: upload nginx password file for http_auth
+          copy:
+            src: ./secrets/.htpasswd
+            dest: "{{ app_dir }}/nginx/.htpasswd"
+
         - name: upload fixture with cities to server
           copy:
             src: fikstura_cities.json
             dest: "{{ app_dir }}/employees/fixtures/"
 
-        - name: prepare variable template for docker-compose
-          template:
-            src: docker-compose-env.j2
-            dest: "{{ app_dir }}/deployment/.env"
+        - name: create path for docker volume containing superuser fixture used by polishlody_createsuperuser.yaml playbook
+          # Otherwise docker-compose will create this directory as root with root ownership
+          file:
+            path: "{{ app_dir }}/deployment/secrets"
+            state: directory
 
         - name: run docker-compose build for instance
           command: "docker-compose --project-name {{ instance_name }} build"

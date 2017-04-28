@@ -1,7 +1,12 @@
 server {
 
     listen 80;
-    #server_name not.configured.example.com;
+    server_name {{ server_name }};
+    
+    {% if instance_name == 'staging' %}
+    auth_basic "Enter password for polishlody staging server:";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+    {% endif %}
     charset utf-8;
 
     location /static {
