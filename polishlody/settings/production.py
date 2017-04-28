@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'sass_processor',
     'widget_tweaks',
     'sales',
-    'dbbackup', #django-dbbackup
 ]
 
 MIDDLEWARE = [
@@ -107,12 +106,6 @@ DATABASES = {
 # Update database configuration with $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-
-# django-dbbackup options
-
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'backups')}
-DBBACKUP_CLEANUP_KEEP = 14
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -198,10 +191,13 @@ WARNING_DAYS_LEFT = 30
 FORM_SUBMIT_DELAY = 2000
 
 EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_ACCESS_KEY')
+MAILGUN_SERVER_NAME = os.environ.get('MAILGUN_SERVER_NAME')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') #my gmail password
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') #my gmail username
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'polishlody team'
 
