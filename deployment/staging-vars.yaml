@@ -1,6 +1,8 @@
-polish_lody_port: 8000
+#polish_lody_port: 8000
+polish_lody_port: 80
 polish_lody_version: ovh-deployment
-server_name: vps396758.ovh.net
+#server_name: vps396758.ovh.net
+server_name: polishlody.codepoets.it
 
 admins:
   - name: Jakub
