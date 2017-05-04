@@ -18,7 +18,13 @@ x_frame_options: SAMEORIGIN
 
 email_use_tls: True
 email_backend: django.core.mail.backends.smtp.EmailBackend
-mailgun_server_name:
-email_host: smtp.gmail.com
-email_host_user: polishmietek@gmail.com
+mailgun_server_name: https://api.mailgun.net/v3/polishlody.codepoets.it
+email_host: smtp.mailgun.com
+email_host_user: postmaster@polishlody.codepoets.it
+
+# email_use_tls: True
+# email_backend: django.core.mail.backends.smtp.EmailBackend
+# mailgun_server_name:
+# email_host: smtp.gmail.com
+# email_host_user: polishmietek@gmail.com
 email_port: 587
