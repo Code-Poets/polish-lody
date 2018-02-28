@@ -97,7 +97,7 @@ class EmployeeChangeForm(ModelForm):
 
         fields = ['email', 'first_name', 'last_name', 'rate_per_hour', 'contract_start_date', 'contract_exp_date',
          'health_book_exp_date', 'gender', 'position', 'contract_type', 'address_city', 'address_street', 'address_zip_code', 'bank_account_number', 
-         'phone_contact_number']
+         'phone_contact_number','currently_employed']
 
         widgets = {
             'contract_start_date'   : forms.DateInput(attrs={'class': 'datepicker'}),
