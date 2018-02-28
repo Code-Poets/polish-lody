@@ -132,6 +132,9 @@ html, body {
   border: none;
   outline: none; }
 
+.sort-buttons {
+  white-space: nowrap; }
+
 /*CHECKBOXES*/
 .vis-hidden {
   border: 0;
@@ -631,4 +634,4 @@ ul.topnav li.icon {
 
 /**/
 
-/*# sourceMappingURL=../../../../../../../static/main.css.map */
+/*# sourceMappingURL=../../../../../../static/main.css.map */

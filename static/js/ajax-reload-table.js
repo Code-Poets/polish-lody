@@ -8,7 +8,7 @@ $(document).ready(function submit(e) {
         timer = setTimeout(function(){
             try {
                 var parameters = gatherFilters();
-                delete parameters.page;
+               // delete parameters.page;
             } 
             catch(err) {
                 var parameters = { };

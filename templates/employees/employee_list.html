@@ -19,7 +19,7 @@
         <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
 
-    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
+    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}"
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
         <div class="filter-forms">
             <!-- <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
@@ -84,6 +84,36 @@
                         {% trans 'Not paid' %}
                     </label>
                 </li>
+
+
+                <li class="filter">
+                    {% if currently_employed_employees_filter %}
+                        <input id="former_employees_id" type="checkbox" checked class="vis-hidden"
+                           name="former_employees" />
+                    {% else %}
+                        <input id="former_employees_id" type="checkbox"  class="vis-hidden"
+                           name="former_employees" />
+                    {% endif %}
+                    <label class="my-button clickable" for="former_employees_id">
+                        {{'former employees'}}
+                    </label>
+                </li>
+
+
+                 <li class="filter">
+                    {% if currently_employed_employees_filter %}
+                        <input id="current_employees_id" type="checkbox" checked class="vis-hidden"
+                           name="current_employees" />
+                    {% else %}
+                        <input id="current_employees_id" type="checkbox"  class="vis-hidden"
+                           name="current_employees" />
+                    {% endif %}
+                    <label class="my-button clickable" for="current_employees_id">
+                        {{'current employees'}}
+                    </label>
+                </li>
+
+
                 <li class="filter">
                     <input class="vis-hidden" type="checkbox" value="Clear filters"/>
                     <label class="my-button reset-filters">
@@ -103,11 +133,11 @@
                 {% endfor %}
             </select>
         </div>
-            
+
         {% endif %}
 {% endblock %}
 {% block load_block %}
-    {% include 'employees/employee_list_table.html' %}       
+    {% include 'employees/employee_list_table.html' %}
 {% endblock %}
 {% block footer_block %}
     {% if all_employee_list %}
@@ -144,7 +174,7 @@
                 try {
                     var parameters = gatherFilters();
                     delete parameters.page;
-                } 
+                }
                 catch(err) {
                     var parameters = { };
                 }
@@ -161,10 +191,30 @@
                 position_production: $('input[name=position_production]:checked').val(),
                 hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
                 hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
+
+                former_employees: $('input[name=former_employees]:checked').val(),
+                current_employees: $('input[name=current_employees]:checked').val(),
+
                 per_page: $('select[name=per_page]').val(),
                 page: $('input[name=pg]:checked').val(),
             }
         }
+
+        const current_emp_check_box = document.querySelector('#current_employees_id');
+        current_emp_check_box.click();
+
+        const current_check_box = document.querySelector('#current_employees_id');
+        const former_check_box = document.querySelector('#former_employees_id');
+
+        current_check_box.addEventListener('click', function () {
+        former_check_box.checked=false;
+         });
+
+        former_check_box.addEventListener('click', function () {
+        current_check_box.checked=false;
+         });
+
+
     </script>
     {% elif not messages %}
     <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>

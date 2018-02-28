@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-#from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+# from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -15,7 +15,7 @@ from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
 from .models import City, Employee, Month
 from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
-from  django.db.models import Case, When, Sum, Value, F, Q, DecimalField
+from django.db.models import Case, When, Sum, Value, F, Q, DecimalField
 import re
 from django.db import IntegrityError
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
@@ -23,42 +23,48 @@ from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
 from functools import reduce
 
+
 def ajax_autocomplete(request):
     if request.is_ajax():
         query = request.GET.get('query', '')
         polishquery = query
         polishqueryarr = []
-        for word, initial in {'A':'Ą','C':'Ć','E':'Ę','L':'Ł','N':'Ń','O':'Ó','S':'Ś','Z':'Ź','Z':'Ż',
-            'a':'ą','c':'ć','e':'ę','l':'ł','n':'ń','o':'ó','s':'ś','z':'ź','z':'ż'}.items():
+        for word, initial in {'A': 'Ą', 'C': 'Ć', 'E': 'Ę', 'L': 'Ł', 'N': 'Ń', 'O': 'Ó', 'S': 'Ś', 'Z': 'Ź', 'Z': 'Ż',
+                              'a': 'ą', 'c': 'ć', 'e': 'ę', 'l': 'ł', 'n': 'ń', 'o': 'ó', 's': 'ś', 'z': 'ź',
+                              'z': 'ż'}.items():
             polishquery = query
-            polishquery = polishquery.replace(word,initial)
+            polishquery = polishquery.replace(word, initial)
             polishqueryarr.append(polishquery)
-        for word, initial in {'A':'Ą','C':'Ć','E':'Ę','L':'Ł','N':'Ń','O':'Ó','S':'Ś','Z':'Ź','Z':'Ż',
-            'a':'ą','c':'ć','e':'ę','l':'ł','n':'ń','o':'ó','s':'ś','z':'ź','z':'ż'}.items():
-            polishquery = polishquery.replace(word,initial)
+        for word, initial in {'A': 'Ą', 'C': 'Ć', 'E': 'Ę', 'L': 'Ł', 'N': 'Ń', 'O': 'Ó', 'S': 'Ś', 'Z': 'Ź', 'Z': 'Ż',
+                              'a': 'ą', 'c': 'ć', 'e': 'ę', 'l': 'ł', 'n': 'ń', 'o': 'ó', 's': 'ś', 'z': 'ź',
+                              'z': 'ż'}.items():
+            polishquery = polishquery.replace(word, initial)
             polishqueryarr.append(polishquery)
         data = json.dumps({
 
-            "suggestions" :
-            
-            [city.name for city in City.objects.filter(
-                Q(name__icontains = query)|reduce(lambda x, y: x | y, [Q(name__contains=word) for word in polishqueryarr]))]
-            
-            })
+            "suggestions":
+
+                [city.name for city in City.objects.filter(
+                    Q(name__icontains=query) | reduce(lambda x, y: x | y,
+                                                      [Q(name__contains=word) for word in polishqueryarr]))]
+
+        })
     else:
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
 
 def ajax_verify_email(request):
     if request.POST and request.is_ajax():
         email = request.POST.get('email')
         if Employee.objects.filter(email=email).exists():
             return HttpResponse(json.dumps({
-                "status":1
-                }), content_type='application/json')
+                "status": 1
+            }), content_type='application/json')
         return HttpResponse('')
     return HttpResponse('')
+
 
 def ajax_verify_date(request, **kwargs):
     year = request.GET.get('year')
@@ -70,6 +76,7 @@ def ajax_verify_date(request, **kwargs):
         'is_date': employee_month_query.filter(month=month, year=year).exists()
     }
     return JsonResponse(data)
+
 
 def make_year_list_for_filtering_in_emp_detail(employee):
     months = employee.month_set.all()
@@ -83,6 +90,7 @@ def make_year_list_for_filtering_in_emp_detail(employee):
     else:
         return False
 
+
 def position_list_and_filtering(self, queryset):
     positions = {
         'position_sale': 'Sale',
@@ -92,22 +100,46 @@ def position_list_and_filtering(self, queryset):
     }
     exclude_list = []
     for key in positions.keys():
+
         if self.request.GET.get(key) is None:
             exclude_list.append(positions[key])
             queryset = queryset.exclude(position=positions[key])
+
     queryset = queryset.exclude(position=None)
     return queryset
+
+
+def former_and_current_filtering(self, queryset):
+    if self.request.GET.get('current_employees'):
+        queryset = queryset.exclude(currently_employed=False)
+        # queryset = queryset.exclude(currently_employed=None) dont need to take caro of None, column Not Null in Data Base
+
+    if not self.request.GET.get('current_employees'):
+        queryset = queryset.exclude(currently_employed=True)
+    __check_buttons_and_checkboxes()
+    return queryset
+
+
+
+def __check_buttons_and_checkboxes():
+    pass
+
+
+
+
 
 def make_paginate_by_list():
     paginate_by = [2, 5, 10, 25, 100]
     return paginate_by
 
+
 def find_user_by_name(query_name):
     qs = Employee.objects.all()
     for term in query_name.split():
-        qs = qs.filter( Q(first_name__icontains = term) | Q(last_name__icontains = term)
-                        | Q(first_name__icontains = term.title()) | Q(last_name__icontains = term.title()))
+        qs = qs.filter(Q(first_name__icontains=term) | Q(last_name__icontains=term)
+                       | Q(first_name__icontains=term.title()) | Q(last_name__icontains=term.title()))
     return qs
+
 
 def order_by_default(order):
     try:
@@ -115,6 +147,7 @@ def order_by_default(order):
     except:
         queryset = Employee.objects.all()
     return queryset
+
 
 def order_by_unpaid_salaries(name_filter, descending):
     if name_filter is not None:
@@ -140,8 +173,8 @@ def order_by_unpaid_salaries(name_filter, descending):
     ).order_by('%sunpaid_salaries' % (descending))
     return query
 
+
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
-    
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
 
@@ -162,7 +195,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             except:
                 pass
             context = {
-                'all_employee_list':qset,
+                'all_employee_list': qset,
                 'paginator': paginator,
                 'page_obj': page_obj,
                 'orderby': order,
@@ -172,9 +205,9 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 context['empty_qset'] = True
             context['ajax_request'] = True
             return self.response_class(
-                request = self.request,
-                template = self.get_template_names(),
-                context = context,
+                request=self.request,
+                template=self.get_template_names(),
+                context=context,
                 **response_kwargs
             )
         else:
@@ -208,6 +241,10 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context['position_filter'] = self.request.GET.get('position_filter')
         context['employee_filter'] = self.request.GET.get('employee_filter') or _('e.g. Darth Vader')
         context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
+
+        context['former_employees'] = self.request.GET.get('former_employees') or False
+        context['current_employees'] = self.request.GET.get('current_employees') or False
+
         context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
         context['per_page'] = self.request.GET.get('per_page') or 10
         context['page'] = page
@@ -221,12 +258,17 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     def get_queryset(self):
         clear_filters = self.request.GET.get('clear_filters')
         order = self.request.GET.get('order', 'last_name')
+
         sale_position_filter = self.request.GET.get('position_sale') or False
+        former_employees_filter = self.request.GET.get('former_employees') or False
+        current_employees_filter = self.request.GET.get('current_employees') or False
+
         production_position_filter = self.request.GET.get('position_production') or False
         other_position_filter = self.request.GET.get('position_other') or False
         employee_filter = self.request.GET.get('employee_filter')
         position_filter = self.request.GET.get('position_filter')
         hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
+
         hide_paid_employees_filter = self.request.GET.get('hide_paid_employees_filter')
         if order == 'unpaid_salaries':
             queryset = order_by_unpaid_salaries(employee_filter, '')
@@ -239,21 +281,23 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             queryset = order_by_default(order)
         if sale_position_filter or production_position_filter or other_position_filter:
             queryset = position_list_and_filtering(self, queryset)
-        
-        
+
+        if former_employees_filter or current_employees_filter:
+            queryset = former_and_current_filtering(self, queryset)
+
         if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
-            
+
             queryset = queryset
 
         else:
-            
+
             if hide_paid_employees_filter is not None:
                 exclude_list = []
                 for employee in queryset:
                     if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
                         exclude_list.append(employee.id)
                 queryset = queryset.exclude(id__in=exclude_list)
-                
+
             if hide_zero_salary_months_filter is not None:
                 exclude_list = []
                 for employee in queryset:
@@ -262,12 +306,13 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 queryset = queryset.exclude(id__in=exclude_list)
 
         if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
-                or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
-                    and self.request.is_ajax() is False:
+                                      or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
+                and self.request.is_ajax() is False:
             messages.add_message(self.request, messages.WARNING,
-                                "No employee meets the search criteria. "
-                                "Widen your search or check filter for typos.")
+                                 "No employee meets the search criteria. "
+                                 "Widen your search or check filter for typos.")
         return queryset
+
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
     model = Month
@@ -305,9 +350,9 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 context['empty_qset'] = True
             context['ajax_request'] = True
             return self.response_class(
-                request = self.request,
-                template = self.get_template_names(),
-                context = context,
+                request=self.request,
+                template=self.get_template_names(),
+                context=context,
                 **response_kwargs
             )
         else:
@@ -343,11 +388,11 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
 
             elif order == 'tbp-up':
                 month_queryset = employee.month_set.annotate(
-                    to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
+                    to_be_paid=(F('hours_worked_in_this_month') * F('rate_per_hour_this_month'))
                 ).order_by('to_be_paid')
             elif order == '-to_be_paid':
                 month_queryset = employee.month_set.annotate(
-                    to_be_paid=(F('hours_worked_in_this_month')*F('rate_per_hour_this_month'))
+                    to_be_paid=(F('hours_worked_in_this_month') * F('rate_per_hour_this_month'))
                 ).order_by('tbp-down')
             elif order == 'hours-up':
                 month_queryset = employee.month_set.all().order_by('hours_worked_in_this_month')
@@ -370,9 +415,9 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
             if hide_unpaid_filter is not None:
                 month_queryset = month_queryset.exclude(salary_is_paid=False)
             if month_queryset.count() == 0 and not employee.month_set.all().count() == 0 \
-                and self.request.is_ajax() is False:
+                    and self.request.is_ajax() is False:
                 messages.add_message(self.request, messages.WARNING,
-                                    "Employee has no months which satisfy specified criteria. Check filters again.")
+                                     "Employee has no months which satisfy specified criteria. Check filters again.")
         else:
             try:
                 month_queryset = employee.month_set.all().order_by(order)
@@ -419,6 +464,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         context['per_page'] = self.request.GET.get('per_page') or 10
         return context
 
+
 class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = Employee
     form_class = EmployeeForm
@@ -454,14 +500,14 @@ class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             return form_validation
         except:
             messages.add_message(self.request, messages.ERROR,
-                                    _("Specified e-mail address has already been assigned to another employee"))
+                                 _("Specified e-mail address has already been assigned to another employee"))
             return HttpResponseRedirect('')
 
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
+
 class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
-    
     model = Employee
     form_class = EmployeeChangeForm
     success_url = reverse_lazy('employees')
@@ -469,7 +515,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def get_queryset(self, **kwargs):
         try:
-            return Employee.objects.filter(pk=self.kwargs['pk'])        
+            return Employee.objects.filter(pk=self.kwargs['pk'])
         except:
             messages.add_message(self.request, messages.ERROR, _("This employee does not exist!"))
             return HttpResponseRedirect('../')
@@ -480,16 +526,17 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         employee_object = self.get_queryset()
         city_object = employee_object[0].address_city
         initial['address_city'] = city_object
-        
+
         return initial
 
     def form_valid(self, form, **kwargs):
-        
+
         form_validation = super().form_valid(form)
 
         messages.add_message(self.request, messages.SUCCESS,
-            _("Changes saved for employee %s.") % (self.get_queryset().first()))
+                             _("Changes saved for employee %s.") % (self.get_queryset().first()))
         return form_validation
+
 
 class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     form_class = MonthForm
@@ -521,8 +568,8 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             form_validation = super().form_valid(form)
             messages.add_message(self.request, messages.SUCCESS,
                                  _("Successfully created month %(month)s %(year)s") % ({
-                                    'month':self.object.get_month_display(),
-                                    'year':self.object.year}))
+                                     'month': self.object.get_month_display(),
+                                     'year': self.object.year}))
             return form_validation
         except:
             if "errorlist nonfield" in str(form.errors):
@@ -536,12 +583,12 @@ class MonthCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         employee_object = Employee.objects.get(pk=self.kwargs['pk'])
         if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                _("Specified month has already been assigned to employee %s.") %
-                                (employee_object.full_name()))
+                                 _("Specified month has already been assigned to employee %s.") %
+                                 (employee_object.full_name()))
         return response
 
-class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
+class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     form_class = MonthForm
     template_name = 'employees/month_edit_form.html'
 
@@ -564,7 +611,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         try:
             context = super().get_context_data(**kwargs)
             employee_object = self.get_object().employee
-            context['employee'] = employee_object           
+            context['employee'] = employee_object
             return context
         except:
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
@@ -573,11 +620,11 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     def form_valid(self, form, **kwargs):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                            _("Successfully edited month %(month)s %(year)s.") %({
-                                'month':self.object.get_month_display(),
-                                'year':self.object.year}))
+                             _("Successfully edited month %(month)s %(year)s.") % ({
+                                 'month': self.object.get_month_display(),
+                                 'year': self.object.year}))
         if 'hours_worked_in_this_month' in form.changed_data and self.object.salary_is_paid != True:
-            month = Month.objects.get(pk = self.object.id)
+            month = Month.objects.get(pk=self.object.id)
             month.month_is_approved = False
             month.save()
         return form_validation
@@ -586,21 +633,22 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         employee_object = self.get_object().employee
         if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                _("Specified month has already been assigned to employee %s.") %
-                                (employee_object.full_name()))
+                                 _("Specified month has already been assigned to employee %s.") %
+                                 (employee_object.full_name()))
         return super(MonthUpdate, self).form_invalid(form, **kwargs)
 
-class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
 
+class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
     form_class = MonthApproveForm
     template_name = 'employees/month_approve.html'
 
     def get_queryset(self, **kwargs):
         try:
-            return Month.objects.filter(pk = self.kwargs['pk'])
+            return Month.objects.filter(pk=self.kwargs['pk'])
         except:
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
+
     def get_success_url(self, **kwargs):
         try:
             employee_object = self.get_object().employee
@@ -628,18 +676,19 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
     def form_valid(self, form):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                            _("Successfully approved month %(month)s %(year)s.") % ({
-                                'month':self.object.get_month_display(),
-                                'year':self.object.year}))
+                             _("Successfully approved month %(month)s %(year)s.") % ({
+                                 'month': self.object.get_month_display(),
+                                 'year': self.object.year}))
         return form_validation
 
     def form_invalid(self, form, **kwargs):
         employee_object = self.get_object().employee
         if "errorlist nonfield" in str(form.errors):
             messages.add_message(self.request, messages.ERROR,
-                                _("Specified month has already been assigned to employee %s.") %
-                                (employee_object.full_name()))
+                                 _("Specified month has already been assigned to employee %s.") %
+                                 (employee_object.full_name()))
         return super().form_invalid(form, **kwargs)
+
 
 class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Employee
@@ -655,6 +704,7 @@ class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             messages.add_message(self.request, messages.ERROR, _("This employee does not exist!"))
 
         return HttpResponseRedirect(self.success_url)
+
 
 class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Month
@@ -674,9 +724,9 @@ class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             redirector = employee_object.pk
             success_url = reverse_lazy('employee_detail', kwargs={'pk': redirector})
             messages.add_message(self.request, messages.WARNING,
-                                             _("Successfully deleted month %(month)s %(year)s.") % ({
-                                                'month':self.get_object().get_month_display(),
-                                                'year':self.get_object().year}))
+                                 _("Successfully deleted month %(month)s %(year)s.") % ({
+                                     'month': self.get_object().get_month_display(),
+                                     'year': self.get_object().year}))
             self.object = self.get_object()
             self.object.delete()
             return HttpResponseRedirect(success_url)
@@ -684,11 +734,13 @@ class MonthDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             HttpResponseRedirect('employees')
 
+
 def pl_404_view(request):
     template = 'employees/404.html'
     response = render(request, template)
     response.status_code = 404
     return response
+
 
 def pl_500_view(request):
     template = 'employees/500.html'
