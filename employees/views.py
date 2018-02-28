@@ -116,16 +116,8 @@ def former_and_current_filtering(self, queryset):
 
     if not self.request.GET.get('current_employees'):
         queryset = queryset.exclude(currently_employed=True)
-    __check_buttons_and_checkboxes()
+
     return queryset
-
-
-
-def __check_buttons_and_checkboxes():
-    pass
-
-
-
 
 
 def make_paginate_by_list():
@@ -283,7 +275,16 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             queryset = position_list_and_filtering(self, queryset)
 
         if former_employees_filter or current_employees_filter:
-            queryset = former_and_current_filtering(self, queryset)
+
+            if former_employees_filter and current_employees_filter:
+                queryset = queryset
+            else:
+                queryset = former_and_current_filtering(self, queryset)
+
+        #
+        #
+        # if former_employees_filter is not None and current_employees_filter is not None:
+        #
 
         if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
 
