@@ -88,12 +88,19 @@ function uncheckFilters(timer) {
 }
 
 function makeRequest(parameters) {
+
+
+
     $.ajax({
         url: '',
         data: parameters,
+
         dataType: "html",
         method: "GET",
         timeout: 10000,
+        
+
+
         success: function(content) {
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");

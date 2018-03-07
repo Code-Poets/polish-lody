@@ -502,6 +502,11 @@ msgstr "Wróć"
 msgid "Edit employee"
 msgstr "Edytuj pracownika"
 
+
+#: templates/employees/employee_list_table.html:138
+msgid "Dismiss"
+msgstr "Zwolnij"
+
 #: templates/employees/employee_detail.html:23
 msgid "Email:"
 msgstr ""
@@ -815,6 +820,14 @@ msgstr "Opłaceni"
 #: templates/employees/employee_list.html:84
 msgid "Not paid"
 msgstr "Nieopłaceni"
+
+#: templates/employees/employee_list.html:84
+msgid "Former employees"
+msgstr "Byli pracownicy"
+
+#: templates/employees/employee_list.html:84
+msgid "Current employees"
+msgstr "Obecni pracownicy"
 
 #: templates/employees/employee_list.html:115
 msgid "Employees per page:"
@@ -1340,6 +1353,9 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
+
+
+
 
 #~ msgid "7 days forecast"
 #~ msgstr "Prognoza na 7 dni"

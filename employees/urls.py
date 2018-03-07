@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^del_month/'  + pk + r'$',          views.MonthDelete.as_view(),    name='month_delete'),
     url(r'^appr_month/' + pk + r'/$',         views.MonthApprove.as_view(),   name='month_approve'),
     url(r'^dateverify/$',                     views.ajax_verify_date,         name='dateverify')
+
 ]
 
 handler404 = 'employees.views.pl_404_view'

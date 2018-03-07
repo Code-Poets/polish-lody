@@ -56,8 +56,8 @@ def ajax_autocomplete(request):
 
 
 def ajax_verify_email(request):
-    if request.POST and request.is_ajax():
-        email = request.POST.get('email')
+    if request.GET and request.is_ajax():
+        email = request.GET.get('email')
         if Employee.objects.filter(email=email).exists():
             return HttpResponse(json.dumps({
                 "status": 1
@@ -184,6 +184,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             try:
                 page_obj = context['page_obj']
                 paginator = context['paginator']
+                my_list = context['my_list']
             except:
                 pass
             context = {
@@ -216,6 +217,9 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         employee_list = context['all_employee_list']
+
+
+
         paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(employee_list)
@@ -236,6 +240,8 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
         context['former_employees'] = self.request.GET.get('former_employees') or False
         context['current_employees'] = self.request.GET.get('current_employees') or False
+        context['employees_action'] = self.request.GET.get('employees_action') or False
+        my_list = self.request.GET.get('my_list')
 
         context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
         context['per_page'] = self.request.GET.get('per_page') or 10
@@ -254,6 +260,14 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         sale_position_filter = self.request.GET.get('position_sale') or False
         former_employees_filter = self.request.GET.get('former_employees') or False
         current_employees_filter = self.request.GET.get('current_employees') or False
+
+
+        employees_action_filter = self.request.GET.get('employees_action') or False
+        my_list = self.request.GET.get('my_list')
+
+
+
+
 
         production_position_filter = self.request.GET.get('position_production') or False
         other_position_filter = self.request.GET.get('position_other') or False

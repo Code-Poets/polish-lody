@@ -19,8 +19,10 @@
         <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
 
-    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}"
+    <form id="auto-submit-form" method="GET" data-submit-delay="{{form_submit_delay}}"
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
+
+
         <div class="filter-forms">
             <!-- <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
@@ -95,7 +97,7 @@
                            name="former_employees" />
                     {% endif %}
                     <label class="my-button clickable" for="former_employees_id">
-                        {{'former employees'}}
+                        {% trans 'Former employees' %}
                     </label>
                 </li>
 
@@ -109,7 +111,7 @@
                            name="current_employees" />
                     {% endif %}
                     <label class="my-button clickable" for="current_employees_id">
-                        {{'current employees'}}
+                        {% trans 'Current employees' %}
                     </label>
                 </li>
 
@@ -120,6 +122,24 @@
                         {% trans 'Reset filters' %}
                     </label>
                 </li>
+
+
+
+                 <li class="filter">
+                    {% if employees_action %}
+                        <input id="employees_action_id" type="checkbox" checked class="vis-hidden"
+                           name="employees_action" />
+                    {% else %}
+                        <input id="employees_action_id" type="checkbox"  class="vis-hidden"
+                           name="employees_action" />
+                    {% endif %}
+                    <label class="my-button clickable" for="employees_action_id">
+                    {% trans 'Employees action' %}
+                    </label>
+                </li>
+
+
+
                 <li class="filter">
                 </li>
             </ul>
@@ -163,8 +183,16 @@
 
         <br/>
     </div>
+
     <script>
-        $(function() {
+ // $(document).ready(function () {
+
+
+
+        $(function start_filters() {
+
+            console.log("start_filters");
+
             {% for number in paginate_by_numbers %}
             $('#per-page-{{number}}').click(function(){
                 $('.page-no').removeClass('active');
@@ -173,16 +201,38 @@
                 $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
                 try {
                     var parameters = gatherFilters();
+
                     delete parameters.page;
                 }
                 catch(err) {
                     var parameters = { };
                 }
+
                 makeRequest(parameters);
             });
             {% endfor %}
+
+       //      const former_check_box = document.querySelector('#employees_action_id');
+       // console.log(former_check_box);
+       //
+       //  former_check_box.checked=false;
+
         });
+        // function dismissEmployees(employees) {
+        //     $.ajax({
+        //         url: '',
+        //         data: parameters,
+        //         dataType: "html",
+        //         method: "POST",
+        //         timeout: 10000,
+        //         success:
+        //         },
+        //     );
+
         function gatherFilters() {
+
+
+
             return {
                 order: $('input[name=order]:checked', '#auto-submit-form').val(),
                 employee_filter: $('#employee_filter').val(),
@@ -192,16 +242,37 @@
                 hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
                 hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
 
+                //dodać jako np. tablicę listę akcji (id, akcja, np. [1 dismiss, 5 three, itp]). dalej odczyt, jeżeli lista pusta(jak na początku) nic się nie dzieje
                 former_employees: $('input[name=former_employees]:checked').val(),
                 current_employees: $('input[name=current_employees]:checked').val(),
+                employees_action: $('input[name=employees_action]:checked').val(),
 
                 per_page: $('select[name=per_page]').val(),
                 page: $('input[name=pg]:checked').val(),
-            }
+
+
+            };
         }
+
+
+        // document.addEventListener("DOMContentLoaded", function () {
+
+
+    const employees_action_checkbox = document.querySelector('#employees_action_id');
+
+    // let my_button_action = document.getElementById('employees_action');
+
+    employees_action_checkbox.addEventListener('click', function () {
+        console.log(get_array_with_checkboxes_dismiss_add_one_or_three_months());
+    });
+
+
+
 
         const current_emp_check_box = document.querySelector('#current_employees_id');
         current_emp_check_box.click();
+
+
 
 
         //activate, when you want to allow only one of this checkboxes to be selected
@@ -215,10 +286,12 @@
         // former_check_box.addEventListener('click', function () {
         // current_check_box.checked=false;
         //  });
-
+// });
 
     </script>
     {% elif not messages %}
     <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
     {% endif %}
 {% endblock %}
+        {% csrf_token %}
+ </form>
