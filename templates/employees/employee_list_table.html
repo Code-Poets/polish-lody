@@ -166,33 +166,6 @@
                 </u>
 
 
-                <!--<div class="multiple">-->
-                <!--<label for="id_beatles_0"><input id="id_beatles_0" name="beatles" type="checkbox" value="john"-->
-                <!--required/> John</label>-->
-                <!--</div>-->
-                <!--<div class="multiple">-->
-                <!--<label for="id_beatles_1"><input id="id_beatles_1" name="beatles" type="checkbox" value="paul"-->
-                <!--required/> Paul</label>-->
-                <!--</div>-->
-
-
-                <!--<a href="{% url 'employee_edit' employee.id %}">-->
-                <!--<span title="{% trans 'Dismiss' %} {{ employee }}" class="glyphicon glyphicon-remove"-->
-                <!--aria-hidden="true"></span></a>-->
-
-
-                <!--<li class="checkbox-inline">-->
-                <!--&lt;!&ndash;{% if position_sale %}&ndash;&gt;-->
-                <!--<input id="pos_sale" type="checkbox" checked class="vis-hidden" name="Dismiss">-->
-                <!--&lt;!&ndash;{% else %}&ndash;&gt;-->
-                <!--&lt;!&ndash;<input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">&ndash;&gt;-->
-                <!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
-                <!--&lt;!&ndash;<label class="my-button clickable">&ndash;&gt;-->
-                <!--<label class="my-button clickable">-->
-                <!--{% trans 'Dismiss' %}-->
-                <!--</label>-->
-
-
             </td>
             <td>
                 <a href="{% url 'employee_detail' employee.pk %}">{{ employee.full_name }}</a>
@@ -379,9 +352,17 @@
         //   // console.log($('.invisible').toArray());
         //   // console.log($('.invisible').text());
 
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+   console.log("ajaxPrefilter");
+    if (options['type'].toLowerCase() === "post") {
+        jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    }
+});
 
-        function get_array_with_checkboxes_dismiss_add_one_or_three_months() {
-            console.log('get_array_with_checkboxes_dismiss_add_one_or_three_months');
+
+
+        function get_array_with_checkboxes_dismiss() {
+            console.log('get_array_with_checkboxes_dismiss');
             let myTab = $('.invisible').map(function () {
                 return +$(this).text();
             }).get();
@@ -391,11 +372,38 @@
                 // if ($('#dismiss_id' + myTab[i]).select()) {
                     dismiss_array.push(myTab[i]);
                                    }
-                                    // console.log($('#dismiss_id' + myTab[i]).attr('id'));
-            });
+                                                });
             return dismiss_array;
+        }
+
+
+        function makeRequestEmployeeAction() {
+    console.log('Start makeRequestEmployeeAction');
+
+   const dismiss_array = get_array_with_checkboxes_dismiss();
+            const data = {dismiss:dismiss_array};
+ console.log('data = ' +data);
+
+
+
+    $.ajax({
+        url: 'employee_action/',
+        data: data,
+        dataType: "html",
+        method: "POST",
+        timeout: 10000,
+
+
+        success: function (content) {
+            console.log('Success makeRequestEmployeeAction');
 
         }
+    }).fail(function (jqXHR) {
+          console.log('fail makeRequestEmployeeAction');
+
+        $(".loading-icon").css("opacity", "0");
+        ajaxErrorHandler(jqXHR);
+    });}
 
     </script>
 </div>

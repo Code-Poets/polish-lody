@@ -4,6 +4,7 @@
 {% block title %}{% trans 'Employee list' %}{% endblock %}
 
 {% block header_block %}
+ <!--<meta name="csrf-token" content="{{ csrf_token }}">-->
 <div class="panel panel-heading panel-default">
     <center>
         <h4>{% trans 'Employee list' %}</h4>
@@ -21,6 +22,9 @@
 
     <form id="auto-submit-form" method="GET" data-submit-delay="{{form_submit_delay}}"
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
+
+
+
 
 
         <div class="filter-forms">
@@ -125,12 +129,21 @@
 
 
 
-                 <li class="filter">
+
+
+
+
+                <li class="filter">
+                </li>
+            </ul>
+
+
+            <li class="button">
                     {% if employees_action %}
-                        <input id="employees_action_id" type="checkbox" checked class="vis-hidden"
+                        <input id="employees_action_id" type="button" checked class="vis-hidden"
                            name="employees_action" />
                     {% else %}
-                        <input id="employees_action_id" type="checkbox"  class="vis-hidden"
+                        <input id="employees_action_id" type="button"  class="vis-hidden"
                            name="employees_action" />
                     {% endif %}
                     <label class="my-button clickable" for="employees_action_id">
@@ -139,10 +152,6 @@
                 </li>
 
 
-
-                <li class="filter">
-                </li>
-            </ul>
             <select hidden name="per_page" class="clickable" id="per-page">
                 {% for number in paginate_by_numbers %}
                     {% if current_paginate_by_number == number %}
@@ -185,7 +194,31 @@
     </div>
 
     <script>
- // $(document).ready(function () {
+
+function getCookie(name) {
+     console.log("getCookie");
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+//
+// $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+//    console.log("ajaxPrefilter");
+//     if (options['type'].toLowerCase() === "post") {
+//         jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+//     }
+// });
+
 
 
 
@@ -193,8 +226,13 @@
 
             console.log("start_filters");
 
+
             {% for number in paginate_by_numbers %}
+            console.log("start_filters3");
+
+            // odpalane gdy zmieniam liczbę osób na stronie 2,5,10,25,100..
             $('#per-page-{{number}}').click(function(){
+                  console.log("start_filters4");
                 $('.page-no').removeClass('active');
                 $('#per-page-{{number}}').addClass('active');
                 $('input[name=pg]:checked').prop('checked', false);
@@ -202,12 +240,15 @@
                 try {
                     var parameters = gatherFilters();
 
+
+
+
                     delete parameters.page;
                 }
                 catch(err) {
                     var parameters = { };
                 }
-
+                console.log("przed make request");
                 makeRequest(parameters);
             });
             {% endfor %}
@@ -251,6 +292,7 @@
                 page: $('input[name=pg]:checked').val(),
 
 
+
             };
         }
 
@@ -258,19 +300,21 @@
         // document.addEventListener("DOMContentLoaded", function () {
 
 
-    const employees_action_checkbox = document.querySelector('#employees_action_id');
+    const employees_action_button = document.querySelector('#employees_action_id');
 
     // let my_button_action = document.getElementById('employees_action');
 
-    employees_action_checkbox.addEventListener('click', function () {
-        console.log(get_array_with_checkboxes_dismiss_add_one_or_three_months());
+    employees_action_button.addEventListener('click', function () {
+        // console.log(get_array_with_checkboxes_dismiss_add_one_or_three_months());
+        makeRequestEmployeeAction()
     });
 
 
 
 
         const current_emp_check_box = document.querySelector('#current_employees_id');
-        current_emp_check_box.click();
+        // current_emp_check_box.click();
+        //      ACTIVATE TO SET DEFAULT SELECTED
 
 
 
@@ -293,5 +337,5 @@
     <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
     {% endif %}
 {% endblock %}
-        {% csrf_token %}
+        <!--{% csrf_token %}-->
  </form>
