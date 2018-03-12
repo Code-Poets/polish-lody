@@ -206,7 +206,7 @@ div.filter-forms {
   /* Internet Explorer/Edge */
   user-select: none;
   /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */ }
+                                   supported by Chrome and Opera */ }
 
 .my-button.reset-filters {
   background-color: #785C49; }
@@ -330,7 +330,7 @@ ul li.page-no a:hover {
   color: #635044;
   background-color: #ebe6e2;
   cursor: pointer;
-  transition: background-color  0.25s; }
+  transition: background-color 0.25s; }
 
 ul li.active.page-no a:hover {
   background-color: #635044;
@@ -462,7 +462,7 @@ input[type=radio]:selected + label.my-button {
   background: -o-linear-gradient(top, #d6ffb2 5%, #7bd900 100%);
   background: -ms-linear-gradient(top, #d6ffb2 5%, #7bd900 100%);
   background: linear-gradient(to bottom, #d6ffb2 5%, #7bd900 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900',GradientType=0); }
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900', GradientType=0); }
 
 .disableClick {
   pointer-events: none; }
@@ -632,6 +632,20 @@ ul.topnav li.icon {
   position: fixed;
   top: -30px; }
 
-/**/
+#message_fail_status {
+  color: red;
+  width: auto;
+  padding: 6px;
+  background-color: whitesmoke;
+  border-radius: 8px;
+  font: 15px Verdana, sans-serif; }
+
+#message_success_status {
+  color: green;
+  width: auto;
+  padding: 6px;
+  background-color: whitesmoke;
+  border-radius: 8px;
+  font: 15px Verdana, sans-serif; }
 
 /*# sourceMappingURL=../../../../../../static/main.css.map */

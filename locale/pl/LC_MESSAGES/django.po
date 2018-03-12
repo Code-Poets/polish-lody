@@ -336,6 +336,12 @@ msgstr "Tablica"
 msgid "Employee list"
 msgstr "Lista Pracowników"
 
+#: templates/employees/employee_list_table.html: ~420
+msgid "Employees dismissed successfully"
+msgstr "Powiodło się zwolnienie pracownika"
+
+
+
 #: templates/dashboard/dashboard.html:20
 msgid "Sales (under construction)"
 msgstr "Sprzedaż (w budowie)"

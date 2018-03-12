@@ -219,8 +219,6 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         employee_list = context['all_employee_list']
 
-
-
         paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
         page = self.request.GET.get('page')
         pg = self.get_paginate_by(employee_list)
@@ -316,104 +314,106 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         return queryset
 
 
+class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+    model = Employee
 
-
-
-
-
-
-class EmployeeAction(View):
     def post(self, request, *args, **kwargs):
+        dismiss_array = request.POST.getlist('dismiss[]')
+        messages = "Dismiss OK"
+
+        for employee_id in dismiss_array:
+            try:
+                status = self.dismiss_employee(employee_id)
+                if not status:
+                    messages = "Dismiss Fail"
+
+            except:
+                messages = "Dismiss Fail"
+
+        response = HttpResponse(messages)
+
+        return response
+
+    @staticmethod
+    def dismiss_employee(employee_id):
+        employee_to_dismiss = Employee.objects.get(pk=employee_id)
+        employee_to_dismiss.currently_employed = False
+        employee_to_dismiss.save()
+
+        dismissed_employee = Employee.objects.get(pk=employee_id)
+        if not dismissed_employee.currently_employed:
+            return True
+        else:
+            return False
 
 
-
-        dismiss_array= request.POST.getlist('dismiss[]')
-
-
-
-
-
-        html = "<html><body>It is now</body></html>"
-        return HttpResponse(html)
-
-
-
-
-        #
-        # def post(self, request, *args, **kwargs):
-        #     return self.delete(request, *args, **kwargs)
-        #
-        #
-        # def get_queryset(self):
-        #     queryset=None
-        # #     clear_filters = self.request.GET.get('clear_filters')
-        # #     # order = self.request.GET.get('order', 'last_name')
-        # #     #
-        # #     # sale_position_filter = self.request.GET.get('position_sale') or False
-        # #     # former_employees_filter = self.request.GET.get('former_employees') or False
-        # #     # current_employees_filter = self.request.GET.get('current_employees') or False
-        # #     #
-        # #     # production_position_filter = self.request.GET.get('position_production') or False
-        # #     # other_position_filter = self.request.GET.get('position_other') or False
-        # #     # employee_filter = self.request.GET.get('employee_filter')
-        # #     # position_filter = self.request.GET.get('position_filter')
-        # #     # hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
-        # #     #
-        # #     # hide_paid_employees_filter = self.request.GET.get('hide_paid_employees_filter')
-        # #     # if order == 'unpaid_salaries':
-        # #     #     queryset = order_by_unpaid_salaries(employee_filter, '')
-        # #     # elif order == '-unpaid_salaries':
-        # #     #     queryset = order_by_unpaid_salaries(employee_filter, '-')
-        # #     # elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
-        # #     #     filtered_queryset = find_user_by_name(employee_filter)
-        # #     #     queryset = filtered_queryset.order_by(order)
-        # #     # else:
-        # #     #     queryset = order_by_default(order)
-        # #     # if sale_position_filter or production_position_filter or other_position_filter:
-        # #     #     queryset = position_list_and_filtering(self, queryset)
-        # #     #
-        # #     # if former_employees_filter or current_employees_filter:
-        # #     #
-        # #     #     if former_employees_filter and current_employees_filter:
-        # #     #         queryset = queryset
-        # #     #     else:
-        # #     #         queryset = former_and_current_filtering(self, queryset)
-        # #     #
-        # #     # if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
-        # #     #
-        # #     #     queryset = queryset
-        # #     #
-        # #     # else:
-        # #     #
-        # #     #     if hide_paid_employees_filter is not None:
-        # #     #         exclude_list = []
-        # #     #         for employee in queryset:
-        # #     #             if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
-        # #     #                 exclude_list.append(employee.id)
-        # #     #         queryset = queryset.exclude(id__in=exclude_list)
-        # #     #
-        # #     #     if hide_zero_salary_months_filter is not None:
-        # #     #         exclude_list = []
-        # #     #         for employee in queryset:
-        # #     #             if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
-        # #     #                 exclude_list.append(employee.id)
-        # #     #         queryset = queryset.exclude(id__in=exclude_list)
-        # #     #
-        # #     # if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
-        # #     #                               or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
-        # #     #         and self.request.is_ajax() is False:
-        # #     #     messages.add_message(self.request, messages.WARNING,
-        # #     #                          "No employee meets the search criteria. "
-        # #     #                          "Widen your search or check filter for typos.")
-        #     return queryset
-
-
-
-
-
-
-
-
+#
+# def post(self, request, *args, **kwargs):
+#     return self.delete(request, *args, **kwargs)
+#
+#
+# def get_queryset(self):
+#     queryset=None
+# #     clear_filters = self.request.GET.get('clear_filters')
+# #     # order = self.request.GET.get('order', 'last_name')
+# #     #
+# #     # sale_position_filter = self.request.GET.get('position_sale') or False
+# #     # former_employees_filter = self.request.GET.get('former_employees') or False
+# #     # current_employees_filter = self.request.GET.get('current_employees') or False
+# #     #
+# #     # production_position_filter = self.request.GET.get('position_production') or False
+# #     # other_position_filter = self.request.GET.get('position_other') or False
+# #     # employee_filter = self.request.GET.get('employee_filter')
+# #     # position_filter = self.request.GET.get('position_filter')
+# #     # hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
+# #     #
+# #     # hide_paid_employees_filter = self.request.GET.get('hide_paid_employees_filter')
+# #     # if order == 'unpaid_salaries':
+# #     #     queryset = order_by_unpaid_salaries(employee_filter, '')
+# #     # elif order == '-unpaid_salaries':
+# #     #     queryset = order_by_unpaid_salaries(employee_filter, '-')
+# #     # elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
+# #     #     filtered_queryset = find_user_by_name(employee_filter)
+# #     #     queryset = filtered_queryset.order_by(order)
+# #     # else:
+# #     #     queryset = order_by_default(order)
+# #     # if sale_position_filter or production_position_filter or other_position_filter:
+# #     #     queryset = position_list_and_filtering(self, queryset)
+# #     #
+# #     # if former_employees_filter or current_employees_filter:
+# #     #
+# #     #     if former_employees_filter and current_employees_filter:
+# #     #         queryset = queryset
+# #     #     else:
+# #     #         queryset = former_and_current_filtering(self, queryset)
+# #     #
+# #     # if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
+# #     #
+# #     #     queryset = queryset
+# #     #
+# #     # else:
+# #     #
+# #     #     if hide_paid_employees_filter is not None:
+# #     #         exclude_list = []
+# #     #         for employee in queryset:
+# #     #             if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
+# #     #                 exclude_list.append(employee.id)
+# #     #         queryset = queryset.exclude(id__in=exclude_list)
+# #     #
+# #     #     if hide_zero_salary_months_filter is not None:
+# #     #         exclude_list = []
+# #     #         for employee in queryset:
+# #     #             if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
+# #     #                 exclude_list.append(employee.id)
+# #     #         queryset = queryset.exclude(id__in=exclude_list)
+# #     #
+# #     # if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
+# #     #                               or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
+# #     #         and self.request.is_ajax() is False:
+# #     #     messages.add_message(self.request, messages.WARNING,
+# #     #                          "No employee meets the search criteria. "
+# #     #                          "Widen your search or check filter for typos.")
+#     return queryset
 
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
@@ -849,5 +849,3 @@ def pl_500_view(request):
     response = render(request, template)
     response.status_code = 500
     return response
-
-

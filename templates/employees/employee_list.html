@@ -6,10 +6,19 @@
 {% block header_block %}
  <!--<meta name="csrf-token" content="{{ csrf_token }}">-->
 <div class="panel panel-heading panel-default">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <center>
         <h4>{% trans 'Employee list' %}</h4>
     </center>
 </div>
+
+<!--<div class="alert alert-warning alert-dismissable" id="msg">-->
+<div id="messages_container">
+
+            <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
+            <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
+        </div>
+
 {% endblock %}
 {% block body_block %}
 {% if all_employee_list is not None %}
@@ -24,15 +33,8 @@
     action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
 
 
-
-
-
         <div class="filter-forms">
-            <!-- <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
-
-            <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg"> -->
-            <ul class="filters">
+               <ul class="filters">
                 <li class="filter">
                     {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
                 </li>
@@ -46,7 +48,7 @@
                         {% trans 'Sale' %}
                     </label>
                 </li>
-                <li class="filter" class="filter">
+                <li class="filter">
                     {% if position_production %}
                         <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
                     {% else %}
@@ -127,18 +129,9 @@
                     </label>
                 </li>
 
-
-
-
-
-
-
                 <li class="filter">
-                </li>
-            </ul>
 
 
-            <li class="button">
                     {% if employees_action %}
                         <input id="employees_action_id" type="button" checked class="vis-hidden"
                            name="employees_action" />
@@ -150,7 +143,7 @@
                     {% trans 'Employees action' %}
                     </label>
                 </li>
-
+            </ul>
 
             <select hidden name="per_page" class="clickable" id="per-page">
                 {% for number in paginate_by_numbers %}
@@ -253,22 +246,8 @@ function getCookie(name) {
             });
             {% endfor %}
 
-       //      const former_check_box = document.querySelector('#employees_action_id');
-       // console.log(former_check_box);
-       //
-       //  former_check_box.checked=false;
 
         });
-        // function dismissEmployees(employees) {
-        //     $.ajax({
-        //         url: '',
-        //         data: parameters,
-        //         dataType: "html",
-        //         method: "POST",
-        //         timeout: 10000,
-        //         success:
-        //         },
-        //     );
 
         function gatherFilters() {
 
@@ -283,7 +262,6 @@ function getCookie(name) {
                 hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
                 hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
 
-                //dodać jako np. tablicę listę akcji (id, akcja, np. [1 dismiss, 5 three, itp]). dalej odczyt, jeżeli lista pusta(jak na początku) nic się nie dzieje
                 former_employees: $('input[name=former_employees]:checked').val(),
                 current_employees: $('input[name=current_employees]:checked').val(),
                 employees_action: $('input[name=employees_action]:checked').val(),
@@ -304,12 +282,17 @@ function getCookie(name) {
 
     // let my_button_action = document.getElementById('employees_action');
 
-    employees_action_button.addEventListener('click', function () {
+
+
+employees_action_button.addEventListener('click', function () {
         // console.log(get_array_with_checkboxes_dismiss_add_one_or_three_months());
+    console.log('clicked');
+
+
         makeRequestEmployeeAction()
     });
 
-
+// });
 
 
         const current_emp_check_box = document.querySelector('#current_employees_id');
@@ -330,7 +313,7 @@ function getCookie(name) {
         // former_check_box.addEventListener('click', function () {
         // current_check_box.checked=false;
         //  });
-// });
+
 
     </script>
     {% elif not messages %}

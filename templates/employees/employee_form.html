@@ -241,6 +241,7 @@
                 {% if employee and user.is_staff %}
                 <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Cancel' %}</a>
                 {% else %}
+                <!--opcja przy dodawaniu nowych pracowników-->
                 <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
                 {% endif %}
             </center>

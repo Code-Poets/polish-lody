@@ -1,7 +1,11 @@
 {% load i18n %}
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <div class="ajax-loader">
     <table class="table table-hover">
         <thead>
+         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+                      rel="stylesheet">
+
         <tr>
             <td>
                 <!--<p>Dismiss +1 month +3 months</p>-->
@@ -139,27 +143,34 @@
         {% for employee in all_employee_list %}
         <tr>
             <td>
+
                 <a href="{% url 'employee_edit' employee.id %}">
                     <span title="{% trans 'Edit employee' %} {{ employee }}" class="glyphicon glyphicon-pencil"
                           aria-hidden="true"></span></a>
 
 
-                <a class="multiple">
-                    <label for="dismiss_id{{employee.pk}}"><input id="dismiss_id{{employee.pk}}" name="employee_actions"
-                                                                  type="checkbox"
-                                                                  value="dismiss"
-                                                                  required/> Dismiss</label>
-                </a>
-                <a class="multiple">
-                    <label for="add_1_month_id"><input id="add_1_month_id" name="employee_actions" type="checkbox"
-                                                       value="add_1_month"
-                                                       required/>+1 month</label>
-                </a>
-                <a class="multiple">
-                    <label for="add_3_months_id"><input id="add_3_months_id" name="employee_actions" type="checkbox"
-                                                        value="add_3_months"
-                                                        required/>+3 months</label>
-                </a>
+
+
+
+
+                <input class="toggle-one"     id="dismiss_id{{employee.pk}}" data-off="Dismiss" data-on="Execute"  type="checkbox" >
+
+
+                <input class="toggle-one"     id="add_one_id{{employee.pk}}" data-off="Add 1 Month" data-on="Execute"  type="checkbox" >
+
+
+                <input class="toggle-one"     id="add_three_id{{employee.pk}}" data-off="Add 3 Months" data-on="Execute"  type="checkbox" >
+
+                <script>
+                    $(function () {
+                        $('.toggle-one').bootstrapToggle();
+                    })
+                </script>
+
+
+
+
+
 
                 <u class="invisible">
                     {{employee.pk}}
@@ -231,6 +242,7 @@
             </td>
         </tr>
         {% endfor %}
+
         </tbody>
         {% endif %}
     </table>
@@ -282,83 +294,54 @@
             {% endif %}
             {% endfor %}
 
-            <a>
-
-                <!--&lt;!&ndash;<button type="button" id = 'employees_action_button_id' onclick=" document.getElementById('textarea_id').insertAdjacentText(ttttt)">{% trans 'Employees action' %} </button>&ndash;&gt;-->
-                <!--<button type="button" id='employees_action_button_id' onclick=console.log("ggggg")>{% trans 'Employees-->
-                <!--action' %}-->
-                <!--</button>-->
-
-            </a>
-
-
-            <!--<li class="pg-clickable">-->
-            <!--<label class="employee_action_button">{% trans 'Employees action' %} &raquo;</label>-->
-            <!--</li>-->
-
         </ul>
 
 
         <br/>
         {% endif %}
     </div>
-    <script id="hidden-template" type="text/x-custom-template">
-        <div class="alert alert-warning alert-dismissable" id="msg">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>
-        </div>
 
-
-    </script>
 
     <script>
 
 
-        //
-        //    for (let i=0; i<myTab.length; i++){
-        //
-        //
-        //
-        //    }
-        // console.log(  myTab);
-        //console.log(  +myTab[0]+2);
 
-        // myArray=$('.invisible').text();
-        // // console.log(myArray);
-        // // // myArray.toArray();
-        // // console.log(myArray instanceof String);
-        // //
-        // //
-        // // // var array = $('li').map(function(){
-        // var array = myArray.map(function(){
-        //        return $.trim($(this).text());
-        //     }).get();
-        //
-        // console.log('array '+array);
+            function makeRequestEmployeeAction() {
+            console.log('Start makeRequestEmployeeAction');
 
-        //       console.log(document.getElementById('all_employee_list'));
-        //        console.log(document.querySelector('#all_employee_list'));
-        //        console.log(document.getElementsByClassName('all_employee_list'));
+            const dismiss_array = get_array_with_checkboxes_dismiss();
+            const data = {dismiss: dismiss_array};
+            console.log('data = ' + data);
 
 
-        //  // console.log($(emp-list));
-        //  //  console.log($('#emp-list'));
-        // // console.log($('.invisible').toArray());
-        //  myArray= $('.invisible');
-        //   console.log(myArray);
-        //
-        //   desc=myArray.getQueryParameters();
-        //  console.log('myArray [0] '+desc);
-        //   // console.log($('.invisible').toArray());
-        //   // console.log($('.invisible').text());
+            $.ajax({
+                url: 'employee_action/',
+                data: data,
+                dataType: "html",
+                method: "POST",
+                timeout: 10000,
 
-        $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-   console.log("ajaxPrefilter");
-    if (options['type'].toLowerCase() === "post") {
-        jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-    }
-});
 
+                success: function (content) {
+                    console.log('Success makeRequestEmployeeAction');
+                    console.log('content ' + content);
+                    dismissStatusMessage(content)
+
+
+                }
+            }).fail(function (jqXHR) {
+                console.log('fail makeRequestEmployeeAction');
+
+                $(".loading-icon").css("opacity", "0");
+                ajaxErrorHandler(jqXHR);
+            });
+        }
+
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+               if (options['type'].toLowerCase() === "post") {
+                jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            }
+        });
 
 
         function get_array_with_checkboxes_dismiss() {
@@ -369,41 +352,40 @@
             let dismiss_array = [];
             myTab.forEach((el, i) => {
                 if (document.getElementById('dismiss_id' + myTab[i]).checked) {
-                // if ($('#dismiss_id' + myTab[i]).select()) {
+                    // if ($('#dismiss_id' + myTab[i]).select()) {
                     dismiss_array.push(myTab[i]);
-                                   }
-                                                });
+                }
+            });
             return dismiss_array;
         }
 
 
-        function makeRequestEmployeeAction() {
-    console.log('Start makeRequestEmployeeAction');
-
-   const dismiss_array = get_array_with_checkboxes_dismiss();
-            const data = {dismiss:dismiss_array};
- console.log('data = ' +data);
 
 
+        function dismissStatusMessage(content) {
+            let message;
 
-    $.ajax({
-        url: 'employee_action/',
-        data: data,
-        dataType: "html",
-        method: "POST",
-        timeout: 10000,
+            if (content === 'Dismiss Fail') {
+                message = "Unexpected problem with dismiss employees";
+                $('#messages_container').html('<div id="message_fail_status">Unexpected problem with dismiss employees</div>');
+            }
+
+            else if (content === 'Dismiss OK') {
+                message = "Employees dismissed successfully";
+                $('#messages_container').html('<div id="message_success_status">{% trans 'Employees dismissed successfully' %}</div>');
 
 
-        success: function (content) {
-            console.log('Success makeRequestEmployeeAction');
+            }
+
+            else {
+                message = "Dismiss employees unexpected behavior";
+                $('#messages_container').html('<div id="message_fail_status">Dismiss employees unexpected behavior</div>');
+            }
+
+            // $('#messages_container').text(message)
+            // $('#messages_container').html('<span style="color: red; ">message</span>');
 
         }
-    }).fail(function (jqXHR) {
-          console.log('fail makeRequestEmployeeAction');
-
-        $(".loading-icon").css("opacity", "0");
-        ajaxErrorHandler(jqXHR);
-    });}
 
     </script>
 </div>
