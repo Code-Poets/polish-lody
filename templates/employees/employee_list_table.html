@@ -310,7 +310,11 @@
             console.log('Start makeRequestEmployeeAction');
 
             const dismiss_array = get_array_with_checkboxes_dismiss();
-            const data = {dismiss: dismiss_array};
+            const add_one_array = get_array_with_checkboxes_add_one();
+            const add_three_array = get_array_with_checkboxes_add_three();
+            const data = {dismiss:      dismiss_array,
+                          add_one:      add_one_array,
+                          add_three:    add_three_array};
             console.log('data = ' + data);
 
 
@@ -324,7 +328,9 @@
 
                 success: function (content) {
                     console.log('Success makeRequestEmployeeAction');
-                    console.log('content ' + content);
+
+                    console.log('content'+content);
+
                     dismissStatusMessage(content)
 
 
@@ -360,30 +366,113 @@
         }
 
 
+        function get_array_with_checkboxes_add_one() {
+            console.log('get_array_with_checkboxes_add_one');
+            let myTab = $('.invisible').map(function () {
+                return +$(this).text();
+            }).get();
+            let add_one_array = [];
+            myTab.forEach((el, i) => {
+                if (document.getElementById('add_one_id' + myTab[i]).checked) {
+                    // if ($('#dismiss_id' + myTab[i]).select()) {
+                    add_one_array.push(myTab[i]);
+                }
+            });
+            return add_one_array;
+        }
 
 
-        function dismissStatusMessage(content) {
-            let message;
+           function get_array_with_checkboxes_add_three() {
+            console.log('get_array_with_checkboxes_add_three');
+            let myTab = $('.invisible').map(function () {
+                return +$(this).text();
+            }).get();
+            let add_three_array = [];
+            myTab.forEach((el, i) => {
+                if (document.getElementById('add_three_id' + myTab[i]).checked) {
+                   add_three_array.push(myTab[i]);
+                }
+            });
+            return add_three_array;
+        }
 
-            if (content === 'Dismiss Fail') {
-                message = "Unexpected problem with dismiss employees";
-                $('#messages_container').html('<div id="message_fail_status">Unexpected problem with dismiss employees</div>');
-            }
-
-            else if (content === 'Dismiss OK') {
-                message = "Employees dismissed successfully";
-                $('#messages_container').html('<div id="message_success_status">{% trans 'Employees dismissed successfully' %}</div>');
 
 
-            }
+              function dismissStatusMessage(content) {
+        $('#messages_container').html('<div id="message_success_status"></div>');
+            let obj = JSON.parse(content);
 
-            else {
-                message = "Dismiss employees unexpected behavior";
-                $('#messages_container').html('<div id="message_fail_status">Dismiss employees unexpected behavior</div>');
-            }
 
-            // $('#messages_container').text(message)
-            // $('#messages_container').html('<span style="color: red; ">message</span>');
+            dismissStatus=obj[0];
+            addOneStatus=obj[1];
+            addThreeStatus=obj[2];
+
+            //
+            // console.log('Dismiss_status '+obj[0]);
+            // console.log('Add one status '+obj[1]);
+            // console.log('Add three status '+obj[2]);
+
+
+             if ((dismissStatus==='OK') &&    (addOneStatus==='OK') && (addThreeStatus==='OK')){
+
+                  $('#messages_container').html('<div id="message_success_status">All actions executed successful</div>');
+             }
+
+
+             else {
+
+                 if (dismissStatus == 'OK') {
+                     $('#messages_container').append('<div id="message_success_status">No problems with employees dismiss noted </div>');
+                 }
+                 else {
+                     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with dismiss employees1</div>');
+
+                 }
+
+
+                 if (addOneStatus == 'OK') {
+                     $('#messages_container').append('<div id="message_success_status">No problems with one month contracts extension noted</div>');
+                 }
+                 else {
+                     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with one month contracts extension</div>');
+
+                 }
+
+
+                 if (addThreeStatus == 'OK') {
+                     $('#messages_container').append('<div id="message_success_status">No problems with three months contracts extension noted</div>');
+                 }
+                 else {
+                     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with three months contracts extension</div>');
+
+                 }
+             }
+
+
+            //
+            //
+            // // if (content === 'Dismiss Fail') {
+            //     message = "Unexpected problem with dismiss employees";
+            //     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with dismiss employees1</div>');
+            //     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with dismiss employees2</div>');
+            //     $('#messages_container').append('<div id="message_fail_status">Unexpected problem with dismiss employees3</div>');
+            // // }
+
+            // // else if (content === 'Dismiss OK') {
+            //     message = "Employees dismissed successfully";
+            //     $('#messages_container').html.append('<div id="message_success_status">Employees dismissed successfully</div>');
+            //     // $('#messages_container').html.append('<div id="message_success_status">{% trans 'Employees dismissed successfully' %}</div>');
+            //
+            //
+            // // }
+            //
+            // else {
+            //     message = "Dismiss employees unexpected behavior";
+            //     $('#messages_container').html('<div id="message_fail_status">Dismiss employees unexpected behavior</div>');
+            // }
+            //
+            // // $('#messages_container').text(message)
+            // // $('#messages_container').html('<span style="color: red; ">message</span>');
 
         }
 

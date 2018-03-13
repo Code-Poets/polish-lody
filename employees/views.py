@@ -319,20 +319,50 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         dismiss_array = request.POST.getlist('dismiss[]')
-        messages = "Dismiss OK"
+        add_one_array = request.POST.getlist('add_one[]')
+        add_three_array = request.POST.getlist('add_three[]')
+
+
+
+        message_dismiss = "OK"
+        message_add_one = "OK"
+        message_add_three = "OK"
 
         for employee_id in dismiss_array:
             try:
                 status = self.dismiss_employee(employee_id)
                 if not status:
-                    messages = "Dismiss Fail"
-
+                    message_dismiss = "Fail"
             except:
-                messages = "Dismiss Fail"
+                message_dismiss = "Fail"
 
-        response = HttpResponse(messages)
 
-        return response
+        for employee_id in add_one_array:
+            try:
+                status = self.add_one_month(employee_id)
+                if not status:
+                    message_add_one = "Fail"
+            except:
+                message_add_one = "Fail"
+
+        for employee_id in add_three_array:
+            try:
+                status = self.add_three_months(employee_id)
+                if not status:
+                    message_add_three = "Fail"
+            except:
+                message_add_three = "Fail"
+
+
+
+
+        your_list = [message_dismiss, message_add_one, message_add_three]
+
+        your_list_as_json = json.dumps(your_list)
+
+        return HttpResponse(your_list_as_json)
+
+
 
     @staticmethod
     def dismiss_employee(employee_id):
@@ -343,6 +373,97 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         dismissed_employee = Employee.objects.get(pk=employee_id)
         if not dismissed_employee.currently_employed:
             return True
+        else:
+            return False
+
+    @staticmethod
+    def add_one_month(employee_id):
+        employee_to_update = Employee.objects.get(pk=employee_id)
+
+        old_date = employee_to_update.contract_exp_date
+
+        day = old_date.day
+        old_month = old_date.month
+        old_year = old_date.year
+
+        new_year = old_year
+
+        new_month = old_month + 1
+
+        if new_month == 13:
+            new_month = 1
+            new_year = old_year + 1
+
+        import datetime
+        new_date = datetime.date(new_year, new_month, day)
+        employee_to_update.contract_exp_date = new_date
+        employee_to_update.save()
+
+        updated_employee = Employee.objects.get(pk=employee_id)
+        updated_date = updated_employee.contract_exp_date
+
+        if ((old_date.day == updated_date.day) and (old_date.month + 1 == updated_date.month) and (
+                old_date.year == updated_date.year)):
+            return True
+
+        elif ((old_date.day == updated_date.day) and (updated_date.month == 1) and (
+                old_date.year + 1 == updated_date.year)):
+            return True
+
+        else:
+            return False
+
+    @staticmethod
+    def add_three_months(employee_id):
+        employee_to_update = Employee.objects.get(pk=employee_id)
+
+        old_date = employee_to_update.contract_exp_date
+
+        day = old_date.day
+        old_month = old_date.month
+        old_year = old_date.year
+
+        new_year = old_year
+
+        new_month = old_month + 3
+
+        if new_month == 13:
+            new_month = 1
+            new_year = old_year + 1
+
+        if new_month == 14:
+            new_month = 2
+            new_year = old_year + 1
+
+        if new_month == 15:
+            new_month = 3
+            new_year = old_year + 1
+
+
+        import datetime
+        new_date = datetime.date(new_year, new_month, day)
+        employee_to_update.contract_exp_date = new_date
+        employee_to_update.save()
+
+        updated_employee = Employee.objects.get(pk=employee_id)
+        updated_date = updated_employee.contract_exp_date
+
+        if ((old_date.day == updated_date.day) and (old_date.month + 3 == updated_date.month) and (
+                old_date.year == updated_date.year)):
+            return True
+
+        elif ((old_date.day == updated_date.day) and (updated_date.month == 1) and (
+                old_date.year + 1 == updated_date.year)):
+            return True
+
+        elif ((old_date.day == updated_date.day) and (updated_date.month == 2) and (
+                old_date.year + 1  == updated_date.year)):
+            return True
+
+        elif ((old_date.day == updated_date.day) and (updated_date.month == 3) and (
+                old_date.year + 1 == updated_date.year)):
+            return True
+
         else:
             return False
 
