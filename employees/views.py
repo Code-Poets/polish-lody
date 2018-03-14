@@ -322,8 +322,6 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         add_one_array = request.POST.getlist('add_one[]')
         add_three_array = request.POST.getlist('add_three[]')
 
-
-
         message_dismiss = "OK"
         message_add_one = "OK"
         message_add_three = "OK"
@@ -335,7 +333,6 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                     message_dismiss = "Fail"
             except:
                 message_dismiss = "Fail"
-
 
         for employee_id in add_one_array:
             try:
@@ -353,16 +350,9 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             except:
                 message_add_three = "Fail"
 
-
-
-
         your_list = [message_dismiss, message_add_one, message_add_three]
-
         your_list_as_json = json.dumps(your_list)
-
         return HttpResponse(your_list_as_json)
-
-
 
     @staticmethod
     def dismiss_employee(employee_id):
@@ -387,7 +377,6 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         old_year = old_date.year
 
         new_year = old_year
-
         new_month = old_month + 1
 
         if new_month == 13:
@@ -439,7 +428,6 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             new_month = 3
             new_year = old_year + 1
 
-
         import datetime
         new_date = datetime.date(new_year, new_month, day)
         employee_to_update.contract_exp_date = new_date
@@ -457,7 +445,7 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             return True
 
         elif ((old_date.day == updated_date.day) and (updated_date.month == 2) and (
-                old_date.year + 1  == updated_date.year)):
+                old_date.year + 1 == updated_date.year)):
             return True
 
         elif ((old_date.day == updated_date.day) and (updated_date.month == 3) and (
@@ -861,9 +849,11 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         return super(MonthUpdate, self).form_invalid(form, **kwargs)
 
 
-class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
-    form_class = MonthApproveForm
-    template_name = 'employees/month_approve.html'
+
+
+
+class MonthApproveBase(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
+
 
     def get_queryset(self, **kwargs):
         try:
@@ -890,16 +880,12 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial = initial.copy()
-        initial['month_is_approved'] = True
-        return initial
+
 
     def form_valid(self, form):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
-                             _("Successfully approved month %(month)s %(year)s.") % ({
+                             _("Successfully updated month %(month)s %(year)s.") % ({
                                  'month': self.object.get_month_display(),
                                  'year': self.object.year}))
         return form_validation
@@ -911,6 +897,31 @@ class MonthApprove(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
                                  _("Specified month has already been assigned to employee %s.") %
                                  (employee_object.full_name()))
         return super().form_invalid(form, **kwargs)
+
+
+
+
+class MonthApprove(MonthApproveBase):
+    form_class = MonthApproveForm
+    template_name = 'employees/month_approve.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial = initial.copy()
+        initial['month_is_approved'] = True
+        return initial
+
+
+
+class Month_NOT_Approve(MonthApproveBase):
+    form_class = MonthApproveForm
+    template_name = 'employees/month_NOT_approve.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial = initial.copy()
+        initial['month_not_approved_with_comment'] = True
+        return initial
 
 
 class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):

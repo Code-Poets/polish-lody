@@ -4,7 +4,7 @@
 {% block title %}{% trans 'Employee list' %}{% endblock %}
 
 {% block header_block %}
- <!--<meta name="csrf-token" content="{{ csrf_token }}">-->
+
 <div class="panel panel-heading panel-default">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <center>
@@ -12,7 +12,6 @@
     </center>
 </div>
 
-<!--<div class="alert alert-warning alert-dismissable" id="msg">-->
 <div id="messages_container">
 
             <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
@@ -140,7 +139,7 @@
                            name="employees_action" />
                     {% endif %}
                     <label class="my-button clickable" for="employees_action_id">
-                    {% trans 'Employees action' %}
+                    {% trans 'Execute employees actions' %}
                     </label>
                 </li>
             </ul>
@@ -204,16 +203,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-//
-// $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-//    console.log("ajaxPrefilter");
-//     if (options['type'].toLowerCase() === "post") {
-//         jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-//     }
-// });
-
-
-
 
         $(function start_filters() {
 
@@ -232,9 +221,6 @@ function getCookie(name) {
                 $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
                 try {
                     var parameters = gatherFilters();
-
-
-
 
                     delete parameters.page;
                 }
@@ -273,29 +259,15 @@ function getCookie(name) {
 
             };
         }
-
-
-        // document.addEventListener("DOMContentLoaded", function () {
-
-
     const employees_action_button = document.querySelector('#employees_action_id');
 
-    // let my_button_action = document.getElementById('employees_action');
-
-
-
 employees_action_button.addEventListener('click', function () {
-        // console.log(get_array_with_checkboxes_dismiss_add_one_or_three_months());
-    console.log('clicked');
-
-
-        makeRequestEmployeeAction()
+       makeRequestEmployeeAction()
     });
 
-// });
 
 
-        const current_emp_check_box = document.querySelector('#current_employees_id');
+        // const current_emp_check_box = document.querySelector('#current_employees_id');
         // current_emp_check_box.click();
         //      ACTIVATE TO SET DEFAULT SELECTED
 
@@ -320,5 +292,5 @@ employees_action_button.addEventListener('click', function () {
     <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
     {% endif %}
 {% endblock %}
-        <!--{% csrf_token %}-->
+
  </form>

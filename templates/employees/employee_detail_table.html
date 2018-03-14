@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if years %}
-    <div class="ajax-loader">
+<div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -26,7 +26,7 @@
                             {% endif %}
                             <label title="{% trans 'Sort by least recent months' %}" class="glyphicon glyphicon-chevron-down clickable"
                                    for="least-recent"></label>
-                        </span>               
+                        </span>
                     </td>
                     <td class="cursor-hover" align="center" valign="middle">
                         {% trans 'Hours worked' %}
@@ -137,7 +137,7 @@
                                     {{ month.year }} {{ month.get_month_display }}
                                 </td>
                                 <td align="center">
-                                    {{ month.hours_worked_in_this_month }} 
+                                    {{ month.hours_worked_in_this_month }}
                             {% if month.month_is_approved %}
                                 <span class="glyphicon glyphicon-ok-sign icon-true" title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
                             {% else %}
@@ -177,13 +177,30 @@
                                 </td>
                                 <td align="center">
                                     {{ month.hours_worked_in_this_month }}
+
+
                                 {% if month.month_is_approved %}
                                     <span class="glyphicon glyphicon-ok-sign icon-true" title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
-                                {% else %}                                    
+
+
+                                {%  elif month.month_not_approved_with_comment %}
+                                    <span class="glyphicon glyphicon-ban-circle icon-disagree" title="{% trans 'Hours not approved' %}" aria-hidden="true"></span>
+                                   <a target="_blank">
+                                    <span class="glyphicon glyphicon-list-alt" title="{% trans 'Message from employee' %}" aria-hidden="true"></span>
+
+                                   </a>
+
+                                {% else %}
                                     {% if not user.is_staff %}
                                         <a href="{% url 'month_approve' month.id %}">
                                             <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                         </a>
+
+                                     <a href="{% url 'month_NOT_approve' month.id %}">
+                                            <span title="{% trans 'Disapprove hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                        </a>
+
+
                                     {% endif %}
                                 {% endif %}
                                 </td>
@@ -303,8 +320,8 @@
                     </ul><br/>
                 {% endif %}
             </div>
-        </div>    
-        
+        </div>
+
     {% else %}
         <span>{% trans 'It looks like there are no months yet.' %}
             {% if user.is_staff %}

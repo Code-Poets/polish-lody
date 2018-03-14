@@ -330,17 +330,48 @@ msgstr "Panel główny"
 msgid "Dashboard"
 msgstr "Tablica"
 
+#: templates/dashboard/dashboard.html:32
+msgid "Weather forecast"
+msgstr "Prognoza pogody"
+
 #: templates/dashboard/dashboard.html:16
 #: templates/employees/employee_list.html:4
 #: templates/employees/employee_list.html:9
 msgid "Employee list"
 msgstr "Lista Pracowników"
 
+#: templates/employees/employee_list.html:15
+msgid "All actions executed successful"
+msgstr "Wszystkie akcje zakończone sukcesem"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with employees dismiss noted"
+msgstr "Nie odnotowano problemów ze zwalnianiem pracowników"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with dismiss employees"
+msgstr "Wystąpił nieoczekiwany problem ze zwalnianiem pracowników"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with one month contracts extension noted"
+msgstr "Nie odnotowano problemów z wydłużaniem umów o 1 miesiąc"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with one month contracts extension"
+msgstr "Wystąpił nieoczekiwany problem z wydłużaniem umów o 1 miesiąc"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with three months contracts extension noted"
+msgstr "Nie odnotowano problemów z wydłużaniem umów o 3 miesiące"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with three months contracts extension"
+msgstr "Wystąpił nieoczekiwany problem z wydłużaniem umów o 3 miesiące"
+
+
 #: templates/employees/employee_list_table.html: ~420
 msgid "Employees dismissed successfully"
 msgstr "Powiodło się zwolnienie pracownika"
-
-
 
 #: templates/dashboard/dashboard.html:20
 msgid "Sales (under construction)"
@@ -350,10 +381,7 @@ msgstr "Sprzedaż (w budowie)"
 msgid "My Details"
 msgstr "Moje Dane"
 
-#: templates/dashboard/dashboard.html:32
-#: templates/weather/weather_forecast.html:8
-msgid "Weather forecast"
-msgstr "Prognoza pogody"
+
 
 #: templates/dashboard/dashboard.html:39
 msgid "7 days/ 1 hour forecast"
@@ -509,10 +537,6 @@ msgid "Edit employee"
 msgstr "Edytuj pracownika"
 
 
-#: templates/employees/employee_list_table.html:138
-msgid "Dismiss"
-msgstr "Zwolnij"
-
 #: templates/employees/employee_detail.html:23
 msgid "Email:"
 msgstr ""
@@ -648,6 +672,10 @@ msgstr "Ukryj opłacone miesiące."
 msgid "Reset filters"
 msgstr "Zresetuj filtry"
 
+#: templates/employees/employee_list.html:142
+msgid "Execute employees actions"
+msgstr "Wykonaj akcje na pracownikach"
+
 #: templates/employees/employee_detail.html:339
 msgid "Months per page:"
 msgstr "Ilość miesięcy na stronę:"
@@ -722,11 +750,20 @@ msgstr "Sortuj po wypłacie malejąco"
 msgid "Hours approved"
 msgstr "Godziny zaakceptowane"
 
+msgid "Hours not approved"
+msgstr "Godziny niezaakceptowane"
+
+msgid "Message from employee"
+msgstr "Wiadomość od pracownika"
+
 #: templates/employees/employee_detail_table.html:146
 #: templates/employees/employee_detail_table.html:185
 #: templates/employees/employee_detail_table.html:225
 msgid "Approve hours for month"
 msgstr "Zaakceptuj godziny dla miesiąca"
+
+msgid "Disapprove hours for month"
+msgstr "Nie akceptuję godzin dla miesiąca"
 
 #: templates/employees/employee_detail_table.html:157
 #: templates/employees/employee_detail_table.html:197
@@ -837,7 +874,7 @@ msgstr "Obecni pracownicy"
 
 #: templates/employees/employee_list.html:115
 msgid "Employees per page:"
-msgstr "Ilość pracowników na stronę:"
+msgstr "Liczba pracowników na stronę:"
 
 #: templates/employees/employee_list.html:170
 msgid "The list of employees is empty, you can change it by "
@@ -846,6 +883,10 @@ msgstr "Lista pracowników jest pusta, możesz to zmienić poprzez "
 #: templates/employees/employee_list.html:170
 msgid "adding a new employee."
 msgstr "dodanie nowego pracownika."
+
+#: templates/employees/employee_list.html:170
+msgid "Employees actions"
+msgstr "Akcje na pracownikach"
 
 #: templates/employees/employee_list_table.html:10
 msgid "Full name"
@@ -910,6 +951,23 @@ msgstr "Sortuj po niewypłaconych wypłatach rosnąco"
 #: templates/employees/employee_list_table.html:122
 msgid "Sort by unpaid salaries descending"
 msgstr "Sortuj po niewypłaconych wypłatach malejąco"
+
+#: templates/employees/employee_list_table.html:152
+msgid "Dismiss"
+msgstr "Zwolnij"
+
+#: templates/employees/employee_list_table.html:154
+msgid "Add 1 Month"
+msgstr "Dodaj 1 m-c"
+
+#: templates/employees/employee_list_table.html:156
+msgid "Add 3 Months"
+msgstr "Dodaj 3 m-ce"
+
+#: templates/employees/employee_list_table.html:152-156
+msgid "Execute"
+msgstr "Wykonaj"
+
 
 #: templates/employees/employee_list_table.html:204
 msgid "No matches found."

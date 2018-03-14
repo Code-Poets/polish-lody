@@ -224,6 +224,8 @@ class Month(models.Model):
                                                      default=0,
                                                      validators=[MaxValueValidator(720), MinValueValidator(0)])
     month_is_approved = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
+    month_not_approved_with_comment = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
+
     rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'), decimal_places=2, max_digits=7,
                                                    default=0,
                                                    validators=[MinValueValidator(0)])
