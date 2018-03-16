@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^del_month/'  + pk + r'$',          views.MonthDelete.as_view(),          name='month_delete'),
     url(r'^appr_month/' + pk + r'/$',         views.MonthApprove.as_view(),         name='month_approve'),
     url(r'^appr_NOT_month/' + pk + r'/$',     views.Month_NOT_Approve.as_view(),    name='month_NOT_approve'),
+    url(r'^employee_message/' + pk,           views.EmployeeMessage.as_view(),      name='employee_message'),
     url(r'^dateverify/$',                     views.ajax_verify_date,               name='dateverify'),
     url(r'^employee_action/$',                views.EmployeeAction.as_view(),       name='employee_action')
 

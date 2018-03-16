@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseDeleteView
+from django.views.generic.detail import BaseDetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseDeleteView, BaseUpdateView
 from django.urls import reverse_lazy
 # from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 import time
@@ -849,11 +850,7 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         return super(MonthUpdate, self).form_invalid(form, **kwargs)
 
 
-
-
-
 class MonthApproveBase(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
-
 
     def get_queryset(self, **kwargs):
         try:
@@ -880,8 +877,6 @@ class MonthApproveBase(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
             return HttpResponseRedirect('../')
 
-
-
     def form_valid(self, form):
         form_validation = super().form_valid(form)
         messages.add_message(self.request, messages.SUCCESS,
@@ -899,8 +894,6 @@ class MonthApproveBase(LoginRequiredMixin, MonthOwnershipMixin, UpdateView):
         return super().form_invalid(form, **kwargs)
 
 
-
-
 class MonthApprove(MonthApproveBase):
     form_class = MonthApproveForm
     template_name = 'employees/month_approve.html'
@@ -912,16 +905,57 @@ class MonthApprove(MonthApproveBase):
         return initial
 
 
-
 class Month_NOT_Approve(MonthApproveBase):
     form_class = MonthApproveForm
+    model = Month
     template_name = 'employees/month_NOT_approve.html'
+
+    # Employee.objects.get(pk=employee_id)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        # print('post ')
+        # print(request.POST.get('employee_message'))
+        # print(self.kwargs['pk'])
+
+        pk = self.kwargs['pk']
+        employee_message = request.POST.get('employee_message')
+        month_to_update = Month.objects.get(id=int(pk))
+
+        month_to_update.message_reason_hours_not_approved = employee_message
+        month_to_update.save()
+
+        self.object = self.get_object()
+        return super(BaseUpdateView, self).post(request, *args, **kwargs)
 
     def get_initial(self):
         initial = super().get_initial()
         initial = initial.copy()
         initial['month_not_approved_with_comment'] = True
         return initial
+
+
+class EmployeeMessage(DetailView):
+    model = Month
+    template_name = 'employees/employee_message.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        try:
+            employee_message = self.object.message_reason_hours_not_approved
+        except:
+            employee_message = str(_("Unexpected problem with getting message from employee"))
+
+        if employee_message==None or employee_message=="":
+            employee_message= str(_("No message from employee"))
+
+        employee_message_as_json = json.dumps(employee_message)
+        return HttpResponse(employee_message_as_json)
 
 
 class EmployeeDelete(LoginRequiredMixin, StaffRequiredMixin, DeleteView):

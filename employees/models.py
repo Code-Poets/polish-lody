@@ -142,7 +142,8 @@ class Employee(MyUser):
     address_zip_code = models.CharField(_('Zip code'), max_length=6, blank=True, null=True, default=None,
                                         validators=[zip_check])
 
-    bank_account_number = models.CharField(_('Bank account number'), max_length=32, blank=True, null=True, default=None,
+    bank_account_number = models.CharField(_('Bank account number'), max_length=250, blank=True, null=True,
+                                           default=None,
                                            validators=[sanity_check])
 
     phone_contact_number = models.CharField(_('Phone contact number'), max_length=15, blank=True, null=True,
@@ -225,6 +226,9 @@ class Month(models.Model):
                                                      validators=[MaxValueValidator(720), MinValueValidator(0)])
     month_is_approved = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
     month_not_approved_with_comment = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
+
+    message_reason_hours_not_approved = models.CharField(_('Comment, why you disagree with the hours (optional)'),
+                                                         max_length=1000, blank=True, null=True, default=None)
 
     rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'), decimal_places=2, max_digits=7,
                                                    default=0,

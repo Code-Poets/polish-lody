@@ -347,8 +347,7 @@
             let dismiss_array = [];
             myTab.forEach((el, i) => {
                 if (document.getElementById('dismiss_id' + myTab[i]).checked) {
-                    // if ($('#dismiss_id' + myTab[i]).select()) {
-                    dismiss_array.push(myTab[i]);
+                     dismiss_array.push(myTab[i]);
                 }
             });
             return dismiss_array;
@@ -363,7 +362,6 @@
             let add_one_array = [];
             myTab.forEach((el, i) => {
                 if (document.getElementById('add_one_id' + myTab[i]).checked) {
-                    // if ($('#dismiss_id' + myTab[i]).select()) {
                     add_one_array.push(myTab[i]);
                 }
             });
@@ -391,21 +389,14 @@
         $('#messages_container').html('<div id="message_success_status"></div>');
             let obj = JSON.parse(content);
 
-
             dismissStatus=obj[0];
             addOneStatus=obj[1];
             addThreeStatus=obj[2];
-
 
              if ((dismissStatus==='OK') &&    (addOneStatus==='OK') && (addThreeStatus==='OK')){
 
                   $('#messages_container').html('<div id="message_success_status">{% trans "All actions executed successful" %}</div>');
              }
-
-
-             // {% trans 'Employees actions' %}
-
-
              else {
 
                  if (dismissStatus == 'OK') {
@@ -433,7 +424,6 @@
 
                  }
              }
-
         }
 
     </script>

@@ -121,7 +121,7 @@ class EmployeeChangeForm(ModelForm):
 class MonthForm(ModelForm):
     class Meta:
         model = Month
-        exclude = ['month_is_approved', 'month_not_approved_with_comment']
+        exclude = ['month_is_approved', 'month_not_approved_with_comment','message_reason_hours_not_approved']
 
         widgets = {
             'year'                          : forms.NumberInput(attrs={'min':'0', 'max':'9999', 'step':'1'}),
@@ -134,8 +134,20 @@ class MonthForm(ModelForm):
 class MonthApproveForm(ModelForm):
     class Meta:
         model = Month
-        fields = ['month_is_approved','month_not_approved_with_comment']
+        fields = ['month_is_approved','month_not_approved_with_comment','message_reason_hours_not_approved']
         widgets = {
             'month_is_approved'     : forms.HiddenInput(),
             'month_not_approved_with_comment'     : forms.HiddenInput()
+        }
+
+class MonthNotApproveForm(ModelForm):
+    subject = forms.CharField(max_length=100)
+    class Meta:
+        print('MonthNotApproveForm')
+        model = Month
+        fields = ['month_is_approved','month_not_approved_with_comment']
+        widgets = {
+            'month_is_approved'     : forms.HiddenInput(),
+            'month_not_approved_with_comment'     : forms.HiddenInput(),
+
         }

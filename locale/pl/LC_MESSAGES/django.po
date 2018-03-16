@@ -141,6 +141,9 @@ msgstr "Kod pocztowy"
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
+msgid "Comment, why you disagree with the hours (optional)"
+msgstr "Komentarz, dlaczego nie zgadzasz sie z godzinami (opcjonalnie) "
+
 #: employees/models.py:141 templates/employees/employee_detail.html:179
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
@@ -303,6 +306,16 @@ msgstr "Pomyślnie usunięto pracownika %s."
 #, python-format
 msgid "Successfully deleted month %(month)s %(year)s."
 msgstr "Pomyślnie usunięto miesiąc %(month)s %(year)s."
+
+#: employees/views.py:952
+#, python-format
+msgid "Unexpected problem with getting message from employee"
+msgstr "Wystąpił problem z pobieraniem wiadomości od pracownika"
+
+#: employees/views.py:955
+#, python-format
+msgid "No message from employee"
+msgstr "Brak wiadomości od pracownika"
 
 #: polishlody/pass_validators.py:11
 #, python-format
@@ -985,6 +998,10 @@ msgstr ""
 msgid "Are you sure you want to approve this month?"
 msgstr "Czy na pewno chcesz zatwierdzić ten miesiąc?"
 
+#: templates/employees/month_disapprove.html:9
+msgid "Are you sure you want to disapprove this month"
+msgstr "Czy na pewno nie chcesz zatwierdzić tego miesiąca?"
+
 #: templates/employees/month_approve.html:14
 msgid "Employee:"
 msgstr "Pracownik:"
@@ -1000,6 +1017,11 @@ msgstr "Godzin przepracowanych w tym miesiącu:"
 #: templates/employees/month_approve.html:38
 msgid "Rate per hour this month:"
 msgstr "Stawka godzinowa w tym miesiącu:"
+
+#: templates/employees/month_NOT_approve.html:49
+msgid "Characters remaining"
+msgstr "Pozostało znaków"
+
 
 #: templates/employees/month_confirm_delete.html:21
 msgid "Are you sure you want to delete"

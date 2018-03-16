@@ -1,7 +1,21 @@
 {% load i18n %}
 
 {% if years %}
-<div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml">
+{% load static %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Dialog - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+
+    <!--<link rel="stylesheet" href="{% static 'js/employee-detail.js' %}">-->
+<div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml" xmlns:pointer-events="http://www.w3.org/1999/xhtml">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -119,14 +133,26 @@
                             <input id="tbp-down" type="radio" class="sorting sort-down"
                                            name="order" value="tbp-down"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by salary descending' %}" class="glyphicon glyphicon-chevron-down clickable"
-                                   for="tbp-down"></label>
+                            <label title="{% trans 'Sort by salary descending' %}" class="glyphicon glyphicon-chevron-down clickable" for="tbp-down"></label>
                         </span>
                     </td>
                     <td>
                     </td>
                 </tr>
+
+
+
+
             </thead>
+
+            <body>
+
+<div id="dialog" title="{% trans 'Message from employee' %}"></div>
+
+
+</body>
+
+
             <tbody>
             {% if months %}
                 {% if empty_qset is not True %}
@@ -159,6 +185,11 @@
                                 <td align="center">
                                     {{ month.calculating_salary_for_this_month }}
                                 </td>
+
+
+
+
+
                                 <td align="right">
                                 {% if user.is_staff %}
                                     <a href="{% url 'month_edit' month.id %}">
@@ -185,10 +216,13 @@
 
                                 {%  elif month.month_not_approved_with_comment %}
                                     <span class="glyphicon glyphicon-ban-circle icon-disagree" title="{% trans 'Hours not approved' %}" aria-hidden="true"></span>
-                                   <a target="_blank">
-                                    <span class="glyphicon glyphicon-list-alt" title="{% trans 'Message from employee' %}" aria-hidden="true"></span>
 
-                                   </a>
+       <a href="{% url 'employee_message' month.id %}">
+    <span class="glyphicon-list-alt"   aria-hidden="true"  id = 'month_message{{month.id}}'></span>
+  </a>
+
+
+
 
                                 {% else %}
                                     {% if not user.is_staff %}
@@ -269,6 +303,11 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
+
+
+
+
+
             </tbody>
             </table>
 
@@ -330,16 +369,58 @@
         </span>
     {% endif %}
 
-        <script id="hidden-template" type="text/x-custom-template">
-        {% if not months %}
-            {% if empty_qset is True %}
-                <p></p>
-            {% endif %}
-        {% endif %}
-            <div class="alert alert-warning alert-dismissable" id="msg-table">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <span>{% trans 'There are no months which satisfy specified criteria.' %}</span>
-            </div>
-        </script>
 
+
+
+        <div id="hidden-template">
+
+
+             <p>
+        {% if not months %}
+                 <script>
+                     console.log('no months');
+
+                     $('#hidden-template').html('<div class="alert alert-warning alert-dismissable" id="msg-table">' +
+                         '<span>{% trans "There are no months which satisfy specified criteria" %}</span></div>');
+                 </script>
+                   </p>
+                  {% else %}
+               <script>
+                    console.log('months');
+                     $('#hidden-template').html('<div class="default" id="msg-table"></div>');
+                 </script>
+                {% endif %}
+        </div>
+
+<script src="{% static 'js/employee-detail.js'%}"></script>
+
+
+
+
+
+
+
+
+
+ <!--<script id="hidden-template" type="text/x-custom-template">-->
+             <!--<p>-->
+
+        <!--{% if not months %}-->
+            <!--&lt;!&ndash;{% if empty_qset is True %}&ndash;&gt;-->
+             <!---->
+                <!--<div class="alert alert-warning alert-dismissable" id="msg-table">-->
+                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
+                <!--<span>{% trans 'There are no months which satisfy specified criteria.' %}</span>-->
+            <!--</div>-->
+
+                <!--</p>-->
+            <!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
+        <!--{% else %}-->
+                <!--<div class="invisible">-->
+                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
+                <!--<span>aa</span>-->
+            <!--</div>-->
+        <!--{% endif %}-->
+
+        <!--</script>-->
 
