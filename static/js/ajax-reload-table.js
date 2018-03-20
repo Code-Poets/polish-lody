@@ -99,6 +99,8 @@ function makeRequest(parameters) {
         timeout: 10000,
 
 
+
+
         success: function (content) {
             console.log('Success ajax GET reload');
             $(".ajax-loader").replaceWith(content);

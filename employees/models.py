@@ -227,8 +227,8 @@ class Month(models.Model):
     month_is_approved = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
     month_not_approved_with_comment = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
 
-    message_reason_hours_not_approved = models.CharField(_('Comment, why you disagree with the hours (optional)'),
-                                                         max_length=1000, blank=True, null=True, default=None)
+    message_reason_hours_not_approved = models.TextField(_('Comment, why you disagree with the hours (optional)'),
+                                                         blank=True, null=True, default=None)
 
     rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'), decimal_places=2, max_digits=7,
                                                    default=0,

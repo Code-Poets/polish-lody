@@ -14,283 +14,299 @@
 
 <div id="messages_container">
 
-            <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
-            <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
-        </div>
+    <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
+    <!--<span>{% trans 'No employee meets the search criteria. Widen your search or check filter for typos.' %}</span>-->
+</div>
 
 {% endblock %}
 {% block body_block %}
 {% if all_employee_list is not None %}
 <a href="{% url 'dashboard' %}" class="btn btn-default">{% trans 'Back' %}</a>
 <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
-    <div style="margin-bottom: 7px;">
-        <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
+<div style="margin-bottom: 7px;">
+    <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
+</div>
+
+<form id="auto-submit-form" method="GET" data-submit-delay="{{form_submit_delay}}"
+      action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
+
+
+    <div class="filter-forms">
+        <ul class="filters">
+            <li class="filter">
+                {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable"
+                                                    placeholder="{{ employee_filter }}" name="employee_filter"
+                                                    id="employee_filter"/>
+            </li>
+            <li class="filter">
+                {% if position_sale %}
+                <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
+                {% else %}
+                <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
+                {% endif %}
+                <label class="my-button clickable" for="pos_sale">
+                    {% trans 'Sale' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if position_production %}
+                <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
+                {% else %}
+                <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success"
+                       name="position_production">
+                {% endif %}
+                <label class="my-button clickable" for="pos_production">
+                    {% trans 'Production' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if position_other %}
+                <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
+                {% else %}
+                <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
+                {% endif %}
+                <label class="my-button clickable" for="pos_other">
+                    {% trans 'Other' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if hide_zero_salary_months %}
+                <input id="chk_paid" checked type="checkbox" class="vis-hidden"
+                       name="hide_zero_salary_months"/>
+                {% else %}
+                <input id="chk_paid" type="checkbox" class="vis-hidden"
+                       name="hide_zero_salary_months"/>
+                {% endif %}
+                <label class="my-button clickable" for="chk_paid">
+                    {% trans 'Paid' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if hide_paid_employees_filter %}
+                <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
+                       name="hide_paid_employees_filter"/>
+                {% else %}
+                <input id="chk_unpaid" type="checkbox" class="vis-hidden"
+                       name="hide_paid_employees_filter"/>
+                {% endif %}
+                <label class="my-button clickable" for="chk_unpaid">
+                    {% trans 'Not paid' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                {% if former_employees %}
+                <input id="former_employees_id" type="checkbox" checked class="vis-hidden"
+                       name="former_employees"/>
+                {% else %}
+                <input id="former_employees_id" type="checkbox" class="vis-hidden"
+                       name="former_employees"/>
+                {% endif %}
+                <label class="my-button clickable" for="former_employees_id">
+                    {% trans 'Former employees' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                {% if current_employees %}
+                <input id="current_employees_id" type="checkbox" checked class="vis-hidden"
+                       name="current_employees"/>
+                {% else %}
+                <input id="current_employees_id" type="checkbox" class="vis-hidden"
+                       name="current_employees"/>
+                {% endif %}
+                <label class="my-button clickable" for="current_employees_id">
+                    {% trans 'Current employees' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                <input class="vis-hidden" type="checkbox" value="Clear filters"/>
+                <label class="my-button reset-filters">
+                    {% trans 'Reset filters' %}
+                </label>
+            </li>
+
+            <li class="filter">
+
+
+                {% if employees_action %}
+                <input id="employees_action_id" type="button" checked class="vis-hidden"
+                       name="employees_action"/>
+                {% else %}
+                <input id="employees_action_id" type="button" class="vis-hidden"
+                       name="employees_action"/>
+                {% endif %}
+                <label class="my-button clickable" for="employees_action_id">
+                    {% trans 'Execute employees actions' %}
+                </label>
+            </li>
+        </ul>
+
+        <select hidden name="per_page" class="clickable" id="per-page">
+            {% for number in paginate_by_numbers %}
+            {% if current_paginate_by_number == number %}
+            <option selected value="{{ number }}">{{number}}</option>
+            {% else %}
+            <option value="{{ number }}">{{number}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
     </div>
 
-    <form id="auto-submit-form" method="GET" data-submit-delay="{{form_submit_delay}}"
-    action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
-
-
-        <div class="filter-forms">
-               <ul class="filters">
-                <li class="filter">
-                    {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
-                </li>
-                <li class="filter">
-                    {% if position_sale %}
-                        <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
-                    {% else %}
-                        <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_sale">
-                        {% trans 'Sale' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if position_production %}
-                        <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
-                    {% else %}
-                        <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success" name="position_production">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_production">
-                        {% trans 'Production' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if position_other %}
-                        <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
-                    {% else %}
-                        <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_other">
-                        {% trans 'Other' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if hide_zero_salary_months %}
-                        <input id="chk_paid" checked type="checkbox" class="vis-hidden"
-                           name="hide_zero_salary_months" />
-                    {% else %}
-                        <input id="chk_paid" type="checkbox" class="vis-hidden"
-                           name="hide_zero_salary_months" />
-                    {% endif %}
-                    <label class="my-button clickable" for="chk_paid">
-                        {% trans 'Paid' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if hide_paid_employees_filter %}
-                        <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
-                           name="hide_paid_employees_filter" />
-                    {% else %}
-                        <input id="chk_unpaid" type="checkbox"  class="vis-hidden"
-                           name="hide_paid_employees_filter" />
-                    {% endif %}
-                    <label class="my-button clickable" for="chk_unpaid">
-                        {% trans 'Not paid' %}
-                    </label>
-                </li>
-
-
-                <li class="filter">
-                    {% if currently_employed_employees_filter %}
-                        <input id="former_employees_id" type="checkbox" checked class="vis-hidden"
-                           name="former_employees" />
-                    {% else %}
-                        <input id="former_employees_id" type="checkbox"  class="vis-hidden"
-                           name="former_employees" />
-                    {% endif %}
-                    <label class="my-button clickable" for="former_employees_id">
-                        {% trans 'Former employees' %}
-                    </label>
-                </li>
-
-
-                 <li class="filter">
-                    {% if currently_employed_employees_filter %}
-                        <input id="current_employees_id" type="checkbox" checked class="vis-hidden"
-                           name="current_employees" />
-                    {% else %}
-                        <input id="current_employees_id" type="checkbox"  class="vis-hidden"
-                           name="current_employees" />
-                    {% endif %}
-                    <label class="my-button clickable" for="current_employees_id">
-                        {% trans 'Current employees' %}
-                    </label>
-                </li>
-
-
-                <li class="filter">
-                    <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-                    <label class="my-button reset-filters">
-                        {% trans 'Reset filters' %}
-                    </label>
-                </li>
-
-                <li class="filter">
-
-
-                    {% if employees_action %}
-                        <input id="employees_action_id" type="button" checked class="vis-hidden"
-                           name="employees_action" />
-                    {% else %}
-                        <input id="employees_action_id" type="button"  class="vis-hidden"
-                           name="employees_action" />
-                    {% endif %}
-                    <label class="my-button clickable" for="employees_action_id">
-                    {% trans 'Execute employees actions' %}
-                    </label>
-                </li>
-            </ul>
-
-            <select hidden name="per_page" class="clickable" id="per-page">
-                {% for number in paginate_by_numbers %}
-                    {% if current_paginate_by_number == number %}
-                        <option selected value="{{ number }}">{{number}}</option>
-                    {% else %}
-                        <option value="{{ number }}">{{number}}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-
-        {% endif %}
-{% endblock %}
-{% block load_block %}
+    {% endif %}
+    {% endblock %}
+    {% block load_block %}
     {% include 'employees/employee_list_table.html' %}
-{% endblock %}
-{% block footer_block %}
+    {% endblock %}
+    {% block footer_block %}
     {% if all_employee_list %}
     <div>
         <span>{% trans 'Employees per page:' %}</span><br/>
         <ul class="pagination paginate">
             {% for number in paginate_by_numbers %}
-                {% if current_paginate_by_number == number %}
-                    <li class="active page-no" id="per-page-{{ number }}">
-                        <a>
-                            {{ number }}
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-no" id="per-page-{{ number }}">
-                        <a>
-                            {{ number }}
-                        </a>
-                    </li>
-                {% endif %}
+            {% if current_paginate_by_number == number %}
+            <li class="active page-no" id="per-page-{{ number }}">
+                <a>
+                    {{ number }}
+                </a>
+            </li>
+            {% else %}
+            <li class="page-no" id="per-page-{{ number }}">
+                <a>
+                    {{ number }}
+                </a>
+            </li>
+            {% endif %}
             {% endfor %}
         </ul>
 
         <br/>
     </div>
 
-    <script>
 
-function getCookie(name) {
-     console.log("getCookie");
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    {% elif not messages %}
+    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans
+        'adding a new employee.' %}</a></p>
+    {% endif %}
+
+
+
+<script>
+   console.log("start script");
+
+
+   $('.filter').mouseup( function () {
+       console.log('filter clicked');
+data=gatherFilters();
+$.post('update_session/', function(data) {
+
+});
+
+
+
+   });
+
+    function getCookie(name) {
+        console.log("getCookie");
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
 
-        $(function start_filters() {
+    $(function start_filters() {
 
-            console.log("start_filters");
+        console.log("start_filters");
 
 
-            {% for number in paginate_by_numbers %}
-            console.log("start_filters3");
+        // {% for number in paginate_by_numbers %}
+        console.log("start_filters3");
 
-            // odpalane gdy zmieniam liczbę osób na stronie 2,5,10,25,100..
-            $('#per-page-{{number}}').click(function(){
-                  console.log("start_filters4");
-                $('.page-no').removeClass('active');
-                $('#per-page-{{number}}').addClass('active');
-                $('input[name=pg]:checked').prop('checked', false);
-                $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
-                try {
-                    var parameters = gatherFilters();
+        // odpalane gdy zmieniam liczbę osób na stronie 2,5,10,25,100..
+        $('#per-page-{{number}}').click(function () {
+            console.log("start_filters4");
+            $('.page-no').removeClass('active');
+            $('#per-page-{{number}}').addClass('active');
+            $('input[name=pg]:checked').prop('checked', false);
+            $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected', true);
+            try {
+                var parameters = gatherFilters();
 
-                    delete parameters.page;
-                }
-                catch(err) {
-                    var parameters = { };
-                }
-                console.log("przed make request");
-                makeRequest(parameters);
-            });
-            {% endfor %}
-
-
+                delete parameters.page;
+            }
+            catch (err) {
+                var parameters = {};
+            }
+            console.log("przed make request");
+            makeRequest(parameters);
         });
-
-        function gatherFilters() {
-
+        // {% endfor %}
 
 
-            return {
-                order: $('input[name=order]:checked', '#auto-submit-form').val(),
-                employee_filter: $('#employee_filter').val(),
-                position_sale: $('input[name=position_sale]:checked').val(),
-                position_other: $('input[name=position_other]:checked').val(),
-                position_production: $('input[name=position_production]:checked').val(),
-                hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
-                hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
+    });
 
-                former_employees: $('input[name=former_employees]:checked').val(),
-                current_employees: $('input[name=current_employees]:checked').val(),
-                employees_action: $('input[name=employees_action]:checked').val(),
+    function gatherFilters() {
+        console.log('gather filters');
+        return {
+            order: $('input[name=order]:checked', '#auto-submit-form').val(),
+            employee_filter: $('#employee_filter').val(),
+            position_sale: $('input[name=position_sale]:checked').val(),
+            position_other: $('input[name=position_other]:checked').val(),
+            position_production: $('input[name=position_production]:checked').val(),
+            hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
+            hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
 
-                per_page: $('select[name=per_page]').val(),
-                page: $('input[name=pg]:checked').val(),
+            former_employees: $('input[name=former_employees]:checked').val(),
+            current_employees: $('input[name=current_employees]:checked').val(),
+            employees_action: $('input[name=employees_action]:checked').val(),
+
+            per_page: $('select[name=per_page]').val(),
+            page: $('input[name=pg]:checked').val(),
 
 
+        };
+    }
 
-            };
-        }
     const employees_action_button = document.querySelector('#employees_action_id');
 
-employees_action_button.addEventListener('click', function () {
-       makeRequestEmployeeAction()
+    employees_action_button.addEventListener('click', function () {
+        makeRequestEmployeeAction()
     });
 
 
-
-        const current_emp_check_box = document.querySelector('#current_employees_id');
-        current_emp_check_box.click();
-        //      ACTIVATE TO SET DEFAULT SELECTED
-
+    // const current_emp_check_box = document.querySelector('#current_employees_id');
+    // current_emp_check_box.click();
+    //      ACTIVATE TO SET DEFAULT SELECTED
 
 
+    //activate, when you want to allow only one of this checkboxes to be selected
+    // const current_check_box = document.querySelector('#current_employees_id');
+    // const former_check_box = document.querySelector('#former_employees_id');
+    //
+    // current_check_box.addEventListener('click', function () {
+    // former_check_box.checked=false;
+    //  });
+    //
+    // former_check_box.addEventListener('click', function () {
+    // current_check_box.checked=false;
+    //  });
 
-        //activate, when you want to allow only one of this checkboxes to be selected
-        // const current_check_box = document.querySelector('#current_employees_id');
-        // const former_check_box = document.querySelector('#former_employees_id');
-        //
-        // current_check_box.addEventListener('click', function () {
-        // former_check_box.checked=false;
-        //  });
-        //
-        // former_check_box.addEventListener('click', function () {
-        // current_check_box.checked=false;
-        //  });
 
+</script>
 
-    </script>
-    {% elif not messages %}
-    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
-    {% endif %}
-{% endblock %}
-
- </form>
+        {% endblock %}
+</form>

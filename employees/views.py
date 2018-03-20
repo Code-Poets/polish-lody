@@ -93,6 +93,27 @@ def make_year_list_for_filtering_in_emp_detail(employee):
         return False
 
 
+def position_list_and_filtering_session(self, queryset):
+
+
+
+    positions = {
+        'position_sale': 'Sale',
+        'position_production': 'Production',
+        'position_other': 'Other',
+        # 'position_none': 'None',
+    }
+    exclude_list = []
+    for key in positions.keys():
+
+        if self.request.session[key] is None:
+            exclude_list.append(positions[key])
+            queryset = queryset.exclude(position=positions[key])
+
+    queryset = queryset.exclude(position=None)
+    return queryset
+
+
 def position_list_and_filtering(self, queryset):
     positions = {
         'position_sale': 'Sale',
@@ -108,6 +129,15 @@ def position_list_and_filtering(self, queryset):
             queryset = queryset.exclude(position=positions[key])
 
     queryset = queryset.exclude(position=None)
+    return queryset
+
+
+def former_and_current_filtering_session(self, queryset):
+    if self.request.session['current_employees']:
+        queryset = queryset.exclude(currently_employed=False)
+        # queryset = queryset.exclude(currently_employed=None) dont need to take caro of None, column Not Null in Data Base
+    if not self.request.session['current_employees']:
+        queryset = queryset.exclude(currently_employed=True)
     return queryset
 
 
@@ -168,61 +198,227 @@ def order_by_unpaid_salaries(name_filter, descending):
     return query
 
 
+class UpdateSession(View):
+
+    def post(self, request):
+        print('UpdateSession')
+        print(request)
+        if not request.is_ajax() or not request.method == 'POST':
+            from django.http import HttpResponseNotAllowed
+            return HttpResponseNotAllowed(['POST'])
+
+        try:
+            print('before')
+            print('position_sale ' + request.session['position_sale'])
+            print('position_production ' + request.session['position_production'])
+            print('position_other ' + request.session['position_other'])
+        except:
+            pass
+
+        position_sale = self.__make_true_or_false_from_POST_request(request, 'position_sale')
+        request.session['position_sale'] = position_sale
+        position_other = self.__make_true_or_false_from_POST_request(request, 'position_other')
+        request.session['position_other'] = position_other
+        position_production = self.__make_true_or_false_from_POST_request(request, 'position_production')
+        request.session['position_production'] = position_production
+        hide_paid_employees_filter = self.__make_true_or_false_from_POST_request(request, 'hide_paid_employees_filter')
+        request.session['hide_paid_employees_filter'] = hide_paid_employees_filter
+        hide_zero_salary_months = self.__make_true_or_false_from_POST_request(request, 'hide_zero_salary_months')
+        request.session['hide_zero_salary_months'] = hide_zero_salary_months
+        former_employees = self.__make_true_or_false_from_POST_request(request, 'former_employees')
+        request.session['former_employees'] = former_employees
+        current_employees = self.__make_true_or_false_from_POST_request(request, 'current_employees')
+        request.session['current_employees'] = current_employees
+
+        try:
+            per_page = self.request.POST['per_page']
+            request.session['per_page'] = per_page
+        except:
+            request.session['per_page'] = 10
+
+        try:
+            page = self.request.POST['page']
+            request.session['page'] = page
+        except:
+            request.session['page'] = 1
+
+        print('after')
+        print('position_sale ' + str(request.session['position_sale']))
+        print('position_production ' + str(request.session['position_production']))
+        print('position_other ' + str(request.session['position_other']))
+
+        return HttpResponse('ok')
+
+    @staticmethod
+    def __make_true_or_false_from_POST_request(request, filer_name):
+        try:
+            value = request.POST[filer_name]
+            if value == 'on':
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    @staticmethod
+    def __make_number_from_POST_request(request, filer_name):
+        try:
+            value = request.POST[filer_name]
+            if value == 'on':
+                return True
+            else:
+                return False
+        except:
+            return False
+
+
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'employees/employee_list.html'
     context_object_name = 'all_employee_list'
 
-    def get_template_names(self, **kwargs):
-        if self.request.is_ajax():
-            names = ['employees/employee_list_table.html']
-        else:
-            names = ['employees/employee_list.html']
-        return names
+    def get(self, request, *args, **kwargs):
 
-    def render_to_response(self, context, **response_kwargs):
         if self.request.is_ajax():
-            qset = context['all_employee_list']
-            order = context['orderby']
-            try:
-                page_obj = context['page_obj']
-                paginator = context['paginator']
-                my_list = context['my_list']
-            except:
-                pass
-            context = {
-                'all_employee_list': qset,
-                'paginator': paginator,
-                'page_obj': page_obj,
-                'orderby': order,
-            }
-            context['warning_x_days_left'] = WARNING_DAYS_LEFT
-            if qset.count() == 0:
-                context['empty_qset'] = True
-            context['ajax_request'] = True
-            return self.response_class(
-                request=self.request,
-                template=self.get_template_names(),
-                context=context,
-                **response_kwargs
-            )
-        else:
-            response = super().render_to_response(context, **response_kwargs)
-            return super().render_to_response(context, **response_kwargs)
+            self.object_list = self.get_queryset_ajax()
+            allow_empty = self.get_allow_empty()
+            if not allow_empty:
+                if self.get_paginate_by_ajax() is not None and hasattr(self.object_list, 'exists'):
+                    is_empty = not self.object_list.exists()
+                else:
+                    is_empty = len(self.object_list) == 0
+                if is_empty:
+                    raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
+                        'class_name': self.__class__.__name__,
+                    })
+            context = self.get_context_data_ajax()
+            return self.render_to_response_ajax(context)
 
-    def get_paginate_by(self, queryset):
+
+        else:
+            self.object_list = self.get_queryset_session_or_default()
+            allow_empty = self.get_allow_empty()
+            if not allow_empty:
+                if self.get_paginate_by_session_or_default() is not None and hasattr(self.object_list,
+                                                                                     'exists'):
+                    is_empty = not self.object_list.exists()
+                else:
+                    is_empty = len(self.object_list) == 0
+                if is_empty:
+                    raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
+                        'class_name': self.__class__.__name__,
+                    })
+            # context = self.get_context_data_session_or_default()
+            context = self.get_context_data_session_or_default(self.object_list)
+            return self.render_to_response_session_or_default(context)
+
+    def __make_true_or_false_from_SESSION_request(self, filer_name):
         try:
-            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
+            return self.request.session[filer_name]
         except:
-            per_page = 10
-        return per_page
+            self.request.session[filer_name] = False
+            return False
 
-    def get_context_data(self, **kwargs):
+    def get_queryset_session_or_default(self):
+        # clear_filters = self.request.GET.get('clear_filters')
+
+        order = self.request.GET.get('order', 'last_name')
+
+        sale_position_filter = self.__make_true_or_false_from_SESSION_request('position_sale')
+        former_employees_filter = self.__make_true_or_false_from_SESSION_request('former_employees')
+        current_employees_filter = self.__make_true_or_false_from_SESSION_request('current_employees')
+
+        production_position_filter = self.__make_true_or_false_from_SESSION_request('position_production')
+        other_position_filter = self.__make_true_or_false_from_SESSION_request('position_other')
+        employee_filter = self.__make_true_or_false_from_SESSION_request('employee_filter')
+        position_filter = self.__make_true_or_false_from_SESSION_request('position_filter')
+        hide_zero_salary_months_filter = self.__make_true_or_false_from_SESSION_request('hide_zero_salary_months')
+
+        hide_paid_employees_filter = self.__make_true_or_false_from_SESSION_request('hide_paid_employees_filter')
+
+        #
+        #
+        # if order == 'unpaid_salaries':
+        #     queryset = order_by_unpaid_salaries(employee_filter, '')
+        # elif order == '-unpaid_salaries':
+        #     queryset = order_by_unpaid_salaries(employee_filter, '-')
+        # elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
+        #     filtered_queryset = find_user_by_name(employee_filter)
+        #     queryset = filtered_queryset.order_by(order)
+        # else:
+        #     queryset = order_by_default(order)
+        #
+        #
+
+        queryset = Employee.objects.all()  # delete after order
+
+        # if sale_position_filter or production_position_filter or other_position_filter:
+        #     queryset = position_list_and_filtering_session(self, queryset)
+
+        if not sale_position_filter and not production_position_filter and not other_position_filter:
+            pass
+        else:
+            if not sale_position_filter:
+                queryset = queryset.exclude(position='Sale')
+
+            if not production_position_filter:
+                queryset = queryset.exclude(position='Production')
+
+            if not other_position_filter:
+                queryset = queryset.exclude(position='Other')
+
+        if former_employees_filter or current_employees_filter:
+
+            if former_employees_filter and current_employees_filter:
+                queryset = queryset
+            else:
+                queryset = former_and_current_filtering_session(self, queryset)
+
+        if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
+
+            queryset = queryset
+
+        else:
+
+            if hide_paid_employees_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
+
+            if hide_zero_salary_months_filter is not None:
+                exclude_list = []
+                for employee in queryset:
+                    if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
+                        exclude_list.append(employee.id)
+                queryset = queryset.exclude(id__in=exclude_list)
+
+        if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
+                                      or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
+                and self.request.is_ajax() is False:
+            messages.add_message(self.request, messages.WARNING,
+                                 "No employee meets the search criteria. "
+                                 "Widen your search or check filter for typos.")
+        return queryset
+
+    def get_context_data_session_or_default(self, objects_list ,**kwargs ):
         context = super().get_context_data(**kwargs)
-        employee_list = context['all_employee_list']
+        employee_list = objects_list
+        # employee_list = self.object_list
+        paginate_by = self.get_paginate_by_session_or_default()
 
-        paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
-        page = self.request.GET.get('page')
-        pg = self.get_paginate_by(employee_list)
+        print('paginate by ' + str(paginate_by))
+        print('employee_list ' + str(employee_list))
+        paginator = Paginator(employee_list, paginate_by)
+        context['paginator'] = paginator
+
+        try:
+            page = self.request.session['page']
+        except:
+            page = 1
+
+        pg = self.get_paginate_by_session_or_default()
+
         if pg is not None:
             context['current_paginate_by_number'] = int(pg)
         try:
@@ -231,28 +427,52 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             employee_pages = paginator.page(1)
         except EmptyPage:
             employee_pages = paginator.page(paginator.num_pages)
+
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
         context['orderby'] = self.request.GET.get('order', 'last_name')
-        context['position_filter'] = self.request.GET.get('position_filter')
-        context['employee_filter'] = self.request.GET.get('employee_filter') or _('e.g. Darth Vader')
-        context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
 
-        context['former_employees'] = self.request.GET.get('former_employees') or False
-        context['current_employees'] = self.request.GET.get('current_employees') or False
-        context['employees_action'] = self.request.GET.get('employees_action') or False
+        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
+        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
+        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
 
-        context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
+        #
+        # print(self.request.COOKIES['employee_filter'])
+        #
+        #
+        # print(self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter']))
+
+        # context['employee_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter'])
+
+        context['hide_zero_salary_months'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['hide_zero_salary_months'])
+
+        context['former_employees'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['former_employees'])
+        context['current_employees'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['current_employees'])
+
+        context['hide_paid_employees_filter'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['hide_paid_employees_filter'])
         context['per_page'] = self.request.GET.get('per_page') or 10
         context['page'] = page
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
-        context['position_sale'] = self.request.GET.get('position_sale') or False
-        context['position_production'] = self.request.GET.get('position_production') or False
-        context['position_other'] = self.request.GET.get('position_other') or False
+        context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['position_sale'])
+        context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['position_production'])
+        context['position_other'] = self.__set_boolean_from_session_with_exception_secure(
+            self.request.session['position_other'])
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
         return context
 
-    def get_queryset(self):
+    def render_to_response_session_or_default(self, context, **response_kwargs):
+        response=  super().render_to_response(context, **response_kwargs)
+        return  response
+
+    # AJAX                     AJAX                     AJAX                     AJAX                     AJAX                     AJAX                     AJAX
+
+    def get_queryset_ajax(self):
         clear_filters = self.request.GET.get('clear_filters')
         order = self.request.GET.get('order', 'last_name')
 
@@ -313,6 +533,202 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                                  "No employee meets the search criteria. "
                                  "Widen your search or check filter for typos.")
         return queryset
+
+    def get_context_data_ajax(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        employee_list = context['all_employee_list']
+
+        paginator = Paginator(employee_list, self.get_paginate_by_ajax())
+
+
+        try:
+            page = self.request.GET.get('page')
+            if page == None:
+                page = 1
+        except:
+            page = 1
+
+        pg = self.get_paginate_by_ajax()
+        if pg is not None:
+            context['current_paginate_by_number'] = int(pg)
+        try:
+            employee_pages = paginator.page(page)
+        except PageNotAnInteger:
+            employee_pages = paginator.page(1)
+        except EmptyPage:
+            employee_pages = paginator.page(paginator.num_pages)
+
+        qset=employee_pages.object_list
+
+        context['qset'] = qset
+        context['paginator'] = paginator
+        context['page_obj'] = employee_pages
+        context['is_paginated'] = True
+
+        context['paginate_by_numbers'] = make_paginate_by_list()
+        context['employee_list'] = employee_pages
+        context['orderby'] = self.request.GET.get('order', 'last_name')
+        context['position_filter'] = self.request.GET.get('position_filter')
+        context['employee_filter'] = self.request.GET.get('employee_filter') or _('e.g. Darth Vader')
+        context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
+
+        context['former_employees'] = self.request.GET.get('former_employees') or False
+        context['current_employees'] = self.request.GET.get('current_employees') or False
+        context['employees_action'] = self.request.GET.get('employees_action') or False
+
+        context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
+        context['per_page'] = self.request.GET.get('per_page') or 10
+        context['page'] = page
+        context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        context['position_sale'] = self.request.GET.get('position_sale') or False
+        context['position_production'] = self.request.GET.get('position_production') or False
+        context['position_other'] = self.request.GET.get('position_other') or False
+        context['form_submit_delay'] = FORM_SUBMIT_DELAY
+        return context
+
+    def get_template_names(self, **kwargs):
+        if self.request.is_ajax():
+            names = ['employees/employee_list_table.html']
+        else:
+            names = ['employees/employee_list.html']
+        return names
+
+    def render_to_response_ajax(self, context, **response_kwargs):
+        # if self.request.is_ajax():
+        print("render to respose ajax")
+        qset = context['qset']
+        order = context['orderby']
+        try:
+            page_obj = context['page_obj']
+            paginator = context['paginator']
+
+        except:
+            pass
+        context = {
+            'all_employee_list': qset,
+            'paginator': paginator,
+            'page_obj': page_obj,
+            'orderby': order,
+        }
+        context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        if qset.count() == 0:
+            context['empty_qset'] = True
+        context['ajax_request'] = True
+        return self.response_class(
+            request=self.request,
+            template=self.get_template_names(),
+            context=context,
+            **response_kwargs
+        )
+
+    # else:
+    #     print("render to respose NO ajax")
+    #     response = super().render_to_response(context, **response_kwargs)
+    #     return super().render_to_response(context, **response_kwargs)
+
+    def get_paginate_by_ajax(self):
+        try:
+            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
+        except:
+            per_page = 10
+        return per_page
+
+    def get_paginate_by_session_or_default(self):
+        try:
+            per_page = self.request.session['per_page'] or 10
+        except:
+            per_page = 10
+        return per_page
+
+    # def get_context_data(self, **kwargs):
+    #
+    #     print("COOKIES")
+    #     # print(self.request.COOKIES)
+    #     print("current_employees")
+    #     # print(self.request.COOKIES['current_employees'])
+    #
+    #     if not self.request.is_ajax():
+    #         try:
+    #             # context = self.get_context_data_ajax_or_default()
+    #             context = self.get_context_data_no_ajax_from_cookie()
+    #         #     blok ładujący z cookie
+    #         except:
+    #             context = self.get_context_data_ajax_or_default()
+    #
+    #     else:
+    #         context = self.get_context_data_ajax_or_default()
+    #
+    #     return context
+
+    @staticmethod
+    def __set_boolean_from_session_with_exception_secure(boolean_value):
+        try:
+            return boolean_value
+        except:
+            return False
+
+    # def get_queryset_first_before_cookie(self):
+    #     clear_filters = self.request.GET.get('clear_filters')
+    #     order = self.request.GET.get('order', 'last_name')
+    #
+    #     sale_position_filter = self.request.GET.get('position_sale') or False
+    #     former_employees_filter = self.request.GET.get('former_employees') or False
+    #     current_employees_filter = self.request.GET.get('current_employees') or False
+    #
+    #     production_position_filter = self.request.GET.get('position_production') or False
+    #     other_position_filter = self.request.GET.get('position_other') or False
+    #     employee_filter = self.request.GET.get('employee_filter')
+    #     position_filter = self.request.GET.get('position_filter')
+    #     hide_zero_salary_months_filter = self.request.GET.get('hide_zero_salary_months')
+    #
+    #     hide_paid_employees_filter = self.request.GET.get('hide_paid_employees_filter')
+    #     if order == 'unpaid_salaries':
+    #         queryset = order_by_unpaid_salaries(employee_filter, '')
+    #     elif order == '-unpaid_salaries':
+    #         queryset = order_by_unpaid_salaries(employee_filter, '-')
+    #     elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
+    #         filtered_queryset = find_user_by_name(employee_filter)
+    #         queryset = filtered_queryset.order_by(order)
+    #     else:
+    #         queryset = order_by_default(order)
+    #     if sale_position_filter or production_position_filter or other_position_filter:
+    #         queryset = position_list_and_filtering(self, queryset)
+    #
+    #     if former_employees_filter or current_employees_filter:
+    #
+    #         if former_employees_filter and current_employees_filter:
+    #             queryset = queryset
+    #         else:
+    #             queryset = former_and_current_filtering(self, queryset)
+    #
+    #     if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
+    #
+    #         queryset = queryset
+    #
+    #     else:
+    #
+    #         if hide_paid_employees_filter is not None:
+    #             exclude_list = []
+    #             for employee in queryset:
+    #                 if employee.all_unpaid_salaries() == 0 or employee.all_unpaid_salaries() is None:
+    #                     exclude_list.append(employee.id)
+    #             queryset = queryset.exclude(id__in=exclude_list)
+    #
+    #         if hide_zero_salary_months_filter is not None:
+    #             exclude_list = []
+    #             for employee in queryset:
+    #                 if employee.all_unpaid_salaries() != 0 and employee.all_unpaid_salaries() is not None:
+    #                     exclude_list.append(employee.id)
+    #             queryset = queryset.exclude(id__in=exclude_list)
+    #
+    #     if queryset.count() == 0 and (employee_filter is not None or position_filter is not None
+    #                                   or hide_zero_salary_months_filter is not None or hide_paid_employees_filter is not None) \
+    #             and self.request.is_ajax() is False:
+    #         messages.add_message(self.request, messages.WARNING,
+    #                              "No employee meets the search criteria. "
+    #                              "Widen your search or check filter for typos.")
+    #     return queryset
+    #
 
 
 class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
@@ -533,12 +949,17 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
     def get_template_names(self, **kwargs):
         if self.request.is_ajax():
             names = ['employees/employee_detail_table.html']
+
         else:
             names = ['employees/employee_detail.html']
+
         return names
 
     def render_to_response(self, context, **response_kwargs):
+
         if self.request.is_ajax():
+
+            print("render to response ajax")
             qset = context['object_list']
             orderby = context['orderby']
             try:
@@ -561,6 +982,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
             if qset.count() == 0:
                 context['empty_qset'] = True
             context['ajax_request'] = True
+
             return self.response_class(
                 request=self.request,
                 template=self.get_template_names(),
@@ -568,7 +990,9 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
                 **response_kwargs
             )
         else:
+
             response = super().render_to_response(context, **response_kwargs)
+
             return super().render_to_response(context, **response_kwargs)
 
     def get_paginate_by(self, queryset):
@@ -638,6 +1062,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         return month_queryset
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         month_list = context['object_list']
         context['employee'] = Employee.objects.get(pk=self.kwargs.get('pk'))
@@ -675,6 +1100,30 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['per_page'] = self.request.GET.get('per_page') or 10
         return context
+
+    def get(self, request, *args, **kwargs):
+        # self.add_filters_to_cookie()
+        self.object_list = self.get_queryset()
+
+        allow_empty = self.get_allow_empty()
+        if not allow_empty:
+
+            if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
+                is_empty = not self.object_list.exists()
+            else:
+                is_empty = len(self.object_list) == 0
+            if is_empty:
+                raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
+                    'class_name': self.__class__.__name__,
+                })
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    #
+    #
+    # def add_filters_to_cookie(self):
+    #     self.request.session['testFilter']='exampleValue4'
+    #     self.request.session.modified = True
 
 
 class EmployeeCreate(LoginRequiredMixin, StaffRequiredMixin, CreateView):
@@ -951,8 +1400,8 @@ class EmployeeMessage(DetailView):
         except:
             employee_message = str(_("Unexpected problem with getting message from employee"))
 
-        if employee_message==None or employee_message=="":
-            employee_message= str(_("No message from employee"))
+        if employee_message == None or employee_message == "":
+            employee_message = str(_("No message from employee"))
 
         employee_message_as_json = json.dumps(employee_message)
         return HttpResponse(employee_message_as_json)
