@@ -200,16 +200,42 @@
    console.log("start script");
 
 
-   $('.filter').mouseup( function () {
-       console.log('filter clicked');
-data=gatherFilters();
-$.post('update_session/', function(data) {
-
-});
 
 
-
+      $('.cursor-hover').mouseleave( function () {
+  update_session();
    });
+
+
+      $('.pagination').mouseleave( function () {
+  update_session();
+   });
+
+      $('.pg-clickable').mouseleave( function () {
+  update_session();
+   });
+
+   $('.filter').mouseleave( function () {
+  update_session();
+   });
+
+   function update_session() {
+            console.log('filter clicked');
+       data = gatherFilters();
+
+       $.post({
+           url: 'update_session/',
+           data: data,
+           dataType: "html",
+           method: "POST",
+           timeout: 10000,
+
+
+       });
+   }
+
+
+
 
     function getCookie(name) {
         console.log("getCookie");

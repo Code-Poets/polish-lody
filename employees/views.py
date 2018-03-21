@@ -209,11 +209,19 @@ class UpdateSession(View):
 
         try:
             print('before')
+            print('order ' + str(request.session['order']))
             print('position_sale ' + request.session['position_sale'])
             print('position_production ' + request.session['position_production'])
             print('position_other ' + request.session['position_other'])
         except:
             pass
+
+        try:
+            order = self.request.POST['order']
+            request.session['order'] = order
+        except:
+            request.session['order'] = 'last_name'
+
 
         position_sale = self.__make_true_or_false_from_POST_request(request, 'position_sale')
         request.session['position_sale'] = position_sale
@@ -243,6 +251,8 @@ class UpdateSession(View):
             request.session['page'] = 1
 
         print('after')
+
+        print('order ' + str(request.session['order']))
         print('position_sale ' + str(request.session['position_sale']))
         print('position_production ' + str(request.session['position_production']))
         print('position_other ' + str(request.session['position_other']))
@@ -260,16 +270,16 @@ class UpdateSession(View):
         except:
             return False
 
-    @staticmethod
-    def __make_number_from_POST_request(request, filer_name):
-        try:
-            value = request.POST[filer_name]
-            if value == 'on':
-                return True
-            else:
-                return False
-        except:
-            return False
+    # @staticmethod
+    # def __make_number_from_POST_request(request, filer_name):
+    #     try:
+    #         value = request.POST[filer_name]
+    #         if value == 'on':
+    #             return True
+    #         else:
+    #             return False
+    #     except:
+    #         return False
 
 
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
@@ -321,7 +331,10 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     def get_queryset_session_or_default(self):
         # clear_filters = self.request.GET.get('clear_filters')
 
-        order = self.request.GET.get('order', 'last_name')
+        try:
+            order = self.request.session['order']
+        except:
+            order='last_name'
 
         sale_position_filter = self.__make_true_or_false_from_SESSION_request('position_sale')
         former_employees_filter = self.__make_true_or_false_from_SESSION_request('former_employees')
@@ -336,20 +349,26 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         hide_paid_employees_filter = self.__make_true_or_false_from_SESSION_request('hide_paid_employees_filter')
 
         #
-        #
-        # if order == 'unpaid_salaries':
-        #     queryset = order_by_unpaid_salaries(employee_filter, '')
-        # elif order == '-unpaid_salaries':
-        #     queryset = order_by_unpaid_salaries(employee_filter, '-')
-        # elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
-        #     filtered_queryset = find_user_by_name(employee_filter)
-        #     queryset = filtered_queryset.order_by(order)
-        # else:
-        #     queryset = order_by_default(order)
-        #
-        #
+        if employee_filter==False:
+            employee_filter=None
 
-        queryset = Employee.objects.all()  # delete after order
+        print('order '+order)
+
+
+        if order == 'unpaid_salaries':
+            queryset = order_by_unpaid_salaries(employee_filter, '')
+        elif order == '-unpaid_salaries':
+            queryset = order_by_unpaid_salaries(employee_filter, '-')
+        elif not 'unpaid' in order and employee_filter is not None and employee_filter != '':
+            filtered_queryset = find_user_by_name(employee_filter)
+            queryset = filtered_queryset.order_by(order)
+        else:
+
+              queryset = order_by_default(order)
+
+
+
+        # queryset = Employee.objects.all()  # delete after order
 
         # if sale_position_filter or production_position_filter or other_position_filter:
         #     queryset = position_list_and_filtering_session(self, queryset)
@@ -372,6 +391,13 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 queryset = queryset
             else:
                 queryset = former_and_current_filtering_session(self, queryset)
+
+
+        if hide_paid_employees_filter==False:
+            hide_paid_employees_filter=None
+
+        if hide_zero_salary_months_filter == False:
+            hide_zero_salary_months_filter = None
 
         if hide_paid_employees_filter is not None and hide_zero_salary_months_filter is not None:
 
@@ -402,15 +428,11 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         return queryset
 
     def get_context_data_session_or_default(self, objects_list ,**kwargs ):
-        context = super().get_context_data(**kwargs)
-        employee_list = objects_list
-        # employee_list = self.object_list
-        paginate_by = self.get_paginate_by_session_or_default()
 
-        print('paginate by ' + str(paginate_by))
-        print('employee_list ' + str(employee_list))
-        paginator = Paginator(employee_list, paginate_by)
-        context['paginator'] = paginator
+        context = super().get_context_data(**kwargs)
+        employee_list = context['all_employee_list']
+
+        paginator = Paginator(employee_list, self.get_paginate_by_session_or_default())
 
         try:
             page = self.request.session['page']
@@ -428,21 +450,24 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         except EmptyPage:
             employee_pages = paginator.page(paginator.num_pages)
 
+        qset = employee_pages.object_list
+
+        #   TO HARD REFACTOR !!!!
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
-        context['orderby'] = self.request.GET.get('order', 'last_name')
 
-        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
-        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
-        # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
 
-        #
-        # print(self.request.COOKIES['employee_filter'])
-        #
-        #
-        # print(self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter']))
+        qset = employee_pages.object_list
 
-        # context['employee_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter'])
+        context['qset'] = qset
+        context['paginator'] = paginator
+        context['page_obj'] = employee_pages
+        context['employee_list'] = qset
+        context['object_list'] = qset
+        context['all_employee_list'] = qset
+        context['orderby'] = self.request.session['order']
+        context['order'] = self.request.session['order']
+
 
         context['hide_zero_salary_months'] = self.__set_boolean_from_session_with_exception_secure(
             self.request.session['hide_zero_salary_months'])
@@ -466,7 +491,135 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
         return context
 
+    # def get_context_data_session_or_default_archiwum_względnie_działające(self, objects_list, **kwargs):
+    #
+    #     context = super().get_context_data(**kwargs)
+    #     employee_list = context['all_employee_list']
+    #
+    #     paginator = Paginator(employee_list, self.get_paginate_by_session_or_default())
+    #
+    #     try:
+    #         page = self.request.session['page']
+    #     except:
+    #         page = 1
+    #
+    #     pg = self.get_paginate_by_session_or_default()
+    #
+    #     if pg is not None:
+    #         context['current_paginate_by_number'] = int(pg)
+    #     try:
+    #         employee_pages = paginator.page(page)
+    #     except PageNotAnInteger:
+    #         employee_pages = paginator.page(1)
+    #     except EmptyPage:
+    #         employee_pages = paginator.page(paginator.num_pages)
+    #
+    #     qset = employee_pages.object_list
+    #     #
+    #     # context['qset'] = qset
+    #     # context['paginator'] = paginator
+    #     # context['page_obj'] = employee_pages
+    #
+    #     #
+    #     # context = super().get_context_data(**kwargs)
+    #     # employee_list = objects_list
+    #     # # employee_list = self.object_list
+    #     # paginate_by = self.get_paginate_by_session_or_default()
+    #     #
+    #     # print('paginate by ' + str(paginate_by))
+    #     # print('employee_list ' + str(employee_list))
+    #     # paginator = Paginator(employee_list, paginate_by)
+    #     # context['paginator'] = paginator
+    #     #
+    #     # try:
+    #     #     page = self.request.session['page']
+    #     # except:
+    #     #     page = 1
+    #     #
+    #     # pg = self.get_paginate_by_session_or_default()
+    #     #
+    #     # if pg is not None:
+    #     #     context['current_paginate_by_number'] = int(pg)
+    #     # try:
+    #     #     employee_pages = paginator.page(page)
+    #     # except PageNotAnInteger:
+    #     #     employee_pages = paginator.page(1)
+    #     # except EmptyPage:
+    #     #     employee_pages = paginator.page(paginator.num_pages)
+    #
+    #     context['paginate_by_numbers'] = make_paginate_by_list()
+    #     context['employee_list'] = employee_pages
+    #     context['orderby'] = self.request.GET.get('order', 'last_name')
+    #     #
+    #     qset = employee_pages.object_list
+    #
+    #     context['qset'] = qset
+    #     context['paginator'] = paginator
+    #     context['page_obj'] = employee_pages
+    #     context['employee_list'] = qset
+    #     #
+    #
+    #     # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
+    #     # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
+    #     # context['position_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['position_filter'])
+    #
+    #     #
+    #     # print(self.request.COOKIES['employee_filter'])
+    #     #
+    #     #
+    #     # print(self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter']))
+    #
+    #     # context['employee_filter'] = self.__set_boolean_from_session_with_exception_secure(self.request.COOKIES['employee_filter'])
+    #
+    #     context['hide_zero_salary_months'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['hide_zero_salary_months'])
+    #
+    #     context['former_employees'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['former_employees'])
+    #     context['current_employees'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['current_employees'])
+    #
+    #     context['hide_paid_employees_filter'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['hide_paid_employees_filter'])
+    #     context['per_page'] = self.request.GET.get('per_page') or 10
+    #     context['page'] = page
+    #     context['warning_x_days_left'] = WARNING_DAYS_LEFT
+    #     context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['position_sale'])
+    #     context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['position_production'])
+    #     context['position_other'] = self.__set_boolean_from_session_with_exception_secure(
+    #         self.request.session['position_other'])
+    #     context['form_submit_delay'] = FORM_SUBMIT_DELAY
+    #     return context
+    #
     def render_to_response_session_or_default(self, context, **response_kwargs):
+
+        # qset = context['qset']
+        # order = context['orderby']
+        # try:
+        #     page_obj = context['page_obj']
+        #     paginator = context['paginator']
+        #
+        # except:
+        #     pass
+        # context = {
+        #     'all_employee_list': qset,
+        #     'paginator': paginator,
+        #     'page_obj': page_obj,
+        #     'orderby': order,
+        # }
+        # context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        # if qset.count() == 0:
+        #     context['empty_qset'] = True
+        #
+        # return self.response_class(
+        #     request=self.request,
+        #     template=self.get_template_names(),
+        #     context=context,
+        #     **response_kwargs)
+
+
         response=  super().render_to_response(context, **response_kwargs)
         return  response
 
@@ -563,7 +716,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         context['qset'] = qset
         context['paginator'] = paginator
         context['page_obj'] = employee_pages
-        context['is_paginated'] = True
+        # context['is_paginated'] = True
 
         context['paginate_by_numbers'] = make_paginate_by_list()
         context['employee_list'] = employee_pages
