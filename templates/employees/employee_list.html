@@ -190,8 +190,7 @@
 
 
     {% elif not messages %}
-    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans
-        'adding a new employee.' %}</a></p>
+    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
     {% endif %}
 
 
@@ -201,23 +200,32 @@
 
 
 
+   $('.filter').click( function () {
+       setTimeout(function(){
+    update_session();
+}, 500);
 
-      $('.cursor-hover').mouseleave( function () {
-  update_session();
    });
 
+     $('.sort-buttons').click( function () {
+        setTimeout(function(){
+    update_session();
+}, 500);
+  });
 
-      $('.pagination').mouseleave( function () {
-  update_session();
-   });
 
-      $('.pg-clickable').mouseleave( function () {
-  update_session();
-   });
+     $('.pagination').click( function () {
+       setTimeout(function(){
+    update_session();
+}, 500);
+  });
 
-   $('.filter').mouseleave( function () {
-  update_session();
-   });
+     $('.pg-clickable').click( function () {
+      setTimeout(function(){
+    update_session();
+}, 500);
+  });
+
 
    function update_session() {
             console.log('filter clicked');

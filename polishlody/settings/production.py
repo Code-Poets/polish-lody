@@ -16,6 +16,11 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# os.environ.setdefault['DJANGO_SETTINGS_MODULE'] = 'polishlody.settings'
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE','polishlody.settings')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'polishlody.settings'
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -223,3 +228,4 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'polishlody team'
 
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
+
