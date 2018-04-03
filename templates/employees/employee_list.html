@@ -202,34 +202,43 @@
 
 <script>
    console.log("start script");
+    {# problem JQuery didn see page buttons on second click - dynamic setted#}
+    $(this).click(function () {
+       setTimeout(function(){
+    update_session();
+}, 100);
 
-
+   });
 
    $('.filter').click( function () {
        setTimeout(function(){
     update_session();
-}, 500);
+}, 100);
 
    });
 
      $('.sort-buttons').click( function () {
         setTimeout(function(){
     update_session();
-}, 500);
+}, 100);
   });
 
-
-     $('.pagination').click( function () {
-       setTimeout(function(){
+   $('.paginated').click( function () {
+        setTimeout(function(){
     update_session();
-}, 500);
+}, 100);
   });
 
-     $('.pg-clickable').click( function () {
-      setTimeout(function(){
+   $('.pg-clickable').click( function () {
+        setTimeout(function(){
     update_session();
-}, 500);
+}, 100);
   });
+
+
+
+
+
 
 
    function update_session() {
