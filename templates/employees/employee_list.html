@@ -163,14 +163,19 @@
     {% block load_block %}
     {% include 'employees/employee_list_table.html' %}
     {% endblock %}
+
     {% block footer_block %}
+
     {% if all_employee_list %}
     <div>
+
         <span>{% trans 'Employees per page:' %}</span><br/>
         <ul class="pagination paginate">
+
             {% for number in paginate_by_numbers %}
+
             {% if current_paginate_by_number == number %}
-            <li class="active page-no" id="per-page-{{ number }}">
+                <li class="active page-no" id="per-page-{{ number }}">
                 <a>
                     {{ number }}
                 </a>
@@ -342,5 +347,5 @@
 
 </script>
 
-        {% endblock %}
+    {% endblock %}
 </form>

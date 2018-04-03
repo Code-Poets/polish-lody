@@ -295,8 +295,8 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                     raise Http404(_("Empty list and '%(class_name)s.allow_empty' is False.") % {
                         'class_name': self.__class__.__name__,
                     })
-            context = self.get_context_data_ajax()
-            return self.render_to_response_ajax(context)
+            context = self.get_context_data()
+            return self.render_to_response(context)
 
 
         else:
@@ -314,8 +314,9 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                         'class_name': self.__class__.__name__,
                     })
             # context = self.get_context_data_session_or_default()
-            context = self.get_context_data_session_or_default(self.object_list)
-            return self.render_to_response_session_or_default(context)
+            context = self.get_context_data()
+            # context = self.get_context_data_session_or_default(self.object_list)
+            return self.render_to_response(context)
 
     def __get_filter_value_from_ajax_or_session_with_default_secure(self, filer_name):
         if self.request.is_ajax():
@@ -393,16 +394,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         hide_zero_salary_months_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure('hide_zero_salary_months')
         hide_paid_employees_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure('hide_paid_employees_filter')
 
-        # else:
-        #     sale_position_filter = self.__make_true_or_None_from_SESSION_request('position_sale')
-        #     former_employees_filter = self.__make_true_or_None_from_SESSION_request('former_employees')
-        #     current_employees_filter = self.__make_true_from_SESSION_request('current_employees')
-        #     production_position_filter = self.__make_true_or_None_from_SESSION_request('position_production')
-        #     other_position_filter = self.__make_true_or_None_from_SESSION_request('position_other')
-        #     employee_filter = self.__make_true_or_None_from_SESSION_request('employee_filter')
-        #     position_filter = self.__make_true_or_None_from_SESSION_request('position_filter')
-        #     hide_zero_salary_months_filter = self.__make_true_or_None_from_SESSION_request('hide_zero_salary_months')
-        #     hide_paid_employees_filter = self.__make_true_or_None_from_SESSION_request('hide_paid_employees_filter')
+
 
         if order == 'unpaid_salaries':
             queryset = order_by_unpaid_salaries(employee_filter, '')
@@ -455,20 +447,176 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
         return queryset
 
+
+    def __get_active_page_number(self):
+        if self.request.is_ajax():
+            try:
+                page = self.request.GET.get('page')
+                if page == None:
+                    page = 1
+                return page
+            except:
+                return 1
+        else:
+            try:
+                return self.request.session['page']
+            except:
+                return 1
+
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        # # employee_list = context['all_employee_list']
+        # employee_list = self.object_list
+        # # paginator = Paginator(employee_list, self.get_paginate_by_ajax())
+        # # context['paginator']=paginator
+
+
+        paginator=context['paginator']
+
+
+
+        active_page_number=self.__get_active_page_number()
+
+
+
+        try:
+            page_obj = paginator.page(active_page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        qset = page_obj.object_list
+
+
+
+
+        context = {
+            'all_employee_list': qset,
+            'paginator': paginator,
+            'page_obj': page_obj,
+            'orderby': self.request.GET.get('order', 'last_name'),
+        }
+
+        current_active_per_page = self.get_paginate_by(self.queryset)
+
+        if current_active_per_page is not None:
+            context['current_paginate_by_number'] = int(current_active_per_page)
+
+
+
+
+        # context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        if qset.count() == 0:
+            context['empty_qset'] = True
+
+
+                          # AJAX
+        if self.request.is_ajax():
+            context['ajax_request'] = True
+
+
+                          # SESSION
+        else:
+            #
+            # 'all_employee_list': qset,
+            # 'paginator': paginator,
+            # 'page_obj': page_obj,
+            # 'orderby': order,
+
+            # context['all_employee_list'] = qset
+
+            # context['qset'] = qset
+
+            # context['paginator'] = paginator
+            # context['page_obj'] = page_obj
+            # context['is_paginated'] = True
+
+            context['paginate_by_numbers'] = make_paginate_by_list()  # określa, ile osób na stronie, 2,5,10, itp.
+            context['per_page'] = self.request.GET.get('per_page') or 10  # button przesazujący info jw
+            context['active_page_number'] = active_page_number
+
+            context['employee_list'] = page_obj
+            # context['orderby'] = self.request.GET.get('order', 'last_name')
+            try:
+                context['orderby'] = self.request.session['order']
+            except:
+                context['orderby'] = 'last_name'
+
+            # filtry pozycji
+
+            context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['position_sale'])
+            context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['position_production'])
+            context['position_other'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['position_other'])
+
+            context['hide_zero_salary_months'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['hide_zero_salary_months'])
+
+            context['hide_paid_employees_filter'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['hide_paid_employees_filter'])
+
+            context['former_employees'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['former_employees'])
+
+
+
+
+
+
+
+
+
+            # context['position_sale'] = self.request.GET.get('position_sale') or False
+            # context['position_production'] = self.request.GET.get('position_production') or False
+            # context['position_other'] = self.request.GET.get('position_other') or False
+            # context['hide_zero_salary_months'] = self.request.GET.get('hide_zero_salary_months') or False
+            # context['hide_paid_employees_filter'] = self.request.GET.get('hide_paid_employees_filter') or False
+            # context['former_employees'] = self.request.GET.get('former_employees') or False
+
+
+            # ustawia domyślnie zaznaczonych obecnych pracowników. Dlatego tak wyjątkowo
+            try:
+                if self.request.session['current_employees'] == None:
+                    context['current_employees'] = True
+                else:
+                    context['current_employees'] = self.request.session['current_employees']
+
+            except:
+                context['current_employees'] = None
+
+            # context['employees_action'] = self.request.GET.get('employees_action') or False
+
+
+
+
+
+        context['warning_x_days_left'] = WARNING_DAYS_LEFT
+        context['form_submit_delay'] = FORM_SUBMIT_DELAY
+
+        return context
+
+
     def get_context_data_session_or_default(self, objects_list, **kwargs):
 
         context = super().get_context_data(**kwargs)
         employee_list = context['all_employee_list']
 
-        paginator = Paginator(employee_list, self.get_paginate_by_session_or_default())
+        paginator = Paginator(employee_list, self.get_paginate_by(employee_list))
 
         try:
             page = self.request.session['page']
         except:
             page = 1
 
-        pg = self.get_paginate_by_session_or_default()
-        self.paginate_queryset(employee_list, self.get_paginate_by_session_or_default())
+        pg = self.get_paginate_by(employee_list)
+        self.paginate_queryset(employee_list, self.get_paginate_by(employee_list))
 
         if pg is not None:
             context['current_paginate_by_number'] = int(pg)
@@ -724,33 +872,34 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             names = ['employees/employee_list.html']
         return names
 
-    def render_to_response_ajax(self, context, **response_kwargs):
-        # if self.request.is_ajax():
-        print("render to respose ajax")
-        qset = context['qset']
-        order = context['orderby']
-        try:
-            page_obj = context['page_obj']
-            paginator = context['paginator']
-
-        except:
-            pass
-        context = {
-            'all_employee_list': qset,
-            'paginator': paginator,
-            'page_obj': page_obj,
-            'orderby': order,
-        }
-        context['warning_x_days_left'] = WARNING_DAYS_LEFT
-        if qset.count() == 0:
-            context['empty_qset'] = True
-        context['ajax_request'] = True
-        response = self.response_class(
-            request=self.request,
-            template=self.get_template_names(),
-            context=context,
-            **response_kwargs)
-        return response
+    # def render_to_response_ajax(self, context, **response_kwargs):
+    #
+    #     # if self.request.is_ajax():
+    #     print("render to respose ajax")
+    #     qset = context['qset']
+    #     order = context['orderby']
+    #     try:
+    #         page_obj = context['page_obj']
+    #         paginator = context['paginator']
+    #
+    #     except:
+    #         pass
+    #     # context = {
+    #     #     # 'all_employee_list': qset,
+    #     #     # 'paginator': paginator,
+    #     #     # 'page_obj': page_obj,
+    #     #     # 'orderby': order,
+    #     # }
+    #     # context['warning_x_days_left'] = WARNING_DAYS_LEFT
+    #     # if qset.count() == 0:
+    #     #     context['empty_qset'] = True
+    #     # context['ajax_request'] = True
+    #     response = self.response_class(
+    #         request=self.request,
+    #         template=self.get_template_names(),
+    #         context=context,
+    #         **response_kwargs)
+    #     return response
 
     # else:
     #     print("render to respose NO ajax")
@@ -770,6 +919,14 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         except:
             per_page = 10
         return per_page
+
+
+    def get_paginate_by(self, queryset):
+        if self.request.is_ajax():
+            return self.get_paginate_by_ajax()
+        else:
+            return self.get_paginate_by_session_or_default()
+
 
     # def get_context_data(self, **kwargs):
     #
