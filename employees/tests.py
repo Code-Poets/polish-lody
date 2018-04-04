@@ -52,6 +52,7 @@ class EmployeeListViewTests(TestCase):
 
     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
     # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
 
     def setUp(self):
         zbigniew_adamski = Employee.objects.get(id=3)
@@ -128,24 +129,21 @@ class EmployeeListViewTests(TestCase):
         self.assertEqual(response.context['orderby'], 'rate_per_hour')
 
 
-    def test_employee_list_view_should_keep_filters_when_user_returns(self):
-     #    test integracyjny
-     pass
-
 
 class EmployeeDetailViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
     # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
 
     def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
     def test_employee_detail_view_with_the_existing_record(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         url = reverse_lazy('employee_detail', args=(30,))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -154,15 +152,12 @@ class EmployeeDetailViewTests(TestCase):
 
 
     def test_employee_message_view_with_the_existing_record(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         url = reverse_lazy('employee_message', args=(47,))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "nie zgadzam sie")
 
     def test_should_employee_detail_view_show_correct_amount_of_months(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-
         url = reverse_lazy('employee_detail', args=(29,))
         response = self.client.get(url)
         self.assertQuerysetEqual(
@@ -172,8 +167,6 @@ class EmployeeDetailViewTests(TestCase):
         )
 
     def test_should_employee_detail_view_be_paginated(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-
         url = reverse_lazy('employee_detail', args=(30,))
         response = self.client.get(url)
 
@@ -191,8 +184,6 @@ class EmployeeDetailViewTests(TestCase):
         self.assertEqual(len(response.context['object_list']), 2)
 
     def test_should_month_create_view_work(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-
         url = reverse_lazy('employee_detail', args=(29,))
 
         from employees.forms import MonthForm
@@ -205,7 +196,6 @@ class EmployeeDetailViewTests(TestCase):
             'bonuses'                       :   '100',
         })
 
-
         self.assertTrue(form.is_valid())
         march2018 = form.save()
 
@@ -214,185 +204,136 @@ class EmployeeDetailViewTests(TestCase):
         self.assertEqual(march2018.salary_is_paid, False)
         self.assertEqual(march2018.rate_per_hour_this_month, 15)
 
-       
 
 
-
-
-
-@skip
-class EmployeeDetailViewTests_old_version(TestCase):
-    fixtures = ['users_myuser.json', ]
-    c = Client()
-
-    def test_employee_detail_view_with_the_existing_record(self):
-        """
-        the detail view of an existing employee should be return status_code 200
-        """
-        start_date = date.today()
-        exp_date = date.today() + timedelta(days=30)
-        admin_login(self)
-        employee = Employee(first_name='John', last_name='Gamlet', email="gamlet@example.com",
-                            contract_start_date=start_date,
-                            contract_exp_date=exp_date,
-                            )
-        employee.save()
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "John")
-
-    def test_employee_detail_view_with_no_existing_record(self):
-        """
-        the detail view of a no existing employee should be return status_code 404
-        """
-        admin_login(self)
-        url = reverse_lazy('employee_detail', args=(120215454121,))
-        ###
-        ### For some reason this test wouldnt work in traditional way (response = self.c.get(url) raised
-        ### error 404 and failed test.
-        try:
-            status_code = self.c.get(url, follow=True)
-            print(url)
-            print(status_code.content)
-        except:
-            status_code = 404
-        self.assertEqual(status_code, 404)
-
-
-
-class EmployeeDetailViewWithGrzesieksFixturesTests(TestCase):
-    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
-
-
-
-
-
-
-
-@skip
-class EmployeeDetailViewWithGrzesieksFixturesTests_old_version(TestCase):
-    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
-    # fixtures = ['fixtures.json']
-    c = Client()
-
-    def test_should_employee_detail_view_show_correct_amount_of_months(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-        start_date = date.today()
-        exp_date = date.today() + timedelta(days=30)
-        employee = Employee.objects.create(first_name="Alan",
-                                           last_name="Shepard",
-                                           email="shepard@mail.com",
-                                           contract_start_date=start_date,
-                                           contract_exp_date=exp_date
-                                           )
-        employee.save()
-        # admin_login(self)
-        first_month = Month(
-            month=1,
-            year=2016,
-            employee=employee,
-        )
-        another_month = Month(
-            month=3,
-            year=2016,
-            employee=employee,
-            salary_is_paid=True,
-        )
-        another_month.save()
-        first_month.save()
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url)
-        self.assertQuerysetEqual(
-            response.context['months'],
-            ['<Month: March 2016>', '<Month: January 2016>']
-        )
-
-    def test_should_employee_detail_view_be_paginated(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-        start_date = date.today()
-        exp_date = date.today() + timedelta(days=30)
-        employee = Employee.objects.create(first_name="Alan",
-                                           last_name="Shepard",
-                                           email="shepard@mail.com",
-                                           contract_start_date=start_date,
-                                           contract_exp_date=exp_date
-                                           )
-        employee.save()
-        # admin_login(self)
-        first_month = Month(
-            month=1,
-            year=2016,
-            employee=employee,
-        )
-        second_month = Month(
-            month=3,
-            year=2016,
-            employee=employee,
-            salary_is_paid=True,
-        )
-        third_month = Month(
-            month=5,
-            year=2016,
-            employee=employee
-        )
-
-        third_month.save()
-        second_month.save()
-        first_month.save()
-        url = reverse_lazy('employee_detail', args=(employee.id,)) + "?per_page=2"
-        response = self.c.get(url)
-        self.assertTrue('2016 May' in str(response.content))
-        self.assertTrue('2016 January' not in str(response.content))
-        url = reverse_lazy('employee_detail', args=(employee.id,)) + "?page=2&per_page=2"
-        response = self.c.get(url)
-        self.assertTrue('2016 January' in str(response.content))
-        self.assertTrue('2016 May' not in str(response.content))
-
-    def test_should_month_create_view_work(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-        # admin_login(self)
-        employee = random.choice(Employee.objects.all())
-        url = reverse_lazy('month_new', args=(employee.id,))
-        response = self.c.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['employee'], employee)
-        initial_form_data = response.context['form']
-        self.assertTrue('selected="selected">%s<' % (str(employee)) in str(initial_form_data['employee']))
-        self.assertTrue('type="number" value="%d" required' % (date.today().year) in str(initial_form_data['year']))
-        self.assertTrue('type="number" value="%s" required' %
-                        (employee.rate_per_hour) in
-                        str(initial_form_data['rate_per_hour_this_month']))
-
-
-@skip
 class EmployeeDeleteViewTests(TestCase):
-    fixtures = ['fixtures.json']
-    c = Client()
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
+
+    def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        zbigniew_adamski = Employee.objects.get(id=3)
+        assert ('Zbigniew Adamski' == str(
+            zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
+
 
     def test_should_employee_delete_method_work_properly(self):
-        admin_login(self)
-        start_date = date(2184, 11, 7)
-        exp_date = date(2186, 11, 7, )
-        emp = Employee(first_name="Alan", last_name="Shepard", email="shepard@mail.com",
-                       contract_start_date=start_date,
-                       contract_exp_date=exp_date)
-        emp.save()
-        m = Month(year=2185, month=11, rate_per_hour_this_month=10,
-                  hours_worked_in_this_month=300, employee=emp)
-        m.save()
-        emp_id = emp.id
-        response = self.c.get(reverse('employee_delete', args=(emp.id,)), follow=True)
+
+        url = reverse_lazy('employee_message', args=(44,))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "bo nie")
+
+        response = self.client.get(reverse('employee_delete', args=(30,)), follow=True)
         self.assertTrue('Are you sure you want to delete' in str(response.content))
-        post_response = self.c.post(reverse('month_delete', args=(m.id,)), follow=True)
-        self.assertRedirects(post_response, reverse('employee_detail', args=(emp.id,)), status_code=302)
-        emp.delete()
-        response404 = self.c.get(reverse('month_delete', args=(m.id,)), follow=True)
+        self.client.post(reverse('month_delete', args=(44,)), follow=True)
+
+        TestowyyPaweltest=Employee.objects.get(pk=30)
+        TestowyyPaweltest.delete()
+
+        response404 = self.client.get(reverse('month_delete', args=(44,)), follow=True)
         self.assertTrue('does not exist' in str(response404.content))
 
 
+
+class MonthCreateAndUpdateAndDeleteViewTests(TestCase):
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
+
+    def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        zbigniew_adamski = Employee.objects.get(id=3)
+        assert ('Zbigniew Adamski' == str(
+            zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
+
+    def test_should_month_save_method_work_properly(self):
+        print ('test_should_month_save_method_work_properly')
+
+        emp = Employee.objects.get(pk=30)
+        self.assertEqual(emp.month_set.all().count(), 12)
+
+        month_date = date(2016, 11, 7)
+        m = Month(year=2185, month=11, rate_per_hour_this_month=10,
+                  hours_worked_in_this_month=300, employee=emp)
+        m.save()
+        m2 = Month(year=2186, month=7, rate_per_hour_this_month=10,
+                   hours_worked_in_this_month=150, employee=emp, salary_is_paid=True)
+        m2.save()
+        self.assertEqual(emp.month_set.all().count(), 14)
+        self.assertEqual(m.calculating_salary_for_this_month(), 3000)
+        self.assertEqual(m.month_name(), 'November')
+        self.assertEqual(m.month_detail(), '2185 November')
+        fail_month = Month(year=2185, month=11, rate_per_hour_this_month=10,
+                           hours_worked_in_this_month=300, employee=emp)
+        self.assertEqual(emp.all_unpaid_salaries(), 14800)
+        try:
+            fail_month.save()
+        except IntegrityError:
+            print("Unique together constraint raises IntegrityError as expected.")
+
+        months = Month.objects.filter(year__gte=2185)
+        # print('months ' + str(months))
+
+
+    def test_should_month_update_view_work(self):
+        print('test_should_month_update_view_work')
+
+        month = random.choice(Month.objects.all())
+        employee = month.employee  # .__str__()
+        year = month.year
+        url = reverse_lazy('month_edit', args=(month.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['month'], month)
+        initial_form_data = response.context['form']
+        self.assertTrue('selected="selected">%s<' % (employee) in str(initial_form_data['employee']))
+        self.assertTrue('type="number" value="%d" required' % (year) in str(initial_form_data['year']))
+        self.assertTrue('type="number" value="%s" required' %
+                        (month.rate_per_hour_this_month) in
+                        str(initial_form_data['rate_per_hour_this_month']))
+
+    def test_should_month_delete_method_work_properly(self):
+        print('test_should_month_delete_method_work_properly')
+
+        emp = Employee.objects.get(pk=30)
+        self.assertEqual(emp.month_set.all().count(), 14)
+
+
+
+
+
+
+        # month_date = date(2016, 11, 7)
+        # m = Month(year=2185, month=11, rate_per_hour_this_month=10,
+        #           hours_worked_in_this_month=300, employee=emp)
+        # m.save()
+        # m2 = Month(year=2186, month=7, rate_per_hour_this_month=10,
+        #            hours_worked_in_this_month=150, employee=emp, salary_is_paid=True)
+        # m2.save()
+        # self.assertEqual(emp.month_set.all().count(), 14)
+        # self.assertEqual(m.calculating_salary_for_this_month(), 3000)
+        # self.assertEqual(m.month_name(), 'November')
+        # self.assertEqual(m.month_detail(), '2185 November')
+        # fail_month = Month(year=2185, month=11, rate_per_hour_this_month=10,
+        #                    hours_worked_in_this_month=300, employee=emp)
+        # self.assertEqual(emp.all_unpaid_salaries(), 14800)
+        # try:
+        #     fail_month.save()
+        # except IntegrityError:
+        #     print("Unique together constraint raises IntegrityError as expected.")
+
+
+
+
+
 @skip
-class MonthCreateAndUpdateViewTests(TestCase):
+class MonthCreateAndUpdateViewTests1(TestCase):
     fixtures = ['fixtures.json']
     c = Client()
 
