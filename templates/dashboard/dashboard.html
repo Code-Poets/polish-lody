@@ -13,7 +13,7 @@
                 {% if user.is_staff %}
                     <ul>
                         <li>
-                            <a href="{% url 'employees' %}">{% trans 'Employee list' %}</a>
+                            <a id=employees_link href="{% url 'employees' %}">{% trans 'Employee list' %}</a>
                         </li>
                         <li>
                             <!-- <a disabled href="{% url 'sales' %}">Sales (under construction)</a> -->

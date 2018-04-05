@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from unittest2 import skip
 
 from users.models import MyUser
-from django.test import TestCase, Client, RequestFactory
+from django.test import TestCase, Client, RequestFactory, TransactionTestCase
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from datetime import datetime, timedelta, date
@@ -129,7 +129,6 @@ class EmployeeListViewTests(TestCase):
         self.assertEqual(response.context['orderby'], 'rate_per_hour')
 
 
-
 class EmployeeDetailViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
@@ -149,7 +148,6 @@ class EmployeeDetailViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testowyy Paweltest")
         self.assertContains(response, "pawel@wp.pl")
-
 
     def test_employee_message_view_with_the_existing_record(self):
         url = reverse_lazy('employee_message', args=(47,))
@@ -188,12 +186,12 @@ class EmployeeDetailViewTests(TestCase):
 
         from employees.forms import MonthForm
         form = MonthForm({
-            'year'                          : '2018',
-            'month'                          : '3',
-            'salary_is_paid'                : False,
-            'hours_worked_in_this_month'    : '150',
-            'rate_per_hour_this_month'      : '15',
-            'bonuses'                       :   '100',
+            'year': '2018',
+            'month': '3',
+            'salary_is_paid': False,
+            'hours_worked_in_this_month': '150',
+            'rate_per_hour_this_month': '15',
+            'bonuses': '100',
         })
 
         self.assertTrue(form.is_valid())
@@ -205,8 +203,7 @@ class EmployeeDetailViewTests(TestCase):
         self.assertEqual(march2018.rate_per_hour_this_month, 15)
 
 
-
-class EmployeeDeleteViewTests(TestCase):
+class EmployeeMessageViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
@@ -219,27 +216,14 @@ class EmployeeDeleteViewTests(TestCase):
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
-
-    def test_should_employee_delete_method_work_properly(self):
-
+    def test_should_message_view_work_properly(self):
         url = reverse_lazy('employee_message', args=(44,))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "bo nie")
 
-        response = self.client.get(reverse('employee_delete', args=(30,)), follow=True)
-        self.assertTrue('Are you sure you want to delete' in str(response.content))
-        self.client.post(reverse('month_delete', args=(44,)), follow=True)
 
-        TestowyyPaweltest=Employee.objects.get(pk=30)
-        TestowyyPaweltest.delete()
-
-        response404 = self.client.get(reverse('month_delete', args=(44,)), follow=True)
-        self.assertTrue('does not exist' in str(response404.content))
-
-
-
-class MonthCreateAndUpdateAndDeleteViewTests(TestCase):
+class MonthCreateAndUpdateAndDeleteViewTests(TransactionTestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
@@ -252,13 +236,11 @@ class MonthCreateAndUpdateAndDeleteViewTests(TestCase):
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
-    def test_should_month_save_method_work_properly(self):
-        print ('test_should_month_save_method_work_properly')
+    def test_should_month_save_and_delete_method_work_properly(self):
 
         emp = Employee.objects.get(pk=30)
         self.assertEqual(emp.month_set.all().count(), 12)
 
-        month_date = date(2016, 11, 7)
         m = Month(year=2185, month=11, rate_per_hour_this_month=10,
                   hours_worked_in_this_month=300, employee=emp)
         m.save()
@@ -278,11 +260,21 @@ class MonthCreateAndUpdateAndDeleteViewTests(TestCase):
             print("Unique together constraint raises IntegrityError as expected.")
 
         months = Month.objects.filter(year__gte=2185)
-        # print('months ' + str(months))
+        self.assertEqual(months.count(), 2)
+        month1_id = months[0].id
 
+        response = self.client.get(reverse('month_delete', args=(month1_id,)), follow=True)
+        self.assertTrue('Are you sure you want to delete' in str(response.content))
+
+        months.delete()
+
+        months_after_delete = Month.objects.filter(year__gte=2185)
+        self.assertEqual(months_after_delete.count(), 0)
+
+        response404 = self.client.get(reverse('month_delete', args=(month1_id,)), follow=True)
+        self.assertTrue('404' in str(response404.content))
 
     def test_should_month_update_view_work(self):
-        print('test_should_month_update_view_work')
 
         month = random.choice(Month.objects.all())
         employee = month.employee  # .__str__()
@@ -298,196 +290,148 @@ class MonthCreateAndUpdateAndDeleteViewTests(TestCase):
                         (month.rate_per_hour_this_month) in
                         str(initial_form_data['rate_per_hour_this_month']))
 
-    def test_should_month_delete_method_work_properly(self):
-        print('test_should_month_delete_method_work_properly')
-
-        emp = Employee.objects.get(pk=30)
-        self.assertEqual(emp.month_set.all().count(), 14)
-
-
-
-
-
-
-        # month_date = date(2016, 11, 7)
-        # m = Month(year=2185, month=11, rate_per_hour_this_month=10,
-        #           hours_worked_in_this_month=300, employee=emp)
-        # m.save()
-        # m2 = Month(year=2186, month=7, rate_per_hour_this_month=10,
-        #            hours_worked_in_this_month=150, employee=emp, salary_is_paid=True)
-        # m2.save()
-        # self.assertEqual(emp.month_set.all().count(), 14)
-        # self.assertEqual(m.calculating_salary_for_this_month(), 3000)
-        # self.assertEqual(m.month_name(), 'November')
-        # self.assertEqual(m.month_detail(), '2185 November')
-        # fail_month = Month(year=2185, month=11, rate_per_hour_this_month=10,
-        #                    hours_worked_in_this_month=300, employee=emp)
-        # self.assertEqual(emp.all_unpaid_salaries(), 14800)
-        # try:
-        #     fail_month.save()
-        # except IntegrityError:
-        #     print("Unique together constraint raises IntegrityError as expected.")
-
-
-
-
-
-@skip
-class MonthCreateAndUpdateViewTests1(TestCase):
-    fixtures = ['fixtures.json']
-    c = Client()
-
-    def test_should_month_update_view_work(self):
-        admin_login(self)
-        month = random.choice(Month.objects.all())
-        employee = month.employee  # .__str__()
-        year = month.year
-        url = reverse_lazy('month_edit', args=(month.id,))
-        response = self.c.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['month'], month)
-        initial_form_data = response.context['form']
-        self.assertTrue('selected="selected">%s<' % (employee) in str(initial_form_data['employee']))
-        self.assertTrue('type="number" value="%d" required' % (year) in str(initial_form_data['year']))
-        self.assertTrue('type="number" value="%s" required' %
-                        (month.rate_per_hour_this_month) in
-                        str(initial_form_data['rate_per_hour_this_month']))
-
-    def test_should_month_save_method_work_properly(self):
-        start_date = date(2184, 11, 7)
-        exp_date = date(2186, 11, 7, )
-        emp = Employee(first_name="Alan", last_name="Shepard", email="shepard@mail.com",
-                       contract_start_date=start_date,
-                       contract_exp_date=exp_date)
-        emp.save()
-        month_date = date(2016, 11, 7)
-        m = Month(year=2185, month=11, rate_per_hour_this_month=10,
-                  hours_worked_in_this_month=300, employee=emp)
-        m.save()
-        m2 = Month(year=2186, month=7, rate_per_hour_this_month=10,
-                   hours_worked_in_this_month=150, employee=emp, salary_is_paid=True)
-        m2.save()
-        self.assertEqual(emp.month_set.all().count(), 2)
-        mon = Month(year=month_date.year, month=month_date.month, rate_per_hour_this_month=10,
-                    hours_worked_in_this_month=300, employee=emp)
-        self.assertEqual(m.calculating_salary_for_this_month(), 3000)
-        self.assertEqual(m.month_name(), 'November')
-        self.assertEqual(m.month_detail(), '2185 November')
-        fail_month = Month(year=2185, month=11, rate_per_hour_this_month=10,
-                           hours_worked_in_this_month=300, employee=emp)
-        self.assertEqual(emp.all_unpaid_salaries(), 3000)
-        try:
-            fail_month.save()
-        except IntegrityError:
-            print("Unique together constraint raises IntegrityError as expected.")
-
-
-@skip
-class MonthDeleteViewTests(TestCase):
-    fixtures = ['user.json']
-    c = Client()
-
-    def test_should_month_delete_method_work_properly(self):
-        admin_login(self)
-        start_date = date(2184, 11, 7)
-        exp_date = date(2186, 11, 7, )
-        emp = Employee(first_name="Alan", last_name="Shepard", email="shepard@mail.com",
-                       contract_start_date=start_date,
-                       contract_exp_date=exp_date)
-        emp.save()
-        m = Month(year=2185, month=11, rate_per_hour_this_month=10,
-                  hours_worked_in_this_month=300, employee=emp)
-        m.save()
-        m_id = m.id
-        response = self.c.get(reverse('month_delete', args=(m_id,)), follow=True)
+    def test_should_employee_delete_method_work_properly(self):
+        response = self.client.get(reverse('employee_delete', args=(30,)), follow=True)
         self.assertTrue('Are you sure you want to delete' in str(response.content))
-        post_response = self.c.post(reverse('month_delete', args=(m.id,)), follow=True)
-        self.assertRedirects(post_response, reverse('employee_detail', args=(emp.id,)), status_code=302)
-        m.delete()
-        response404 = self.c.get(reverse('month_delete', args=(m_id,)), follow=True)
-        self.assertTrue('not exist anymore' in str(response404.content))
+        self.client.post(reverse('month_delete', args=(44,)), follow=True)
+
+        TestowyyPaweltest = Employee.objects.get(pk=30)
+        TestowyyPaweltest.delete()
+
+        response404 = self.client.get(reverse('month_delete', args=(44,)), follow=True)
+        self.assertTrue('does not exist' in str(response404.content))
 
 
-@skip
 class EmployeeFilterTests(TestCase):
-    fixtures = ['fixtures.json']
-    c = Client()
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
+
+    def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        zbigniew_adamski = Employee.objects.get(id=3)
+        assert ('Zbigniew Adamski' == str(
+            zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
     def test_should_name_filter_work_properly(self):
         admin_login(self)
         url = reverse_lazy('employees')
-        response = self.c.get(url)
-        filtered_response = self.c.get(url + "?employee_filter=czarny")
+        response = self.client.get(url)
+        filtered_response = self.client.get(url + "?employee_filter=czarny")
         self.assertQuerysetEqual(
             filtered_response.context['all_employee_list'],
             ['<Employee: Czarny Lodziarz>']
         )
-        filtered_response_multiple_results = self.c.get(url + "?employee_filter=w")
+        filtered_response_multiple_results = self.client.get(url + "?employee_filter=w")
         self.assertQuerysetEqual(
             filtered_response_multiple_results.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>']
+            ['<Employee: Zbigniew Adamski>', '<Employee: Waldemar Kiepski>', '<Employee: Paweł Testowy>',
+             '<Employee: Paweltest Testowyy>']
         )
-        filtered_response_none = self.c.get(url + "?employee_filter=inexistent_potato")
+        filtered_response_none = self.client.get(url + "?employee_filter=inexistent_potato")
         self.assertQuerysetEqual(
             filtered_response_none.context['all_employee_list'],
             []
         )
         self.assertTrue("No employee meets the search criteria." in str(filtered_response_none.content))
 
-    def test_should_position_filter_work_properly(self):
-        admin_login(self)
-        url = reverse_lazy('employees')
-        position_response = self.c.get(url + "?position_other=on")
-        print(position_response)
-        self.assertQuerysetEqual(
-            position_response.context['all_employee_list'],
-            ['<Employee: Waldemar Kiepski>']
-        )
-        position_response_sale = self.c.get(url + "?position_sale=on")
-        self.assertQuerysetEqual(
-            position_response_sale.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Mietek Żul>'],
-        )
-        position_response_production = self.c.get(url + "?position_production=on")
-        self.assertQuerysetEqual(
-            position_response_production.context['all_employee_list'],
-            ['<Employee: Czarny Lodziarz>'],
-        )
-        position_response_none = self.c.get(url + "?inexistent_position=on")
-        self.assertQuerysetEqual(
-            position_response_none.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>', '<Employee: Czarny Lodziarz>',
-             '<Employee: Jadzia Pani>', '<Employee: Mietek Żul>']
-        )
+    def test_should_position_other_filter_work_properly(self):
+        """
+        Be careful with tests no ajax requests. ListView sets current_employees True as default, all not ajax requests
+        are checked- if there is no session value default value is set as True. Default pagination is 10.
+        """
 
-    def test_should_hide_unpaid_employees_filter_work_properly(self):
-        admin_login(self)
-        url = reverse_lazy('employees')
-        unpaid_response = self.c.get(url + "?hide_zero_salary_months=on")
-        self.assertQuerysetEqual(
-            unpaid_response.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>',
-             '<Employee: Jadzia Pani>', '<Employee: Mietek Żul>']
-        )
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employees')
 
-    def test_should_hide_paid_employees_filter_work_properly(self):
-        admin_login(self)
-        url = reverse_lazy('employees')
-        unpaid_response = self.c.get(url + "?hide_paid_employees_filter=on")
-        self.assertQuerysetEqual(
-            unpaid_response.context['all_employee_list'],
-            ['<Employee: Czarny Lodziarz>']
-        )
+        get_data = {'position_other': 'on',
+                    'current_employees': 'on',
+                    'per_page': '10',
+                    }
 
-    def test_should_multiple_filters_at_a_time_work_properly(self):
-        admin_login(self)
-        url = reverse_lazy('employees')
-        response = self.c.get(url + "?employee_filter=w&position_filter=Sale&position_filter=Other"
-                                    "&position_filter=Production&hide_zero_salary_months=on")
+        position_response = self.client.get(url, get_data, **kwargs)
+        self.assertEqual(position_response.status_code, 200)
+        self.assertEqual(position_response.context['ajax_request'], True)
+        self.assertContains(position_response, 'Waldemar Kiepski')
+        self.assertContains(position_response, 'Nnn Nnn')
+        self.assertContains(position_response, 'Testowy Paweł')
+        self.assertNotContains(position_response, 'Eee Eee')
+        self.assertNotContains(position_response, 'Jjj Jjj')
+
+    def test_should_position_paid_filter_work_properly(self):
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employees')
+
+        get_data = {'hide_zero_salary_months': 'on',
+                    'per_page': '5',
+                    }
+
+        position_response = self.client.get(url, get_data, **kwargs)
+        self.assertEqual(position_response.status_code, 200)
+        self.assertEqual(position_response.context['ajax_request'], True)
+        self.assertContains(position_response, 'Aaa Aaa')
+        self.assertContains(position_response, 'Ccc Ccc')
+        self.assertContains(position_response, 'Eee Eee')
+        self.assertNotContains(position_response, 'Fff Fff')
+
+    def test_should_position_former_filter_work_properly(self):
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employees')
+
+        get_data = {'former_employees': 'on',
+                    'per_page': '5',
+                    'page': '2',
+                    }
+
+        position_response = self.client.get(url, get_data, **kwargs)
+        self.assertEqual(position_response.status_code, 200)
+        self.assertEqual(position_response.context['ajax_request'], True)
+        self.assertContains(position_response, 'Iii Iii')
+        self.assertContains(position_response, 'Ggg Ggg')
+        self.assertContains(position_response, 'Eee Eee')
+        self.assertNotContains(position_response, 'Waldemar Kiepski')
+
+    def test_should_order_filter_work_properly(self):
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employees')
+
+        get_data = {'order': 'contract_exp_date',
+                    'hide_paid_employees_filter': 'on',
+                    'current_employees': 'on',
+                    'per_page': '5',
+
+                    }
+
+        position_response = self.client.get(url, get_data, **kwargs)
+        self.assertEqual(position_response.status_code, 200)
+        self.assertEqual(position_response.context['ajax_request'], True)
+        self.assertContains(position_response, 'Zbigniew Adamski')
+        self.assertContains(position_response, 'Paweł Testowy')
+        self.assertContains(position_response, 'Paweltest Testowyy')
+        self.assertNotContains(position_response, 'Waldemar Kiepski')
+
+    def test_should_employee_filter_work_properly(self):
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employees')
+
+        get_data = {'employee_filter': 'ala',
+
+                    }
+
+        response = self.client.get(url, get_data, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['ajax_request'], True)
         self.assertQuerysetEqual(
             response.context['all_employee_list'],
-            ['<Employee: Jarosław K.>', '<Employee: Waldemar Kiepski>']
-        )
+            ['<Employee: Alan Shepard>'])
+
+
+
+
+
+
 
 
 @skip

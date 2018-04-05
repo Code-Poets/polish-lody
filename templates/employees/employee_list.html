@@ -45,7 +45,7 @@
                 {% else %}
                 <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
                 {% endif %}
-                <label class="my-button clickable" for="pos_sale">
+                <label id="pos_sale_label" class="my-button clickable" for="pos_sale">
                     {% trans 'Sale' %}
                 </label>
             </li>
@@ -335,23 +335,6 @@
         makeRequestEmployeeAction()
     });
 
-
-    // const current_emp_check_box = document.querySelector('#current_employees_id');
-    // current_emp_check_box.click();
-    //      ACTIVATE TO SET DEFAULT SELECTED
-
-
-    //activate, when you want to allow only one of this checkboxes to be selected
-    // const current_check_box = document.querySelector('#current_employees_id');
-    // const former_check_box = document.querySelector('#former_employees_id');
-    //
-    // current_check_box.addEventListener('click', function () {
-    // former_check_box.checked=false;
-    //  });
-    //
-    // former_check_box.addEventListener('click', function () {
-    // current_check_box.checked=false;
-    //  });
 
 
 </script>
