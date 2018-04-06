@@ -226,11 +226,11 @@
 
                                 {% else %}
                                     {% if not user.is_staff %}
-                                        <a href="{% url 'month_approve' month.id %}">
+                                        <a id='month-approve-id{{month.id}}' href="{% url 'month_approve' month.id %}">
                                             <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                                         </a>
 
-                                     <a href="{% url 'month_NOT_approve' month.id %}">
+                                     <a id='month-not-approve-id{{month.id}}' href="{% url 'month_NOT_approve' month.id %}">
                                             <span title="{% trans 'Disapprove hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                                         </a>
 

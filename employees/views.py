@@ -196,21 +196,21 @@ class UpdateSession(View):
     # class to update current session
 
     def post(self, request):
-        print('UpdateSession')
+        # print('UpdateSession')
 
         if not request.is_ajax() or not request.method == 'POST':
             from django.http import HttpResponseNotAllowed
             return HttpResponseNotAllowed(['POST'])
 
-        try:
-            print('before')
-            print('page ' + str(request.session['page']))
-            # print('order ' + str(request.session['order']))
-            # print('position_sale ' + request.session['position_sale'])
-            # print('position_production ' + request.session['position_production'])
-            # print('position_other ' + request.session['position_other'])
-        except:
-            pass
+        # try:
+        #     # print('before')
+        #     # print('page ' + str(request.session['page']))
+        #     # print('order ' + str(request.session['order']))
+        #     # print('position_sale ' + request.session['position_sale'])
+        #     # print('position_production ' + request.session['position_production'])
+        #     # print('position_other ' + request.session['position_other'])
+        # except:
+        #     pass
 
         try:
             order = self.request.POST['order']
@@ -245,9 +245,9 @@ class UpdateSession(View):
         except:
             request.session['page'] = 1
 
-        print('after')
-
-        print('page ' + str(request.session['page']))
+        # print('after')
+        #
+        # print('page ' + str(request.session['page']))
         # print('order ' + str(request.session['order']))
         # print('position_sale ' + str(request.session['position_sale']))
         # print('position_production ' + str(request.session['position_production']))

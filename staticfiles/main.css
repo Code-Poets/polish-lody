@@ -651,15 +651,4 @@ ul.topnav li.icon {
   border-radius: 8px;
   font: 15px Verdana, sans-serif; }
 
-.textarea_disapprove {
-
-  color: gray();
-  height: 250px;
-  font: 16px Verdana, sans-serif;
-  line-height: 27px; /* 4px +12px + 4px */
-
-}
-
-
-
 /*# sourceMappingURL=../../../../../../static/main.css.map */

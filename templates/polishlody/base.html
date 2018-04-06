@@ -62,7 +62,7 @@
                         </li>
                         <li><span id="logged-in">{% trans 'Logged in as - ' %}{{ user.email }}</span>
                         <li><a href="{% url 'password_change' %}">{% trans 'Change password' %}</a></li>
-                        <li><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
+                        <li id='logout-button'><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
                         <li>
                             <a href="{% url 'languageChange' %}" title="{% trans 'Change language' %}"><img src="{% static 'images/Poland-English.png' %}"></a>
                         </li>

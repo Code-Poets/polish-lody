@@ -1,20 +1,18 @@
-import sys
+import os
 import time
+from enum import Enum
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, override_settings
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.wait import WebDriverWait
-from unittest2 import skip, TestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-
-from selenium.webdriver.support import expected_conditions as EC
+from unittest2 import skip
+from selenium.common import exceptions
 
 from employees.functional_tests.base import FunctionalTestsBase
+from polishlody.settings import BASE_DIR
 
 
-
+@skip
 class UserLogin(LiveServerTestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
@@ -45,68 +43,250 @@ class ListViewFilter(FunctionalTestsBase):
     selenium = None
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-
     def __log_manager_and_go_to_employee_list(self):
+
         self.selenium.get('%s%s' % (self.live_server_url, ''))
         login_field = self.selenium.find_element_by_id('id_username')
         password_field = self.selenium.find_element_by_id('id_password')
         login_field.send_keys('pawel.kisielewicz@codepoets.it')
         password_field.send_keys('codepoets')
         password_field.send_keys(Keys.ENTER)
-        time.sleep(2)
+        time.sleep(1)
         employee_list_link = self.selenium.find_element_by_id('employees_link')
         employee_list_link.click()
-        time.sleep(4)
+        time.sleep(1)
 
+    def __log_employee_and_go_to_employee_list(self):
 
+        self.selenium.get('%s%s' % (self.live_server_url, ''))
+        login_field = self.selenium.find_element_by_id('id_username')
+        password_field = self.selenium.find_element_by_id('id_password')
+        login_field.send_keys('pawel@wp.pl')
+        password_field.send_keys('codepoets')
+        password_field.send_keys(Keys.ENTER)
+        time.sleep(1)
+        employee_list_link = self.selenium.find_element_by_id('my-details-link')
+        employee_list_link.click()
+        time.sleep(1)
+
+    def __logout(self):
+        button = self.selenium.find_element_by_id('logout-button')
+        button.click()
+
+    @skip
     def test_sale_filter(self):
         self.__log_manager_and_go_to_employee_list()
         self.assertIn('Lista Pracowników', self.selenium.title)
-
-        current_emp_cb = self.selenium.find_element_by_id('current_employees_id')
-        sale_emp_cb = self.selenium.find_element_by_id('pos_sale')
-
-        time.sleep(2)
-
-        # paginate_previous_radio = self.selenium.find_element_by_id('pg-previous')
-        paginate_previous_radio = self.selenium.find_element_by_class_name('paginated')
-        # paginate_previous_radio = self.selenium.find_element_by_class_name('my-button previous disabled')
-
         sale_emp_label_clickable = self.selenium.find_element_by_id('pos_sale_label')
 
+        self.__check_if_previous_page_exist_and_is_disabled()
+        self.__check_if_next_page_exist_and_is_clickable()
+        self.assertTrue(self.__check_page_exist_and_get_true_if_selected(1))
+        self.assertFalse(self.__check_page_exist_and_get_true_if_selected(2))
+        self.__check_if_per_page_exist_and_check_if_given_value_is_selected(10)
+
+        names = ['Adamski Zbigniew', 'Lodziarz Czarny', 'Rrr Rrr']
+        self.assertTrue(self.__check_employee_list_and_return_boolean_status(names))
+
+        names = ['Sss Sss', 'Testowy Paweł', 'Testowyy Paweltest']
+        self.assertFalse(self.__check_employee_list_and_return_boolean_status(names))
+        self.assertEqual(self.__get_number_of_employees_on_current_page(), 10)
 
         sale_emp_label_clickable.click()
 
-        self.assertTrue(current_emp_cb.is_selected())
-        self.assertTrue(sale_emp_cb.is_selected())
-        self.assertFalse(paginate_previous_radio.is_selected())
+        self.assertTrue(self.__check_if_employee_filter_exist_and_get_boolean_value(EmployeeFilters.CURRENT_EMPLOYEES))
+        self.assertTrue(self.__check_if_employee_filter_exist_and_get_boolean_value(EmployeeFilters.POS_SALE))
+        self.__check_if_pagination_block_doesnt_exist()
+        self.__check_if_per_page_exist_and_check_if_given_value_is_selected(10)
 
+        names = ['Adamski Zbigniew']
+        self.assertTrue(self.__check_employee_list_and_return_boolean_status(names))
+        self.assertEqual(self.__get_number_of_employees_on_current_page(), 1)
+
+        sale_emp_label_clickable.click()
+        time.sleep(1)
+        page_2_label_clickable = self.selenium.find_element_by_id('pg-label2-not-checked')
+        page_2_label_clickable.click()
+
+        self.__check_if_previous_page_exist_and_is_clickable()
+        self.__check_if_next_page_exist_and_is_disabled()
+        self.assertTrue(self.__check_page_exist_and_get_true_if_selected(2))
+        self.assertFalse(self.__check_page_exist_and_get_true_if_selected(1))
+        self.__check_if_per_page_exist_and_check_if_given_value_is_selected(10)
+        names = ['Sss Sss', 'Testowy Paweł', 'Testowyy Paweltest']
+        self.assertTrue(self.__check_employee_list_and_return_boolean_status(names))
+        self.assertEqual(self.__get_number_of_employees_on_current_page(), 3)
+
+    def __check_employee_list_and_return_boolean_status(self, list_given_by_tester):
+        elements = self.selenium.find_elements_by_name('employee-from-list')
+        employees_list = []
+
+        for element in elements:
+            employees_list.append(element.text)
+
+        for name in list_given_by_tester:
+            if name not in employees_list:
+                return False
+        return True
+
+    def __get_number_of_employees_on_current_page(self):
+        elements = self.selenium.find_elements_by_name('employee-from-list')
+        return len(elements)
+
+    def __check_if_employee_filter_exist_and_get_boolean_value(self, filter_name_enum):
+
+        filter_name = filter_name_enum.value
+        try:
+            element = self.selenium.find_element_by_id(filter_name)
+
+        except:
+            element = None
+
+        self.assertNotEqual(element, None, 'unable to find ' + filter_name)
+
+        return element.is_selected()
+
+    def __check_if_pagination_block_doesnt_exist(self):
+
+        def __find_paginate_previous_radio():
+            self.selenium.find_element_by_id('paginated')
+
+        self.assertRaises(exceptions.NoSuchElementException, __find_paginate_previous_radio)
+
+    def __check_if_previous_page_exist_and_is_disabled(self):
+        try:
+            element = self.selenium.find_element_by_xpath('//label[@class="my-button previous disabled"]')
+        except:
+            element = None
+        self.assertNotEqual(element, None, 'unable to find previous page label with status disabled')
+
+    def __check_if_previous_page_exist_and_is_clickable(self):
+        try:
+            element = self.selenium.find_element_by_xpath('//label[@class="my-button previous clickable"]')
+        except:
+            element = None
+        self.assertNotEqual(element, None, 'unable to find previous page label with status clickable')
+
+    def __check_if_next_page_exist_and_is_disabled(self):
+        try:
+            element = self.selenium.find_element_by_xpath('//label[@class="my-button next disabled"]')
+        except:
+            element = None
+        self.assertNotEqual(element, None, 'unable to find next page label with status disabled')
+
+    def __check_if_next_page_exist_and_is_clickable(self):
+        try:
+            element = self.selenium.find_element_by_xpath('//label[@class="my-button next clickable"]')
+        except:
+            element = None
+        self.assertNotEqual(element, None, 'unable to find next page label with status clickable')
+
+    def __check_page_exist_and_get_true_if_selected(self, number):
+        try:
+            id = 'pg-label' + str(number) + '-checked'
+            self.selenium.find_element_by_id(id)  # test if element exist. If doesn't throws exceptions
+            return True
+        except:
+            try:
+                id = 'pg-label' + str(number) + '-not-checked'
+                self.selenium.find_element_by_id(id)
+                return False
+            except:
+                element = None
+
+        self.assertNotEqual(element, None, 'unable to find page radio number ' + str(number))
+
+    def __check_if_per_page_exist_and_check_if_given_value_is_selected(self, per_page):
+        try:
+            element = self.selenium.find_element_by_xpath('//li[@class="page-no active"]')
+            element1 = self.selenium.find_element_by_id('per-page-' + str(per_page))
+        except:
+            element = None
+        self.assertNotEqual(element, None, 'unable to find per page block')
+        self.assertEqual(element, element1, 'given per_page is not selected')
 
 
     def test_employee_message(self):
+        self.__log_employee_and_go_to_employee_list()
+        approve42 = self.selenium.find_element_by_id('month-approve-id42')
+        approve42.click()
+
+        submit_button = self.selenium.find_element_by_xpath('//input[@class="btn btn-primary"]')
+        submit_button.click()
+
+        approve43 = self.selenium.find_element_by_id('month-not-approve-id43')
+        approve43.click()
+
+        message_area = self.selenium.find_element_by_id('employee_message_id')
+        message_area.send_keys('pracowałem więcej godzin w piątek 13-tego')
+        submit_button = self.selenium.find_element_by_xpath('//input[@class="btn btn-primary"]')
+        submit_button.click()
+
+        message_month43 = self.selenium.find_element_by_id('month_message43')
+        message_month43.click()
+        alert = self.selenium.switch_to_alert()
+        month_message = alert.driver.page_source
+        self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
+        self.__logout()
+
+        self.__log_manager_and_go_to_employee_list()
+        self.assertIn('Lista Pracowników', self.selenium.title)
+
+        self.selenium.get('%s%s' % (self.live_server_url, '/employees/30'))
+        self.assertIn('Detale', self.selenium.title)
+
+        accepted_months = self.selenium.find_elements_by_xpath('//tr[@class="details"]')
+        not_accepted_months = self.selenium.find_elements_by_xpath('//tr[@class="details unpaid"]')
+
+        self.assertEqual(len(accepted_months),2)
+        self.assertEqual(len(not_accepted_months),8)
+
+        not_accepted_text=''
+        for month in not_accepted_months:
+            not_accepted_text=not_accepted_text+str(month.text)
+
+        self.assertIn('Listopad', not_accepted_text)
+        self.assertIn('Marzec', not_accepted_text)
+        self.assertIn('Lipiec', not_accepted_text)
+
+
+        accepted_text=''
+        for month in accepted_months:
+            accepted_text=accepted_text+str(month.text)
+
+        self.assertIn('Październik', accepted_text)
+        self.assertIn('Czerwiec', accepted_text)
+
+        message_month43 = self.selenium.find_element_by_id('month_message43')
+        message_month43.click()
+        alert = self.selenium.switch_to_alert()
+        month_message = alert.driver.page_source
+        self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
+
+
+
+
+    @skip
+    def test_employee_message1(self):
         self.__log_manager_and_go_to_employee_list()
 
         # poprawić, żby przejście było przez kliknięcia a nie przekierowanie
         self.assertIn('Lista Pracowników', self.selenium.title)
-        self.selenium.get('%s%s' % (self.live_server_url, '/employees/30'))
-        self.assertIn('Detale', self.selenium.title)
+
 
         row = self.selenium.find_element_by_class_name('details')
         rows = self.selenium.find_elements_by_class_name('details')
 
-
-        # time.sleep(400)
+        time.sleep(1)
 
         message_march_2018 = self.selenium.find_element_by_id('month_message33')
         message_march_2018.click()
         time.sleep(2)
         alert = self.selenium.switch_to_alert()
 
+        month_message = alert.driver.page_source
 
-        month_message=alert.driver.page_source
-
-        self.assertIn('pracowalem wiecej',month_message)
-
+        self.assertIn('pracowalem wiecej', month_message)
 
 
 
@@ -115,58 +295,11 @@ class ListViewFilter(FunctionalTestsBase):
 
 
 
-
-
-#
-# @skip
-# class NewVisitorTest(FunctionalTests):
-#
-#     def test_can_start_a_list_and_retrieve_it_later(self):
-#         self.browser.get(self.server_url)
-#         self.assertIn('Listy', self.browser.title)
-#         header_text = self.browser.find_element_by_tag_name('h1').text
-#         self.assertIn('listę', header_text)
-#
-#         inputbox = self.browser.find_element_by_id('id_new_item')
-#         self.assertEqual(inputbox.get_attribute('placeholder'), 'Wpisz rzeczy do zrobienia')
-#
-#         inputbox.send_keys('Kupić pawie pióra')
-#         inputbox.send_keys(Keys.ENTER)
-#         time.sleep(3)
-#
-#         edith_list_url = self.browser.current_url
-#         self.assertRegex(edith_list_url, 'lists/.+')
-#
-#         inputbox = self.browser.find_element_by_id('id_new_item')
-#         inputbox.send_keys('Użyć pawich piór do zrobienia przynęty')
-#         inputbox.send_keys(Keys.ENTER)
-#         time.sleep(3)
-#
-#         self.check_for_row_in_list_table('1: Kupić pawie pióra')
-#         self.check_for_row_in_list_table('2: Użyć pawich piór do zrobienia przynęty')
-#
-#         self.browser.quit()
-#         time.sleep(1)
-#         self.browser = webdriver.Firefox()
-#
-#         # Franek wchodzi na stronę główną, nie ma śladów Edyty
-#         self.browser.get(self.server_url)
-#         page_text = self.browser.find_element_by_tag_name('body').text
-#         self.assertNotIn('Kupić pawie pióra', page_text)
-#         self.assertNotIn('zrobienia przynęty', page_text)
-#
-#         # Franek tworzy swoją listę, dodaje nowy element
-#         inputbox = self.browser.find_element_by_id('id_new_item')
-#         inputbox.send_keys('Kupić mleko')
-#         inputbox.send_keys(Keys.ENTER)
-#
-#         # Franek dostaje swój URL
-#         francis_list_url = self.browser.current_url
-#         time.sleep(2)
-#
-#         # self.assertRegex(francis_list_url, 'lists/.+')
-#         self.assertNotEqual(francis_list_url, edith_list_url)
-#
-#         page_text = self.browser.find_element_by_tag_name('body').text
-#         self.assertNotIn('Kupić pawie pióra', page_text)
-#         self.assertIn('Kupić mleko', page_text)
+class EmployeeFilters(Enum):
+    POS_SALE = 'pos_sale'
+    POS_PRODUCTION = 'pos_sale'
+    POS_OTHER = 'pos_other'
+    PAID = 'chk_paid'
+    NOT_PAID = 'chk_unpaid'
+    FORMER_EMPLOYEES = 'former_employees_id'
+    CURRENT_EMPLOYEES = 'current_employees_id'

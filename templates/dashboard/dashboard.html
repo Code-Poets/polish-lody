@@ -21,7 +21,7 @@
                         </li>
                     </ul>
                 {% elif user.employee.id == user.pk %}
-                    <a href="{% url 'employee_detail' user.pk %}">{% trans 'My Details' %}</a>
+                    <a id='my-details-link' href="{% url 'employee_detail' user.pk %}">{% trans 'My Details' %}</a>
                 {% else%}
                     <a>Your have no power here!!!</a>
                 {% endif %}

@@ -168,7 +168,7 @@
 
             </td>
             <td>
-                <a href="{% url 'employee_detail' employee.pk %}">{{ employee.full_name }}</a>
+                <a href="{% url 'employee_detail' employee.pk %}" name="employee-from-list">{{ employee.full_name }} </a>
             </td>
             <td align="center" valign="middle">
                 {{ employee.rate_per_hour }}
@@ -267,13 +267,13 @@
             <li class="active pg-clickable">
                 <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
                        name="pg" value="{{i}}"/>
-                <label class="my-button clickable pg-active" for="pg-{{i}}">{{i}}</label>
+                <label class="my-button clickable pg-active"  id="pg-label{{i}}-checked" for="pg-{{i}}">{{i}}</label>
             </li>
             {% else %}
             <li class="pg-clickable">
                 <input id="pg-{{i}}" type="radio" class="vis-hidden"
                        name="pg" value="{{i}}"/>
-                <label class="my-button clickable" for="pg-{{i}}">{{i}}</label>
+                <label class="my-button clickable" id="pg-label{{i}}-not-checked" for="pg-{{i}}">{{i}}</label>
             </li>
             {% endif %}
             {% if forloop.last %}
