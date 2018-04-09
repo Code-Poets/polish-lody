@@ -101,7 +101,7 @@ class EmployeeListViewTests(TestCase):
         self.assertContains(response, 'Zbigniew Adamski')
         paginator = response.context['paginator']
         self.assertEqual(paginator.per_page, 10)
-        self.assertEqual(len(response.context['all_employee_list']), 1)
+        self.assertEqual(len(response.context['page_employee_list']), 1)
         self.assertEqual(response.context['orderby'], 'last_name')
 
     def test_employee_list_view_should_changed_by_ajax_paid_current_pagination(self):
@@ -125,7 +125,7 @@ class EmployeeListViewTests(TestCase):
         paginator = response.context['paginator']
         self.assertEqual(paginator.per_page, 5)
         self.assertEqual(paginator.num_pages, 2)
-        self.assertEqual(len(response.context['all_employee_list']), 5)
+        self.assertEqual(len(response.context['page_employee_list']), 5)
         self.assertEqual(response.context['orderby'], 'rate_per_hour')
 
 
@@ -321,18 +321,18 @@ class EmployeeFilterTests(TestCase):
         response = self.client.get(url)
         filtered_response = self.client.get(url + "?employee_filter=czarny")
         self.assertQuerysetEqual(
-            filtered_response.context['all_employee_list'],
+            filtered_response.context['page_employee_list'],
             ['<Employee: Czarny Lodziarz>']
         )
         filtered_response_multiple_results = self.client.get(url + "?employee_filter=w")
         self.assertQuerysetEqual(
-            filtered_response_multiple_results.context['all_employee_list'],
+            filtered_response_multiple_results.context['page_employee_list'],
             ['<Employee: Zbigniew Adamski>', '<Employee: Waldemar Kiepski>', '<Employee: Paweł Testowy>',
              '<Employee: Paweltest Testowyy>']
         )
         filtered_response_none = self.client.get(url + "?employee_filter=inexistent_potato")
         self.assertQuerysetEqual(
-            filtered_response_none.context['all_employee_list'],
+            filtered_response_none.context['page_employee_list'],
             []
         )
         self.assertTrue("No employee meets the search criteria." in str(filtered_response_none.content))
@@ -424,7 +424,7 @@ class EmployeeFilterTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['ajax_request'], True)
         self.assertQuerysetEqual(
-            response.context['all_employee_list'],
+            response.context['page_employee_list'],
             ['<Employee: Alan Shepard>'])
 
 

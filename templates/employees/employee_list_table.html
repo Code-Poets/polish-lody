@@ -139,9 +139,9 @@
             </td>
         </tr>
         </thead>
-        {% if all_employee_list %}
+        {% if page_employee_list %}
         <tbody id="emp-list">
-        {% for employee in all_employee_list %}
+        {% for employee in page_employee_list %}
         <tr>
             <td>
 
@@ -233,19 +233,15 @@
         {% endfor %}
 
         </tbody>
-        {% endif %}
     </table>
 
   <div>
 
-
-
-
-
-
-    {% if empty_qset is True %}
+    {% else %}
     <p>{% trans 'No matches found.' %}</p>
     {% endif %}
+
+
     <div class="paginated">
         {% if page_obj.has_other_pages %}
         <ul class="pagination">
@@ -293,7 +289,6 @@
 
         </ul>
 
-
         <br/>
         {% endif %}
     </div>
@@ -302,14 +297,8 @@
     <script>
 
 
-
-
-
-
-
-
             function makeRequestEmployeeAction() {
-            console.log('Start makeRequestEmployeeAction');
+
 
             const dismiss_array = get_array_with_checkboxes_dismiss();
             const add_one_array = get_array_with_checkboxes_add_one();
@@ -317,8 +306,6 @@
             const data = {dismiss:      dismiss_array,
                           add_one:      add_one_array,
                           add_three:    add_three_array};
-            console.log('data = ' + data);
-
 
             $.ajax({
                 url: 'employee_action/',
@@ -329,16 +316,12 @@
 
 
                 success: function (content) {
-                    console.log('Success makeRequestEmployeeAction');
-
-                    console.log('content'+content);
 
                     dismissStatusMessage(content)
 
 
                 }
             }).fail(function (jqXHR) {
-                console.log('fail makeRequestEmployeeAction');
 
                 $(".loading-icon").css("opacity", "0");
                 ajaxErrorHandler(jqXHR);
@@ -353,7 +336,7 @@
 
 
         function get_array_with_checkboxes_dismiss() {
-            console.log('get_array_with_checkboxes_dismiss');
+
             let myTab = $('.invisible').map(function () {
                 return +$(this).text();
             }).get();
@@ -368,7 +351,7 @@
 
 
         function get_array_with_checkboxes_add_one() {
-            console.log('get_array_with_checkboxes_add_one');
+
             let myTab = $('.invisible').map(function () {
                 return +$(this).text();
             }).get();
@@ -383,7 +366,7 @@
 
 
            function get_array_with_checkboxes_add_three() {
-            console.log('get_array_with_checkboxes_add_three');
+
             let myTab = $('.invisible').map(function () {
                 return +$(this).text();
             }).get();
@@ -395,8 +378,6 @@
             });
             return add_three_array;
         }
-
-
 
               function dismissStatusMessage(content) {
         $('#messages_container').html('<div id="message_success_status"></div>');

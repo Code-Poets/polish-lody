@@ -1,156 +1,165 @@
 {% load i18n %}
 
 {% if years %}
-{% load static %}
+    {% load static %}
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Dialog - Default functionality</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>jQuery UI Dialog - Default functionality</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-</head>
+    </head>
 
     <!--<link rel="stylesheet" href="{% static 'js/employee-detail.js' %}">-->
-<div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml" xmlns:pointer-events="http://www.w3.org/1999/xhtml">
+    <div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml"
+         xmlns:pointer-events="http://www.w3.org/1999/xhtml">
         <table class="table table-hover">
             <thead>
-                <tr>
-                    <td class="cursor-hover">
-                        {% trans 'Month and year' %}
-                        <span class="sort-buttons">
+            <tr>
+                <td class="cursor-hover">
+                    {% trans 'Month and year' %}
+                    <span class="sort-buttons">
                             {% if orderby == 'newest' %}
-                            <input id="most-recent" checked type="radio" class="sorting sort-up"
-                                           name="order" value="newest"/>
+                                <input id="most-recent" checked type="radio" class="sorting sort-up"
+                                       name="order" value="newest"/>
                             {% else %}
-                            <input id="most-recent" type="radio" class="sorting sort-up"
-                                           name="order" value="newest"/>
+                                <input id="most-recent" type="radio" class="sorting sort-up"
+                                       name="order" value="newest"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by most recent months' %}" class="glyphicon glyphicon-chevron-up clickable"
-                                   for="most-recent"></label>
-                            {% if orderby == 'oldest' %}
+                        <label title="{% trans 'Sort by most recent months' %}"
+                               class="glyphicon glyphicon-chevron-up clickable"
+                               for="most-recent"></label>
+                        {% if orderby == 'oldest' %}
                             <input id="least-recent" checked type="radio" class="sorting sort-down"
-                                           name="order" value="oldest"/>
-                            {% else %}
+                                   name="order" value="oldest"/>
+                        {% else %}
                             <input id="least-recent" type="radio" class="sorting sort-down"
-                                           name="order" value="oldest"/>
-                            {% endif %}
-                            <label title="{% trans 'Sort by least recent months' %}" class="glyphicon glyphicon-chevron-down clickable"
-                                   for="least-recent"></label>
+                                   name="order" value="oldest"/>
+                        {% endif %}
+                        <label title="{% trans 'Sort by least recent months' %}"
+                               class="glyphicon glyphicon-chevron-down clickable"
+                               for="least-recent"></label>
                         </span>
-                    </td>
-                    <td class="cursor-hover" align="center" valign="middle">
-                        {% trans 'Hours worked' %}
-                        <span class="sort-buttons">
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    {% trans 'Hours worked' %}
+                    <span class="sort-buttons">
                             {% if orderby == 'hours-up' %}
-                            <input id="hours-worked-up" checked type="radio" class="sorting sort-up"
-                                           name="order" value="hours-up"/>
+                                <input id="hours-worked-up" checked type="radio" class="sorting sort-up"
+                                       name="order" value="hours-up"/>
                             {% else %}
-                            <input id="hours-worked-up" type="radio" class="sorting sort-up"
-                                           name="order" value="hours-up"/>
+                                <input id="hours-worked-up" type="radio" class="sorting sort-up"
+                                       name="order" value="hours-up"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by hours worked ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
-                                   for="hours-worked-up"></label>
-                            {% if orderby == 'hours-down' %}
+                        <label title="{% trans 'Sort by hours worked ascending' %}"
+                               class="glyphicon glyphicon-chevron-up clickable"
+                               for="hours-worked-up"></label>
+                        {% if orderby == 'hours-down' %}
                             <input id="hours-worked-down" checked type="radio" class="sorting sort-down"
-                                           name="order" value="hours-down"/>
-                            {% else %}
+                                   name="order" value="hours-down"/>
+                        {% else %}
                             <input id="hours-worked-down" type="radio" class="sorting sort-down"
-                                           name="order" value="hours-down"/>
-                            {% endif %}
-                            <label title="{% trans 'Sort by hours worked descending' %}" class="glyphicon glyphicon-chevron-down clickable"
-                                   for="hours-worked-down"></label>
+                                   name="order" value="hours-down"/>
+                        {% endif %}
+                        <label title="{% trans 'Sort by hours worked descending' %}"
+                               class="glyphicon glyphicon-chevron-down clickable"
+                               for="hours-worked-down"></label>
                         </span>
-                    </td>
-                    <td class="cursor-hover" align="center" valign="middle">
-                        {% trans 'Rate per hour' %} (zł)
-                        <span class="sort-buttons">
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    {% trans 'Rate per hour' %} (zł)
+                    <span class="sort-buttons">
                             {% if orderby == 'rph-up' %}
-                            <input id="rph-up" checked type="radio" class="sorting sort-up"
-                                           name="order" value="rph-up"/>
+                                <input id="rph-up" checked type="radio" class="sorting sort-up"
+                                       name="order" value="rph-up"/>
                             {% else %}
-                            <input id="rph-up" type="radio" class="sorting sort-up"
-                                           name="order" value="rph-up"/>
+                                <input id="rph-up" type="radio" class="sorting sort-up"
+                                       name="order" value="rph-up"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by rate per hour ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
-                                   for="rph-up"></label>
-                            {% if orderby == 'rph-down' %}
+                        <label title="{% trans 'Sort by rate per hour ascending' %}"
+                               class="glyphicon glyphicon-chevron-up clickable"
+                               for="rph-up"></label>
+                        {% if orderby == 'rph-down' %}
                             <input id="rph-down" checked type="radio" class="sorting sort-down"
-                                           name="order" value="rph-down"/>
-                            {% else %}
+                                   name="order" value="rph-down"/>
+                        {% else %}
                             <input id="rph-down" type="radio" class="sorting sort-down"
-                                           name="order" value="rph-down"/>
-                            {% endif %}
-                            <label title="{% trans 'Sort by rate per hour descending' %}" class="glyphicon glyphicon-chevron-down clickable"
-                                   for="rph-down"></label>
+                                   name="order" value="rph-down"/>
+                        {% endif %}
+                        <label title="{% trans 'Sort by rate per hour descending' %}"
+                               class="glyphicon glyphicon-chevron-down clickable"
+                               for="rph-down"></label>
                         </span>
-                    </td>
-                    <td class="cursor-hover" align="center" valign="middle">
-                        {% trans 'Bonuses' %} (zł)
-                        <span class="sort-buttons">
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    {% trans 'Bonuses' %} (zł)
+                    <span class="sort-buttons">
                             {% if orderby == 'rph-up' %}
-                            <input id="rph-up" checked type="radio" class="sorting sort-up"
-                                           name="order" value="rph-up"/>
+                                <input id="rph-up" checked type="radio" class="sorting sort-up"
+                                       name="order" value="rph-up"/>
                             {% else %}
-                            <input id="rph-up" type="radio" class="sorting sort-up"
-                                           name="order" value="rph-up"/>
+                                <input id="rph-up" type="radio" class="sorting sort-up"
+                                       name="order" value="rph-up"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by bonuses ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
-                                   for="rph-up"></label>
-                            {% if orderby == 'rph-down' %}
+                        <label title="{% trans 'Sort by bonuses ascending' %}"
+                               class="glyphicon glyphicon-chevron-up clickable"
+                               for="rph-up"></label>
+                        {% if orderby == 'rph-down' %}
                             <input id="rph-down" checked type="radio" class="sorting sort-down"
-                                           name="order" value="rph-down"/>
-                            {% else %}
+                                   name="order" value="rph-down"/>
+                        {% else %}
                             <input id="rph-down" type="radio" class="sorting sort-down"
-                                           name="order" value="rph-down"/>
-                            {% endif %}
-                            <label title="{% trans 'Sort by bonuses descending' %}" class="glyphicon glyphicon-chevron-down clickable"
-                                   for="rph-down"></label>
+                                   name="order" value="rph-down"/>
+                        {% endif %}
+                        <label title="{% trans 'Sort by bonuses descending' %}"
+                               class="glyphicon glyphicon-chevron-down clickable"
+                               for="rph-down"></label>
                         </span>
-                    </td>
-                    <td class="cursor-hover" align="center" valign="middle">
-                        {% trans 'Was salary paid?' %}
-                    </td>
-                    <td class="cursor-hover" align="center" valign="middle">
-                        {% trans 'To be paid' %} (zł)
-                        <span class="sort-buttons">
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    {% trans 'Was salary paid?' %}
+                </td>
+                <td class="cursor-hover" align="center" valign="middle">
+                    {% trans 'To be paid' %} (zł)
+                    <span class="sort-buttons">
                             {% if orderby == 'tbp-up' %}
-                            <input id="tbp-up" checked type="radio" class="sorting sort-up"
-                                           name="order" value="tbp-up"/>
+                                <input id="tbp-up" checked type="radio" class="sorting sort-up"
+                                       name="order" value="tbp-up"/>
                             {% else %}
-                            <input id="tbp-up" type="radio" class="sorting sort-up"
-                                           name="order" value="tbp-up"/>
+                                <input id="tbp-up" type="radio" class="sorting sort-up"
+                                       name="order" value="tbp-up"/>
                             {% endif %}
-                            <label title="{% trans 'Sort by salary ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
-                                   for="tbp-up"></label>
-                            {% if orderby == 'tbp-down' %}
+                        <label title="{% trans 'Sort by salary ascending' %}"
+                               class="glyphicon glyphicon-chevron-up clickable"
+                               for="tbp-up"></label>
+                        {% if orderby == 'tbp-down' %}
                             <input id="tbp-down" checked type="radio" class="sorting sort-down"
-                                           name="order" value="tbp-down"/>
-                            {% else %}
+                                   name="order" value="tbp-down"/>
+                        {% else %}
                             <input id="tbp-down" type="radio" class="sorting sort-down"
-                                           name="order" value="tbp-down"/>
-                            {% endif %}
-                            <label title="{% trans 'Sort by salary descending' %}" class="glyphicon glyphicon-chevron-down clickable" for="tbp-down"></label>
+                                   name="order" value="tbp-down"/>
+                        {% endif %}
+                        <label title="{% trans 'Sort by salary descending' %}"
+                               class="glyphicon glyphicon-chevron-down clickable" for="tbp-down"></label>
                         </span>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-
-
+                </td>
+                <td>
+                </td>
+            </tr>
 
 
             </thead>
 
             <body>
 
-<div id="dialog" title="{% trans 'Message from employee' %}"></div>
+            <div id="dialog" title="{% trans 'Message from employee' %}"></div>
 
 
-</body>
+            </body>
 
 
             <tbody>
@@ -164,14 +173,17 @@
                                 </td>
                                 <td align="center">
                                     {{ month.hours_worked_in_this_month }}
-                            {% if month.month_is_approved %}
-                                <span class="glyphicon glyphicon-ok-sign icon-true" title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
-                            {% else %}
-                                {% if not user.is_staff %}
-                                    <a href="{% url 'month_approve' month.id %}">
-                                <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
-                                {% endif %}
-                            {% endif %}
+                                    {% if month.month_is_approved %}
+                                        <span class="glyphicon glyphicon-ok-sign icon-true"
+                                              title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
+                                    {% else %}
+                                        {% if not user.is_staff %}
+                                            <a href="{% url 'month_approve' month.id %}">
+                                                <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                      class="glyphicon glyphicon-thumbs-up"
+                                                      aria-hidden="true"></span></a>
+                                        {% endif %}
+                                    {% endif %}
                                 </td>
                                 <td align="center">
                                     {{ month.rate_per_hour_this_month }}
@@ -180,28 +192,28 @@
                                     {{ month.bonuses }}
                                 </td>
                                 <td align="center">
-                                    <span class="glyphicon glyphicon-remove icon-false" title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
-                                </td >
+                                    <span class="glyphicon glyphicon-remove icon-false"
+                                          title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
+                                </td>
                                 <td align="center">
                                     {{ month.calculating_salary_for_this_month }}
                                 </td>
 
 
-
-
-
                                 <td align="right">
-                                {% if user.is_staff %}
-                                    <a href="{% url 'month_edit' month.id %}">
-                                        <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </a>
+                                    {% if user.is_staff %}
+                                        <a href="{% url 'month_edit' month.id %}">
+                                            <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
                                         <a href="{% url 'month_delete' month.id %}">
-                                    <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                {% endif %}
+                                            <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    {% endif %}
                                 </td>
                             </tr>
-                            {% elif month.salary_is_paid is False %}
+                        {% elif month.salary_is_paid is False %}
                             <tr class="details unpaid">
                                 <td>
                                     {{ month.year }} {{ month.get_month_display }}
@@ -210,70 +222,38 @@
                                     {{ month.hours_worked_in_this_month }}
 
 
-                                {% if month.month_is_approved %}
-                                    <span class="glyphicon glyphicon-ok-sign icon-true" title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
+                                    {% if month.month_is_approved %}
+                                        <span class="glyphicon glyphicon-ok-sign icon-true"
+                                              title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
 
 
-                                {%  elif month.month_not_approved_with_comment %}
-                                    <span class="glyphicon glyphicon-ban-circle icon-disagree" title="{% trans 'Hours not approved' %}" aria-hidden="true"></span>
+                                    {% elif month.month_not_approved_with_comment %}
+                                        <span class="glyphicon glyphicon-ban-circle icon-disagree"
+                                              title="{% trans 'Hours not approved' %}" aria-hidden="true"></span>
 
-       <a href="{% url 'employee_message' month.id %}">
-    <span class="glyphicon-list-alt"   aria-hidden="true"  id = 'month_message{{month.id}}'></span>
-  </a>
-
-
-
-
-                                {% else %}
-                                    {% if not user.is_staff %}
-                                        <a id='month-approve-id{{month.id}}' href="{% url 'month_approve' month.id %}">
-                                            <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                        </a>
-
-                                     <a id='month-not-approve-id{{month.id}}' href="{% url 'month_NOT_approve' month.id %}">
-                                            <span title="{% trans 'Disapprove hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                        <a href="{% url 'employee_message' month.id %}">
+                                            <span class="glyphicon-list-alt" aria-hidden="true"
+                                                  id='month_message{{ month.id }}'></span>
                                         </a>
 
 
-                                    {% endif %}
-                                {% endif %}
-                                </td>
-                                <td align="center">
-                                    {{ month.rate_per_hour_this_month }}
-                                </td>
-                                <td align="center">
-                                    {{ month.bonuses }}
-                                </td>
-                                <td align="center">
-                                    <span class="glyphicon glyphicon-remove icon-false" title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
-                                </td>
-                                <td align="center">
-                                    {{ month.calculating_salary_for_this_month }}
-                                </td>
-                                <td  align="right">
-                                {% if user.is_staff %}
-                                    <a href="{% url 'month_edit' month.id %}">
-                                <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </a>
-                                    <a href="{% url 'month_delete' month.id %}">
-                                <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                {% endif %}
-                            </td>
-                            </tr>
-                            {% elif month.salary_is_paid is True %}
-                            <tr class="details">
-                                <td>
-                                    {{ month.year }} {{ month.get_month_display }}
-                                </td>
-                                <td align="center">
-                                    {{ month.hours_worked_in_this_month }}
-                                {% if month.month_is_approved %}
-                                                    <span class="glyphicon glyphicon-ok-sign icon-true" title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
-                                {% else %}
-                                    {% if not user.is_staff %}
-                                        <a href="{% url 'month_approve' month.id %}">
-                                            <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+
+
+                                    {% else %}
+                                        {% if not user.is_staff %}
+                                            <a id='month-approve-id{{ month.id }}'
+                                               href="{% url 'month_approve' month.id %}">
+                                                <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                      class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                            </a>
+
+                                            <a id='month-not-approve-id{{ month.id }}'
+                                               href="{% url 'month_NOT_approve' month.id %}">
+                                                <span title="{% trans 'Disapprove hours for month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                      class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                            </a>
+
+
                                         {% endif %}
                                     {% endif %}
                                 </td>
@@ -284,20 +264,68 @@
                                     {{ month.bonuses }}
                                 </td>
                                 <td align="center">
-                                    <span class="glyphicon glyphicon-ok icon-true" title="{% trans 'Month paid' %}" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-remove icon-false"
+                                          title="{% trans 'Not paid yet' %}" aria-hidden="true"></span>
                                 </td>
                                 <td align="center">
                                     {{ month.calculating_salary_for_this_month }}
                                 </td>
                                 <td align="right">
-                                {% if user.is_staff %}
-                                    <a href="{% url 'month_edit' month.id %}">
-                                        <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </a>
-                                    <a href="{% url 'month_delete' month.id %}">
-                                        <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}" class="glyphicon glyphicon-trash"></span>
-                                    </a>
-                                {% endif %}
+                                    {% if user.is_staff %}
+                                        <a href="{% url 'month_edit' month.id %}">
+                                            <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
+                                        <a href="{% url 'month_delete' month.id %}">
+                                            <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% elif month.salary_is_paid is True %}
+                            <tr class="details">
+                                <td>
+                                    {{ month.year }} {{ month.get_month_display }}
+                                </td>
+                                <td align="center">
+                                    {{ month.hours_worked_in_this_month }}
+                                    {% if month.month_is_approved %}
+                                        <span class="glyphicon glyphicon-ok-sign icon-true"
+                                              title="{% trans 'Hours approved' %}" aria-hidden="true"></span>
+                                    {% else %}
+                                        {% if not user.is_staff %}
+                                            <a href="{% url 'month_approve' month.id %}">
+                                                <span title="{% trans 'Approve hours for month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                      class="glyphicon glyphicon-thumbs-up"
+                                                      aria-hidden="true"></span></a>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td align="center">
+                                    {{ month.rate_per_hour_this_month }}
+                                </td>
+                                <td align="center">
+                                    {{ month.bonuses }}
+                                </td>
+                                <td align="center">
+                                    <span class="glyphicon glyphicon-ok icon-true" title="{% trans 'Month paid' %}"
+                                          aria-hidden="true"></span>
+                                </td>
+                                <td align="center">
+                                    {{ month.calculating_salary_for_this_month }}
+                                </td>
+                                <td align="right">
+                                    {% if user.is_staff %}
+                                        <a href="{% url 'month_edit' month.id %}">
+                                            <span title="{% trans 'Edit month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
+                                        <a href="{% url 'month_delete' month.id %}">
+                                            <span title="{% trans 'Delete month' %} {{ month.get_month_display }} {{ month.year }}"
+                                                  class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endif %}
@@ -308,20 +336,21 @@
 
 
 
-            </tbody>
-            </table>
+                </tbody>
+                </table>
 
             {% endif %}
-            <div class="paginated">
-                {% if page_obj.has_other_pages %}
-                    <ul class="pagination">
+        <div class="paginated">
+            {% if page_obj.has_other_pages %}
+                <ul class="pagination">
                     {% for i in paginator.page_range %}
                         {% if forloop.counter == 1 %}
                             {% if page_obj.has_previous %}
                                 <li class="pg-clickable">
-                                    <input id="pg-previous" type="radio"  class="vis-hidden"
-                                        name="pg" value="{{ page_obj.previous_page_number }}"/>
-                                    <label class="my-button previous pg-clickable" for="pg-previous">&laquo; {% trans 'Previous' %}</label>
+                                    <input id="pg-previous" type="radio" class="vis-hidden"
+                                           name="pg" value="{{ page_obj.previous_page_number }}"/>
+                                    <label class="my-button previous pg-clickable"
+                                           for="pg-previous">&laquo; {% trans 'Previous' %}</label>
                                 </li>
                             {% else %}
                                 <li class="disabled">
@@ -331,96 +360,68 @@
                         {% endif %}
                         {% if page_obj.number == i %}
                             <li class="active pg-clickable">
-                                <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
-                                   name="pg" value="{{i}}"/>
-                                <label class="my-button pg-clickable pg-active" for="pg-{{i}}">{{i}}</label>
+                                <input id="pg-{{ i }}" type="radio" checked class="vis-hidden"
+                                       name="pg" value="{{ i }}"/>
+                                <label class="my-button pg-clickable pg-active" for="pg-{{ i }}">{{ i }}</label>
                             </li>
                         {% else %}
                             <li class="pg-clickable">
-                                <input id="pg-{{i}}" type="radio"  class="vis-hidden"
-                                   name="pg" value="{{i}}"/>
-                                <label class="my-button pg-clickable" for="pg-{{i}}">{{i}}</label>
+                                <input id="pg-{{ i }}" type="radio" class="vis-hidden"
+                                       name="pg" value="{{ i }}"/>
+                                <label class="my-button pg-clickable" for="pg-{{ i }}">{{ i }}</label>
                             </li>
                         {% endif %}
                         {% if forloop.last %}
                             {% if page_obj.has_next %}
-                            <li class="pg-clickable">
-                                <input id="pg-next" type="radio"  class="vis-hidden"
-                                    name="pg" value="{{ page_obj.next_page_number }}"/>
-                                <label class="my-button next pg-clickable" for="pg-next">{% trans 'Next' %} &raquo;</label>
-                            </li>
+                                <li class="pg-clickable">
+                                    <input id="pg-next" type="radio" class="vis-hidden"
+                                           name="pg" value="{{ page_obj.next_page_number }}"/>
+                                    <label class="my-button next pg-clickable" for="pg-next">{% trans 'Next' %}
+                                        &raquo;</label>
+                                </li>
                             {% else %}
-                            <li class="disabled">
-                                <label class="my-button next disabled">{% trans 'Next' %} &raquo;</label>
-                            </li>
+                                <li class="disabled">
+                                    <label class="my-button next disabled">{% trans 'Next' %} &raquo;</label>
+                                </li>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
-                    </ul><br/>
-                {% endif %}
-            </div>
-        </div>
-
-    {% else %}
-        <span>{% trans 'It looks like there are no months yet.' %}
-            {% if user.is_staff %}
-                <a href="{% url 'month_new' employee.pk %}">{% trans 'Add first month for this employee.' %}</a>
+                </ul><br/>
             {% endif %}
-        </span>
-    {% endif %}
-
-
-
-
-        <div id="hidden-template">
-
-
-             <p>
-        {% if not months %}
-                 <script>
-                     console.log('no months');
-
-                     $('#hidden-template').html('<div class="alert alert-warning alert-dismissable" id="msg-table">' +
-                         '<span>{% trans "There are no months which satisfy specified criteria" %}</span></div>');
-                 </script>
-                   </p>
-                  {% else %}
-               <script>
-                    console.log('months');
-                     $('#hidden-template').html('<div class="default" id="msg-table"></div>');
-                 </script>
-                {% endif %}
         </div>
+    </div>
 
-<script src="{% static 'js/employee-detail.js'%}"></script>
+{% else %}
+    <span>{% trans 'It looks like there are no months yet.' %}
+        {% if user.is_staff %}
+            <a href="{% url 'month_new' employee.pk %}">{% trans 'Add first month for this employee.' %}</a>
+        {% endif %}
+        </span>
+{% endif %}
 
 
 
 
+<div id="hidden-template">
 
 
+    <p>
+        {% if not months %}
+            <script>
+                console.log('no months');
 
+                $('#hidden-template').html('<div class="alert alert-warning alert-dismissable" id="msg-table">' +
+                    '<span>{% trans "There are no months which satisfy specified criteria" %}</span></div>');
+            </script>
+            </p>
+        {% else %}
+            <script>
+                console.log('months');
+                $('#hidden-template').html('<div class="default" id="msg-table"></div>');
+            </script>
+        {% endif %}
+</div>
 
+<script src="{% static 'js/employee-detail.js' %}"></script>
 
- <!--<script id="hidden-template" type="text/x-custom-template">-->
-             <!--<p>-->
-
-        <!--{% if not months %}-->
-            <!--&lt;!&ndash;{% if empty_qset is True %}&ndash;&gt;-->
-             <!---->
-                <!--<div class="alert alert-warning alert-dismissable" id="msg-table">-->
-                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                <!--<span>{% trans 'There are no months which satisfy specified criteria.' %}</span>-->
-            <!--</div>-->
-
-                <!--</p>-->
-            <!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
-        <!--{% else %}-->
-                <!--<div class="invisible">-->
-                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
-                <!--<span>aa</span>-->
-            <!--</div>-->
-        <!--{% endif %}-->
-
-        <!--</script>-->
 

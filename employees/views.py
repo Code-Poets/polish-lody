@@ -93,42 +93,6 @@ def make_year_list_for_filtering_in_emp_detail(employee):
         return False
 
 
-def position_list_and_filtering_session(self, queryset):
-    positions = {
-        'position_sale': 'Sale',
-        'position_production': 'Production',
-        'position_other': 'Other',
-        # 'position_none': 'None',
-    }
-    exclude_list = []
-    for key in positions.keys():
-
-        if self.request.session[key] is None:
-            exclude_list.append(positions[key])
-            queryset = queryset.exclude(position=positions[key])
-
-    queryset = queryset.exclude(position=None)
-    return queryset
-
-
-def position_list_and_filtering(self, queryset):
-    positions = {
-        'position_sale': 'Sale',
-        'position_production': 'Production',
-        'position_other': 'Other',
-        'position_none': 'None',
-    }
-    exclude_list = []
-    for key in positions.keys():
-
-        if self.request.GET.get(key) is None:
-            exclude_list.append(positions[key])
-            queryset = queryset.exclude(position=positions[key])
-
-    queryset = queryset.exclude(position=None)
-    return queryset
-
-
 def former_and_current_filtering(self, queryset):
     # queryset = queryset.exclude(currently_employed=None) don't need to take caro of None, column Not Null in Data Base
     if self.request.is_ajax():
@@ -193,25 +157,12 @@ def order_by_unpaid_salaries(name_filter, descending):
 
 
 class UpdateSession(View):
-    # class to update current session
 
     def post(self, request):
-        # print('UpdateSession')
 
         if not request.is_ajax() or not request.method == 'POST':
             from django.http import HttpResponseNotAllowed
             return HttpResponseNotAllowed(['POST'])
-
-        # try:
-        #     # print('before')
-        #     # print('page ' + str(request.session['page']))
-        #     # print('order ' + str(request.session['order']))
-        #     # print('position_sale ' + request.session['position_sale'])
-        #     # print('position_production ' + request.session['position_production'])
-        #     # print('position_other ' + request.session['position_other'])
-        # except:
-        #     pass
-
         try:
             order = self.request.POST['order']
             request.session['order'] = order
@@ -244,15 +195,6 @@ class UpdateSession(View):
             request.session['page'] = page
         except:
             request.session['page'] = 1
-
-        # print('after')
-        #
-        # print('page ' + str(request.session['page']))
-        # print('order ' + str(request.session['order']))
-        # print('position_sale ' + str(request.session['position_sale']))
-        # print('position_production ' + str(request.session['position_production']))
-        # print('position_other ' + str(request.session['position_other']))
-
         return HttpResponse('ok')
 
     @staticmethod
@@ -269,8 +211,7 @@ class UpdateSession(View):
 
 class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'employees/employee_list.html'
-    context_object_name = 'all_employee_list'
-
+    context_object_name = 'page_employee_list'
 
     def __get_filter_value_from_ajax_or_session_with_default_secure(self, filer_name):
         if self.request.is_ajax():
@@ -405,10 +346,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
 
-        context['all_employee_list'] = page_obj.object_list
-        if page_obj.object_list.count() == 0:
-            context['empty_qset'] = True
-
+        context['page_employee_list'] = page_obj.object_list
         current_active_per_page = self.get_paginate_by(self.queryset)
 
         if current_active_per_page is not None:
@@ -418,13 +356,12 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         if self.request.is_ajax():
             context['ajax_request'] = True
 
-
         else:
             context['page_obj'] = page_obj
             context['paginate_by_numbers'] = make_paginate_by_list()
             context['per_page'] = self.request.GET.get('per_page') or 10
             context['page'] = active_page_number
-            context['employee_list'] = page_obj
+            # context['employee_list'] = page_obj
             context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
                 self.request.session['position_sale'])
             context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
@@ -441,15 +378,20 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             context['former_employees'] = self.__set_boolean_from_session_with_exception_secure(
                 self.request.session['former_employees'])
 
-            # default current_employees should be set on True
-            try:
-                if self.request.session['current_employees'] == None:
-                    context['current_employees'] = True
-                else:
-                    context['current_employees'] = self.request.session['current_employees']
+            context['current_employees'] = self.__set_boolean_from_session_with_exception_secure(
+                self.request.session['current_employees'])
 
-            except:
-                context['current_employees'] = None
+            #
+            #
+            # # default current_employees should be set on True
+            # try:
+            #     if self.request.session['current_employees'] == None:
+            #         context['current_employees'] = True
+            #     else:
+            #         context['current_employees'] = self.request.session['current_employees']
+            #
+            # except:
+            #     context['current_employees'] = None
 
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
