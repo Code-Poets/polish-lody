@@ -1,18 +1,17 @@
-import os
+
 import time
 from enum import Enum
 
-from django.test import LiveServerTestCase, override_settings
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from unittest2 import skip
+
 from selenium.common import exceptions
 
 from employees.functional_tests.base import FunctionalTestsBase
-from polishlody.settings import BASE_DIR
 
 
-@skip
+
 class UserLogin(LiveServerTestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
@@ -43,39 +42,8 @@ class ListViewFilter(FunctionalTestsBase):
     selenium = None
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    def __log_manager_and_go_to_employee_list(self):
-
-        self.selenium.get('%s%s' % (self.live_server_url, ''))
-        login_field = self.selenium.find_element_by_id('id_username')
-        password_field = self.selenium.find_element_by_id('id_password')
-        login_field.send_keys('pawel.kisielewicz@codepoets.it')
-        password_field.send_keys('codepoets')
-        password_field.send_keys(Keys.ENTER)
-        time.sleep(1)
-        employee_list_link = self.selenium.find_element_by_id('employees_link')
-        employee_list_link.click()
-        time.sleep(1)
-
-    def __log_employee_and_go_to_employee_list(self):
-
-        self.selenium.get('%s%s' % (self.live_server_url, ''))
-        login_field = self.selenium.find_element_by_id('id_username')
-        password_field = self.selenium.find_element_by_id('id_password')
-        login_field.send_keys('pawel@wp.pl')
-        password_field.send_keys('codepoets')
-        password_field.send_keys(Keys.ENTER)
-        time.sleep(1)
-        employee_list_link = self.selenium.find_element_by_id('my-details-link')
-        employee_list_link.click()
-        time.sleep(1)
-
-    def __logout(self):
-        button = self.selenium.find_element_by_id('logout-button')
-        button.click()
-
-    @skip
     def test_sale_filter(self):
-        self.__log_manager_and_go_to_employee_list()
+        self.log_manager_and_go_to_employee_list()
         self.assertIn('Lista Pracowników', self.selenium.title)
         sale_emp_label_clickable = self.selenium.find_element_by_id('pos_sale_label')
 
@@ -206,8 +174,12 @@ class ListViewFilter(FunctionalTestsBase):
         self.assertEqual(element, element1, 'given per_page is not selected')
 
 
+class EmployeeMessage(FunctionalTestsBase):
+    selenium = None
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
     def test_employee_message(self):
-        self.__log_employee_and_go_to_employee_list()
+        self.log_employee_and_go_to_employee_list()
         approve42 = self.selenium.find_element_by_id('month-approve-id42')
         approve42.click()
 
@@ -227,9 +199,9 @@ class ListViewFilter(FunctionalTestsBase):
         alert = self.selenium.switch_to_alert()
         month_message = alert.driver.page_source
         self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
-        self.__logout()
+        self.logout()
 
-        self.__log_manager_and_go_to_employee_list()
+        self.log_manager_and_go_to_employee_list()
         self.assertIn('Lista Pracowników', self.selenium.title)
 
         self.selenium.get('%s%s' % (self.live_server_url, '/employees/30'))
@@ -238,66 +210,40 @@ class ListViewFilter(FunctionalTestsBase):
         accepted_months = self.selenium.find_elements_by_xpath('//tr[@class="details"]')
         not_accepted_months = self.selenium.find_elements_by_xpath('//tr[@class="details unpaid"]')
 
-        self.assertEqual(len(accepted_months),2)
-        self.assertEqual(len(not_accepted_months),8)
+        self.assertEqual(len(accepted_months), 2)
+        self.assertEqual(len(not_accepted_months), 8)
 
-        not_accepted_text=''
+        not_accepted_text = ''
         for month in not_accepted_months:
-            not_accepted_text=not_accepted_text+str(month.text)
+            not_accepted_text = not_accepted_text + str(month.text)
 
         self.assertIn('Listopad', not_accepted_text)
         self.assertIn('Marzec', not_accepted_text)
         self.assertIn('Lipiec', not_accepted_text)
 
-
-        accepted_text=''
+        accepted_text = ''
         for month in accepted_months:
-            accepted_text=accepted_text+str(month.text)
+            accepted_text = accepted_text + str(month.text)
 
         self.assertIn('Październik', accepted_text)
         self.assertIn('Czerwiec', accepted_text)
 
         message_month43 = self.selenium.find_element_by_id('month_message43')
         message_month43.click()
-        alert = self.selenium.switch_to_alert()
-        month_message = alert.driver.page_source
-        self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
-
-
-
-
-    @skip
-    def test_employee_message1(self):
-        self.__log_manager_and_go_to_employee_list()
-
-        # poprawić, żby przejście było przez kliknięcia a nie przekierowanie
-        self.assertIn('Lista Pracowników', self.selenium.title)
-
-
-        row = self.selenium.find_element_by_class_name('details')
-        rows = self.selenium.find_elements_by_class_name('details')
-
         time.sleep(1)
 
-        message_march_2018 = self.selenium.find_element_by_id('month_message33')
-        message_march_2018.click()
-        time.sleep(2)
-        alert = self.selenium.switch_to_alert()
+        dialog=self.selenium.find_element_by_id('dialog')
 
-        month_message = alert.driver.page_source
-
-        self.assertIn('pracowalem wiecej', month_message)
-
-
-
-
-
+        # alert = self.selenium.switch_to_alert()
+        # month_message = alert.driver.page_source
+        month_message = dialog.text
+        self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
 
 
 
 class EmployeeFilters(Enum):
     POS_SALE = 'pos_sale'
-    POS_PRODUCTION = 'pos_sale'
+    POS_PRODUCTION = 'pos_production'
     POS_OTHER = 'pos_other'
     PAID = 'chk_paid'
     NOT_PAID = 'chk_unpaid'
