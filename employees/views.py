@@ -1026,7 +1026,7 @@ class Month_NOT_Approve(MonthApproveBase):
 
 class EmployeeMessage(DetailView):
     model = Month
-    template_name = 'employees/employee_message.html'
+    # template_name = 'employees/employee_message.html'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

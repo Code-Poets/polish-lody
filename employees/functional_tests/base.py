@@ -6,8 +6,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from polishlody.settings import BASE_DIR
 
+# STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles'),
 
-@override_settings(DEBUG=True, STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles'), )
+@override_settings(DEBUG=True)
 class FunctionalTestsBase(StaticLiveServerTestCase):
 
     @classmethod

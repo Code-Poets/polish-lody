@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 from selenium.common import exceptions
+from unittest2 import skip
 
 from employees.functional_tests.base import FunctionalTestsBase
 
@@ -29,10 +30,12 @@ class UserLogin(LiveServerTestCase):
         password_field = self.browser.find_element_by_id('id_password')
 
         login_field.send_keys('pawel.kisielewicz@codepoets.it')
+        # login_field.send_keys('user_manager@polishlody.pl')
         password_field.send_keys('codepoets')
         password_field.send_keys(Keys.ENTER)
-        time.sleep(2)
-        self.assertIn('Panel główny', self.browser.title)
+        time.sleep(1)
+
+        self.assertIn('Panel główny', self.browser.title,'prawdopodobny problem z logowaniem')
         employee_list_link = self.browser.find_element_by_id('employees_link')
         employee_list_link.click()
         self.assertIn('Lista Pracowników', self.browser.title)
@@ -173,7 +176,6 @@ class ListViewFilter(FunctionalTestsBase):
         self.assertNotEqual(element, None, 'unable to find per page block')
         self.assertEqual(element, element1, 'given per_page is not selected')
 
-
 class EmployeeMessage(FunctionalTestsBase):
     selenium = None
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
@@ -232,11 +234,12 @@ class EmployeeMessage(FunctionalTestsBase):
         message_month43.click()
         time.sleep(1)
 
-        dialog=self.selenium.find_element_by_id('dialog')
+        # dialog=self.selenium.find_element_by_id('dialog')
 
-        # alert = self.selenium.switch_to_alert()
-        # month_message = alert.driver.page_source
-        month_message = dialog.text
+        alert = self.selenium.switch_to_alert()
+        month_message = alert.driver.page_source
+        time.sleep(1)
+        # month_message = dialog.text
         self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
 
 

@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>jQuery UI Dialog - Default functionality</title>
+{#        <title>jQuery UI Dialog - Default functionality</title>#}
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="/resources/demos/style.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -14,7 +14,7 @@
 
     </head>
 
-    <!--<link rel="stylesheet" href="{% static 'js/employee-detail.js' %}">-->
+
     <div class="ajax-loader" xmlns:color="http://www.w3.org/1999/xhtml"
          xmlns:pointer-events="http://www.w3.org/1999/xhtml">
         <table class="table table-hover">
@@ -156,7 +156,7 @@
 
             <body>
 
-            <div id="dialog" title="{% trans 'Message from employee' %}"></div>
+            <div class = "ui-widget" id="emp_message_dialog" title="{% trans 'Message from employee' %}"></div>
 
 
             </body>
@@ -422,6 +422,6 @@
         {% endif %}
 </div>
 
-<script src="{% static 'js/employee-detail.js' %}"></script>
+<script src="{% static 'js/employee-detail-message.js' %}"></script>
 
 

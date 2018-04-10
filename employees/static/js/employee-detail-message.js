@@ -1,8 +1,6 @@
 $('.glyphicon-list-alt').click(function () {
     let idNumber = $(this).attr('id').substring(13);
 
-    // console.log('idNumber = ' + idNumber);
-
     $.ajax({
         url: 'employee_message/' + idNumber,
         dataType: "html",
@@ -10,34 +8,42 @@ $('.glyphicon-list-alt').click(function () {
         timeout: 10000,
 
         success: function (content) {
-            let messageFromEmployee = JSON.parse(content);
-            dialog();
+            const messageFromEmployee = JSON.parse(content);
 
             function dialog() {
-                // console.log('before dialog open');
-
-                let myDialog = $("#dialog");
+                let myDialog = $("#emp_message_dialog");
                 myDialog.dialog({
+
                     autoOpen: true,
+                    modal: true,
+                    minHeight: 500,
+                    minWidth: 800,
 
                     show: {
-                        // minHeight: 500,
-                        // minWidth: 800,
                         effect: "blind",
-                        text: "test",
                         duration: 300
                     },
                     hide: {
                         effect: "explode",
                         duration: 300
+                    },
+
+                    buttons: {
+                        Ok: function () {
+                            $(this).dialog("close");
+                        }
                     }
                 });
+
                 myDialog.text(messageFromEmployee);
+                myDialog.css('font-size', 16);
             }
+
+            dialog();
         }
     }).fail(() => {
         alert('Unexpected problem with showing the message');
     });
     return false;
-});
 
+});
