@@ -428,6 +428,166 @@ class EmployeeFilterTests(TestCase):
             ['<Employee: Alan Shepard>'])
 
 
+class ContractExtensionBusinessLogicTests(TestCase):
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
+
+    def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        zbigniew_adamski = Employee.objects.get(id=3)
+        assert ('Zbigniew Adamski' == str(
+            zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
+
+    def test_should_business_logic_1_month_extension_work_properly(self):
+        dict = {2: [True, date(2018, 10, 19)],
+                3: [True, date(2018, 1, 19)],
+                4: [True, date(2017, 2, 27)],
+                6: [True, date(2018, 1, 19)],
+                12: [True, date(2017, 3, 2)],
+                11: [False, None],
+                29: [False, None],
+                }
+
+        for key in dict.keys():
+            from employees.views_business_logic import ContractExtension
+            contractExtension = ContractExtension()
+
+            extend_status = dict.get(key)[0]
+
+            self.assertEqual(contractExtension.add_one_month(key), extend_status)
+            exp_date = dict.get(key)[1]
+
+            self.assertEqual(contractExtension.exp_date, exp_date)
+
+
+    def test_should_business_logic_3_month_extension_work_properly(self):
+        dict = {2: [True, date(2018, 12, 19)],
+                3: [True, date(2018, 3, 19)],
+                4: [True, date(2017, 4, 27)],
+                6: [True, date(2018, 3, 19)],
+                12: [True, date(2017, 5, 2)],
+                11: [False, None],
+                29: [False, None],
+                }
+
+        for key in dict.keys():
+            from employees.views_business_logic import ContractExtension
+            contractExtension = ContractExtension()
+
+            extend_status = dict.get(key)[0]
+
+            self.assertEqual(contractExtension.add_three_months(key), extend_status)
+            exp_date = dict.get(key)[1]
+
+            self.assertEqual(contractExtension.exp_date, exp_date)
+
+
+
+# class ContractExtensionViewStatusTests(TestCase):
+#     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+#
+#     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+#     # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+#     # reason- loading fikstura_cities takes very long time
+#
+#     def setUp(self):
+#         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+#         zbigniew_adamski = Employee.objects.get(id=3)
+#         assert ('Zbigniew Adamski' == str(
+#             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
+#
+#     def test_should_business_logic_extension_work_properly(self):
+#         dict = {3: True,
+#                 2: True,
+#                 4: True,
+#                 6: True,
+#                 12: True,
+#                 11: False,
+#                 29: False
+#                 }
+#
+#         for key in dict.keys():
+#             self.__should_contract_extension_work_properly(key, dict.get(key), 'add_1_month')
+#             self.__should_contract_extension_work_properly(key, dict.get(key), 'add_3_month')
+#
+#     def __should_contract_extension_work_properly(self, id, answer_status, extension):
+#
+#         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+#         url = reverse('employee_action')
+#
+#         get_data = {'extensionLength': extension,
+#                     'employeeId': id,
+#                     }
+#
+#         response = self.client.post(url, get_data, **kwargs)
+#         self.assertEqual(response.status_code, 200)
+#
+#         import json
+#         dict = json.loads(response.content)
+#
+#         status = dict[0]
+#         name = dict[1]
+#         date = dict[2]
+#
+#         self.assertEqual(status, answer_status)
+
+
+
+
+
+
+class ContractExtensionViewCorrectDateTests(TestCase):
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    # reason- loading fikstura_cities takes very long time
+
+    def setUp(self):
+        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        zbigniew_adamski = Employee.objects.get(id=3)
+        assert ('Zbigniew Adamski' == str(
+            zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
+
+    def test_should_business_logic_extension_work_properly(self):
+        dict = {2: [True, '2018-10-19', 'Jakub Czachura'],
+                3: [True, '2018-01-19', 'Zbigniew Adamski'],
+                4: [True, '2017-02-27', 'Czarny Lodziarz' ],
+                6: [True, '2018-01-19', 'Andrzej Strzelba'],
+                12: [True, '2017-03-02', 'Ccc Ccc'],
+                11: [False, 'null', 'Bbb Bbb'],
+                29: [False, 'null', 'Paweł Testowy'],
+                }
+
+        for key in dict.keys():
+            self.__should_contract_extension_work_properly(key, dict.get(key)[0], dict.get(key)[1], dict.get(key)[2], 'add_1_id')
+            # self.__should_contract_extension_work_properly(key, dict.get(key), 'add_3_month')
+
+    def __should_contract_extension_work_properly(self, id, answer_status, expected_date, expected_name, extension):
+
+        kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        url = reverse('employee_action')
+
+        get_data = {'extensionLength': extension,
+                    'employeeId': id,
+                    }
+
+        response = self.client.post(url, get_data, **kwargs)
+        self.assertEqual(response.status_code, 200)
+
+        import json
+        dict = json.loads(response.content)
+
+        status = dict[0]
+        name = dict[1]
+        date = dict[2]
+
+        self.assertEqual(status, answer_status)
+        self.assertEqual(name, expected_name)
+        self.assertIn(expected_date, date)
 
 
 

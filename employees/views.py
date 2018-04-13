@@ -381,18 +381,6 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             context['current_employees'] = self.__set_boolean_from_session_with_exception_secure(
                 self.request.session['current_employees'])
 
-            #
-            #
-            # # default current_employees should be set on True
-            # try:
-            #     if self.request.session['current_employees'] == None:
-            #         context['current_employees'] = True
-            #     else:
-            #         context['current_employees'] = self.request.session['current_employees']
-            #
-            # except:
-            #     context['current_employees'] = None
-
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
 
@@ -445,7 +433,64 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             return False
 
 
-class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+
+class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+    model = Employee
+
+    def post(self, request, *args, **kwargs):
+
+        from employees.views_business_logic import ContractExtension
+        contractExtension=ContractExtension()
+
+
+        extensionLength=self.request.POST['extensionLength']
+        employeeId=self.request.POST['employeeId']
+
+        contractExtendedSucessful=False
+
+
+        if (extensionLength=='add_1_id'):
+            contractExtendedSucessful= contractExtension.add_one_month(employeeId)
+
+        if (extensionLength == 'add_3_id'):
+            contractExtendedSucessful= contractExtension.add_three_months(employeeId)
+
+
+
+        from django.core.serializers.json import DjangoJSONEncoder
+        data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
+
+        your_list = [contractExtendedSucessful, contractExtension.name, data]
+        your_list_as_json = json.dumps(your_list)
+
+        # response = HttpResponse(your_list_as_json, content_type="application/json")
+        response = HttpResponse(your_list_as_json)
+        return response
+
+
+
+
+
+# from django.core.serializers.json import DjangoJSONEncoder
+#         data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
+#
+#         your_list = [contractExtendedSucessful, contractExtension.name,data]
+#
+#
+#
+#         your_list_as_json = json.dumps(your_list)
+#
+#
+#         response = HttpResponse(your_list_as_json, content_type="application/json")
+#         return response
+
+
+
+
+
+
+
+class EmployeeActionStare(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Employee
 
     def post(self, request, *args, **kwargs):
@@ -497,94 +542,6 @@ class EmployeeAction(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         else:
             return False
 
-    @staticmethod
-    def add_one_month(employee_id):
-        employee_to_update = Employee.objects.get(pk=employee_id)
-
-        old_date = employee_to_update.contract_exp_date
-
-        day = old_date.day
-        old_month = old_date.month
-        old_year = old_date.year
-
-        new_year = old_year
-        new_month = old_month + 1
-
-        if new_month == 13:
-            new_month = 1
-            new_year = old_year + 1
-
-        import datetime
-        new_date = datetime.date(new_year, new_month, day)
-        employee_to_update.contract_exp_date = new_date
-        employee_to_update.save()
-
-        updated_employee = Employee.objects.get(pk=employee_id)
-        updated_date = updated_employee.contract_exp_date
-
-        if ((old_date.day == updated_date.day) and (old_date.month + 1 == updated_date.month) and (
-                old_date.year == updated_date.year)):
-            return True
-
-        elif ((old_date.day == updated_date.day) and (updated_date.month == 1) and (
-                old_date.year + 1 == updated_date.year)):
-            return True
-
-        else:
-            return False
-
-    @staticmethod
-    def add_three_months(employee_id):
-        employee_to_update = Employee.objects.get(pk=employee_id)
-
-        old_date = employee_to_update.contract_exp_date
-
-        day = old_date.day
-        old_month = old_date.month
-        old_year = old_date.year
-
-        new_year = old_year
-
-        new_month = old_month + 3
-
-        if new_month == 13:
-            new_month = 1
-            new_year = old_year + 1
-
-        if new_month == 14:
-            new_month = 2
-            new_year = old_year + 1
-
-        if new_month == 15:
-            new_month = 3
-            new_year = old_year + 1
-
-        import datetime
-        new_date = datetime.date(new_year, new_month, day)
-        employee_to_update.contract_exp_date = new_date
-        employee_to_update.save()
-
-        updated_employee = Employee.objects.get(pk=employee_id)
-        updated_date = updated_employee.contract_exp_date
-
-        if ((old_date.day == updated_date.day) and (old_date.month + 3 == updated_date.month) and (
-                old_date.year == updated_date.year)):
-            return True
-
-        elif ((old_date.day == updated_date.day) and (updated_date.month == 1) and (
-                old_date.year + 1 == updated_date.year)):
-            return True
-
-        elif ((old_date.day == updated_date.day) and (updated_date.month == 2) and (
-                old_date.year + 1 == updated_date.year)):
-            return True
-
-        elif ((old_date.day == updated_date.day) and (updated_date.month == 3) and (
-                old_date.year + 1 == updated_date.year)):
-            return True
-
-        else:
-            return False
 
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):

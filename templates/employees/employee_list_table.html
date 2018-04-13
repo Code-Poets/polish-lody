@@ -8,7 +8,6 @@
 
         <tr>
             <td>
-                  <b>{% trans 'Employees actions' %}</b></br>
 
                 </td>
             <td class="cursor-hover" align="center" valign="middle">
@@ -149,23 +148,6 @@
                     <span title="{% trans 'Edit employee' %} {{ employee }}" class="glyphicon glyphicon-pencil"
                           aria-hidden="true"></span></a>
 
-                <input class="toggle-one"     id="dismiss_id{{employee.pk}}" data-off="{% trans 'Dismiss' %}" data-on="{% trans 'Execute' %}" type="checkbox" >
-
-                <input class="toggle-one"     id="add_one_id{{employee.pk}}" data-off="{% trans 'Add 1 Month' %}" data-on="{% trans 'Execute' %}"  type="checkbox" >
-
-                <input class="toggle-one"     id="add_three_id{{employee.pk}}" data-off="{% trans 'Add 3 Months' %}" data-on="{% trans 'Execute' %}"  type="checkbox" >
-                <!--<input class="toggle-one"     id="add_three_id{{employee.pk}}" data-off="Add 3 Months" data-on="Execute"  type="checkbox" >-->
-
-                <script>
-                    $(function () {
-                        $('.toggle-one').bootstrapToggle();
-                    })
-                </script>
-                <u class="invisible">
-                    {{employee.pk}}
-                </u>
-
-
             </td>
             <td>
                 <a href="{% url 'employee_detail' employee.pk %}" name="employee-from-list">{{ employee.full_name }} </a>
@@ -180,7 +162,17 @@
                 {% trans 'N/A' %}
                 {% endif %}
             </td>
-            <td class="employee-list-date">
+
+
+            <td  class="employee-list-date"  style = "display:table-cell" >
+
+            <div id="contract_exp_div{{employee.id}}" style = "display:inline">
+
+
+
+
+
+
                 {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}
                 <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"
                       class="glyphicon glyphicon-exclamation-sign employee-list"></span>
@@ -194,12 +186,41 @@
                 <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
                       class="glyphicon glyphicon-warning-sign employee-list"></span>
                 {% endif %}
+
+
+
                 {% if employee.contract_exp_date %}
-                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }}</span>
+                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }} </span>
+
+
+ </div>
+
+  <span class="employee-list-date"   style = "display:inline">
+
+
+
+                  <input  type="button" class="vis-hidden"/>
+             <label id="add_1_id{{employee.pk}}" class="contract_extend"  >+1M</label>
+
+                 <input type="button" class="vis-hidden"/>
+             <label id="add_3_id{{employee.pk}}" class="contract_extend" >+3M</label>
+
+
+
+
+
+
+
+                </span>
                 {% else %}
-                <span style="padding-right:40%">{% trans 'N/A' %}</span>
+                <p>{% trans 'N/A' %}</p>
                 {% endif %}
-            </td>
+
+
+
+
+</td>
+
             <td class="employee-list-date">
                 {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
                 <span title="{% trans 'Health book expires in about' %} {{ employee.is_health_book_expiring }} {% trans 'days.' %}"
@@ -217,7 +238,7 @@
                 {% if employee.health_book_exp_date %}
                 <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
                 {% else %}
-                <span style="padding-right:40%">{% trans 'N/A' %}</span>
+                <p>{% trans 'N/A' %}</p>
                 {% endif %}
             </td>
             <td class="sorttable_numeric" align="center" valign="middle">
@@ -297,6 +318,110 @@
     <script>
 
 
+
+
+         $('.contract_extend').click(function () {
+
+
+             let fullId = this.id;
+             let extensionLength = fullId.substring(0,8);
+             let id = fullId.substring(8);
+             {#console.log(name);#}
+             {#console.log(id);#}
+
+             extendContract(extensionLength, id);
+
+         });
+
+
+
+         function extendContract(extensionLength, employeeId){
+
+            const data = {extensionLength:      extensionLength,
+                          employeeId:      employeeId
+                            };
+
+            $.ajax({
+                url: 'employee_action/',
+                data: data,
+                dataType: "html",
+                method: "POST",
+                timeout: 10000,
+
+
+                success: function (content) {
+
+                {#  zamiana daty u użytkowania w tabeli#}
+
+
+
+                    console.log("employee update sucess");
+                    console.log(content);
+
+                     let obj = JSON.parse(content);
+                    let status=obj[0];
+            let name=obj[1];
+            let date=obj[2];
+
+ console.log(date);
+
+
+             let month = date.substring(6,8);
+              console.log(date);
+             let day = date.substring(9,11);
+              console.log(date);
+             let year = date.substring(1,5);
+
+
+  let new_date= day+'.'+month+'.'+year;
+  console.log(new_date);
+
+
+
+  selector_id='#contract_exp_div'+employeeId;
+
+
+               $( selector_id ).html('<span class="employee-list-date">'+new_date);
+
+
+
+
+             {#parent.document.getElementById("contract_exp_column4").reload();#}
+            {# #}
+            {# #}
+            {#$( "#contract_exp_column4" ).r#}
+
+            {#$( "#contract_exp_column4" ).load(window.location.href+  ' #contract_exp_column4');#}
+            {##}
+
+
+
+
+
+
+                }
+            }).fail(function (jqXHR) {
+                {#alert że coś niue bangla#}
+                $(".loading-icon").css("opacity", "0");
+                ajaxErrorHandler(jqXHR);
+            });
+        }
+
+        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+               if (options['type'].toLowerCase() === "post") {
+                jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            }
+        }
+
+        );
+
+
+
+
+
+
+
+
             function makeRequestEmployeeAction() {
 
 
@@ -332,7 +457,9 @@
                if (options['type'].toLowerCase() === "post") {
                 jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
             }
-        });
+        }
+
+        );
 
 
         function get_array_with_checkboxes_dismiss() {
@@ -378,6 +505,7 @@
             });
             return add_three_array;
         }
+
 
               function dismissStatusMessage(content) {
         $('#messages_container').html('<div id="message_success_status"></div>');

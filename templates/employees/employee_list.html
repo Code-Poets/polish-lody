@@ -132,20 +132,7 @@
                     </label>
                 </li>
 
-                <li class="filter">
 
-
-                    {% if employees_action %}
-                        <input id="employees_action_id" type="button" checked class="vis-hidden"
-                               name="employees_action"/>
-                    {% else %}
-                        <input id="employees_action_id" type="button" class="vis-hidden"
-                               name="employees_action"/>
-                    {% endif %}
-                    <label class="my-button clickable" for="employees_action_id">
-                        {% trans 'Execute employees actions' %}
-                    </label>
-                </li>
             </ul>
 
             <select hidden name="per_page" class="clickable" id="per-page">
@@ -204,39 +191,39 @@
 
     <script>
 
-        {# problem JQuery didn see page buttons on second click - dynamic setted#}
-        $(this).click(function () {
+         {#problem JQuery didn see page buttons on second click - dynamic setted#}
+                $(this).click(function () {
+                    setTimeout(function () {
+                        update_session();
+                    }, 100);
+
+                });
+
+        $('.filter').click(function () {
             setTimeout(function () {
                 update_session();
             }, 100);
 
         });
 
-        {#$('.filter').click(function () {#}
-        {#    setTimeout(function () {#}
-        {#        update_session();#}
-        {#    }, 100);#}
-        {##}
-        {#{);#}
-        {##}
-        {#$('.sort-buttons').click(function () {#}
-        {#    setTimeout(function () {#}
-        {#        update_session();#}
-        {#    }, 100);#}
-        {#{);#}
-        {##}
-        {#$('.paginated').click(function () {#}
-        {#    setTimeout(function () {#}
-        {#        update_session();#}
-        {#    }, 100);#}
-        {#{);#}
-        {##}
-        {#$('.pg-clickable').click(function () {#}
-        {#    setTimeout(function () {#}
-        {#        update_session();#}
-        {#    }, 100);#}
-        {#        {);#}
-        {##}
+        $('.sort-buttons').click(function () {
+            setTimeout(function () {
+                update_session();
+            }, 100);
+           });
+
+        $('.paginated').click(function () {
+            setTimeout(function () {
+                update_session();
+            }, 100);
+           });
+
+        $('.pg-clickable').click(function () {
+            setTimeout(function () {
+                update_session();
+            }, 100);
+            });
+
 
         function update_session() {
 
@@ -314,11 +301,15 @@
             };
         }
 
-        const employees_action_button = document.querySelector('#employees_action_id');
 
-        employees_action_button.addEventListener('click', function () {
-            makeRequestEmployeeAction()
-        });
+
+
+        {##}
+        {#const employees_action_button = document.querySelector('#employees_action_id');#}
+        {##}
+        {#employees_action_button.addEventListener('click', function () {#}
+        {#    makeRequestEmployeeAction()#}
+        {#{);#}
 
 
     </script>
