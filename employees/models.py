@@ -100,10 +100,10 @@ class Employee(MyUser):
         ("Male", _("Male")),
         ("Female", _("Female")),
     )
-    currently_employed_choices = (
-        (True, _("Current employee")),
-        (False, _("Former employee")),
-    )
+    # currently_employed_choices = (
+    #     (True, _("Current employee")),
+    #     (False, _("Former employee")),
+    # )
 
     position_choices = (
         ("Production", _("Production")),
@@ -149,7 +149,9 @@ class Employee(MyUser):
     phone_contact_number = models.CharField(_('Phone contact number'), max_length=15, blank=True, null=True,
                                             default=None, validators=[phone_check])
 
-    currently_employed = models.BooleanField(_('currently_employed'), default=True, choices=currently_employed_choices)
+    currently_employed = models.BooleanField(_('Currently employed'), default=True)
+
+
 
     class Meta:
         verbose_name = _('employee')

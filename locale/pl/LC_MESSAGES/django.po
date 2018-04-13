@@ -148,6 +148,11 @@ msgstr "Komentarz, dlaczego nie zgadzasz sie z godzinami (opcjonalnie) "
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
 
+#: templates/employees/employee_form.html:136
+msgid "Currently employed"
+msgstr "Obecnie zatrudniony"
+
+
 #: employees/models.py:144
 msgid "employee"
 msgstr "pracownik"

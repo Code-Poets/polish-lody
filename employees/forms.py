@@ -109,6 +109,8 @@ class EmployeeChangeForm(ModelForm):
             'address_zip_code'      : forms.TextInput(attrs = {'title' : 'Please enter as: __-___'}),
             'address_city'          : forms.TextInput(),
             'gender'                : RadioSelect(renderer=HorizontalRadioRenderer),
+            'currently_employed'    : forms.CheckboxInput(),
+
         }
 
 

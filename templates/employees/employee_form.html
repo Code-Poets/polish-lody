@@ -5,309 +5,316 @@
 {% block title %}{% trans 'Employee' %}{% endblock %}
 {% block header_block %}
 
-<style type="text/css">
+    <style type="text/css">
 
-    .autocomplete-suggestions {
-        border: 1px solid #999;
-        background: #FFF;
-        overflow: auto;
-    }
+        .autocomplete-suggestions {
+            border: 1px solid #999;
+            background: #FFF;
+            overflow: auto;
+        }
 
-    .autocomplete-suggestion {
-        padding: 2px 5px;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+        .autocomplete-suggestion {
+            padding: 2px 5px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-    .autocomplete-selected {
-        background: #F0F0F0;
-    }
+        .autocomplete-selected {
+            background: #F0F0F0;
+        }
 
-    .autocomplete-suggestions strong {
-        font-weight: normal;
-        color: #819839;
-    }
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #819839;
+        }
 
-    .autocomplete-group {
-        padding: 2px 5px;
-    }
+        .autocomplete-group {
+            padding: 2px 5px;
+        }
 
-    .autocomplete-group strong {
-        display: block;
-        border-bottom: 1px solid #000;
-    }
+        .autocomplete-group strong {
+            display: block;
+            border-bottom: 1px solid #000;
+        }
 
-</style>
+    </style>
 
-<div class="panel panel-heading panel-default">
-    <h4>
-        <center>
-            {% if employee %}
-            {{ employee.full_name }}
-            {% else %}
-            {% trans 'New employee' %}
-            {% endif %}
-        </center>
-    </h4>
-</div>
-{% endblock %}
-{% block body_block %}
-{% if employee %}
-<a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
-<a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger pull-right"><span
-        class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;{% trans 'Delete employee' %}</a>
-{% else %}
-<a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
-{% endif %}
-<div class="panel panel-heading panel-default">
-    <div class="form-container">
-        <form method="post">
-            {% csrf_token %}
-            {% for error in form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-            {% endfor %}
-            {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-                {% for e in form %}
-                {{e.errors|escape}}
-                {% endfor %}
-            </div>
-            {% endif %}
-            <!-- Row for personal data and employee data -->
-            <div class="row">
-                <div class="col-sm-6"> <!-- Column 1/2, personal data -->
-                    <div class="panel panel-info">
-                        <div class="panel-heading">{% trans 'Personal data' %}</div>
-                        <div class="panel-body">
-                            <div class="col-sm-12 form-group">
-                                <label>{{ form.email.label }}<span class="required"> *</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-envelope"></span></span>
-                                    {{ form.email|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            {% if form.password1 %}
-                            <div class="col-sm-12 col-md-12 col-lg-6 form-group">
-                                <label>{{ form.password1.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-lock"></span></span>
-                                    {{ form.password1|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12 col-lg-6 form-group">
-                                <label>{{ form.password2.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-lock"></span></span>
-                                    {{ form.password2|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            {% endif %}
-
-
-                            <div class="col-sm-12 col-md-12 col-lg-6 form-group">
-                                <label>{{ form.first_name.label }}<span class="required"> *</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-user"></span></span>
-                                    {{ form.first_name|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12 col-lg-6 form-group">
-                                <label>{{ form.last_name.label }}<span class="required"> *</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-user"></span></span>
-                                    {{ form.last_name|add_class:"form-control" }}
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-6">
-                                {{form.gender}}
-
-                                <span style="padding-left: 30px">
-                                    {{form.currently_employed}}</span>
-
-
-                            </div>
-
-
-                            <div class="col-sm-1"></div>
-                            <div class="col-sm-12 form-group">
-                                <label>{{ form.phone_contact_number.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-phone"></span></span>
-                                    {{ form.phone_contact_number|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 form-group">
-                                <label>{{ form.address_city.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-home"></span></span>
-                                    {{ form.address_city|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 form-group">
-                                <label>{{ form.address_street.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-road"></span></span>
-                                    {{ form.address_street|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="col-sm-12 form-group">
-                                <label>{{ form.address_zip_code.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-home"></span></span>
-                                    {{ form.address_zip_code|add_class:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6"> <!-- Column 2/2, employee data -->
-                    <div class="panel panel-success">
-                        <div class="panel-heading">{% trans 'Employee data' %}</div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="control-label" for="id_position">{{ form.position.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-                                    {{ form.position|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ form.contract_type.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-briefcase"></span></span>
-                                    {{ form.contract_type|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ form.contract_start_date.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-calendar"></span></span>
-                                    {{ form.contract_start_date|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="">{{ form.contract_exp_date.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-calendar"></span></span>
-                                    {{ form.contract_exp_date|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ form.health_book_exp_date.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-calendar"></span></span>
-                                    {{ form.health_book_exp_date|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ form.rate_per_hour.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-usd"></span></span>
-                                    {{ form.rate_per_hour|add_class:"form-control" }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>{{ form.bank_account_number.label }}</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span
-                                            class="glyphicon glyphicon-credit-card"></span></span>
-                                    {{ form.bank_account_number|add_class:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> <!-- End of row -->
-            <br>
+    <div class="panel panel-heading panel-default">
+        <h4>
             <center>
-                <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
-                {% if employee and user.is_staff %}
-                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+                {% if employee %}
+                    {{ employee.full_name }}
                 {% else %}
-                <!--opcja przy dodawaniu nowych pracowników-->
-                <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+                    {% trans 'New employee' %}
                 {% endif %}
             </center>
-            <br>
-        </form>
+        </h4>
     </div>
-</div>
+{% endblock %}
+{% block body_block %}
+    {% if employee %}
+        <a href="{% url 'employee_detail' employee.id %}" class="btn btn-default">{% trans 'Back' %}</a>
+        <a href="{% url 'employee_delete' employee.id %}" class="btn btn-danger pull-right"><span
+                class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;{% trans 'Delete employee' %}</a>
+    {% else %}
+        <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Back' %}</a>
+    {% endif %}
+    <div class="panel panel-heading panel-default">
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for e in form %}
+                            {{ e.errors|escape }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- Row for personal data and employee data -->
+                <div class="row">
+                    <div class="col-sm-6"> <!-- Column 1/2, personal data -->
+                        <div class="panel panel-info">
+                            <div class="panel-heading">{% trans 'Personal data' %}</div>
+                            <div class="panel-body">
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ form.email.label }}<span class="required"> *</span></label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-envelope"></span></span>
+                                        {{ form.email|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                {% if form.password1 %}
+                                    <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                                        <label>{{ form.password1.label }}</label>
+                                        <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-lock"></span></span>
+                                            {{ form.password1|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                                        <label>{{ form.password2.label }}</label>
+                                        <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-lock"></span></span>
+                                            {{ form.password2|add_class:"form-control" }}
+                                        </div>
+                                    </div>
+                                {% endif %}
 
-<script>
 
-    $(document).ready(function () {
-        $('#id_bank_account_number').mask('00 0000 0000 0000 0000 0000 0000')
-        $('#id_phone_contact_number').mask('+00 000 000 000')
-        $('#id_address_zip_code').mask('00-000');
+                                <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                                    <label>{{ form.first_name.label }}<span class="required"> *</span></label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-user"></span></span>
+                                        {{ form.first_name|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-6 form-group">
+                                    <label>{{ form.last_name.label }}<span class="required"> *</span></label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-user"></span></span>
+                                        {{ form.last_name|add_class:"form-control" }}
+                                    </div>
+                                </div>
 
-    });
 
-    document.getElementById("id_first_name").onkeyup = function () {
-        formatCityText("id_first_name")
-    };
+                                <td class=class="col-sm-6">
+                                    {{ form.gender }}
+                                </td>
+                                <td class=class="col-sm-6">
+                                <span style="padding-left: 30px">
+                                    {{ form.currently_employed }}
+                                  <label style="display: inline">{{form.currently_employed.label }}</label>
 
-    document.getElementById("id_last_name").onkeyup = function () {
-        formatCityText("id_last_name")
-    };
+                                </span>
+                                </td>
 
-    document.getElementById("id_address_city").onkeyup = function () {
-        formatCityText("id_address_city")
-    };
 
-    function formatCityText(data) {
-        var datahtml = document.getElementById(data);
-        var datatext = datahtml.value;
-        if (data == "id_first_name") {
-            var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C]/g;
-        } else {
-            var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C -]/g;
-        }
-        datatext = datatext.replace(regex, "");
-        var re = /(-|\s)/g;
-        datatext = datatext.toLowerCase().split(re);
-        for (var i = 0; i < datatext.length; i++) {
-            var placeholder = datatext[i];
-            var UpLetter = placeholder.charAt(0).toUpperCase();
-            placeholder = placeholder.slice(1, placeholder.length);
-            datatext[i] = UpLetter.concat(placeholder);
-        }
-        datatext = datatext.join("");
-        datahtml.value = datatext;
-    }
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ form.phone_contact_number.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-phone"></span></span>
+                                        {{ form.phone_contact_number|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ form.address_city.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-home"></span></span>
+                                        {{ form.address_city|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ form.address_street.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-road"></span></span>
+                                        {{ form.address_street|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ form.address_zip_code.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-home"></span></span>
+                                        {{ form.address_zip_code|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-</script>
+                    <div class="col-sm-6"> <!-- Column 2/2, employee data -->
+                        <div class="panel panel-success">
+                            <div class="panel-heading">{% trans 'Employee data' %}</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="control-label" for="id_position">{{ form.position.label }}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-briefcase"></span></span>
+                                        {{ form.position|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form.contract_type.label }}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-briefcase"></span></span>
+                                        {{ form.contract_type|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form.contract_start_date.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-calendar"></span></span>
+                                        {{ form.contract_start_date|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="">{{ form.contract_exp_date.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-calendar"></span></span>
+                                        {{ form.contract_exp_date|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form.health_book_exp_date.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-calendar"></span></span>
+                                        {{ form.health_book_exp_date|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form.rate_per_hour.label }}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-usd"></span></span>
+                                        {{ form.rate_per_hour|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form.bank_account_number.label }}</label>
+                                    <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                            class="glyphicon glyphicon-credit-card"></span></span>
+                                        {{ form.bank_account_number|add_class:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End of row -->
+                <br>
+                <center>
+                    <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
+                    {% if employee and user.is_staff %}
+                        <a href="{% url 'employee_detail' employee.id %}"
+                           class="btn btn-default">{% trans 'Cancel' %}</a>
+                    {% else %}
+                        <!--opcja przy dodawaniu nowych pracowników-->
+                        <a href="{% url 'employees' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+                    {% endif %}
+                </center>
+                <br>
+            </form>
+        </div>
+    </div>
 
-<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script> <!-- javascript strings translations -->
-<script>
+    <script>
 
-    $(function () {
-
-        $("#id_address_city").autocomplete({
-
-            serviceUrl: "/employees/autocomplete/",
-            minChars: 3
+        $(document).ready(function () {
+            $('#id_bank_account_number').mask('00 0000 0000 0000 0000 0000 0000')
+            $('#id_phone_contact_number').mask('+00 000 000 000')
+            $('#id_address_zip_code').mask('00-000');
 
         });
 
-    });
+        document.getElementById("id_first_name").onkeyup = function () {
+            formatCityText("id_first_name")
+        };
 
-</script>
+        document.getElementById("id_last_name").onkeyup = function () {
+            formatCityText("id_last_name")
+        };
+
+        document.getElementById("id_address_city").onkeyup = function () {
+            formatCityText("id_address_city")
+        };
+
+        function formatCityText(data) {
+            var datahtml = document.getElementById(data);
+            var datatext = datahtml.value;
+            if (data == "id_first_name") {
+                var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C]/g;
+            } else {
+                var regex = /[^a-zA-Z\u0104\u0106\u0118\u0141\u0143\u00D3\u015A\u0179\u017B\u0105\u0107\u0119\u0142\u0144\u00F3\u015B\u017A\u017C -]/g;
+            }
+            datatext = datatext.replace(regex, "");
+            var re = /(-|\s)/g;
+            datatext = datatext.toLowerCase().split(re);
+            for (var i = 0; i < datatext.length; i++) {
+                var placeholder = datatext[i];
+                var UpLetter = placeholder.charAt(0).toUpperCase();
+                placeholder = placeholder.slice(1, placeholder.length);
+                datatext[i] = UpLetter.concat(placeholder);
+            }
+            datatext = datatext.join("");
+            datahtml.value = datatext;
+        }
+
+    </script>
+
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+    <!-- javascript strings translations -->
+    <script>
+
+        $(function () {
+
+            $("#id_address_city").autocomplete({
+
+                serviceUrl: "/employees/autocomplete/",
+                minChars: 3
+
+            });
+
+        });
+
+    </script>
 
 {% endblock %}

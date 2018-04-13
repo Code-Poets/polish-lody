@@ -3,32 +3,32 @@
 <div class="ajax-loader">
     <table class="table table-hover">
         <thead>
-         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
-                      rel="stylesheet">
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+              rel="stylesheet">
 
         <tr>
             <td>
 
-                </td>
+            </td>
             <td class="cursor-hover" align="center" valign="middle">
                 <div class="sort-buttons">
                     <b>{% trans 'Full name' %}</b></br>
                     {% if orderby == 'last_name' %}
-                    <input id="last-name-up" checked type="radio" class="sorting sort-up"
-                           name="order" value="last_name"/>
+                        <input id="last-name-up" checked type="radio" class="sorting sort-up"
+                               name="order" value="last_name"/>
                     {% else %}
-                    <input id="last-name-up" type="radio" class="sorting sort-up"
-                           name="order" value="last_name"/>
+                        <input id="last-name-up" type="radio" class="sorting sort-up"
+                               name="order" value="last_name"/>
                     {% endif %}
                     <label title="{% trans 'Sort alphabetically ascending' %}"
                            class="glyphicon glyphicon-chevron-up clickable"
                            for="last-name-up"></label>
                     {% if orderby == '-last_name' %}
-                    <input id="last-name-down" checked type="radio" class="sorting sort-down"
-                           name="order" value="-last_name"/>
+                        <input id="last-name-down" checked type="radio" class="sorting sort-down"
+                               name="order" value="-last_name"/>
                     {% else %}
-                    <input id="last-name-down" type="radio" class="sorting sort-down"
-                           name="order" value="-last_name"/>
+                        <input id="last-name-down" type="radio" class="sorting sort-down"
+                               name="order" value="-last_name"/>
                     {% endif %}
                     <label title="{% trans 'Sort alphabetically descending' %}"
                            class="glyphicon glyphicon-chevron-down clickable"
@@ -39,20 +39,20 @@
                 <b>{% trans 'Rate per hour ' %}(zł)</b>
                 <div class="sort-buttons">
                     {% if orderby == 'rate_per_hour' %}
-                    <input id="rate-per-hour-up" checked type="radio" class="sorting sort-up"
-                           name="order" value="rate_per_hour"/>
+                        <input id="rate-per-hour-up" checked type="radio" class="sorting sort-up"
+                               name="order" value="rate_per_hour"/>
                     {% else %}
-                    <input id="rate-per-hour-up" type="radio" class="sorting sort-up"
-                           name="order" value="rate_per_hour"/>
+                        <input id="rate-per-hour-up" type="radio" class="sorting sort-up"
+                               name="order" value="rate_per_hour"/>
                     {% endif %}
                     <label title="{% trans 'Sort ascending' %}" class="glyphicon glyphicon-chevron-up clickable"
                            for="rate-per-hour-up"></label>
                     {% if orderby == '-rate_per_hour' %}
-                    <input id="rate-per-hour-down" checked type="radio" class="sorting sort-down"
-                           name="order" value="-rate_per_hour"/>
+                        <input id="rate-per-hour-down" checked type="radio" class="sorting sort-down"
+                               name="order" value="-rate_per_hour"/>
                     {% else %}
-                    <input id="rate-per-hour-down" type="radio" class="sorting sort-down"
-                           name="order" value="-rate_per_hour"/>
+                        <input id="rate-per-hour-down" type="radio" class="sorting sort-down"
+                               name="order" value="-rate_per_hour"/>
                     {% endif %}
                     <label title="{% trans 'Sort descending' %}" class="glyphicon glyphicon-chevron-down clickable"
                            for="rate-per-hour-down"></label>
@@ -65,21 +65,21 @@
                 <b>{% trans 'Contract expiration date' %}</b>
                 <div class="sort-buttons">
                     {% if orderby == 'contract_exp_date' %}
-                    <input id="contract-exp-up" checked type="radio" class="sorting sort-up"
-                           name="order" value="contract_exp_date"/>
+                        <input id="contract-exp-up" checked type="radio" class="sorting sort-up"
+                               name="order" value="contract_exp_date"/>
                     {% else %}
-                    <input id="contract-exp-up" type="radio" class="sorting sort-up"
-                           name="order" value="contract_exp_date"/>
+                        <input id="contract-exp-up" type="radio" class="sorting sort-up"
+                               name="order" value="contract_exp_date"/>
                     {% endif %}
                     <label title="{% trans 'Sort by contract expiration date ascending' %}"
                            class="glyphicon glyphicon-chevron-up clickable"
                            for="contract-exp-up"></label>
                     {% if orderby == '-contract_exp_date' %}
-                    <input id="contract-exp-down" checked type="radio" class="sorting sort-down"
-                           name="order" value="-contract_exp_date"/>
+                        <input id="contract-exp-down" checked type="radio" class="sorting sort-down"
+                               name="order" value="-contract_exp_date"/>
                     {% else %}
-                    <input id="contract-exp-down" type="radio" class="sorting sort-down"
-                           name="order" value="-contract_exp_date"/>
+                        <input id="contract-exp-down" type="radio" class="sorting sort-down"
+                               name="order" value="-contract_exp_date"/>
                     {% endif %}
                     <label title="{% trans 'Sort by contract expiration date descending' %}"
                            class="glyphicon glyphicon-chevron-down clickable"
@@ -90,21 +90,21 @@
                 <b>{% trans 'Health book expiration date' %}</b>
                 <div class="sort-buttons">
                     {% if orderby == 'health_book_exp_date' %}
-                    <input id="health-book-up" checked type="radio" class="sorting sort-up"
-                           name="order" value="health_book_exp_date"/>
+                        <input id="health-book-up" checked type="radio" class="sorting sort-up"
+                               name="order" value="health_book_exp_date"/>
                     {% else %}
-                    <input id="health-book-up" type="radio" class="sorting sort-up"
-                           name="order" value="health_book_exp_date"/>
+                        <input id="health-book-up" type="radio" class="sorting sort-up"
+                               name="order" value="health_book_exp_date"/>
                     {% endif %}
                     <label title="{% trans 'Sort by health book expiration date ascending' %}"
                            class="glyphicon glyphicon-chevron-up clickable"
                            for="health-book-up"></label>
                     {% if orderby == '-health_book_exp_date' %}
-                    <input id="health-book-down" checked type="radio" class="sorting sort-down"
-                           name="order" value="-health_book_exp_date"/>
+                        <input id="health-book-down" checked type="radio" class="sorting sort-down"
+                               name="order" value="-health_book_exp_date"/>
                     {% else %}
-                    <input id="health-book-down" type="radio" class="sorting sort-down"
-                           name="order" value="-health_book_exp_date"/>
+                        <input id="health-book-down" type="radio" class="sorting sort-down"
+                               name="order" value="-health_book_exp_date"/>
                     {% endif %}
                     <label title="{% trans 'Sort by health book expiration date descending' %}"
                            class="glyphicon glyphicon-chevron-down clickable"
@@ -115,21 +115,21 @@
                 <b>{% trans 'Total unpaid salaries ' %}(zł)</b>
                 <div class="sort-buttons">
                     {% if orderby == 'unpaid_salaries' %}
-                    <input id="unpaid-salaries-up" checked type="radio" class="sorting sort-up"
-                           name="order" value="unpaid_salaries"/>
+                        <input id="unpaid-salaries-up" checked type="radio" class="sorting sort-up"
+                               name="order" value="unpaid_salaries"/>
                     {% else %}
-                    <input id="unpaid-salaries-up" type="radio" class="sorting sort-up"
-                           name="order" value="unpaid_salaries"/>
+                        <input id="unpaid-salaries-up" type="radio" class="sorting sort-up"
+                               name="order" value="unpaid_salaries"/>
                     {% endif %}
                     <label title="{% trans 'Sort by unpaid salaries ascending' %}"
                            class="glyphicon glyphicon-chevron-up clickable"
                            for="unpaid-salaries-up"></label>
                     {% if orderby == '-unpaid_salaries' %}
-                    <input id="unpaid-salaries-down" checked type="radio" class="sorting sort-down"
-                           name="order" value="-unpaid_salaries"/>
+                        <input id="unpaid-salaries-down" checked type="radio" class="sorting sort-down"
+                               name="order" value="-unpaid_salaries"/>
                     {% else %}
-                    <input id="unpaid-salaries-down" type="radio" class="sorting sort-down"
-                           name="order" value="-unpaid_salaries"/>
+                        <input id="unpaid-salaries-down" type="radio" class="sorting sort-down"
+                               name="order" value="-unpaid_salaries"/>
                     {% endif %}
                     <label title="{% trans 'Sort by unpaid salaries descending' %}"
                            class="glyphicon glyphicon-chevron-down clickable"
@@ -139,71 +139,68 @@
         </tr>
         </thead>
         {% if page_employee_list %}
-        <tbody id="emp-list">
-        {% for employee in page_employee_list %}
-        <tr>
-            <td>
+            <tbody id="emp-list">
+            {% for employee in page_employee_list %}
+                <tr>
+                    <td>
 
-                <a href="{% url 'employee_edit' employee.id %}">
+                        <a href="{% url 'employee_edit' employee.id %}">
                     <span title="{% trans 'Edit employee' %} {{ employee }}" class="glyphicon glyphicon-pencil"
                           aria-hidden="true"></span></a>
 
-            </td>
-            <td>
-                <a href="{% url 'employee_detail' employee.pk %}" name="employee-from-list">{{ employee.full_name }} </a>
-            </td>
-            <td align="center" valign="middle">
-                {{ employee.rate_per_hour }}
-            </td>
-            <td align="center" valign="middle">
-                {% if employee.position %}
-                {{ employee.get_position_display }}
-                {% else %}
-                {% trans 'N/A' %}
-                {% endif %}
-            </td>
+                    </td>
+                    <td>
+                        <a href="{% url 'employee_detail' employee.pk %}"
+                           name="employee-from-list"  id='employee-name{{ employee.pk }}'  >{{ employee.full_name }}</a>
+                    </td>
+                    <td align="center" valign="middle">
+                        {{ employee.rate_per_hour }}
+                    </td>
+                    <td align="center" valign="middle">
+                        {% if employee.position %}
+                            {{ employee.get_position_display }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
+                    </td>
 
 
-            <td  class="employee-list-date"  style = "display:table-cell" >
+                    <td class="employee-list-date" style="display:table-cell">
 
-            <div id="contract_exp_div{{employee.id}}" style = "display:inline">
-
-
+                        <div id="contract_exp_div{{ employee.id }}" style="display:inline">
 
 
-
-
-                {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}
-                <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"
-                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
-                <span title="{% trans 'Contract expires within 24 hours!' %}"
-                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                {% elif employee.is_contract_expiring.1 == 1%}
-                <span title="{% trans 'Contract expired yesterday!' %}"
-                      class="glyphicon glyphicon-warning-sign employee-list"></span>
-                {% elif employee.is_contract_expiring.1 %}
-                <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
-                      class="glyphicon glyphicon-warning-sign employee-list"></span>
-                {% endif %}
+                            {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}
+                                <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"
+                                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
+                                <span title="{% trans 'Contract expires within 24 hours!' %}"
+                                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring.1 == 1 %}
+                                <span title="{% trans 'Contract expired yesterday!' %}"
+                                      class="glyphicon glyphicon-warning-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring.1 %}
+                                <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
+                                      class="glyphicon glyphicon-warning-sign employee-list"></span>
+                            {% endif %}
 
 
 
-                {% if employee.contract_exp_date %}
-                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }} </span>
+                            {% if employee.contract_exp_date %}
+                                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }} </span>
 
 
- </div>
+                                </div>
 
-  <span class="employee-list-date"   style = "display:inline">
+                                <span class="employee-list-date" style="display:inline">
 
 
 
-                  <input  type="button" class="vis-hidden"/>
-             <label id="add_1_id{{employee.pk}}" class="contract_extend"  >+1M</label>
+                  <input type="button" class="vis-hidden"/>
+             <label id="add_1_id{{ employee.pk }}" class="contract_extend">+1M</label>
 
                  <input type="button" class="vis-hidden"/>
-             <label id="add_3_id{{employee.pk}}" class="contract_extend" >+3M</label>
+             <label id="add_3_id{{ employee.pk }}" class="contract_extend">+3M</label>
 
 
 
@@ -212,344 +209,197 @@
 
 
                 </span>
-                {% else %}
-                <p>{% trans 'N/A' %}</p>
-                {% endif %}
+                            {% else %}
+                                <p>{% trans 'N/A' %}</p>
+                            {% endif %}
 
 
+                    </td>
 
-
-</td>
-
-            <td class="employee-list-date">
-                {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
-                <span title="{% trans 'Health book expires in about' %} {{ employee.is_health_book_expiring }} {% trans 'days.' %}"
-                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                {% elif employee.is_health_book_expiring == 0 and warning_x_days_left %}
-                <span title="{% trans 'Health book expires within 24 hours!' %}"
-                      class="glyphicon glyphicon-exclamation-sign employee-list "></span>
-                {% elif employee.is_health_book_expiring.1 == 1 %}
-                <span title="{% trans 'Health book expired yesterday!' %}"
-                      class="glyphicon glyphicon-warning-sign employee-list "></span>
-                {% elif employee.is_health_book_expiring.1 %}
-                <span title="{% trans 'Health book expired' %} {{ employee.is_health_book_expiring.1 }} {% trans 'days ago!' %}"
-                      class="glyphicon glyphicon-warning-sign employee-list "></span>
-                {% endif %}
-                {% if employee.health_book_exp_date %}
-                <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
-                {% else %}
-                <p>{% trans 'N/A' %}</p>
-                {% endif %}
-            </td>
-            <td class="sorttable_numeric" align="center" valign="middle">
-                {% if employee.all_unpaid_salaries == 0 %}
-                0.00
-                {% elif employee.all_unpaid_salaries != 0 and employee.all_unpaid_salaries != None %}
-                {{ employee.all_unpaid_salaries }}
-                {% else %}
-                {% trans 'N/A' %}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-
-        </tbody>
-    </table>
-
-  <div>
-
-    {% else %}
-    <p>{% trans 'No matches found.' %}</p>
-    {% endif %}
-
-
-    <div class="paginated">
-        {% if page_obj.has_other_pages %}
-        <ul class="pagination">
-            {% for i in paginator.page_range %}
-            {% if forloop.counter == 1 %}
-            {% if page_obj.has_previous %}
-            <li class="pg-clickable">
-                <input id="pg-previous" type="radio" class="vis-hidden"
-                       name="pg" value="{{ page_obj.previous_page_number }}"/>
-                <label class="my-button previous clickable" for="pg-previous">&laquo; {% trans 'Previous' %}</label>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <label class="my-button previous disabled">&laquo; {% trans 'Previous' %}</label>
-            </li>
-            {% endif %}
-            {% endif %}
-            {% if page_obj.number == i %}
-            <li class="active pg-clickable">
-                <input id="pg-{{i}}" type="radio" checked class="vis-hidden"
-                       name="pg" value="{{i}}"/>
-                <label class="my-button clickable pg-active"  id="pg-label{{i}}-checked" for="pg-{{i}}">{{i}}</label>
-            </li>
-            {% else %}
-            <li class="pg-clickable">
-                <input id="pg-{{i}}" type="radio" class="vis-hidden"
-                       name="pg" value="{{i}}"/>
-                <label class="my-button clickable" id="pg-label{{i}}-not-checked" for="pg-{{i}}">{{i}}</label>
-            </li>
-            {% endif %}
-            {% if forloop.last %}
-            {% if page_obj.has_next %}
-            <li class="pg-clickable">
-                <input id="pg-next" type="radio" class="vis-hidden"
-                       name="pg" value="{{ page_obj.next_page_number }}"/>
-                <label class="my-button next clickable" for="pg-next">{% trans 'Next' %} &raquo;</label>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <label class="my-button next disabled">{% trans 'Next' %} &raquo;</label>
-            </li>
-            {% endif %}
-            {% endif %}
+                    <td class="employee-list-date">
+                        {% if employee.is_health_book_expiring > 0 and warning_x_days_left > employee.is_health_book_expiring %}
+                            <span title="{% trans 'Health book expires in about' %} {{ employee.is_health_book_expiring }} {% trans 'days.' %}"
+                                  class="glyphicon glyphicon-exclamation-sign employee-list"></span>
+                        {% elif employee.is_health_book_expiring == 0 and warning_x_days_left %}
+                            <span title="{% trans 'Health book expires within 24 hours!' %}"
+                                  class="glyphicon glyphicon-exclamation-sign employee-list "></span>
+                        {% elif employee.is_health_book_expiring.1 == 1 %}
+                            <span title="{% trans 'Health book expired yesterday!' %}"
+                                  class="glyphicon glyphicon-warning-sign employee-list "></span>
+                        {% elif employee.is_health_book_expiring.1 %}
+                            <span title="{% trans 'Health book expired' %} {{ employee.is_health_book_expiring.1 }} {% trans 'days ago!' %}"
+                                  class="glyphicon glyphicon-warning-sign employee-list "></span>
+                        {% endif %}
+                        {% if employee.health_book_exp_date %}
+                            <span class="employee-list-date">{{ employee.health_book_exp_date|date:"d.m.Y" }}</span>
+                        {% else %}
+                            <p>{% trans 'N/A' %}</p>
+                        {% endif %}
+                    </td>
+                    <td class="sorttable_numeric" align="center" valign="middle">
+                        {% if employee.all_unpaid_salaries == 0 %}
+                            0.00
+                        {% elif employee.all_unpaid_salaries != 0 and employee.all_unpaid_salaries != None %}
+                            {{ employee.all_unpaid_salaries }}
+                        {% else %}
+                            {% trans 'N/A' %}
+                        {% endif %}
+                    </td>
+                </tr>
             {% endfor %}
 
-        </ul>
+            </tbody>
+            </table>
 
-        <br/>
+            <div>
+
+        {% else %}
+            <p>{% trans 'No matches found.' %}</p>
         {% endif %}
-    </div>
 
 
-    <script>
+        <div class="paginated">
+            {% if page_obj.has_other_pages %}
+                <ul class="pagination">
+                    {% for i in paginator.page_range %}
+                        {% if forloop.counter == 1 %}
+                            {% if page_obj.has_previous %}
+                                <li class="pg-clickable">
+                                    <input id="pg-previous" type="radio" class="vis-hidden"
+                                           name="pg" value="{{ page_obj.previous_page_number }}"/>
+                                    <label class="my-button previous clickable"
+                                           for="pg-previous">&laquo; {% trans 'Previous' %}</label>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <label class="my-button previous disabled">&laquo; {% trans 'Previous' %}</label>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% if page_obj.number == i %}
+                            <li class="active pg-clickable">
+                                <input id="pg-{{ i }}" type="radio" checked class="vis-hidden"
+                                       name="pg" value="{{ i }}"/>
+                                <label class="my-button clickable pg-active" id="pg-label{{ i }}-checked"
+                                       for="pg-{{ i }}">{{ i }}</label>
+                            </li>
+                        {% else %}
+                            <li class="pg-clickable">
+                                <input id="pg-{{ i }}" type="radio" class="vis-hidden"
+                                       name="pg" value="{{ i }}"/>
+                                <label class="my-button clickable" id="pg-label{{ i }}-not-checked"
+                                       for="pg-{{ i }}">{{ i }}</label>
+                            </li>
+                        {% endif %}
+                        {% if forloop.last %}
+                            {% if page_obj.has_next %}
+                                <li class="pg-clickable">
+                                    <input id="pg-next" type="radio" class="vis-hidden"
+                                           name="pg" value="{{ page_obj.next_page_number }}"/>
+                                    <label class="my-button next clickable" for="pg-next">{% trans 'Next' %}
+                                        &raquo;</label>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <label class="my-button next disabled">{% trans 'Next' %} &raquo;</label>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                </ul>
+
+                <br/>
+            {% endif %}
+        </div>
 
 
+        <script>
 
 
-         $('.contract_extend').click(function () {
+            $('.contract_extend').click(function () {
 
 
-             let fullId = this.id;
-             let extensionLength = fullId.substring(0,8);
-             let id = fullId.substring(8);
-             {#console.log(name);#}
-             {#console.log(id);#}
+                let fullId = this.id;
+                let extensionLength = fullId.substring(0, 8);
+                let id = fullId.substring(8);
+                extendContract(extensionLength, id);
 
-             extendContract(extensionLength, id);
-
-         });
-
-
-
-         function extendContract(extensionLength, employeeId){
-
-            const data = {extensionLength:      extensionLength,
-                          employeeId:      employeeId
-                            };
-
-            $.ajax({
-                url: 'employee_action/',
-                data: data,
-                dataType: "html",
-                method: "POST",
-                timeout: 10000,
-
-
-                success: function (content) {
-
-                {#  zamiana daty u użytkowania w tabeli#}
-
-
-
-                    console.log("employee update sucess");
-                    console.log(content);
-
-                     let obj = JSON.parse(content);
-                    let status=obj[0];
-            let name=obj[1];
-            let date=obj[2];
-
- console.log(date);
-
-
-             let month = date.substring(6,8);
-              console.log(date);
-             let day = date.substring(9,11);
-              console.log(date);
-             let year = date.substring(1,5);
-
-
-  let new_date= day+'.'+month+'.'+year;
-  console.log(new_date);
-
-
-
-  selector_id='#contract_exp_div'+employeeId;
-
-
-               $( selector_id ).html('<span class="employee-list-date">'+new_date);
-
-
-
-
-             {#parent.document.getElementById("contract_exp_column4").reload();#}
-            {# #}
-            {# #}
-            {#$( "#contract_exp_column4" ).r#}
-
-            {#$( "#contract_exp_column4" ).load(window.location.href+  ' #contract_exp_column4');#}
-            {##}
-
-
-
-
-
-
-                }
-            }).fail(function (jqXHR) {
-                {#alert że coś niue bangla#}
-                $(".loading-icon").css("opacity", "0");
-                ajaxErrorHandler(jqXHR);
             });
-        }
 
-        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-               if (options['type'].toLowerCase() === "post") {
-                jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+            function extendContract(extensionLength, employeeId) {
+
+
+                const data = {
+                    extensionLength: extensionLength,
+                    employeeId: employeeId
+                };
+
+                $.ajax({
+                    url: 'employee_action/',
+                    data: data,
+                    dataType: "html",
+                    method: "POST",
+                    timeout: 10000,
+
+
+                    success: function (content) {
+
+                        let obj = JSON.parse(content);
+                        let status = obj[0];
+                        console.log(status);
+                        let name = obj[1];
+                        let date = obj[2];
+
+                       if (status===true) {
+
+
+                           let day = date.substring(9, 11);
+                           let month = date.substring(6, 8);
+                           let year = date.substring(1, 5);
+                           let new_date = day + '.' + month + '.' + year;
+
+                           selector_id = '#contract_exp_div' + employeeId;
+                           $(selector_id).html('<span class="employee-list-date">' + new_date);
+                       }
+
+                       else{
+
+                    alert('Problem z przedłużeniem kontraktu dla pracownika '+name+'. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
+
+
+
+
+                       }
+
+
+                    }
+                }).fail(function () {
+
+
+                   let empName= $('#employee-name'+employeeId).html();
+
+
+
+                    alert('Problem z przedłużeniem kontraktu dla pracownika '+empName+'. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
+
+
+
+
+                });
             }
-        }
 
-        );
-
-
-
-
-
-
-
-
-            function makeRequestEmployeeAction() {
-
-
-            const dismiss_array = get_array_with_checkboxes_dismiss();
-            const add_one_array = get_array_with_checkboxes_add_one();
-            const add_three_array = get_array_with_checkboxes_add_three();
-            const data = {dismiss:      dismiss_array,
-                          add_one:      add_one_array,
-                          add_three:    add_three_array};
-
-            $.ajax({
-                url: 'employee_action/',
-                data: data,
-                dataType: "html",
-                method: "POST",
-                timeout: 10000,
-
-
-                success: function (content) {
-
-                    dismissStatusMessage(content)
-
-
+            $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    if (options['type'].toLowerCase() === "post") {
+                        jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+                    }
                 }
-            }).fail(function (jqXHR) {
-
-                $(".loading-icon").css("opacity", "0");
-                ajaxErrorHandler(jqXHR);
-            });
-        }
-
-        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-               if (options['type'].toLowerCase() === "post") {
-                jqXHR.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-            }
-        }
-
-        );
+            );
 
 
-        function get_array_with_checkboxes_dismiss() {
-
-            let myTab = $('.invisible').map(function () {
-                return +$(this).text();
-            }).get();
-            let dismiss_array = [];
-            myTab.forEach((el, i) => {
-                if (document.getElementById('dismiss_id' + myTab[i]).checked) {
-                     dismiss_array.push(myTab[i]);
-                }
-            });
-            return dismiss_array;
-        }
-
-
-        function get_array_with_checkboxes_add_one() {
-
-            let myTab = $('.invisible').map(function () {
-                return +$(this).text();
-            }).get();
-            let add_one_array = [];
-            myTab.forEach((el, i) => {
-                if (document.getElementById('add_one_id' + myTab[i]).checked) {
-                    add_one_array.push(myTab[i]);
-                }
-            });
-            return add_one_array;
-        }
-
-
-           function get_array_with_checkboxes_add_three() {
-
-            let myTab = $('.invisible').map(function () {
-                return +$(this).text();
-            }).get();
-            let add_three_array = [];
-            myTab.forEach((el, i) => {
-                if (document.getElementById('add_three_id' + myTab[i]).checked) {
-                   add_three_array.push(myTab[i]);
-                }
-            });
-            return add_three_array;
-        }
-
-
-              function dismissStatusMessage(content) {
-        $('#messages_container').html('<div id="message_success_status"></div>');
-            let obj = JSON.parse(content);
-
-            dismissStatus=obj[0];
-            addOneStatus=obj[1];
-            addThreeStatus=obj[2];
-
-             if ((dismissStatus==='OK') &&    (addOneStatus==='OK') && (addThreeStatus==='OK')){
-
-                  $('#messages_container').html('<div id="message_success_status">{% trans "All actions executed successful" %}</div>');
-             }
-             else {
-
-                 if (dismissStatus == 'OK') {
-                     $('#messages_container').append('<div id="message_success_status">{% trans "No problems with employees dismiss noted" %} </div>');
-                 }
-                 else {
-                     $('#messages_container').append('<div id="message_fail_status">{% trans "Unexpected problem with dismiss employees" %}</div>');
-
-                 }
-
-
-                 if (addOneStatus == 'OK') {
-                     $('#messages_container').append('<div id="message_success_status">{% trans "No problems with one month contracts extension noted" %}</div>');
-                 }
-                 else {
-                     $('#messages_container').append('<div id="message_fail_status">{% trans "Unexpected problem with one month contracts extension" %}</div>');
-
-                 }
-
-                 if (addThreeStatus == 'OK') {
-                     $('#messages_container').append('<div id="message_success_status">{% trans "No problems with three months contracts extension noted" %}</div>');
-                 }
-                 else {
-                     $('#messages_container').append('<div id="message_fail_status">{% trans "Unexpected problem with three months contracts extension" %}</div>');
-
-                 }
-             }
-        }
-
-    </script>
-</div>
-</form>
+        </script>
+        </div>
+    </form>
 
 </div>
