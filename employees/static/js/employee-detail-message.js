@@ -15,7 +15,6 @@ $('.glyphicon-list-alt').click(function () {
                 myDialog.dialog({
 
                     autoOpen: true,
-                    modal: true,
                     minHeight: 500,
                     minWidth: 800,
 

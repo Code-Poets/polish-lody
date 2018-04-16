@@ -649,6 +649,16 @@ msgstr "Książeczka zdrowia wygasła wczoraj!"
 msgid "Health book expired"
 msgstr "Książeczka zdrowia wygasła"
 
+
+#: templates/employees/employee_list_table.html:440-460
+msgid "Problem with contract extension for employee "
+msgstr "Problem z przedłużeniem kontraktu dla pracownika "
+
+#: templates/employees/employee_list_table.html:440-460
+msgid ". Please refresh the page and check if data is correct."
+msgstr ". Proszę odświeżyć stronę i sprawdzić poprawność danych."
+
+
 #: templates/employees/employee_detail.html:107
 msgid "Position:"
 msgstr "Pozycja:"

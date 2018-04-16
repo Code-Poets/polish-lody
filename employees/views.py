@@ -452,10 +452,9 @@ class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         if (extensionLength == 'add_3_id'):
             contractExtendedSucessful = contractExtension.add_three_months(employeeId)
 
-        employee=Employee.objects.get(pk=employeeId)
+        employee = Employee.objects.get(pk=employeeId)
         is_contract_expiring = employee.is_contract_expiring()
         warning_x_days_left = WARNING_DAYS_LEFT
-
 
         from django.core.serializers.json import DjangoJSONEncoder
         data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
@@ -484,7 +483,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
 
         if self.request.is_ajax():
 
-            print("render to response ajax")
             qset = context['object_list']
             orderby = context['orderby']
             try:
@@ -518,7 +516,7 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
 
             response = super().render_to_response(context, **response_kwargs)
 
-            return super().render_to_response(context, **response_kwargs)
+            return response
 
     def get_paginate_by(self, queryset):
         try:

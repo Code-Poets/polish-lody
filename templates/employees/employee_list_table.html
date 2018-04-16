@@ -140,6 +140,9 @@
         </thead>
         {% if page_employee_list %}
             <tbody id="emp-list">
+            <script>
+                 let contract_expiring='';
+            </script>
             {% for employee in page_employee_list %}
                 <tr>
                     <td>
@@ -176,13 +179,31 @@
                             {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
                                 <span title="{% trans 'Contract expires within 24 hours!' %}"
                                       class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                            {% elif employee.is_contract_expiring.1 == 1 %}
+                            {% elif employee.is_contract_expiring == -1 %}
                                 <span title="{% trans 'Contract expired yesterday!' %}"
                                       class="glyphicon glyphicon-warning-sign employee-list"></span>
-                            {% elif employee.is_contract_expiring.1 %}
-                                <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"
-                                      class="glyphicon glyphicon-warning-sign employee-list"></span>
+                            {% elif employee.is_contract_expiring < -1 %}
+
+
+                                <div id="expired-div{{ employee.id }}" style="display: inline">
+                                aaa
+                                </div>
+
+                                <script>
+                                console.log("param");
+
+
+                                    selector_id = '#expired-div' + {{ employee.id }};
+
+                                    contract_expiring = '' +{{ employee.is_contract_expiring }};
+                                    contract_expiring = ' ' + contract_expiring.substring(1);
+                                    console.log(contract_expiring);
+                                    $(selector_id).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
+                                        'class="glyphicon glyphicon-warning-sign employee-list"></span>');
+                                </script>
                             {% endif %}
+
+
 
 
 
@@ -359,60 +380,61 @@
                             let day = date.substring(9, 11);
                             let month = date.substring(6, 8);
                             let year = date.substring(1, 5);
-                            let new_date = day + '.' + month + '.' + year;
+                            let new_date = ' '+day + '.' + month + '.' + year;
+                            console.log(new_date);
 
                             selector_id = '#contract_exp_div' + employeeId;
                             $(selector_id).html('<span class="employee-list-date">' + new_date);
 
 
-                            if (is_contract_expiring > 0 ) {
-                            {#if (is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring) {#}
+                            {# kontrakt upływa w ciągu 30 dni #}
 
-console.log('11');
+                            if (is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring) {
+                                  console.log('is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring)');
+
                                 $(selector_id).html(
-                                    ' <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"' +
-                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>}' +
+                                    ' <span title="{% trans 'Contract expires in about' %} '+ is_contract_expiring +' {% trans 'days.' %}"' +
+                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>' +
+                                    '<span class="employee-list-date">' + new_date
+                                );
+
+                            }
+
+                            else if (is_contract_expiring === 0) {
+                                  console.log('is_contract_expiring ===0 ');
+                                $(selector_id).html('<span title="{% trans 'Contract expires within 24 hours!' %}"' +
+                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>' +
+                                    '<span class="employee-list-date">' + new_date
+                                );
+                            }
 
 
+                            else if (is_contract_expiring === -1) {
+                                  console.log('is_contract_expiring === -1');
+
+                                $(selector_id).html('<span title="{% trans 'Contract expired yesterday!' %}" class="glyphicon glyphicon-warning-sign employee-list"></span>' +
                                     '<span class="employee-list-date">' + new_date
                                 );
 
 
+                            }
+
+                            else if (is_contract_expiring < -1) {
+
+                                console.log('is_contract_expiring < -1');
 
 
-
-
-
-
-
-
-                                {##}
-                                {#   {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}#}
-                                {#    <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"#}
-                                {#          class="glyphicon glyphicon-exclamation-sign employee-list"></span>#}
-
-
-
-
-                                {#{% elif employee.is_contract_expiring == 0 and warning_x_days_left %}#}
-                                {#    <span title="{% trans 'Contract expires within 24 hours!' %}"#}
-                                {#          class="glyphicon glyphicon-exclamation-sign employee-list"></span>#}
-                                {#{% elif employee.is_contract_expiring.1 == 1 %}#}
-                                {#    <span title="{% trans 'Contract expired yesterday!' %}"#}
-                                {#          class="glyphicon glyphicon-warning-sign employee-list"></span>#}
-                                {#{% elif employee.is_contract_expiring.1 %}#}
-                                {#    <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"#}
-                                {#          class="glyphicon glyphicon-warning-sign employee-list"></span>#}
-                                {#{% endif %}#}
-                                {##}
-
+                                contract_expiring = '' +is_contract_expiring;
+                                contract_expiring = ' ' + contract_expiring.substring(1);
+                                $(selector_id).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
+                                    'class="glyphicon glyphicon-warning-sign employee-list"></span>' +
+                                    '<span class="employee-list-date">' + new_date);
                             }
                         }
 
                         else {
 
-                            alert('Problem z przedłużeniem kontraktu dla pracownika ' + name + '. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
-
+                                  alert("{% trans 'Problem with contract extension for employee ' %} "+ empName +"{% trans '. Please refresh the page and check if data is correct.' %}");
 
                         }
 
@@ -423,9 +445,7 @@ console.log('11');
 
                     let empName = $('#employee-name' + employeeId).html();
 
-
-                    alert('Problem z przedłużeniem kontraktu dla pracownika ' + empName + '. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
-
+                    alert("{% trans 'Problem with contract extension for employee ' %} "+ empName +"{% trans '. Please refresh the page and check if data is correct.' %}");
 
                 });
             }

@@ -24,6 +24,16 @@ def is_expiring(exp_date):
             return [days_left, days_left * (-1)]
 
 
+def is_expiring_contract(exp_date):
+    if exp_date is not None:
+        expiration_date = exp_date
+        current_time = time.time()
+        expiration_date = int(time.mktime(time.strptime(str(expiration_date), '%Y-%m-%d')))
+        days_left = int((expiration_date - current_time) / 86400)
+        return days_left
+
+
+
 def sanity_check(account_number):
     assert isinstance(account_number, str)
 
@@ -193,7 +203,7 @@ class Employee(MyUser):
         return is_expiring(self.health_book_exp_date)
 
     def is_contract_expiring(self):
-        return is_expiring(self.contract_exp_date)
+        return is_expiring_contract(self.contract_exp_date)
 
 
 class Month(models.Model):

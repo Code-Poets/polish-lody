@@ -200,7 +200,12 @@ class EmployeeMessage(FunctionalTestsBase):
         message_month43.click()
         alert = self.selenium.switch_to_alert()
         month_message = alert.driver.page_source
+
+        message_month43 = self.selenium.find_element_by_id('month_message43')
+
         self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
+
+
         self.logout()
 
         self.log_manager_and_go_to_employee_list()
@@ -234,12 +239,9 @@ class EmployeeMessage(FunctionalTestsBase):
         message_month43.click()
         time.sleep(1)
 
-        # dialog=self.selenium.find_element_by_id('dialog')
-
         alert = self.selenium.switch_to_alert()
         month_message = alert.driver.page_source
         time.sleep(1)
-        # month_message = dialog.text
         self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
 
 

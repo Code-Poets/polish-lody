@@ -462,7 +462,6 @@ class ContractExtensionBusinessLogicTests(TestCase):
 
             self.assertEqual(contractExtension.exp_date, exp_date)
 
-
     def test_should_business_logic_3_month_extension_work_properly(self):
         dict = {2: [True, date(2018, 12, 19)],
                 3: [True, date(2018, 3, 19)],
@@ -483,7 +482,6 @@ class ContractExtensionBusinessLogicTests(TestCase):
             exp_date = dict.get(key)[1]
 
             self.assertEqual(contractExtension.exp_date, exp_date)
-
 
 
 # class ContractExtensionViewStatusTests(TestCase):
@@ -535,10 +533,6 @@ class ContractExtensionBusinessLogicTests(TestCase):
 #         self.assertEqual(status, answer_status)
 
 
-
-
-
-
 class ContractExtensionViewCorrectDateTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
@@ -555,7 +549,7 @@ class ContractExtensionViewCorrectDateTests(TestCase):
     def test_should_business_logic_extension_work_properly(self):
         dict = {2: [True, '2018-10-19', 'Jakub Czachura'],
                 3: [True, '2018-01-19', 'Zbigniew Adamski'],
-                4: [True, '2017-02-27', 'Czarny Lodziarz' ],
+                4: [True, '2017-02-27', 'Czarny Lodziarz'],
                 6: [True, '2018-01-19', 'Andrzej Strzelba'],
                 12: [True, '2017-03-02', 'Ccc Ccc'],
                 11: [False, 'null', 'Bbb Bbb'],
@@ -563,11 +557,11 @@ class ContractExtensionViewCorrectDateTests(TestCase):
                 }
 
         for key in dict.keys():
-            self.__should_contract_extension_work_properly(key, dict.get(key)[0], dict.get(key)[1], dict.get(key)[2], 'add_1_id')
+            self.__should_contract_extension_work_properly(key, dict.get(key)[0], dict.get(key)[1], dict.get(key)[2],
+                                                           'add_1_id')
             # self.__should_contract_extension_work_properly(key, dict.get(key), 'add_3_month')
 
     def __should_contract_extension_work_properly(self, id, answer_status, expected_date, expected_name, extension):
-
         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         url = reverse('employee_action')
 
@@ -588,10 +582,6 @@ class ContractExtensionViewCorrectDateTests(TestCase):
         self.assertEqual(status, answer_status)
         self.assertEqual(name, expected_name)
         self.assertIn(expected_date, date)
-
-
-
-
 
 
 @skip
