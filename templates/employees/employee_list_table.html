@@ -151,7 +151,7 @@
                     </td>
                     <td>
                         <a href="{% url 'employee_detail' employee.pk %}"
-                           name="employee-from-list"  id='employee-name{{ employee.pk }}'  >{{ employee.full_name }}</a>
+                           name="employee-from-list" id='employee-name{{ employee.pk }}'>{{ employee.full_name }}</a>
                     </td>
                     <td align="center" valign="middle">
                         {{ employee.rate_per_hour }}
@@ -348,43 +348,83 @@
 
                         let obj = JSON.parse(content);
                         let status = obj[0];
-                        console.log(status);
                         let name = obj[1];
                         let date = obj[2];
+                        let is_contract_expiring = obj[3];
+                        let warning_x_days_left = obj[4];
 
-                       if (status===true) {
-
-
-                           let day = date.substring(9, 11);
-                           let month = date.substring(6, 8);
-                           let year = date.substring(1, 5);
-                           let new_date = day + '.' + month + '.' + year;
-
-                           selector_id = '#contract_exp_div' + employeeId;
-                           $(selector_id).html('<span class="employee-list-date">' + new_date);
-                       }
-
-                       else{
-
-                    alert('Problem z przedłużeniem kontraktu dla pracownika '+name+'. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
+                        if (status === true) {
 
 
+                            let day = date.substring(9, 11);
+                            let month = date.substring(6, 8);
+                            let year = date.substring(1, 5);
+                            let new_date = day + '.' + month + '.' + year;
+
+                            selector_id = '#contract_exp_div' + employeeId;
+                            $(selector_id).html('<span class="employee-list-date">' + new_date);
 
 
-                       }
+                            if (is_contract_expiring > 0 ) {
+                            {#if (is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring) {#}
+
+console.log('11');
+                                $(selector_id).html(
+                                    ' <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"' +
+                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>}' +
+
+
+                                    '<span class="employee-list-date">' + new_date
+                                );
+
+
+
+
+
+
+
+
+
+
+                                {##}
+                                {#   {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}#}
+                                {#    <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"#}
+                                {#          class="glyphicon glyphicon-exclamation-sign employee-list"></span>#}
+
+
+
+
+                                {#{% elif employee.is_contract_expiring == 0 and warning_x_days_left %}#}
+                                {#    <span title="{% trans 'Contract expires within 24 hours!' %}"#}
+                                {#          class="glyphicon glyphicon-exclamation-sign employee-list"></span>#}
+                                {#{% elif employee.is_contract_expiring.1 == 1 %}#}
+                                {#    <span title="{% trans 'Contract expired yesterday!' %}"#}
+                                {#          class="glyphicon glyphicon-warning-sign employee-list"></span>#}
+                                {#{% elif employee.is_contract_expiring.1 %}#}
+                                {#    <span title="{% trans 'Contract expired' %} {{ employee.is_contract_expiring.1 }} {% trans 'days ago!' %}"#}
+                                {#          class="glyphicon glyphicon-warning-sign employee-list"></span>#}
+                                {#{% endif %}#}
+                                {##}
+
+                            }
+                        }
+
+                        else {
+
+                            alert('Problem z przedłużeniem kontraktu dla pracownika ' + name + '. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
+
+
+                        }
 
 
                     }
                 }).fail(function () {
 
 
-                   let empName= $('#employee-name'+employeeId).html();
+                    let empName = $('#employee-name' + employeeId).html();
 
 
-
-                    alert('Problem z przedłużeniem kontraktu dla pracownika '+empName+'. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
-
-
+                    alert('Problem z przedłużeniem kontraktu dla pracownika ' + empName + '. Proszę odświeżyć stronę i sprawdzić poprawność danych.');
 
 
                 });

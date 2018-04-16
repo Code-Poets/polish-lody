@@ -155,7 +155,7 @@
 
             <body>
 
-            <div class = "ui-widget" id="emp_message_dialog" title="{% trans 'Message from employee' %}"></div>
+            <div class="ui-widget" id="emp_message_dialog" title="{% trans 'Message from employee' %}"></div>
 
 
             </body>
@@ -230,12 +230,11 @@
                                         <span class="glyphicon glyphicon-ban-circle icon-disagree"
                                               title="{% trans 'Hours not approved' %}" aria-hidden="true"></span>
 
-                                        <a href="{% url 'employee_message' month.id %}">
-                                            <span class="glyphicon-list-alt" aria-hidden="true"
-                                                  id='month_message{{ month.id }}'></span>
-                                        </a>
 
-
+                                        <span class="glyphicon-list-alt" aria-hidden="true"
+                                              id='month_message{{ month.id }}'
+                                              title="{% trans 'Message from employee' %}"
+                                              style="cursor: pointer"></span>
 
 
                                     {% else %}

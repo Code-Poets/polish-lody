@@ -452,10 +452,15 @@ class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         if (extensionLength == 'add_3_id'):
             contractExtendedSucessful = contractExtension.add_three_months(employeeId)
 
+        employee=Employee.objects.get(pk=employeeId)
+        is_contract_expiring = employee.is_contract_expiring()
+        warning_x_days_left = WARNING_DAYS_LEFT
+
+
         from django.core.serializers.json import DjangoJSONEncoder
         data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
 
-        your_list = [contractExtendedSucessful, contractExtension.name, data]
+        your_list = [contractExtendedSucessful, contractExtension.name, data, is_contract_expiring, warning_x_days_left]
         your_list_as_json = json.dumps(your_list)
 
         response = HttpResponse(your_list_as_json, content_type="application/json")
