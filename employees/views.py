@@ -433,28 +433,24 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             return False
 
 
-
 class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Employee
 
     def post(self, request, *args, **kwargs):
 
         from employees.views_business_logic import ContractExtension
-        contractExtension=ContractExtension()
+        contractExtension = ContractExtension()
 
+        extensionLength = self.request.POST['extensionLength']
+        employeeId = self.request.POST['employeeId']
 
-        extensionLength=self.request.POST['extensionLength']
-        employeeId=self.request.POST['employeeId']
+        contractExtendedSucessful = False
 
-        contractExtendedSucessful=False
-
-
-        if (extensionLength=='add_1_id'):
-            contractExtendedSucessful= contractExtension.add_one_month(employeeId)
+        if (extensionLength == 'add_1_id'):
+            contractExtendedSucessful = contractExtension.add_one_month(employeeId)
 
         if (extensionLength == 'add_3_id'):
-            contractExtendedSucessful= contractExtension.add_three_months(employeeId)
-
+            contractExtendedSucessful = contractExtension.add_three_months(employeeId)
 
         from django.core.serializers.json import DjangoJSONEncoder
         data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
@@ -464,61 +460,6 @@ class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 
         response = HttpResponse(your_list_as_json, content_type="application/json")
         return response
-
-
-
-class EmployeeActionStare(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
-    model = Employee
-
-    def post(self, request, *args, **kwargs):
-        dismiss_array = request.POST.getlist('dismiss[]')
-        add_one_array = request.POST.getlist('add_one[]')
-        add_three_array = request.POST.getlist('add_three[]')
-
-        message_dismiss = "OK"
-        message_add_one = "OK"
-        message_add_three = "OK"
-
-        for employee_id in dismiss_array:
-            try:
-                status = self.dismiss_employee(employee_id)
-                if not status:
-                    message_dismiss = "Fail"
-            except:
-                message_dismiss = "Fail"
-
-        for employee_id in add_one_array:
-            try:
-                status = self.add_one_month(employee_id)
-                if not status:
-                    message_add_one = "Fail"
-            except:
-                message_add_one = "Fail"
-
-        for employee_id in add_three_array:
-            try:
-                status = self.add_three_months(employee_id)
-                if not status:
-                    message_add_three = "Fail"
-            except:
-                message_add_three = "Fail"
-
-        your_list = [message_dismiss, message_add_one, message_add_three]
-        your_list_as_json = json.dumps(your_list)
-        return HttpResponse(your_list_as_json)
-
-    @staticmethod
-    def dismiss_employee(employee_id):
-        employee_to_dismiss = Employee.objects.get(pk=employee_id)
-        employee_to_dismiss.currently_employed = False
-        employee_to_dismiss.save()
-
-        dismissed_employee = Employee.objects.get(pk=employee_id)
-        if not dismissed_employee.currently_employed:
-            return True
-        else:
-            return False
-
 
 
 class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
@@ -760,7 +701,6 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         employee_object = self.get_queryset()
         city_object = employee_object[0].address_city
         initial['address_city'] = city_object
-
         return initial
 
     def form_valid(self, form, **kwargs):
@@ -826,8 +766,25 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     form_class = MonthForm
     template_name = 'employees/month_edit_form.html'
 
+    def make_month_acceptable_for_employee_again(self):
+        month = Month.objects.get(pk=self.object.id)
+        month.message_reason_hours_not_approved = None
+        month.month_not_approved_with_comment = False
+        month.save()
+
+    def __check_if_hours_changed(self):
+        month = Month.objects.get(pk=self.object.id)
+        old_hours = float(month.hours_worked_in_this_month)
+        updated = float(self.request.POST['hours_worked_in_this_month'])
+        if old_hours != updated:
+            return True
+        else:
+            return False
+
     def get_queryset(self, **kwargs):
+
         try:
+
             return Month.objects.filter(pk=self.kwargs['pk'])
         except:
             messages.add_message(self.request, messages.ERROR, _("This month does not exist!"))
@@ -852,7 +809,13 @@ class MonthUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             return HttpResponseRedirect('../')
 
     def form_valid(self, form, **kwargs):
+
+        make_acceptable_again = self.__check_if_hours_changed()
         form_validation = super().form_valid(form)
+
+        if make_acceptable_again:
+            self.make_month_acceptable_for_employee_again()
+
         messages.add_message(self.request, messages.SUCCESS,
                              _("Successfully edited month %(month)s %(year)s.") % ({
                                  'month': self.object.get_month_display(),
@@ -940,7 +903,6 @@ class Month_NOT_Approve(MonthApproveBase):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-
         pk = self.kwargs['pk']
         employee_message = request.POST.get('employee_message')
         month_to_update = Month.objects.get(id=int(pk))
@@ -960,6 +922,7 @@ class Month_NOT_Approve(MonthApproveBase):
 
 class EmployeeMessage(DetailView):
     model = Month
+
     # template_name = 'employees/employee_message.html'
 
     def get(self, request, *args, **kwargs):

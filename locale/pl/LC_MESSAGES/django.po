@@ -678,12 +678,12 @@ msgid "Collapse list"
 msgstr "Zwiń listę"
 
 #: templates/employees/employee_detail.html:307
-msgid "Hide unpaid months."
-msgstr "Ukryj nieopłacone miesiące."
+msgid "Hide unpaid months"
+msgstr "Ukryj nieopłacone miesiące"
 
 #: templates/employees/employee_detail.html:317
-msgid "Hide paid months."
-msgstr "Ukryj opłacone miesiące."
+msgid "Hide paid months"
+msgstr "Ukryj opłacone miesiące"
 
 #: templates/employees/employee_detail.html:321
 #: templates/employees/employee_list.html:90
