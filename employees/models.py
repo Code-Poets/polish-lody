@@ -110,10 +110,6 @@ class Employee(MyUser):
         ("Male", _("Male")),
         ("Female", _("Female")),
     )
-    # currently_employed_choices = (
-    #     (True, _("Current employee")),
-    #     (False, _("Former employee")),
-    # )
 
     position_choices = (
         ("Production", _("Production")),
@@ -204,6 +200,14 @@ class Employee(MyUser):
 
     def is_contract_expiring(self):
         return is_expiring_contract(self.contract_exp_date)
+
+    def get_contract_exp_date_string(self):
+
+        if self.contract_exp_date is not None:
+            date_to_send=''+self.contract_exp_date.strftime("%d.%m.%Y")
+            return date_to_send
+        else:
+            return None
 
 
 class Month(models.Model):

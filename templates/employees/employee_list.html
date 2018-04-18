@@ -7,6 +7,70 @@
 
     <div class="panel panel-heading panel-default">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+        <script>
+
+            let icon_cell;
+            let date_cell;
+            let contract_expiring = '';
+            let is_contract_expiring;
+            let contract_exp_date;
+            let warning_x_days_left;
+            let employeeId;
+
+            function loadDataToTable(days_to_contract_expire, new_date, warning_x_days_left, employeeId) {
+                try {
+                    days_to_contract_expire = parseInt(days_to_contract_expire);
+                }
+                catch (e) {
+                    days_to_contract_expire = null
+
+                }
+
+                icon_cell = '#icon-cell' + employeeId;
+                date_cell = '#date-cell' + employeeId;
+
+
+                $(date_cell).html('<span class="employee-list-date">' + new_date);
+
+                if (days_to_contract_expire > 0 && warning_x_days_left > days_to_contract_expire) {
+                    $(icon_cell).html(
+                        ' <span title="{% trans 'Contract expires in about' %} ' + days_to_contract_expire + ' {% trans 'days.' %}"' +
+                        'class="glyphicon glyphicon-exclamation-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire > 0 && warning_x_days_left <= days_to_contract_expire) {
+
+                    $(icon_cell).html(' ')
+                }
+
+                else if (days_to_contract_expire === 0) {
+                    $(icon_cell).html(
+                        '<span title="{% trans 'Contract expires within 24 hours!' %}"' +
+                        'class="glyphicon glyphicon-exclamation-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire === -1) {
+
+                    $(icon_cell).html('<span title="{% trans 'Contract expired yesterday!' %}" class="glyphicon glyphicon-warning-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire < -1) {
+                    contract_expiring = '' + days_to_contract_expire;
+                    contract_expiring = ' ' + contract_expiring.substring(1);
+                    $(icon_cell).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
+                        'class="glyphicon glyphicon-warning-sign employee-list"></span>');
+                }
+
+                else {
+                    $(date_cell).html('{% trans 'N/A' %}');
+                }
+
+            }
+
+
+        </script>
+
         <center>
             <h4>{% trans 'Employee list' %}</h4>
         </center>
@@ -191,13 +255,13 @@
 
     <script>
 
-         {#problem JQuery didn see page buttons on second click - dynamic setted#}
-                $(this).click(function () {
-                    setTimeout(function () {
-                        update_session();
-                    }, 100);
+        {#problem JQuery didn see page buttons on second click - dynamic setted#}
+        $(this).click(function () {
+            setTimeout(function () {
+                update_session();
+            }, 100);
 
-                });
+        });
 
         $('.filter').click(function () {
             setTimeout(function () {
@@ -210,19 +274,19 @@
             setTimeout(function () {
                 update_session();
             }, 100);
-           });
+        });
 
         $('.paginated').click(function () {
             setTimeout(function () {
                 update_session();
             }, 100);
-           });
+        });
 
         $('.pg-clickable').click(function () {
             setTimeout(function () {
                 update_session();
             }, 100);
-            });
+        });
 
 
         function update_session() {
@@ -300,8 +364,6 @@
 
             };
         }
-
-
 
 
         {##}

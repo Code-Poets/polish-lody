@@ -1,5 +1,7 @@
 {% load i18n %}
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+
 <div class="ajax-loader">
     <table class="table table-hover">
         <thead>
@@ -141,7 +143,9 @@
         {% if page_employee_list %}
             <tbody id="emp-list">
             <script>
-                 let contract_expiring='';
+
+
+
             </script>
             {% for employee in page_employee_list %}
                 <tr>
@@ -168,73 +172,34 @@
                     </td>
 
 
-                    <td class="employee-list-date" style="display:table-cell">
-
-                        <div id="contract_exp_div{{ employee.id }}" style="display:inline">
-
-
-                            {% if employee.is_contract_expiring > 0 and warning_x_days_left > employee.is_contract_expiring %}
-                                <span title="{% trans 'Contract expires in about' %} {{ employee.is_contract_expiring }} {% trans 'days.' %}"
-                                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                            {% elif employee.is_contract_expiring == 0 and warning_x_days_left %}
-                                <span title="{% trans 'Contract expires within 24 hours!' %}"
-                                      class="glyphicon glyphicon-exclamation-sign employee-list"></span>
-                            {% elif employee.is_contract_expiring == -1 %}
-                                <span title="{% trans 'Contract expired yesterday!' %}"
-                                      class="glyphicon glyphicon-warning-sign employee-list"></span>
-                            {% elif employee.is_contract_expiring < -1 %}
+                    <td class="employee-list-date">
+                        <div class="flex">
+                            <div id="icon-cell{{ employee.id }}" class="table_icon"></div>
+                            <div id="date-cell{{ employee.id }}" class="table_date"></div>
+                            <div class="table_buttons">
 
 
-                                <div id="expired-div{{ employee.id }}" style="display: inline">
-                                aaa
-                                </div>
+                                {% if employee.get_contract_exp_date_string %}
+                                    <input type="button" class="vis-hidden"/>
+                                    <label id="add_1_id{{ employee.pk }}" class="contract_extend">+1</label>
+
+                                    <input type="button" class="vis-hidden"/>
+                                    <label id="add_3_id{{ employee.pk }}" class="contract_extend">+3</label>
+                                {% endif %}
 
                                 <script>
-                                console.log("param");
+
+                                    is_contract_expiring = '{{ employee.is_contract_expiring }}';
+                                    contract_exp_date = '{{ employee.get_contract_exp_date_string }}';
+                                    warning_x_days_left = {{ warning_x_days_left }};
+                                    employeeId = {{ employee.id }};
+
+                                    loadDataToTable(is_contract_expiring, contract_exp_date, warning_x_days_left, employeeId);
 
 
-                                    selector_id = '#expired-div' + {{ employee.id }};
-
-                                    contract_expiring = '' +{{ employee.is_contract_expiring }};
-                                    contract_expiring = ' ' + contract_expiring.substring(1);
-                                    console.log(contract_expiring);
-                                    $(selector_id).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
-                                        'class="glyphicon glyphicon-warning-sign employee-list"></span>');
                                 </script>
-                            {% endif %}
-
-
-
-
-
-                            {% if employee.contract_exp_date %}
-                                <span class="employee-list-date">{{ employee.contract_exp_date|date:"d.m.Y" }} </span>
-
-
-                                </div>
-
-                                <span class="employee-list-date" style="display:inline">
-
-
-
-                  <input type="button" class="vis-hidden"/>
-             <label id="add_1_id{{ employee.pk }}" class="contract_extend">+1M</label>
-
-                 <input type="button" class="vis-hidden"/>
-             <label id="add_3_id{{ employee.pk }}" class="contract_extend">+3M</label>
-
-
-
-
-
-
-
-                </span>
-                            {% else %}
-                                <p>{% trans 'N/A' %}</p>
-                            {% endif %}
-
-
+                            </div>
+                        </div>
                     </td>
 
                     <td class="employee-list-date">
@@ -376,76 +341,23 @@
 
                         if (status === true) {
 
-
                             let day = date.substring(9, 11);
                             let month = date.substring(6, 8);
                             let year = date.substring(1, 5);
-                            let new_date = ' '+day + '.' + month + '.' + year;
-                            console.log(new_date);
+                            let new_date = ' ' + day + '.' + month + '.' + year;
+                            loadDataToTable(is_contract_expiring, new_date, warning_x_days_left, employeeId)
 
-                            selector_id = '#contract_exp_div' + employeeId;
-                            $(selector_id).html('<span class="employee-list-date">' + new_date);
-
-
-                            {# kontrakt upływa w ciągu 30 dni #}
-
-                            if (is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring) {
-                                  console.log('is_contract_expiring > 0 && warning_x_days_left > is_contract_expiring)');
-
-                                $(selector_id).html(
-                                    ' <span title="{% trans 'Contract expires in about' %} '+ is_contract_expiring +' {% trans 'days.' %}"' +
-                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>' +
-                                    '<span class="employee-list-date">' + new_date
-                                );
-
-                            }
-
-                            else if (is_contract_expiring === 0) {
-                                  console.log('is_contract_expiring ===0 ');
-                                $(selector_id).html('<span title="{% trans 'Contract expires within 24 hours!' %}"' +
-                                    'class="glyphicon glyphicon-exclamation-sign employee-list"></span>' +
-                                    '<span class="employee-list-date">' + new_date
-                                );
-                            }
-
-
-                            else if (is_contract_expiring === -1) {
-                                  console.log('is_contract_expiring === -1');
-
-                                $(selector_id).html('<span title="{% trans 'Contract expired yesterday!' %}" class="glyphicon glyphicon-warning-sign employee-list"></span>' +
-                                    '<span class="employee-list-date">' + new_date
-                                );
-
-
-                            }
-
-                            else if (is_contract_expiring < -1) {
-
-                                console.log('is_contract_expiring < -1');
-
-
-                                contract_expiring = '' +is_contract_expiring;
-                                contract_expiring = ' ' + contract_expiring.substring(1);
-                                $(selector_id).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
-                                    'class="glyphicon glyphicon-warning-sign employee-list"></span>' +
-                                    '<span class="employee-list-date">' + new_date);
-                            }
                         }
 
                         else {
 
-                                  alert("{% trans 'Problem with contract extension for employee ' %} "+ empName +"{% trans '. Please refresh the page and check if data is correct.' %}");
-
+                            alert("{% trans 'Problem with contract extension for employee ' %} " + name + "{% trans '. Please refresh the page and check if data is correct.' %}");
                         }
-
-
                     }
                 }).fail(function () {
 
-
                     let empName = $('#employee-name' + employeeId).html();
-
-                    alert("{% trans 'Problem with contract extension for employee ' %} "+ empName +"{% trans '. Please refresh the page and check if data is correct.' %}");
+                    alert("{% trans 'Problem with contract extension for employee ' %} " + empName + "{% trans '. Please refresh the page and check if data is correct.' %}");
 
                 });
             }

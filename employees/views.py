@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseDeleteView, BaseUpdateView
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView,  BaseUpdateView
 from django.urls import reverse_lazy
-# from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
-import time
+
 import json
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
@@ -17,9 +16,9 @@ from django.utils.crypto import get_random_string
 from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
 from .models import City, Employee, Month
 from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
-from django.db.models import Case, When, Sum, Value, F, Q, DecimalField
+from django.db.models import Case, When, Sum, F, Q, DecimalField
 import re
-from django.db import IntegrityError
+
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
@@ -361,7 +360,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             context['paginate_by_numbers'] = make_paginate_by_list()
             context['per_page'] = self.request.GET.get('per_page') or 10
             context['page'] = active_page_number
-            # context['employee_list'] = page_obj
+
             context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
                 self.request.session['position_sale'])
             context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
@@ -625,7 +624,6 @@ class EmployeeDetail(LoginRequiredMixin, OwnershipMixin, ListView):
         return context
 
     def get(self, request, *args, **kwargs):
-        # self.add_filters_to_cookie()
         self.object_list = self.get_queryset()
 
         allow_empty = self.get_allow_empty()
@@ -898,8 +896,6 @@ class Month_NOT_Approve(MonthApproveBase):
     model = Month
     template_name = 'employees/month_NOT_approve.html'
 
-    # Employee.objects.get(pk=employee_id)
-
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
@@ -925,8 +921,6 @@ class Month_NOT_Approve(MonthApproveBase):
 
 class EmployeeMessage(DetailView):
     model = Month
-
-    # template_name = 'employees/employee_message.html'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

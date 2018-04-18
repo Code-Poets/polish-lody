@@ -651,18 +651,34 @@ ul.topnav li.icon {
 .contract_extend {
   background-color: #bebebe;
   color: black;
-  padding: 6px 7px;
+  padding: 3px 3px;
   margin-left: 4px;
-  text-align: center;
   display: inline-block;
-  font-size: 10px;
-  border-radius: 7px;
-  border: 1px solid #D0D0D0;
+  font-size: 8px;
+  border-radius: 10px;
+  border: 2px solid #D0D0D0;
   cursor: pointer;
   alignment: right;
-  align-content: right; }
+  align-content: right;
+  text-align: right; }
 
 .contract_extend:hover {
   background: #a0a0a0; }
+
+.flex {
+  display: flex; }
+
+.table_icon {
+  width: 30%;
+  text-align: right; }
+
+.table_date {
+  width: min-content;
+  min-width: 90px; }
+
+.table_buttons {
+  width: min-content;
+  min-width: 70px;
+  text-align: left; }
 
 /*# sourceMappingURL=../../../../../../staticfiles/main.css.map */
