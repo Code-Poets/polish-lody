@@ -165,7 +165,7 @@ class UpdateSession(View):
         try:
             order = self.request.POST['order']
             request.session['order'] = order
-        except:
+        except KeyError:
             request.session['order'] = 'last_name'
 
         position_sale = self.__make_true_or_false_from_POST_request(request, 'position_sale')
