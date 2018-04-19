@@ -33,7 +33,6 @@ def is_expiring_contract(exp_date):
         return days_left
 
 
-
 def sanity_check(account_number):
     assert isinstance(account_number, str)
 
@@ -157,8 +156,6 @@ class Employee(MyUser):
 
     currently_employed = models.BooleanField(_('Currently employed'), default=True)
 
-
-
     class Meta:
         verbose_name = _('employee')
         verbose_name_plural = _('employees')
@@ -204,7 +201,7 @@ class Employee(MyUser):
     def get_contract_exp_date_string(self):
 
         if self.contract_exp_date is not None:
-            date_to_send=''+self.contract_exp_date.strftime("%d.%m.%Y")
+            date_to_send = '' + self.contract_exp_date.strftime("%d.%m.%Y")
             return date_to_send
         else:
             return None
@@ -233,24 +230,73 @@ class Month(models.Model):
     default_month = date.today().month
     months_dict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
                    7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
-    year = models.PositiveIntegerField(_('year'), default=default_year, validators=[MaxValueValidator(9999)])
-    employee = models.ForeignKey(Employee, null=True, blank=True, on_delete=models.CASCADE)
-    month = models.IntegerField(_(u'Month'), choices=month_choices, default=default_month)
-    salary_is_paid = models.BooleanField(_(u'Paid?'), default=False, choices=bool_choices)
-    hours_worked_in_this_month = models.DecimalField(_('hours worked in this month'), decimal_places=1, max_digits=4,
-                                                     default=0,
-                                                     validators=[MaxValueValidator(720), MinValueValidator(0)])
-    month_is_approved = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
-    month_not_approved_with_comment = models.BooleanField(_(u'Approved?'), default=False, choices=bool_choices)
 
-    message_reason_hours_not_approved = models.TextField(_('Comment, why you disagree with the hours (optional)'),
-                                                         blank=True, null=True, default=None)
+    year = models.PositiveIntegerField(
+        _('year'),
+        default=default_year,
+        validators=[MaxValueValidator(9999)]
+    )
 
-    rate_per_hour_this_month = models.DecimalField(_('rate per hour this month'), decimal_places=2, max_digits=7,
-                                                   default=0,
-                                                   validators=[MinValueValidator(0)])
-    bonuses = models.DecimalField(_('Bonuses'), decimal_places=2, max_digits=7, default=0,
-                                  validators=[MinValueValidator(0)])
+    employee = models.ForeignKey(
+        Employee,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+
+    month = models.IntegerField(
+        _(u'Month'),
+        choices=month_choices,
+        default=default_month
+    )
+
+    salary_is_paid = models.BooleanField(
+        _(u'Paid?'),
+        default=False,
+        choices=bool_choices
+    )
+
+    hours_worked_in_this_month = models.DecimalField(
+        _('hours worked in this month'),
+        decimal_places=1,
+        max_digits=4,
+        default=0,
+        validators=[MaxValueValidator(720), MinValueValidator(0)]
+    )
+
+    month_is_approved = models.BooleanField(
+        _(u'Approved?'),
+        default=False,
+        choices=bool_choices
+    )
+
+    month_not_approved_with_comment = models.BooleanField(
+        _(u'Approved?'),
+        default=False,
+        choices=bool_choices
+    )
+
+    message_reason_hours_not_approved = models.TextField(
+        _('Comment, why you disagree with the hours (optional)'),
+        blank=True,
+        null=True,
+        default=None
+    )
+
+    rate_per_hour_this_month = models.DecimalField(
+        _('rate per hour this month'),
+        decimal_places=2,
+        max_digits=7,
+        default=0,
+        validators=[MinValueValidator(0)]
+    )
+
+    bonuses = models.DecimalField(
+        _('Bonuses'),
+        decimal_places=2,
+        max_digits=7,
+        default=0,
+        validators=[MinValueValidator(0)]
+    )
 
     def __str__(self):
         return self.months_dict[self.month] + " " + str(self.year)

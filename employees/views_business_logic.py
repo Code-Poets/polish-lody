@@ -2,25 +2,22 @@ from employees.models import Employee
 
 
 class ContractExtension:
-
-
-    name=None
-    exp_date=None
+    name = None
+    exp_date = None
 
     def add_one_month(self, employee_id):
         employee_to_update = Employee.objects.get(pk=employee_id)
 
-        self.name=employee_to_update.first_name+ ' '+employee_to_update.last_name
-
+        self.name = employee_to_update.first_name + ' ' + employee_to_update.last_name
 
         old_date = employee_to_update.contract_exp_date
-        self.exp_date=old_date
+        self.exp_date = old_date
 
-        try:
+        if old_date is not None:
             day = old_date.day
             old_month = old_date.month
             old_year = old_date.year
-        except:
+        else:
             return False
 
         new_year = old_year
@@ -40,7 +37,7 @@ class ContractExtension:
 
         if ((old_date.day == updated_date.day) and (old_date.month + 1 == updated_date.month) and (
                 old_date.year == updated_date.year)):
-            self.exp_date=updated_date
+            self.exp_date = updated_date
             return True
 
         elif ((old_date.day == updated_date.day) and (updated_date.month == 1) and (
@@ -59,11 +56,11 @@ class ContractExtension:
         old_date = employee_to_update.contract_exp_date
         self.exp_date = old_date
 
-        try:
+        if old_date is not None:
             day = old_date.day
             old_month = old_date.month
             old_year = old_date.year
-        except:
+        else:
             return False
 
         new_year = old_year

@@ -263,32 +263,6 @@
 
         });
 
-        $('.filter').click(function () {
-            setTimeout(function () {
-                update_session();
-            }, 100);
-
-        });
-
-        $('.sort-buttons').click(function () {
-            setTimeout(function () {
-                update_session();
-            }, 100);
-        });
-
-        $('.paginated').click(function () {
-            setTimeout(function () {
-                update_session();
-            }, 100);
-        });
-
-        $('.pg-clickable').click(function () {
-            setTimeout(function () {
-                update_session();
-            }, 100);
-        });
-
-
         function update_session() {
 
             data = gatherFilters();
@@ -347,6 +321,11 @@
         });
 
         function gatherFilters() {
+
+            let page_value = ($('input[name=pg]:checked').val());
+            if (page_value === undefined) {
+                page_value = 1;
+            }
             return {
                 order: $('input[name=order]:checked', '#auto-submit-form').val(),
                 employee_filter: $('#employee_filter').val(),
@@ -359,7 +338,7 @@
                 current_employees: $('input[name=current_employees]:checked').val(),
                 employees_action: $('input[name=employees_action]:checked').val(),
                 per_page: $('select[name=per_page]').val(),
-                page: $('input[name=pg]:checked').val(),
+                page: page_value,
 
 
             };

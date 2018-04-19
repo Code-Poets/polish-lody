@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView,  BaseUpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseUpdateView
 from django.urls import reverse_lazy
 
 import json
@@ -162,49 +162,44 @@ class UpdateSession(View):
         if not request.is_ajax() or not request.method == 'POST':
             from django.http import HttpResponseNotAllowed
             return HttpResponseNotAllowed(['POST'])
-        try:
-            order = self.request.POST['order']
-            request.session['order'] = order
-        except KeyError:
-            request.session['order'] = 'last_name'
+
+        order = self.request.POST['order']
+        request.session['order'] = order
 
         position_sale = self.__make_true_or_false_from_POST_request(request, 'position_sale')
         request.session['position_sale'] = position_sale
+
         position_other = self.__make_true_or_false_from_POST_request(request, 'position_other')
         request.session['position_other'] = position_other
+
         position_production = self.__make_true_or_false_from_POST_request(request, 'position_production')
         request.session['position_production'] = position_production
+
         hide_paid_employees_filter = self.__make_true_or_false_from_POST_request(request, 'hide_paid_employees_filter')
         request.session['hide_paid_employees_filter'] = hide_paid_employees_filter
+
         hide_zero_salary_months = self.__make_true_or_false_from_POST_request(request, 'hide_zero_salary_months')
         request.session['hide_zero_salary_months'] = hide_zero_salary_months
+
         former_employees = self.__make_true_or_false_from_POST_request(request, 'former_employees')
         request.session['former_employees'] = former_employees
+
         current_employees = self.__make_true_or_false_from_POST_request(request, 'current_employees')
         request.session['current_employees'] = current_employees
 
-        try:
-            per_page = self.request.POST['per_page']
-            request.session['per_page'] = per_page
-        except:
-            request.session['per_page'] = 10
+        per_page = self.request.POST['per_page']
+        request.session['per_page'] = per_page
 
-        try:
-            page = self.request.POST['page']
-            request.session['page'] = page
-        except:
-            request.session['page'] = 1
+        page = self.request.POST['page']
+        request.session['page'] = page
+
         return HttpResponse('ok')
 
     @staticmethod
-    def __make_true_or_false_from_POST_request(request, filer_name):
-        try:
-            value = request.POST[filer_name]
-            if value == 'on':
-                return True
-            else:
-                return False
-        except:
+    def __make_true_or_false_from_POST_request(request, filter_name):
+        if filter_name in request.POST.keys():
+            return True
+        else:
             return False
 
 
@@ -212,42 +207,36 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'employees/employee_list.html'
     context_object_name = 'page_employee_list'
 
-    def __get_filter_value_from_ajax_or_session_with_default_secure(self, filer_name):
+    def __get_filter_value_from_ajax_or_session_with_default_secure(self, filter_name):
         if self.request.is_ajax():
-            try:
-                value = self.request.GET.get(filer_name)
-                if value == 'on':
-                    return True
-                if value == True:
-                    return True
-                else:
-                    return False
-            except:
+            if filter_name in self.request.GET.keys():
+                return True
+            else:
                 return False
         else:
-            if filer_name == 'current_employees':
-                return self.__make_true_from_SESSION_request(filer_name)
+            if filter_name == 'current_employees':
+                return self.__make_true_from_SESSION_request(filter_name)
             else:
-                try:
-                    return self.request.session[filer_name]
-                except:
-                    self.request.session[filer_name] = None
+                if filter_name in self.request.GET.keys():
+                    return self.request.session[filter_name]
+                else:
+                    self.request.session[filter_name] = None
                     return None
 
-    def __make_true_from_SESSION_request(self, filer_name):
-        try:
-            return self.request.session[filer_name]
-        except:
-            self.request.session[filer_name] = True
+    def __make_true_from_SESSION_request(self, filter_name):
+        if filter_name in self.request.GET.keys():
+            return self.request.session[filter_name]
+        else:
+            self.request.session[filter_name] = True
             return True
 
     def __get_order(self):
         if self.request.is_ajax():
             return self.request.GET.get('order', 'last_name')
         else:
-            try:
+            if 'order' in self.request.GET.keys():
                 return self.request.session['order']
-            except:
+            else:
                 return 'last_name'
 
     def get_queryset(self):
@@ -319,17 +308,15 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
     def __get_active_page_number(self):
         if self.request.is_ajax():
-            try:
+            if 'page' in self.request.GET.keys():
                 page = self.request.GET.get('page')
-                if page == None:
-                    page = 1
                 return page
-            except:
+            else:
                 return 1
         else:
-            try:
+            if 'page' in self.request.GET.keys():
                 return self.request.session['page']
-            except:
+            else:
                 return 1
 
     def get_context_data(self, **kwargs):
@@ -360,25 +347,13 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             context['paginate_by_numbers'] = make_paginate_by_list()
             context['per_page'] = self.request.GET.get('per_page') or 10
             context['page'] = active_page_number
-
-            context['position_sale'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['position_sale'])
-            context['position_production'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['position_production'])
-            context['position_other'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['position_other'])
-
-            context['hide_zero_salary_months'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['hide_zero_salary_months'])
-
-            context['hide_paid_employees_filter'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['hide_paid_employees_filter'])
-
-            context['former_employees'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['former_employees'])
-
-            context['current_employees'] = self.__set_boolean_from_session_with_exception_secure(
-                self.request.session['current_employees'])
+            context['position_sale'] = self.__get_boolean_from_session('position_sale')
+            context['position_production'] = self.__get_boolean_from_session('position_production')
+            context['position_other'] = self.__get_boolean_from_session('position_other')
+            context['hide_zero_salary_months'] = self.__get_boolean_from_session('hide_zero_salary_months')
+            context['hide_paid_employees_filter'] = self.__get_boolean_from_session('hide_paid_employees_filter')
+            context['former_employees'] = self.__get_boolean_from_session('former_employees')
+            context['current_employees'] = self.__get_boolean_from_session('current_employees')
 
         context['warning_x_days_left'] = WARNING_DAYS_LEFT
         context['form_submit_delay'] = FORM_SUBMIT_DELAY
@@ -393,18 +368,16 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         return names
 
     def get_paginate_by_ajax(self):
-        try:
-            per_page = self.request.GET.get('per_page') or self.kwargs.get('per_page') or 10
-        except:
-            per_page = 10
-        return per_page
+        if 'per_page' in self.request.GET.keys():
+            return self.request.GET.get('per_page')
+        else:
+            return 10
 
     def get_paginate_by_session_or_default(self):
-        try:
-            per_page = self.request.session['per_page'] or 10
-        except:
-            per_page = 10
-        return per_page
+        if 'per_page' in self.request.session.keys():
+            return self.request.session['per_page']
+        else:
+            return 10
 
     def get_paginate_by(self, queryset):
         if self.request.is_ajax():
@@ -419,16 +392,16 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             else:
                 return 'last_name'
         else:
-            try:
+            if 'order' in self.request.session.keys():
                 return self.request.session['order']
-            except:
+            else:
                 return 'last_name'
 
-    @staticmethod
-    def __set_boolean_from_session_with_exception_secure(boolean_value):
-        try:
-            return boolean_value
-        except:
+    def __get_boolean_from_session(self, filter_name):
+
+        if filter_name in self.request.session.keys():
+            return self.request.session[filter_name]
+        else:
             return False
 
 
