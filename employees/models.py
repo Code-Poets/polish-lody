@@ -1,96 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from datetime import date
-from django.db import models, transaction
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-import time
-from django.core.validators import validate_email, MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+from employees.utils import phone_check, sanity_check, zip_check, is_expiring, is_expiring_contract
 from users.models import MyUser
-
-import re
-
-
-def is_expiring(exp_date):
-    if exp_date is not None:
-        expiration_date = exp_date
-        current_time = time.time()
-        expiration_date = int(time.mktime(time.strptime(str(expiration_date), '%Y-%m-%d')))
-        days_left = int((expiration_date - current_time) / 86400)
-        if 0 <= days_left <= 30:
-            return days_left
-        elif 0 > days_left:
-            return [days_left, days_left * (-1)]
-
-
-def is_expiring_contract(exp_date):
-    if exp_date is not None:
-        expiration_date = exp_date
-        current_time = time.time()
-        expiration_date = int(time.mktime(time.strptime(str(expiration_date), '%Y-%m-%d')))
-        days_left = int((expiration_date - current_time) / 86400)
-        return days_left
-
-
-def sanity_check(account_number):
-    assert isinstance(account_number, str)
-
-    if account_number.replace(' ', '').isdigit():
-
-        account_number_sans_checksum = account_number.replace(' ', '')[2:]
-        original_checksum = int(account_number[0:2])
-        new_checksum = 98 - (int(account_number_sans_checksum + '252100') % 97)
-
-        assert new_checksum >= 0
-
-        if new_checksum < 10:
-            new_checksum = int('0' + str(new_checksum))
-
-        if original_checksum != new_checksum:
-            raise ValidationError(_("The bank account number you entered is invalid"))
-
-    else:
-
-        raise ValidationError(_('Bank account number cannot contain letters'))
-
-
-def phone_check(phone_number):
-    assert isinstance(phone_number, str)
-
-    phone_number_clean = phone_number.replace(' ', '')
-
-    if phone_number_clean.replace('+', '').isdigit():
-
-        if len(phone_number) <= 3:
-            phone_number = ''
-
-        else:
-
-            pattern = re.compile('^\+[0-9]{2}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}$')
-
-            if not pattern.match(phone_number):
-                raise ValidationError(_("The phone number you entered is invalid"))
-
-        return phone_number
-
-    else:
-
-        raise ValidationError(_('Phone number cannot contain letters'))
-
-
-def zip_check(zip_code):
-    assert isinstance(zip_code, str)
-
-    if zip_code.replace('-', '').isdigit():
-
-        pattern = re.compile('^[0-9]{2}-[0-9]{3}$')
-
-        if not pattern.match(zip_code):
-            raise ValidationError(_("The zip code you entered is invalid"))
-
-    else:
-        raise ValidationError(_('Zip code cannot contain letters'))
 
 
 class City(models.Model):
@@ -124,37 +40,102 @@ class Employee(MyUser):
         ("Other", _("Other")),
     )
 
-    rate_per_hour = models.DecimalField(_('rate per hour'), max_digits=7, decimal_places=2, blank=True, default=0,
-                                        validators=[
-                                            MinValueValidator(0)
-                                        ])
-    contract_start_date = models.DateField(_('contract start date'), blank=True, default=timezone.now,
-                                           null=True)  # alter if needed
-    contract_exp_date = models.DateField(_('contract exp date'), blank=True, default=None, null=True)
-    health_book_exp_date = models.DateField(_('health book exp date'), blank=True, default=None, null=True)
-    gender = models.CharField(_('gender'), max_length=16, blank=False, null=True, default="Male",
-                              choices=gender_choices)
-    position = models.CharField(_('position'), max_length=16, null=True, blank=False, default="Other",
-                                choices=position_choices)
-    contract_type = models.CharField(_('contract type'), blank=True, null=True, default=None, max_length=64,
-                                     choices=contract_choices)
+    rate_per_hour = models.DecimalField(
+        _('rate per hour'),
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        default=0,
+        validators=[
+            MinValueValidator(0)
+        ])
 
-    address_city = models.ForeignKey(City, to_field='name', on_delete=models.SET_NULL, max_length=30, null=True,
-                                     blank=True, verbose_name=_('City'), default=None)
+    contract_start_date = models.DateField(
+        _('contract start date'),
+        blank=True,
+        default=timezone.now,
+        null=True)  # alter if needed
 
-    address_street = models.CharField(_('Street'), max_length=80, null=True, blank=True, default=None)
+    contract_exp_date = models.DateField(
+        _('contract exp date'),
+        blank=True,
+        default=None,
+        null=True)
 
-    address_zip_code = models.CharField(_('Zip code'), max_length=6, blank=True, null=True, default=None,
-                                        validators=[zip_check])
+    health_book_exp_date = models.DateField(
+        _('health book exp date'),
+        blank=True,
+        default=None,
+        null=True)
 
-    bank_account_number = models.CharField(_('Bank account number'), max_length=250, blank=True, null=True,
-                                           default=None,
-                                           validators=[sanity_check])
+    gender = models.CharField(
+        _('gender'),
+        max_length=16,
+        blank=False,
+        null=True,
+        default="Male",
+        choices=gender_choices)
 
-    phone_contact_number = models.CharField(_('Phone contact number'), max_length=15, blank=True, null=True,
-                                            default=None, validators=[phone_check])
+    position = models.CharField(
+        _('position'),
+        max_length=16,
+        null=True,
+        blank=False,
+        default="Other",
+        choices=position_choices)
 
-    currently_employed = models.BooleanField(_('Currently employed'), default=True)
+    contract_type = models.CharField(
+        _('contract type'),
+        blank=True,
+        null=True,
+        default=None,
+        max_length=64,
+        choices=contract_choices)
+
+    address_city = models.ForeignKey(
+        City,
+        to_field='name',
+        on_delete=models.SET_NULL,
+        max_length=30,
+        null=True,
+        blank=True,
+        verbose_name=_('City'),
+        default=None)
+
+    address_street = models.CharField(
+        _('Street'),
+        max_length=80,
+        null=True,
+        blank=True,
+        default=None)
+
+    address_zip_code = models.CharField(
+        _('Zip code'),
+        max_length=6,
+        blank=True,
+        null=True,
+        default=None,
+        validators=[zip_check])
+
+    bank_account_number = models.CharField(
+        _('Bank account number'),
+        max_length=250,
+        blank=True,
+        null=True,
+        default=None,
+        validators=[sanity_check])
+
+    phone_contact_number = models.CharField(
+        _('Phone contact number'),
+        max_length=15,
+        blank=True,
+        null=True,
+        default=None,
+        validators=[phone_check])
+
+    currently_employed = models.BooleanField(
+        _('Currently employed'),
+        default=True)
 
     class Meta:
         verbose_name = _('employee')

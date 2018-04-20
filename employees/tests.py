@@ -1,15 +1,14 @@
 from django.contrib.auth import get_user_model
-from unittest2 import skip
-
-from users.models import MyUser
-from django.test import TestCase, Client, RequestFactory, TransactionTestCase
+from django.test import TestCase, TransactionTestCase
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
-from datetime import datetime, timedelta, date
-from .models import City, Employee, Month
-from datetime import datetime, date
+from datetime import timedelta
+from .models import Employee, Month
+from datetime import date
 import random
-import time
+import json
+from employees.forms import MonthForm
+from employees.views_business_logic import ContractExtension
 
 # FIXME: This method should not be applied globally(@Kamil)
 User = get_user_model()
@@ -50,9 +49,11 @@ class EmployeeMethodTests(TestCase):
 class EmployeeListViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         zbigniew_adamski = Employee.objects.get(id=3)
@@ -132,9 +133,11 @@ class EmployeeListViewTests(TestCase):
 class EmployeeDetailViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -184,7 +187,6 @@ class EmployeeDetailViewTests(TestCase):
     def test_should_month_create_view_work(self):
         url = reverse_lazy('employee_detail', args=(29,))
 
-        from employees.forms import MonthForm
         form = MonthForm({
             'year': '2018',
             'month': '3',
@@ -206,9 +208,11 @@ class EmployeeDetailViewTests(TestCase):
 class EmployeeMessageViewTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -226,9 +230,11 @@ class EmployeeMessageViewTests(TestCase):
 class MonthCreateAndUpdateAndDeleteViewTests(TransactionTestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -277,7 +283,7 @@ class MonthCreateAndUpdateAndDeleteViewTests(TransactionTestCase):
     def test_should_month_update_view_work(self):
 
         month = random.choice(Month.objects.all())
-        employee = month.employee  # .__str__()
+        employee = month.employee
         year = month.year
         url = reverse_lazy('month_edit', args=(month.id,))
         response = self.client.get(url)
@@ -305,9 +311,11 @@ class MonthCreateAndUpdateAndDeleteViewTests(TransactionTestCase):
 class EmployeeFilterTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -431,9 +439,11 @@ class EmployeeFilterTests(TestCase):
 class ContractExtensionBusinessLogicTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -452,7 +462,6 @@ class ContractExtensionBusinessLogicTests(TestCase):
                 }
 
         for key in dict.keys():
-            from employees.views_business_logic import ContractExtension
             contractExtension = ContractExtension()
 
             extend_status = dict.get(key)[0]
@@ -473,72 +482,24 @@ class ContractExtensionBusinessLogicTests(TestCase):
                 }
 
         for key in dict.keys():
-            from employees.views_business_logic import ContractExtension
-            contractExtension = ContractExtension()
+            contract_extension = ContractExtension()
 
             extend_status = dict.get(key)[0]
 
-            self.assertEqual(contractExtension.add_three_months(key), extend_status)
+            self.assertEqual(contract_extension.add_three_months(key), extend_status)
             exp_date = dict.get(key)[1]
 
-            self.assertEqual(contractExtension.exp_date, exp_date)
-
-
-# class ContractExtensionViewStatusTests(TestCase):
-#     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
-#
-#     # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-#     # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-#     # reason- loading fikstura_cities takes very long time
-#
-#     def setUp(self):
-#         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
-#         zbigniew_adamski = Employee.objects.get(id=3)
-#         assert ('Zbigniew Adamski' == str(
-#             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
-#
-#     def test_should_business_logic_extension_work_properly(self):
-#         dict = {3: True,
-#                 2: True,
-#                 4: True,
-#                 6: True,
-#                 12: True,
-#                 11: False,
-#                 29: False
-#                 }
-#
-#         for key in dict.keys():
-#             self.__should_contract_extension_work_properly(key, dict.get(key), 'add_1_month')
-#             self.__should_contract_extension_work_properly(key, dict.get(key), 'add_3_month')
-#
-#     def __should_contract_extension_work_properly(self, id, answer_status, extension):
-#
-#         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
-#         url = reverse('employee_action')
-#
-#         get_data = {'extensionLength': extension,
-#                     'employeeId': id,
-#                     }
-#
-#         response = self.client.post(url, get_data, **kwargs)
-#         self.assertEqual(response.status_code, 200)
-#
-#         import json
-#         dict = json.loads(response.content)
-#
-#         status = dict[0]
-#         name = dict[1]
-#         date = dict[2]
-#
-#         self.assertEqual(status, answer_status)
+            self.assertEqual(contract_extension.exp_date, exp_date)
 
 
 class ContractExtensionViewCorrectDateTests(TestCase):
     fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
 
-    # fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
-    # cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
-    # reason- loading fikstura_cities takes very long time
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
 
     def setUp(self):
         self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
@@ -559,7 +520,6 @@ class ContractExtensionViewCorrectDateTests(TestCase):
         for key in dict.keys():
             self.__should_contract_extension_work_properly(key, dict.get(key)[0], dict.get(key)[1], dict.get(key)[2],
                                                            'add_1_id')
-            # self.__should_contract_extension_work_properly(key, dict.get(key), 'add_3_month')
 
     def __should_contract_extension_work_properly(self, id, answer_status, expected_date, expected_name, extension):
         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
@@ -572,7 +532,6 @@ class ContractExtensionViewCorrectDateTests(TestCase):
         response = self.client.post(url, get_data, **kwargs)
         self.assertEqual(response.status_code, 200)
 
-        import json
         dict = json.loads(response.content)
 
         status = dict[0]
@@ -584,173 +543,94 @@ class ContractExtensionViewCorrectDateTests(TestCase):
         self.assertIn(expected_date, date)
 
 
-@skip
-class MonthFilterTests(TestCase):
-    fixtures = ['fixtures.json']
-    c = Client()
-
-    def test_should_hide_unpaid_months_filter_work(self):
-        admin_login(self)
-        employee = Employee.objects.get(email="czarny@lody.pl")
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url + "?hide_unpaid_months_filter=on")
-        self.assertQuerysetEqual(response.context['months'],
-                                 ['<Month: March 2017>'])
-
-    def test_should_hide_paid_months_filter_work(self):
-        admin_login(self)
-        employee = Employee.objects.get(email="czarny@lody.pl")
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url + "?hide_paid_months_filter=on")
-        self.assertEqual(len(response.context['months']), 10)
-
-    def test_should_year_filters_work(self):
-        admin_login(self)
-        employee = Employee.objects.get(email="czarny@lody.pl")
-        url = reverse_lazy('employee_detail', args=(employee.id,))
-        response = self.c.get(url + "?2017=on")
-        self.assertQuerysetEqual(response.context['months'],
-                                 ['<Month: March 2017>', '<Month: February 2017>', '<Month: January 2017>'])
-        response = self.c.get(url + "?2018=on")
-        self.assertQuerysetEqual(response.context['months'],
-
-                                 ['<Month: January 2018>'])
-
-
-@skip
 class MonthApproveTests(TestCase):
-    fixtures = ['fikstura_approve.yaml']
+    fixtures = ['users_myuser.json', 'employees_employee.json', 'month.json']
+
+    """
+    fixtures = ['fikstura_cities','users_myuser.json', 'employees_employee.json']
+    cities deleted manual from fixtury. To test with cities activate upper line and use employees_employee_with_cities.json
+    reason- loading fikstura_cities takes very long time
+    """
+
+    # def setUp(self):
+    #     self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+    #     zbigniew_adamski = Employee.objects.get(id=3)
+    #     assert ('Zbigniew Adamski' == str(
+    #         zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
     def test_approve_month_page_should_be_accessible_to_employee(self):
-        employee = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.filter(employee=employee.id).order_by('id')[0]
-
-        success = self.client.login(username=employee.email, password='codepassword')
+        success = self.client.login(username='pawel@wp.pl', password='codepoets')
         assert success
 
+        month = Month.objects.get(pk=42)
         url = reverse('month_approve', kwargs={'pk': month.id})
         response = self.client.get(url)
-
         self.assertEqual(response.status_code, 200)
 
     def test_approve_month_page_should_be_inaccessible_to_staff(self):
-        employee_admin = User.objects.get(email='admin@polishlody.com')
-        employee = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.filter(employee=employee.id).order_by('id')[0]
-
-        success = self.client.login(username=employee_admin.email, password='codepassword')
+        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         assert success
 
+        month = Month.objects.get(pk=42)
         url = reverse('month_approve', kwargs={'pk': month.id})
         response = self.client.get(url)
-
-        self.assertNotEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_approve_month_page_should_be_inaccessible_to_wrong_employee(self):
-        employee_1 = Employee.objects.get(email='a.shep@mail.com')
-        employee_2 = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.filter(employee=employee_2.id).order_by('id')[0]
-
-        success = self.client.login(username=employee_1.email, password='codepassword')
+        success = self.client.login(username='pawel@wp.pl', password='codepoets')
         assert success
 
+        month = Month.objects.get(pk=4)
         url = reverse('month_approve', kwargs={'pk': month.id})
         response = self.client.get(url)
-        # print(url)
-        self.assertNotEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_month_approval_status_should_become_false_after_hours_worked_in_month_change_by_staff(self):
-        employee_1 = Employee.objects.get(email='z_niewypal@polishlody.com')
-        employee_2 = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.get(pk=5)
-
-        assert employee_1.is_staff == True
-        assert month.month_is_approved == True
-
-        success = self.client.login(username=employee_1.email, password='codepassword')
+        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         assert success
 
+        month = Month.objects.get(pk=40)
+        employee = Employee.objects.get(pk=30)
+        self.assertEqual(month.month_is_approved, False)
+        self.assertEqual(month.month_not_approved_with_comment, True)
         url = reverse('month_edit', kwargs={'pk': month.id})
 
-        data = {'employee': employee_2.id,
+        data = {'employee': employee.id,
                 'salary_is_paid': False,
                 'hours_worked_in_this_month': 101,
                 'rate_per_hour_this_month': 11,
                 'year': 2017,
-                'month': 1}
+                'month': 11,
+                'bonuses': 0,
+                'submit': 'Zatwierdź'}
 
-        response_post = self.client.post(url, data=data)
+        self.client.post(url, data=data)
         month.refresh_from_db()
-
         self.assertEqual(month.month_is_approved, False)
+        self.assertEqual(month.month_not_approved_with_comment, False)
 
-    def test_month_approval_status_should_become_false_after_hours_worked_in_month_and_other_fields_change_by_staff(
-            self):
-        employee_1 = Employee.objects.get(email='z_niewypal@polishlody.com')
-        employee_2 = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.get(pk=5)
-
-        assert employee_1.is_staff == True
-        assert month.month_is_approved == True
-
-        success = self.client.login(username=employee_1.email, password='codepassword')
+    def test_month_approval_status_should_become_not_change_after_hours_worked_in_month_not_change_by_staff(self):
+        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
         assert success
 
+        month = Month.objects.get(pk=40)
+        employee = Employee.objects.get(pk=30)
+        self.assertEqual(month.month_is_approved, False)
+        self.assertEqual(month.rate_per_hour_this_month, 15)
+        self.assertEqual(month.month_not_approved_with_comment, True)
         url = reverse('month_edit', kwargs={'pk': month.id})
 
-        data = {'employee': employee_2.id,
+        data = {'employee': employee.id,
                 'salary_is_paid': False,
-                'hours_worked_in_this_month': 101,
-                'rate_per_hour_this_month': 12,
-                'year': 2018,
-                'month': 2}
-
-        response_post = self.client.post(url, data=data)
-        month.refresh_from_db()
-
-        self.assertEqual(month.month_is_approved, False)
-
-    def test_month_approval_status_should_remain_true_if_salary_paid_is_true(self):
-        employee_1 = Employee.objects.get(email='z_niewypal@polishlody.pl')
-        employee_2 = Employee.objects.get(email='zbigniew@polishlody.com')
-        month = Month.objects.get(pk=4)
-
-        assert employee_1.is_staff == True
-        assert month.month_is_approved == True
-
-        success = self.client.login(username=employee_1.email, password='codepassword')
-        assert success
-
-        url = reverse('month_edit', kwargs={'pk': month.id})
-
-        data = {'employee': employee_2.id,
-                'salary_is_paid': True,
-                'hours_worked_in_this_month': 153,
+                'hours_worked_in_this_month': 50,
                 'rate_per_hour_this_month': 11,
-                'year': 2016,
-                'month': 12}
+                'year': 2017,
+                'month': 11,
+                'bonuses': 0,
+                'submit': 'Zatwierdź'}
 
-        response_post = self.client.post(url, data=data)
+        self.client.post(url, data=data)
         month.refresh_from_db()
-
-        self.assertEqual(month.month_is_approved, True)
-
-
-@skip
-class CityAutocompleteTests(TestCase):
-    fixtures = ['fikstura_approve.yaml', 'fikstura_cities_test.json']
-
-    def test_user_query_should_be_registered_by_view(self):
-        print('test')
-
-        employee_1 = Employee.objects.get(email='z_niewypal@polishlody.com')
-        assert employee_1.is_staff == True
-
-        success = self.client.login(username=employee_1.email, password='codepassword')
-        assert success
-
-        url = reverse('employee_new')
-
-        response = self.client.get(url, query='Wro')
-
-        print(response)
+        self.assertEqual(month.month_is_approved, False)
+        self.assertEqual(month.rate_per_hour_this_month, 11)
+        self.assertEqual(month.month_not_approved_with_comment, True)

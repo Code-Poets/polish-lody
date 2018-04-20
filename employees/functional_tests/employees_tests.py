@@ -1,14 +1,9 @@
 import time
 from enum import Enum
-
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
-
-from selenium.common import exceptions
-from unittest2 import skip
-
 from employees.functional_tests.base import FunctionalTestsBase
 
 
@@ -24,15 +19,18 @@ class UserLogin(LiveServerTestCase):
 
     def test_user_schould_login(self):
         self.browser.get('%s%s' % (self.live_server_url, ''))
-        self.assertIn('Witajcie', self.browser.title)
+
         login_field = self.browser.find_element_by_id('id_username')
         password_field = self.browser.find_element_by_id('id_password')
 
         login_field.send_keys('pawel.kisielewicz@codepoets.it')
-        # login_field.send_keys('user_manager@polishlody.pl')
         password_field.send_keys('codepoets')
         password_field.send_keys(Keys.ENTER)
         time.sleep(1)
+
+        if 'Manager dashboard' in self.browser.title:
+            button = self.browser.find_element_by_id('change-language')
+            button.click()
 
         self.assertIn('Panel główny', self.browser.title, 'prawdopodobny problem z logowaniem')
         employee_list_link = self.browser.find_element_by_id('employees_link')
@@ -106,73 +104,52 @@ class ListViewFilter(FunctionalTestsBase):
     def __check_if_employee_filter_exist_and_get_boolean_value(self, filter_name_enum):
 
         filter_name = filter_name_enum.value
-        try:
-            element = self.selenium.find_element_by_id(filter_name)
 
-        except:
-            element = None
+        number_of_elements = len(self.selenium.find_elements_by_id(filter_name))
+        self.assertNotEqual(number_of_elements, 0, 'unable to find ' + filter_name)
 
-        self.assertNotEqual(element, None, 'unable to find ' + filter_name)
-
+        element = self.selenium.find_element_by_id(filter_name)
         return element.is_selected()
 
     def __check_if_pagination_block_doesnt_exist(self):
-
-        def __find_paginate_previous_radio():
-            self.selenium.find_element_by_id('paginated')
-
-        self.assertRaises(exceptions.NoSuchElementException, __find_paginate_previous_radio)
+        number_of_elements = len(self.selenium.find_elements_by_id('paginated'))
+        self.assertEqual(number_of_elements, 0, 'pagination plock exist but it should not')
 
     def __check_if_previous_page_exist_and_is_disabled(self):
-        try:
-            element = self.selenium.find_element_by_xpath('//label[@class="my-button previous disabled"]')
-        except NoSuchElementException:
-            element = None
-        self.assertNotEqual(element, None, 'unable to find previous page label with status disabled')
+        number_of_elements = len(self.selenium.find_elements_by_xpath('//label[@class="my-button previous disabled"]'))
+        self.assertNotEqual(number_of_elements, 0, 'unable to find previous page label with status disabled')
 
     def __check_if_previous_page_exist_and_is_clickable(self):
-        try:
-            self.selenium.find_element_by_xpath('//label[@class="my-button previous clickable"]')
-        except NoSuchElementException:
-            raise NoSuchElementException('unable to find previous page label with status clickable')
-
+        number_of_elements = len(self.selenium.find_elements_by_xpath('//label[@class="my-button previous clickable"]'))
+        self.assertNotEqual(number_of_elements, 0, 'unable to find previous page label with status clickable')
 
     def __check_if_next_page_exist_and_is_disabled(self):
-        try:
-            element = self.selenium.find_element_by_xpath('//label[@class="my-button next disabled"]')
-        except:
-            element = None
-        self.assertNotEqual(element, None, 'unable to find next page label with status disabled')
+        number_of_elements = len(self.selenium.find_elements_by_xpath('//label[@class="my-button next disabled"]'))
+        self.assertNotEqual(number_of_elements, 0, 'unable to find next page label with status disabled')
 
     def __check_if_next_page_exist_and_is_clickable(self):
-        try:
-            element = self.selenium.find_element_by_xpath('//label[@class="my-button next clickable"]')
-        except:
-            element = None
-            self.assertNotEqual(element, None, 'unable to find next page label with status clickable')
+        number_of_elements = len(self.selenium.find_elements_by_xpath('//label[@class="my-button next clickable"]'))
+        self.assertNotEqual(number_of_elements, 0, 'unable to find next page label with status clickable')
 
     def __check_page_exist_and_get_true_if_selected(self, number):
-        try:
-            id = 'pg-label' + str(number) + '-checked'
-            self.selenium.find_element_by_id(id)  # test if element exist. If doesn't throws exceptions
+
+        element_id = 'pg-label' + str(number) + '-checked'
+        number_of_elements = len(self.selenium.find_elements_by_id(element_id))
+        if number_of_elements == 1:
             return True
-        except:
-            try:
-                id = 'pg-label' + str(number) + '-not-checked'
-                self.selenium.find_element_by_id(id)
-                return False
-            except:
-                element = None
-                self.assertNotEqual(element, None, 'unable to find page radio number ' + str(number))
+
+        element_id = 'pg-label' + str(number) + '-not-checked'
+        number_of_elements = len(self.selenium.find_elements_by_id(element_id))
+        if number_of_elements == 1:
+            return False
+        else:
+            raise NoSuchElementException('unable to find page radio number ' + str(number))
 
     def __check_if_per_page_exist_and_check_if_given_value_is_selected(self, per_page):
-        try:
-            element = self.selenium.find_element_by_xpath('//li[@class="page-no active"]')
-            element1 = self.selenium.find_element_by_id('per-page-' + str(per_page))
-        except:
-            element = None
-            self.assertNotEqual(element, None, 'unable to find per page block')
-            self.assertEqual(element, element1, 'given per_page is not selected')
+        element = self.selenium.find_elements_by_xpath('//li[@class="page-no active"]')
+        element1 = self.selenium.find_elements_by_id('per-page-' + str(per_page))
+        self.assertNotEqual(element, None, 'unable to find per page block')
+        self.assertEqual(element, element1, 'given per_page is not selected')
 
 
 class EmployeeMessage(FunctionalTestsBase):
@@ -199,8 +176,6 @@ class EmployeeMessage(FunctionalTestsBase):
         message_month43.click()
         alert = self.selenium.switch_to_alert()
         month_message = alert.driver.page_source
-
-        message_month43 = self.selenium.find_element_by_id('month_message43')
 
         self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
 
@@ -239,8 +214,8 @@ class EmployeeMessage(FunctionalTestsBase):
 
         alert = self.selenium.switch_to_alert()
         month_message = alert.driver.page_source
-        # time.sleep(1)
-        # self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
+        time.sleep(1)
+        self.assertIn('pracowałem więcej godzin w piątek 13-tego', month_message)
 
 
 class EmployeeFilters(Enum):

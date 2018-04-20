@@ -1,12 +1,9 @@
-import os
 from selenium.webdriver.common.keys import Keys
 import time
 from django.test import override_settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
-from polishlody.settings import BASE_DIR
 
-# STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles'),
 
 @override_settings(DEBUG=True)
 class FunctionalTestsBase(StaticLiveServerTestCase):
@@ -14,9 +11,7 @@ class FunctionalTestsBase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-
         cls.selenium = WebDriver()
-
         cls.selenium.implicitly_wait(2)
 
     @classmethod
@@ -35,6 +30,7 @@ class FunctionalTestsBase(StaticLiveServerTestCase):
         employee_list_link = self.selenium.find_element_by_id('employees_link')
         employee_list_link.click()
         time.sleep(1)
+        self.__change_lang_to_pl()
 
     def log_employee_and_go_to_employee_list(self):
         self.selenium.get('%s%s' % (self.live_server_url, ''))
@@ -47,8 +43,17 @@ class FunctionalTestsBase(StaticLiveServerTestCase):
         employee_list_link = self.selenium.find_element_by_id('my-details-link')
         employee_list_link.click()
         time.sleep(1)
+        self.__change_lang_to_pl()
 
     def logout(self):
         button = self.selenium.find_element_by_id('logout-button')
         button.click()
 
+    def __change_lang_to_pl(self):
+        if 'Employee list' in self.selenium.title:
+            button = self.selenium.find_element_by_id('change-language')
+            button.click()
+
+        if 'Details' in self.selenium.title:
+            button = self.selenium.find_element_by_id('change-language')
+            button.click()

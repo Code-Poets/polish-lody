@@ -3,10 +3,9 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseUpdateView
 from django.urls import reverse_lazy
-
+from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -18,7 +17,6 @@ from .models import City, Employee, Month
 from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
 from django.db.models import Case, When, Sum, F, Q, DecimalField
 import re
-
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
 from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
@@ -97,14 +95,14 @@ def former_and_current_filtering(self, queryset):
     if self.request.is_ajax():
         if self.request.GET.get('current_employees'):
             queryset = queryset.exclude(currently_employed=False)
-        if not self.request.GET.get('current_employees'):
+        else:
             queryset = queryset.exclude(currently_employed=True)
 
         return queryset
     else:
         if self.request.session['current_employees']:
             queryset = queryset.exclude(currently_employed=False)
-        if not self.request.session['current_employees']:
+        else:
             queryset = queryset.exclude(currently_employed=True)
         return queryset
 
@@ -215,7 +213,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                 return False
         else:
             if filter_name == 'current_employees':
-                return self.__make_true_from_SESSION_request(filter_name)
+                return self.__make_true_from_session_request(filter_name)
             else:
                 if filter_name in self.request.GET.keys():
                     return self.request.session[filter_name]
@@ -223,7 +221,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
                     self.request.session[filter_name] = None
                     return None
 
-    def __make_true_from_SESSION_request(self, filter_name):
+    def __make_true_from_session_request(self, filter_name):
         if filter_name in self.request.GET.keys():
             return self.request.session[filter_name]
         else:
@@ -411,27 +409,27 @@ class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
 
         from employees.views_business_logic import ContractExtension
-        contractExtension = ContractExtension()
+        contract_extension = ContractExtension()
 
-        extensionLength = self.request.POST['extensionLength']
-        employeeId = self.request.POST['employeeId']
+        extension_length = self.request.POST['extensionLength']
+        employee_id = self.request.POST['employeeId']
 
-        contractExtendedSucessful = False
+        contract_extended_successful = False
 
-        if (extensionLength == 'add_1_id'):
-            contractExtendedSucessful = contractExtension.add_one_month(employeeId)
+        if extension_length == 'add_1_id':
+            contract_extended_successful = contract_extension.add_one_month(employee_id)
 
-        if (extensionLength == 'add_3_id'):
-            contractExtendedSucessful = contractExtension.add_three_months(employeeId)
+        if extension_length == 'add_3_id':
+            contract_extended_successful = contract_extension.add_three_months(employee_id)
 
-        employee = Employee.objects.get(pk=employeeId)
+        employee = Employee.objects.get(pk=employee_id)
         is_contract_expiring = employee.is_contract_expiring()
         warning_x_days_left = WARNING_DAYS_LEFT
 
-        from django.core.serializers.json import DjangoJSONEncoder
-        data = json.dumps(contractExtension.exp_date, cls=DjangoJSONEncoder)
 
-        your_list = [contractExtendedSucessful, contractExtension.name, data, is_contract_expiring, warning_x_days_left]
+        data = json.dumps(contract_extension.exp_date, cls=DjangoJSONEncoder)
+
+        your_list = [contract_extended_successful, contract_extension.name, data, is_contract_expiring, warning_x_days_left]
         your_list_as_json = json.dumps(your_list)
 
         response = HttpResponse(your_list_as_json, content_type="application/json")
