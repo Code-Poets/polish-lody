@@ -405,7 +405,7 @@
     <p>
         {% if not months %}
             <script>
-                console.log('no months');
+
 
                 $('#hidden-template').html('<div class="alert alert-warning alert-dismissable" id="msg-table">' +
                     '<span>{% trans "There are no months which satisfy specified criteria" %}</span></div>');
@@ -413,7 +413,7 @@
             </p>
         {% else %}
             <script>
-                console.log('months');
+
                 $('#hidden-template').html('<div class="default" id="msg-table"></div>');
             </script>
         {% endif %}

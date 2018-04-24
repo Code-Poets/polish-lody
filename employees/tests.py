@@ -61,17 +61,17 @@ class EmployeeListViewTests(TestCase):
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
 
     def test_user_should_login_successful(self):
-        is_logged = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        is_logged = self.client.login(username='manager@polishlody.pl', password='codepassword')
         self.assertEqual(is_logged, True)
 
     def test_employees_list_view_should_contain_employee_from_fixtury(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         response = self.client.get(reverse_lazy('employees'), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Zbigniew Adamski')
 
     def test_employee_list_view_should_be_paginated_ordered_and_filtered_by_default(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
 
         response = self.client.get(reverse_lazy('employees'), follow=True)
         self.assertEqual(response.status_code, 200)
@@ -86,7 +86,7 @@ class EmployeeListViewTests(TestCase):
         self.assertEqual(response.context['per_page'], 10)
 
     def test_employee_list_view_should_changed_by_ajax_sale_current(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
 
         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         url = reverse('employees')
@@ -106,7 +106,7 @@ class EmployeeListViewTests(TestCase):
         self.assertEqual(response.context['orderby'], 'last_name')
 
     def test_employee_list_view_should_changed_by_ajax_paid_current_pagination(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
 
         kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         url = reverse('employees')
@@ -140,7 +140,7 @@ class EmployeeDetailViewTests(TestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -215,7 +215,7 @@ class EmployeeMessageViewTests(TestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -237,7 +237,7 @@ class MonthCreateAndUpdateAndDeleteViewTests(TransactionTestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -318,7 +318,7 @@ class EmployeeFilterTests(TestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -343,7 +343,7 @@ class EmployeeFilterTests(TestCase):
             filtered_response_none.context['page_employee_list'],
             []
         )
-        self.assertTrue("No employee meets the search criteria." in str(filtered_response_none.content))
+        self.assertTrue("No matches found" in str(filtered_response_none.content))
 
     def test_should_position_other_filter_work_properly(self):
         """
@@ -446,7 +446,7 @@ class ContractExtensionBusinessLogicTests(TestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -502,7 +502,7 @@ class ContractExtensionViewCorrectDateTests(TestCase):
     """
 
     def setUp(self):
-        self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        self.client.login(username='manager@polishlody.pl', password='codepassword')
         zbigniew_adamski = Employee.objects.get(id=3)
         assert ('Zbigniew Adamski' == str(
             zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -553,7 +553,7 @@ class MonthApproveTests(TestCase):
     """
 
     # def setUp(self):
-    #     self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+    #     self.client.login(username='manager@polishlody.pl', password='codepassword')
     #     zbigniew_adamski = Employee.objects.get(id=3)
     #     assert ('Zbigniew Adamski' == str(
     #         zbigniew_adamski)), 'Zbigniew Adamski should be in fixtures, check if file contains Zbigniew Adamski or problem with loading fixtures'
@@ -568,7 +568,7 @@ class MonthApproveTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_approve_month_page_should_be_inaccessible_to_staff(self):
-        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        success = self.client.login(username='manager@polishlody.pl', password='codepassword')
         assert success
 
         month = Month.objects.get(pk=42)
@@ -586,7 +586,7 @@ class MonthApproveTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_month_approval_status_should_become_false_after_hours_worked_in_month_change_by_staff(self):
-        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        success = self.client.login(username='manager@polishlody.pl', password='codepassword')
         assert success
 
         month = Month.objects.get(pk=40)
@@ -610,7 +610,7 @@ class MonthApproveTests(TestCase):
         self.assertEqual(month.month_not_approved_with_comment, False)
 
     def test_month_approval_status_should_become_not_change_after_hours_worked_in_month_not_change_by_staff(self):
-        success = self.client.login(username='pawel.kisielewicz@codepoets.it', password='codepoets')
+        success = self.client.login(username='manager@polishlody.pl', password='codepassword')
         assert success
 
         month = Month.objects.get(pk=40)

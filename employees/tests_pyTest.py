@@ -12,7 +12,7 @@ class TestUtils(object):
     def test_is_expiring_contract(self, input_data, days_to_contract_expires):
         current_time = time.time()
         days_left = int(current_time / 86400)
-        days_correct = days_left - 17641
+        days_correct = 17641-days_left
         days_to_contract_expires = days_to_contract_expires + days_correct
 
         assert is_expiring_contract(input_data) == days_to_contract_expires

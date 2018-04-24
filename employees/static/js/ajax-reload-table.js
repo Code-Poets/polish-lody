@@ -88,8 +88,6 @@ function uncheckFilters(timer) {
 }
 
 function makeRequest(parameters) {
-    console.log('Start makeRequest');
-
 
     $.ajax({
         url: '',
@@ -102,7 +100,7 @@ function makeRequest(parameters) {
 
 
         success: function (content) {
-            console.log('Success ajax GET reload');
+
             $(".ajax-loader").replaceWith(content);
             $(".loading-icon").css("opacity", "0");
             if (content.indexOf('msg-table') !== -1) {

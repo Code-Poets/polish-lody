@@ -1,26 +1,28 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+import json
+import re
+from functools import reduce
+
+from django.contrib import messages
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Case, When, Sum, F, Q, DecimalField
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, BaseUpdateView
-from django.urls import reverse_lazy
-from django.core.serializers.json import DjangoJSONEncoder
-import json
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib import messages
-from django.contrib.auth.forms import PasswordResetForm
-from django.utils.crypto import get_random_string
-from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
-from .models import City, Employee, Month
-from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
-from django.db.models import Case, When, Sum, F, Q, DecimalField
-import re
+
 from polishlody.settings import WARNING_DAYS_LEFT, FORM_SUBMIT_DELAY
-from django.http import JsonResponse
-from django.utils.translation import ugettext_lazy as _
-from functools import reduce
+from .forms import EmployeeForm, EmployeeChangeForm, MonthForm, MonthApproveForm
+from .mixins import MonthOwnershipMixin, OwnershipMixin, StaffRequiredMixin
+from .models import City, Employee, Month
 
 
 def ajax_autocomplete(request):
@@ -149,7 +151,7 @@ def order_by_unpaid_salaries(name_filter, descending):
                 output_field=DecimalField(),
             )
         )
-    ).order_by('%sunpaid_salaries' % (descending))
+    ).order_by('%sunpaid_salaries' % descending)
     return query
 
 
@@ -164,25 +166,25 @@ class UpdateSession(View):
         order = self.request.POST['order']
         request.session['order'] = order
 
-        position_sale = self.__make_true_or_false_from_POST_request(request, 'position_sale')
+        position_sale = self.__make_true_or_false_from_post_request(request, 'position_sale')
         request.session['position_sale'] = position_sale
 
-        position_other = self.__make_true_or_false_from_POST_request(request, 'position_other')
+        position_other = self.__make_true_or_false_from_post_request(request, 'position_other')
         request.session['position_other'] = position_other
 
-        position_production = self.__make_true_or_false_from_POST_request(request, 'position_production')
+        position_production = self.__make_true_or_false_from_post_request(request, 'position_production')
         request.session['position_production'] = position_production
 
-        hide_paid_employees_filter = self.__make_true_or_false_from_POST_request(request, 'hide_paid_employees_filter')
+        hide_paid_employees_filter = self.__make_true_or_false_from_post_request(request, 'hide_paid_employees_filter')
         request.session['hide_paid_employees_filter'] = hide_paid_employees_filter
 
-        hide_zero_salary_months = self.__make_true_or_false_from_POST_request(request, 'hide_zero_salary_months')
+        hide_zero_salary_months = self.__make_true_or_false_from_post_request(request, 'hide_zero_salary_months')
         request.session['hide_zero_salary_months'] = hide_zero_salary_months
 
-        former_employees = self.__make_true_or_false_from_POST_request(request, 'former_employees')
+        former_employees = self.__make_true_or_false_from_post_request(request, 'former_employees')
         request.session['former_employees'] = former_employees
 
-        current_employees = self.__make_true_or_false_from_POST_request(request, 'current_employees')
+        current_employees = self.__make_true_or_false_from_post_request(request, 'current_employees')
         request.session['current_employees'] = current_employees
 
         per_page = self.request.POST['per_page']
@@ -194,7 +196,7 @@ class UpdateSession(View):
         return HttpResponse('ok')
 
     @staticmethod
-    def __make_true_or_false_from_POST_request(request, filter_name):
+    def __make_true_or_false_from_post_request(request, filter_name):
         if filter_name in request.POST.keys():
             return True
         else:
@@ -215,14 +217,15 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             if filter_name == 'current_employees':
                 return self.__make_true_from_session_request(filter_name)
             else:
-                if filter_name in self.request.GET.keys():
+
+                if filter_name in self.request.session.keys():
                     return self.request.session[filter_name]
                 else:
                     self.request.session[filter_name] = None
                     return None
 
     def __make_true_from_session_request(self, filter_name):
-        if filter_name in self.request.GET.keys():
+        if filter_name in self.request.session.keys():
             return self.request.session[filter_name]
         else:
             self.request.session[filter_name] = True
@@ -232,7 +235,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         if self.request.is_ajax():
             return self.request.GET.get('order', 'last_name')
         else:
-            if 'order' in self.request.GET.keys():
+            if 'order' in self.request.session.keys():
                 return self.request.session['order']
             else:
                 return 'last_name'
@@ -246,6 +249,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
         current_employees_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure('current_employees')
         production_position_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure(
             'position_production')
+
         other_position_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure('position_other')
         employee_filter = self.request.GET.get('employee_filter')
         hide_zero_salary_months_filter = self.__get_filter_value_from_ajax_or_session_with_default_secure(
@@ -312,7 +316,7 @@ class EmployeeList(LoginRequiredMixin, StaffRequiredMixin, ListView):
             else:
                 return 1
         else:
-            if 'page' in self.request.GET.keys():
+            if 'page' in self.request.session.keys():
                 return self.request.session['page']
             else:
                 return 1
@@ -425,11 +429,10 @@ class ContractExtensionView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         employee = Employee.objects.get(pk=employee_id)
         is_contract_expiring = employee.is_contract_expiring()
         warning_x_days_left = WARNING_DAYS_LEFT
-
-
         data = json.dumps(contract_extension.exp_date, cls=DjangoJSONEncoder)
 
-        your_list = [contract_extended_successful, contract_extension.name, data, is_contract_expiring, warning_x_days_left]
+        your_list = [contract_extended_successful, contract_extension.name, data, is_contract_expiring,
+                     warning_x_days_left]
         your_list_as_json = json.dumps(your_list)
 
         response = HttpResponse(your_list_as_json, content_type="application/json")
@@ -663,7 +666,7 @@ class EmployeeUpdate(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     def get_queryset(self, **kwargs):
         try:
             return Employee.objects.filter(pk=self.kwargs['pk'])
-        except:
+        except KeyError:
             messages.add_message(self.request, messages.ERROR, _("This employee does not exist!"))
             return HttpResponseRedirect('../')
 

@@ -23,8 +23,8 @@ class UserLogin(LiveServerTestCase):
         login_field = self.browser.find_element_by_id('id_username')
         password_field = self.browser.find_element_by_id('id_password')
 
-        login_field.send_keys('pawel.kisielewicz@codepoets.it')
-        password_field.send_keys('codepoets')
+        login_field.send_keys('manager@polishlody.pl')
+        password_field.send_keys('codepassword')
         password_field.send_keys(Keys.ENTER)
         time.sleep(1)
 

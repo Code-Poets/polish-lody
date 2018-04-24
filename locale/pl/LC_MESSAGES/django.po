@@ -998,8 +998,8 @@ msgstr "Wykonaj"
 
 
 #: templates/employees/employee_list_table.html:204
-msgid "No matches found."
-msgstr "Nie znaleziono wyników."
+msgid "No matches found"
+msgstr "Nie znaleziono wyników"
 
 #: templates/employees/employee_list_table.html:256
 msgid ""

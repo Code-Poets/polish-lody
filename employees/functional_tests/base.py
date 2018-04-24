@@ -1,7 +1,7 @@
-from selenium.webdriver.common.keys import Keys
 import time
-from django.test import override_settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import override_settings
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 
@@ -23,8 +23,8 @@ class FunctionalTestsBase(StaticLiveServerTestCase):
         self.selenium.get('%s%s' % (self.live_server_url, ''))
         login_field = self.selenium.find_element_by_id('id_username')
         password_field = self.selenium.find_element_by_id('id_password')
-        login_field.send_keys('pawel.kisielewicz@codepoets.it')
-        password_field.send_keys('codepoets')
+        login_field.send_keys('manager@polishlody.pl')
+        password_field.send_keys('codepassword')
         password_field.send_keys(Keys.ENTER)
         time.sleep(1)
         employee_list_link = self.selenium.find_element_by_id('employees_link')

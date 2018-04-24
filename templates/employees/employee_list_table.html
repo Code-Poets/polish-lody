@@ -1,20 +1,19 @@
 {% load i18n %}
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+      rel="stylesheet">
 
 
 <div class="ajax-loader">
     <table class="table table-hover">
         <thead>
-        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
-              rel="stylesheet">
-
         <tr>
             <td>
 
             </td>
             <td class="cursor-hover" align="center" valign="middle">
                 <div class="sort-buttons">
-                    <b>{% trans 'Full name' %}</b></br>
+                    <b>{% trans 'Full name' %}</b>
                     {% if orderby == 'last_name' %}
                         <input id="last-name-up" checked type="radio" class="sorting sort-up"
                                name="order" value="last_name"/>
@@ -139,14 +138,12 @@
                 </div>
             </td>
         </tr>
+
         </thead>
+
+        <tbody id="emp-list">
         {% if page_employee_list %}
-            <tbody id="emp-list">
-            <script>
 
-
-
-            </script>
             {% for employee in page_employee_list %}
                 <tr>
                     <td>
@@ -234,14 +231,23 @@
                 </tr>
             {% endfor %}
 
-            </tbody>
-            </table>
-
-            <div>
-
-        {% else %}
-            <p>{% trans 'No matches found.' %}</p>
         {% endif %}
+
+        </tbody>
+    </table>
+
+
+    {% if not page_employee_list %}
+
+        <div class='table_messages'>{% trans 'No matches found' %}</div>
+
+    {% endif %}
+
+    <div>
+
+
+
+
 
 
         <div class="paginated">
@@ -371,7 +377,7 @@
 
 
         </script>
-        </div>
-    </form>
+    </div>
+
 
 </div>
