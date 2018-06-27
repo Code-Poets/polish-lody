@@ -141,9 +141,17 @@ msgstr "Kod pocztowy"
 msgid "Bank account number"
 msgstr "Numer konta bankowego"
 
+msgid "Comment, why you disagree with the hours (optional)"
+msgstr "Komentarz, dlaczego nie zgadzasz sie z godzinami (opcjonalnie) "
+
 #: employees/models.py:141 templates/employees/employee_detail.html:179
 msgid "Phone contact number"
 msgstr "Telefon kontaktowy"
+
+#: templates/employees/employee_form.html:136
+msgid "Currently employed"
+msgstr "Obecnie zatrudniony"
+
 
 #: employees/models.py:144
 msgid "employee"
@@ -304,6 +312,16 @@ msgstr "Pomyślnie usunięto pracownika %s."
 msgid "Successfully deleted month %(month)s %(year)s."
 msgstr "Pomyślnie usunięto miesiąc %(month)s %(year)s."
 
+#: employees/views.py:952
+#, python-format
+msgid "Unexpected problem with getting message from employee"
+msgstr "Wystąpił problem z pobieraniem wiadomości od pracownika"
+
+#: employees/views.py:955
+#, python-format
+msgid "No message from employee"
+msgstr "Brak wiadomości od pracownika"
+
 #: polishlody/pass_validators.py:11
 #, python-format
 msgid "This password must contain at least %(min_length)d characters."
@@ -330,11 +348,48 @@ msgstr "Panel główny"
 msgid "Dashboard"
 msgstr "Tablica"
 
+#: templates/dashboard/dashboard.html:32
+msgid "Weather forecast"
+msgstr "Prognoza pogody"
+
 #: templates/dashboard/dashboard.html:16
 #: templates/employees/employee_list.html:4
 #: templates/employees/employee_list.html:9
 msgid "Employee list"
 msgstr "Lista Pracowników"
+
+#: templates/employees/employee_list.html:15
+msgid "All actions executed successful"
+msgstr "Wszystkie akcje zakończone sukcesem"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with employees dismiss noted"
+msgstr "Nie odnotowano problemów ze zwalnianiem pracowników"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with dismiss employees"
+msgstr "Wystąpił nieoczekiwany problem ze zwalnianiem pracowników"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with one month contracts extension noted"
+msgstr "Nie odnotowano problemów z wydłużaniem umów o 1 miesiąc"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with one month contracts extension"
+msgstr "Wystąpił nieoczekiwany problem z wydłużaniem umów o 1 miesiąc"
+
+#: templates/employees/employee_list.html:15
+msgid "No problems with three months contracts extension noted"
+msgstr "Nie odnotowano problemów z wydłużaniem umów o 3 miesiące"
+
+#: templates/employees/employee_list.html:15
+msgid "Unexpected problem with three months contracts extension"
+msgstr "Wystąpił nieoczekiwany problem z wydłużaniem umów o 3 miesiące"
+
+
+#: templates/employees/employee_list_table.html: ~420
+msgid "Employees dismissed successfully"
+msgstr "Powiodło się zwolnienie pracownika"
 
 #: templates/dashboard/dashboard.html:20
 msgid "Sales (under construction)"
@@ -344,10 +399,7 @@ msgstr "Sprzedaż (w budowie)"
 msgid "My Details"
 msgstr "Moje Dane"
 
-#: templates/dashboard/dashboard.html:32
-#: templates/weather/weather_forecast.html:8
-msgid "Weather forecast"
-msgstr "Prognoza pogody"
+
 
 #: templates/dashboard/dashboard.html:39
 msgid "7 days/ 1 hour forecast"
@@ -502,6 +554,7 @@ msgstr "Wróć"
 msgid "Edit employee"
 msgstr "Edytuj pracownika"
 
+
 #: templates/employees/employee_detail.html:23
 msgid "Email:"
 msgstr ""
@@ -596,6 +649,16 @@ msgstr "Książeczka zdrowia wygasła wczoraj!"
 msgid "Health book expired"
 msgstr "Książeczka zdrowia wygasła"
 
+
+#: templates/employees/employee_list_table.html:440-460
+msgid "Problem with contract extension for employee "
+msgstr "Problem z przedłużeniem kontraktu dla pracownika "
+
+#: templates/employees/employee_list_table.html:440-460
+msgid ". Please refresh the page and check if data is correct."
+msgstr ". Proszę odświeżyć stronę i sprawdzić poprawność danych."
+
+
 #: templates/employees/employee_detail.html:107
 msgid "Position:"
 msgstr "Pozycja:"
@@ -625,17 +688,21 @@ msgid "Collapse list"
 msgstr "Zwiń listę"
 
 #: templates/employees/employee_detail.html:307
-msgid "Hide unpaid months."
-msgstr "Ukryj nieopłacone miesiące."
+msgid "Hide unpaid months"
+msgstr "Ukryj nieopłacone miesiące"
 
 #: templates/employees/employee_detail.html:317
-msgid "Hide paid months."
-msgstr "Ukryj opłacone miesiące."
+msgid "Hide paid months"
+msgstr "Ukryj opłacone miesiące"
 
 #: templates/employees/employee_detail.html:321
 #: templates/employees/employee_list.html:90
 msgid "Reset filters"
 msgstr "Zresetuj filtry"
+
+#: templates/employees/employee_list.html:142
+msgid "Execute employees actions"
+msgstr "Wykonaj akcje na pracownikach"
 
 #: templates/employees/employee_detail.html:339
 msgid "Months per page:"
@@ -711,11 +778,20 @@ msgstr "Sortuj po wypłacie malejąco"
 msgid "Hours approved"
 msgstr "Godziny zaakceptowane"
 
+msgid "Hours not approved"
+msgstr "Godziny niezaakceptowane"
+
+msgid "Message from employee"
+msgstr "Wiadomość od pracownika"
+
 #: templates/employees/employee_detail_table.html:146
 #: templates/employees/employee_detail_table.html:185
 #: templates/employees/employee_detail_table.html:225
 msgid "Approve hours for month"
 msgstr "Zaakceptuj godziny dla miesiąca"
+
+msgid "Disapprove hours for month"
+msgstr "Nie akceptuję godzin dla miesiąca"
 
 #: templates/employees/employee_detail_table.html:157
 #: templates/employees/employee_detail_table.html:197
@@ -816,9 +892,17 @@ msgstr "Opłaceni"
 msgid "Not paid"
 msgstr "Nieopłaceni"
 
+#: templates/employees/employee_list.html:84
+msgid "Former employees"
+msgstr "Byli pracownicy"
+
+#: templates/employees/employee_list.html:84
+msgid "Current employees"
+msgstr "Obecni pracownicy"
+
 #: templates/employees/employee_list.html:115
 msgid "Employees per page:"
-msgstr "Ilość pracowników na stronę:"
+msgstr "Liczba pracowników na stronę:"
 
 #: templates/employees/employee_list.html:170
 msgid "The list of employees is empty, you can change it by "
@@ -827,6 +911,10 @@ msgstr "Lista pracowników jest pusta, możesz to zmienić poprzez "
 #: templates/employees/employee_list.html:170
 msgid "adding a new employee."
 msgstr "dodanie nowego pracownika."
+
+#: templates/employees/employee_list.html:170
+msgid "Employees actions"
+msgstr "Akcje na pracownikach"
 
 #: templates/employees/employee_list_table.html:10
 msgid "Full name"
@@ -892,9 +980,26 @@ msgstr "Sortuj po niewypłaconych wypłatach rosnąco"
 msgid "Sort by unpaid salaries descending"
 msgstr "Sortuj po niewypłaconych wypłatach malejąco"
 
+#: templates/employees/employee_list_table.html:152
+msgid "Dismiss"
+msgstr "Zwolnij"
+
+#: templates/employees/employee_list_table.html:154
+msgid "Add 1 Month"
+msgstr "Dodaj 1 m-c"
+
+#: templates/employees/employee_list_table.html:156
+msgid "Add 3 Months"
+msgstr "Dodaj 3 m-ce"
+
+#: templates/employees/employee_list_table.html:152-156
+msgid "Execute"
+msgstr "Wykonaj"
+
+
 #: templates/employees/employee_list_table.html:204
-msgid "No matches found."
-msgstr "Nie znaleziono wyników."
+msgid "No matches found"
+msgstr "Nie znaleziono wyników"
 
 #: templates/employees/employee_list_table.html:256
 msgid ""
@@ -907,6 +1012,10 @@ msgstr ""
 #: templates/employees/month_approve.html:9
 msgid "Are you sure you want to approve this month?"
 msgstr "Czy na pewno chcesz zatwierdzić ten miesiąc?"
+
+#: templates/employees/month_disapprove.html:9
+msgid "Are you sure you want to disapprove this month"
+msgstr "Czy na pewno nie chcesz zatwierdzić tego miesiąca?"
 
 #: templates/employees/month_approve.html:14
 msgid "Employee:"
@@ -923,6 +1032,11 @@ msgstr "Godzin przepracowanych w tym miesiącu:"
 #: templates/employees/month_approve.html:38
 msgid "Rate per hour this month:"
 msgstr "Stawka godzinowa w tym miesiącu:"
+
+#: templates/employees/month_NOT_approve.html:49
+msgid "Characters remaining"
+msgstr "Pozostało znaków"
+
 
 #: templates/employees/month_confirm_delete.html:21
 msgid "Are you sure you want to delete"
@@ -1340,6 +1454,9 @@ msgstr ""
 #: users/models.py:63
 msgid "users"
 msgstr ""
+
+
+
 
 #~ msgid "7 days forecast"
 #~ msgstr "Prognoza na 7 dni"

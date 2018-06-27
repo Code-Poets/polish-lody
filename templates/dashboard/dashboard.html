@@ -3,8 +3,8 @@
 {% block title %}{% trans 'Manager dashboard' %}{% endblock %}
         
 {% block body_block %}
-
     <div class="container">
+
         <div class="panel panel-heading panel-default">
             <div>
                 <h4>{% blocktrans %}Dashboard{% endblocktrans %}</h4>
@@ -13,7 +13,7 @@
                 {% if user.is_staff %}
                     <ul>
                         <li>
-                            <a href="{% url 'employees' %}">{% trans 'Employee list' %}</a>
+                            <a id=employees_link href="{% url 'employees' %}">{% trans 'Employee list' %}</a>
                         </li>
                         <li>
                             <!-- <a disabled href="{% url 'sales' %}">Sales (under construction)</a> -->
@@ -21,7 +21,7 @@
                         </li>
                     </ul>
                 {% elif user.employee.id == user.pk %}
-                    <a href="{% url 'employee_detail' user.pk %}">{% trans 'My Details' %}</a>
+                    <a id='my-details-link' href="{% url 'employee_detail' user.pk %}">{% trans 'My Details' %}</a>
                 {% else%}
                     <a>Your have no power here!!!</a>
                 {% endif %}

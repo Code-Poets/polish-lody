@@ -132,6 +132,9 @@ html, body {
   border: none;
   outline: none; }
 
+.sort-buttons {
+  white-space: nowrap; }
+
 /*CHECKBOXES*/
 .vis-hidden {
   border: 0;
@@ -203,7 +206,7 @@ div.filter-forms {
   /* Internet Explorer/Edge */
   user-select: none;
   /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */ }
+                                   supported by Chrome and Opera */ }
 
 .my-button.reset-filters {
   background-color: #785C49; }
@@ -327,7 +330,7 @@ ul li.page-no a:hover {
   color: #635044;
   background-color: #ebe6e2;
   cursor: pointer;
-  transition: background-color  0.25s; }
+  transition: background-color 0.25s; }
 
 ul li.active.page-no a:hover {
   background-color: #635044;
@@ -345,6 +348,9 @@ div.radio-select ul {
 td.cursor-hover {
   font-weight: bold; }
 
+.icon-disagree {
+  color: red; }
+
 .icon-false {
   color: #ff2e35; }
 
@@ -356,10 +362,7 @@ form.column-title-form {
   text-decoration: none; }
 
 .employee-list-date {
-  text-align: right; }
-
-span.employee-list-date {
-  padding-right: 33%; }
+  text-align: center; }
 
 form {
   display: inline; }
@@ -459,7 +462,7 @@ input[type=radio]:selected + label.my-button {
   background: -o-linear-gradient(top, #d6ffb2 5%, #7bd900 100%);
   background: -ms-linear-gradient(top, #d6ffb2 5%, #7bd900 100%);
   background: linear-gradient(to bottom, #d6ffb2 5%, #7bd900 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900',GradientType=0); }
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d6ffb2', endColorstr='#7bd900', GradientType=0); }
 
 .disableClick {
   pointer-events: none; }
@@ -629,6 +632,62 @@ ul.topnav li.icon {
   position: fixed;
   top: -30px; }
 
-/**/
+#message_fail_status {
+  color: red;
+  width: auto;
+  padding: 6px;
+  background-color: whitesmoke;
+  border-radius: 8px;
+  font: 15px Verdana, sans-serif; }
 
-/*# sourceMappingURL=../../../../../../../static/main.css.map */
+#message_success_status {
+  color: green;
+  width: auto;
+  padding: 6px;
+  background-color: whitesmoke;
+  border-radius: 8px;
+  font: 15px Verdana, sans-serif; }
+
+.contract_extend {
+  background-color: #bebebe;
+  color: black;
+  padding: 3px 3px;
+  margin-left: 4px;
+  display: inline-block;
+  font-size: 8px;
+  border-radius: 10px;
+  border: 2px solid #D0D0D0;
+  cursor: pointer;
+  alignment: right;
+  align-content: right;
+  text-align: right; }
+
+.contract_extend:hover {
+  background: #a0a0a0; }
+
+.flex {
+  display: flex; }
+
+.table_icon {
+  width: 30%;
+  text-align: right; }
+
+.table_date {
+  width: min-content;
+  min-width: 90px; }
+
+.table_buttons {
+  width: min-content;
+  min-width: 70px;
+  text-align: left; }
+
+.table_messages {
+  color: black;
+  width: auto;
+  padding: 10px;
+  background-color: whitesmoke;
+  border-radius: 15px;
+  font: 16px Verdana, sans-serif;
+  margin-bottom: 15px; }
+
+/*# sourceMappingURL=../../../../../../staticfiles/main.css.map */

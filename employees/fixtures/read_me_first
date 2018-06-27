@@ -1,0 +1,8 @@
+to develop DB load fixtures:
+1. users_myuser
+2. fikstura_cities
+3. employees_employee_with_cities
+4. month
+
+fixtura employees_employee is only for tests, because if you want to test with cities, it would take too much time. Loading fikstura_cities takes long time and is not necessary to tests.  
+

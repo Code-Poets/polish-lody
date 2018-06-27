@@ -4,155 +4,321 @@
 {% block title %}{% trans 'Employee list' %}{% endblock %}
 
 {% block header_block %}
-<div class="panel panel-heading panel-default">
-    <center>
-        <h4>{% trans 'Employee list' %}</h4>
-    </center>
-</div>
+
+    <div class="panel panel-heading panel-default">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+        <script>
+
+            let icon_cell;
+            let date_cell;
+            let contract_expiring = '';
+            let is_contract_expiring;
+            let contract_exp_date;
+            let warning_x_days_left;
+            let employeeId;
+
+            function loadDataToTable(days_to_contract_expire, new_date, warning_x_days_left, employeeId) {
+                try {
+                    days_to_contract_expire = parseInt(days_to_contract_expire);
+                }
+                catch (e) {
+                    days_to_contract_expire = null
+
+                }
+
+                icon_cell = '#icon-cell' + employeeId;
+                date_cell = '#date-cell' + employeeId;
+
+
+                $(date_cell).html('<span class="employee-list-date">' + new_date);
+
+                if (days_to_contract_expire > 0 && warning_x_days_left > days_to_contract_expire) {
+                    $(icon_cell).html(
+                        ' <span title="{% trans 'Contract expires in about' %} ' + days_to_contract_expire + ' {% trans 'days.' %}"' +
+                        'class="glyphicon glyphicon-exclamation-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire > 0 && warning_x_days_left <= days_to_contract_expire) {
+
+                    $(icon_cell).html(' ')
+                }
+
+                else if (days_to_contract_expire === 0) {
+                    $(icon_cell).html(
+                        '<span title="{% trans 'Contract expires within 24 hours!' %}"' +
+                        'class="glyphicon glyphicon-exclamation-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire === -1) {
+
+                    $(icon_cell).html('<span title="{% trans 'Contract expired yesterday!' %}" class="glyphicon glyphicon-warning-sign employee-list"></span>');
+                }
+
+                else if (days_to_contract_expire < -1) {
+                    contract_expiring = '' + days_to_contract_expire;
+                    contract_expiring = ' ' + contract_expiring.substring(1);
+                    $(icon_cell).html('<span title="{% trans 'Contract expired' %}' + contract_expiring + ' {% trans 'days ago!' %}"' +
+                        'class="glyphicon glyphicon-warning-sign employee-list"></span>');
+                }
+
+                else {
+                    $(date_cell).html('{% trans 'N/A' %}');
+                }
+
+            }
+
+
+        </script>
+
+        <center>
+            <h4>{% trans 'Employee list' %}</h4>
+        </center>
+    </div>
+
+
+
 {% endblock %}
+
 {% block body_block %}
-{% if all_employee_list is not None %}
-<a href="{% url 'dashboard' %}" class="btn btn-default">{% trans 'Back' %}</a>
-<a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-default">{% trans 'Back' %}</a>
+    <a href="{% url 'employee_new' %}" class="btn btn-success pull-right">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
+
+
     <div style="margin-bottom: 7px;">
         <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg">
     </div>
 
-    <form id="auto-submit-form" method="get" data-submit-delay="{{form_submit_delay}}" 
-    action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
-        <div class="filter-forms">
-            <!-- <a href="{% url 'employee_new' %}" class="btn btn-success pull-right" style="margin: 5px">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans ' Add employee' %}</a>
 
-            <img class="loading-icon pull-right" src="../../static/images/loading-icon.svg"> -->
-            <ul class="filters">
-                <li class="filter">
-                    {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable" placeholder="{{ employee_filter }}" name="employee_filter" id="employee_filter"/>
-                </li>
-                <li class="filter">
-                    {% if position_sale %}
-                        <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
-                    {% else %}
-                        <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_sale">
-                        {% trans 'Sale' %}
-                    </label>
-                </li>
-                <li class="filter" class="filter">
-                    {% if position_production %}
-                        <input id="pos_production" type="checkbox" checked class="vis-hidden" name="position_production">
-                    {% else %}
-                        <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success" name="position_production">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_production">
-                        {% trans 'Production' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if position_other %}
-                        <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
-                    {% else %}
-                        <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
-                    {% endif %}
-                    <label class="my-button clickable" for="pos_other">
-                        {% trans 'Other' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if hide_zero_salary_months %}
-                        <input id="chk_paid" checked type="checkbox" class="vis-hidden"
-                           name="hide_zero_salary_months" />
-                    {% else %}
-                        <input id="chk_paid" type="checkbox" class="vis-hidden"
-                           name="hide_zero_salary_months" />
-                    {% endif %}
-                    <label class="my-button clickable" for="chk_paid">
-                        {% trans 'Paid' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    {% if hide_paid_employees_filter %}
-                        <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
-                           name="hide_paid_employees_filter" />
-                    {% else %}
-                        <input id="chk_unpaid" type="checkbox"  class="vis-hidden"
-                           name="hide_paid_employees_filter" />
-                    {% endif %}
-                    <label class="my-button clickable" for="chk_unpaid">
-                        {% trans 'Not paid' %}
-                    </label>
-                </li>
-                <li class="filter">
-                    <input class="vis-hidden" type="checkbox" value="Clear filters"/>
-                    <label class="my-button reset-filters">
-                        {% trans 'Reset filters' %}
-                    </label>
-                </li>
-                <li class="filter">
-                </li>
-            </ul>
-            <select hidden name="per_page" class="clickable" id="per-page">
-                {% for number in paginate_by_numbers %}
-                    {% if current_paginate_by_number == number %}
-                        <option selected value="{{ number }}">{{number}}</option>
-                    {% else %}
-                        <option value="{{ number }}">{{number}}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-            
-        {% endif %}
-{% endblock %}
-{% block load_block %}
-    {% include 'employees/employee_list_table.html' %}       
-{% endblock %}
-{% block footer_block %}
-    {% if all_employee_list %}
-    <div>
-        <span>{% trans 'Employees per page:' %}</span><br/>
-        <ul class="pagination paginate">
-            {% for number in paginate_by_numbers %}
-                {% if current_paginate_by_number == number %}
-                    <li class="active page-no" id="per-page-{{ number }}">
-                        <a>
-                            {{ number }}
-                        </a>
-                    </li>
+    <form id="auto-submit-form" method="GET" data-submit-delay="{{ form_submit_delay }}"
+          action="{% url 'employees' %}" onkeypress="return event.keyCode != 13;">
+
+
+    <div class="filter-forms">
+        <ul class="filters">
+            <li class="filter">
+                {% trans 'Find employee: ' %}<input type="text" class="form-horizontal clickable"
+                                                    placeholder="{{ employee_filter }}" name="employee_filter"
+                                                    id="employee_filter"/>
+            </li>
+            <li class="filter">
+                {% if position_sale %}
+                    <input id="pos_sale" type="checkbox" checked class="vis-hidden" name="position_sale">
                 {% else %}
-                    <li class="page-no" id="per-page-{{ number }}">
-                        <a>
-                            {{ number }}
-                        </a>
-                    </li>
+                    <input id="pos_sale" type="checkbox" class="vis-hidden" name="position_sale">
                 {% endif %}
-            {% endfor %}
+                <label id="pos_sale_label" class="my-button clickable" for="pos_sale">
+                    {% trans 'Sale' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if position_production %}
+                    <input id="pos_production" type="checkbox" checked class="vis-hidden"
+                           name="position_production">
+                {% else %}
+                    <input id="pos_production" type="checkbox" class="vis-hidden checkbox-success"
+                           name="position_production">
+                {% endif %}
+                <label class="my-button clickable" for="pos_production">
+                    {% trans 'Production' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if position_other %}
+                    <input id="pos_other" type="checkbox" checked class="vis-hidden" name="position_other">
+                {% else %}
+                    <input id="pos_other" type="checkbox" class="vis-hidden" name="position_other">
+                {% endif %}
+                <label class="my-button clickable" for="pos_other">
+                    {% trans 'Other' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if hide_zero_salary_months %}
+                    <input id="chk_paid" checked type="checkbox" class="vis-hidden"
+                           name="hide_zero_salary_months"/>
+                {% else %}
+                    <input id="chk_paid" type="checkbox" class="vis-hidden"
+                           name="hide_zero_salary_months"/>
+                {% endif %}
+                <label class="my-button clickable" for="chk_paid">
+                    {% trans 'Paid' %}
+                </label>
+            </li>
+            <li class="filter">
+                {% if hide_paid_employees_filter %}
+                    <input id="chk_unpaid" type="checkbox" checked class="vis-hidden"
+                           name="hide_paid_employees_filter"/>
+                {% else %}
+                    <input id="chk_unpaid" type="checkbox" class="vis-hidden"
+                           name="hide_paid_employees_filter"/>
+                {% endif %}
+                <label class="my-button clickable" for="chk_unpaid">
+                    {% trans 'Not paid' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                {% if former_employees %}
+                    <input id="former_employees_id" type="checkbox" checked class="vis-hidden"
+                           name="former_employees"/>
+                {% else %}
+                    <input id="former_employees_id" type="checkbox" class="vis-hidden"
+                           name="former_employees"/>
+                {% endif %}
+                <label class="my-button clickable" for="former_employees_id">
+                    {% trans 'Former employees' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                {% if current_employees %}
+                    <input id="current_employees_id" type="checkbox" checked class="vis-hidden"
+                           name="current_employees"/>
+                {% else %}
+                    <input id="current_employees_id" type="checkbox" class="vis-hidden"
+                           name="current_employees"/>
+                {% endif %}
+                <label class="my-button clickable" for="current_employees_id">
+                    {% trans 'Current employees' %}
+                </label>
+            </li>
+
+
+            <li class="filter">
+                <input class="vis-hidden" type="checkbox" value="Clear filters"/>
+                <label class="my-button reset-filters">
+                    {% trans 'Reset filters' %}
+                </label>
+            </li>
+
+
         </ul>
 
-        <br/>
-    </div>
-    <script>
-        $(function() {
+        <select hidden name="per_page" class="clickable" id="per-page">
             {% for number in paginate_by_numbers %}
-            $('#per-page-{{number}}').click(function(){
-                $('.page-no').removeClass('active');
-                $('#per-page-{{number}}').addClass('active');
-                $('input[name=pg]:checked').prop('checked', false);
-                $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected',true);
-                try {
-                    var parameters = gatherFilters();
-                    delete parameters.page;
-                } 
-                catch(err) {
-                    var parameters = { };
-                }
-                makeRequest(parameters);
-            });
+                {% if current_paginate_by_number == number %}
+                    <option selected value="{{ number }}">{{ number }}</option>
+                {% else %}
+                    <option value="{{ number }}">{{ number }}</option>
+                {% endif %}
             {% endfor %}
+        </select>
+    </div>
+
+{% endblock %}
+
+
+{% block load_block %}
+
+    {% include 'employees/employee_list_table.html' %}
+
+{% endblock %}
+
+{% block footer_block %}
+
+    {% if page_employee_list %}
+
+        <div>
+
+            <span>{% trans 'Employees per page:' %}</span><br/>
+            <ul class="pagination paginate">
+
+                {% for number in paginate_by_numbers %}
+
+                    {% if current_paginate_by_number == number %}
+                        <li class="active page-no" id="per-page-{{ number }}">
+                            <a>
+                                {{ number }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-no" id="per-page-{{ number }}">
+                            <a>
+                                {{ number }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            <br/>
+        </div>
+
+    {% elif not messages %}
+        <p>{% trans 'The list of employees is empty, you can change it by ' %}<a
+                href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
+    {% endif %}
+
+    <script>
+
+        {#problem JQuery didn see page buttons on second click - dynamic setted#}
+        $(this).click(function () {
+            setTimeout(function () {
+                update_session();
+            }, 100);
+
         });
+
+        function getCookie(name) {
+
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function update_session() {
+
+            data = gatherFilters();
+            $.post({
+                url: 'update_session/',
+                data: data,
+                dataType: "html",
+                method: "POST",
+                timeout: 10000,
+            });
+        }
+
+        $(function start_filters() {
+            {% for number in paginate_by_numbers %}
+                $('#per-page-{{number}}').click(function () {
+                    $('.page-no').removeClass('active');
+                    $('#per-page-{{number}}').addClass('active');
+                    $('input[name=pg]:checked').prop('checked', false);
+                    $('select[name=per_page]>option:eq({{forloop.counter0}})').prop('selected', true);
+                    let parameters = {};
+                    try {
+                        parameters = gatherFilters();
+                        delete parameters.page;
+                    }
+                    catch (err) {
+                        parameters = {};
+                    }
+                    makeRequest(parameters);
+                });
+            {% endfor %}
+
+        });
+
         function gatherFilters() {
+
+            let page_value = ($('input[name=pg]:checked').val());
+            if (page_value === undefined) {
+                page_value = 1;
+            }
             return {
                 order: $('input[name=order]:checked', '#auto-submit-form').val(),
                 employee_filter: $('#employee_filter').val(),
@@ -161,12 +327,14 @@
                 position_production: $('input[name=position_production]:checked').val(),
                 hide_paid_employees_filter: $('input[name=hide_paid_employees_filter]:checked').val(),
                 hide_zero_salary_months: $('input[name=hide_zero_salary_months]:checked').val(),
+                former_employees: $('input[name=former_employees]:checked').val(),
+                current_employees: $('input[name=current_employees]:checked').val(),
+                employees_action: $('input[name=employees_action]:checked').val(),
                 per_page: $('select[name=per_page]').val(),
-                page: $('input[name=pg]:checked').val(),
-            }
+                page: page_value,
+            };
         }
     </script>
-    {% elif not messages %}
-    <p>{% trans 'The list of employees is empty, you can change it by ' %}<a href="{% url 'employee_new' %}">{% trans 'adding a new employee.' %}</a></p>
-    {% endif %}
+
 {% endblock %}
+</form>

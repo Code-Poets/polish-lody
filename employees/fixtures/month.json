@@ -1,0 +1,450 @@
+[
+  {
+    "model": "employees.month",
+    "pk": 2,
+    "fields": {
+      "year": 2016,
+      "employee": 3,
+      "month": 11,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "160.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "11.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 3,
+    "fields": {
+      "year": 2017,
+      "employee": 2,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "40.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "10.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 4,
+    "fields": {
+      "year": 2016,
+      "employee": 3,
+      "month": 12,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "152.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "11.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 5,
+    "fields": {
+      "year": 2017,
+      "employee": 3,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "100.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "11.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 6,
+    "fields": {
+      "year": 2017,
+      "employee": 6,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "0.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 7,
+    "fields": {
+      "year": 2016,
+      "employee": 6,
+      "month": 12,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "144.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 8,
+    "fields": {
+      "year": 2016,
+      "employee": 6,
+      "month": 11,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "140.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 9,
+    "fields": {
+      "year": 2017,
+      "employee": 6,
+      "month": 2,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "0.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 10,
+    "fields": {
+      "year": 2016,
+      "employee": 7,
+      "month": 12,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "111.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "3.50",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 11,
+    "fields": {
+      "year": 2017,
+      "employee": 7,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "720.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "3.50",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 12,
+    "fields": {
+      "year": 2085,
+      "employee": 8,
+      "month": 9,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "150.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "20.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 13,
+    "fields": {
+      "year": 2085,
+      "employee": 8,
+      "month": 10,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "200.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "20.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 14,
+    "fields": {
+      "year": 2018,
+      "employee": 10,
+      "month": 3,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "100.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "20.00",
+      "bonuses": "500.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 15,
+    "fields": {
+      "year": 2018,
+      "employee": 7,
+      "month": 3,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "150.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "3.50",
+      "bonuses": "10.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 16,
+    "fields": {
+      "year": 2018,
+      "employee": 29,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "150.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 17,
+    "fields": {
+      "year": 2018,
+      "employee": 29,
+      "month": 2,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "180.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "500.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 33,
+    "fields": {
+      "year": 2018,
+      "employee": 30,
+      "month": 3,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": true,
+      "message_reason_hours_not_approved": "pracowalem wiecej",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 37,
+    "fields": {
+      "year": 2018,
+      "employee": 30,
+      "month": 2,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "200.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": true,
+      "message_reason_hours_not_approved": "kkkkkkkkkkkkkkkkkkkkkkkkkkuuuuuuuuuuuuuuuuuuuu",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 38,
+    "fields": {
+      "year": 2018,
+      "employee": 30,
+      "month": 1,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": true,
+      "message_reason_hours_not_approved": "Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: Stawka godzinowa w tym miesi\u0105cu: ",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 39,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 12,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": true,
+      "message_reason_hours_not_approved": "jQuery - biblioteka kt\u00f3ra zrobi\u0142a niema\u0142e zamieszanie w internecie.\r\n\r\nJej popularno\u015b\u0107 nie wzi\u0119\u0142a si\u0119 znik\u0105d. Po pierwsze jQuery bardzo upraszcza pisanie skrypt\u00f3w. Dzi\u0119ki temu zamiast skupia\u0107 si\u0119 jak napisa\u0107 dany fragment kodu, skupiamy si\u0119 na tym jak rozwi\u0105za\u0107 dany problem.\r\nDruga sprawa to olbrzymie zaplecze gotowych plugin\u00f3w. Chcesz u\u017cy\u0107 lightboxa na stronie? Dorzucasz plugin, dopisujesz 2-3 linijki kodu i masz lightbox. Chcesz u\u017cy\u0107 na stronie responsywnej karuzeli? Znowu - zastosujesz odpowiedni plugin, napiszesz kilka linii kodu i problem rozwi\u0105zany. Chcesz przeci\u0105ganie i zarz\u0105dzanie listami? Prosz\u0119 bardzo\r\n\r\nDzi\u0119ki takiemu podej\u015bciu tworzenie projekt\u00f3w staje si\u0119 naprawd\u0119 szybkie (a i zalet\u0105 jest to, \u017ce takie rozwi\u0105zania s\u0105 spradzane przez setki os\u00f3b).\r\n\r\nKolejn\u0105 zalet\u0105 - w dzisiejszych czasach mo\u017ce mniej znacz\u0105c\u0105 - jest jednolito\u015b\u0107 kodu. Gdy jQuery wchodzi\u0142a na rynek wci\u0105\u017c istnia\u0142a na rynku spora rozbie\u017cno\u015b\u0107 w implementacji r\u00f3\u017cnych \"ficzer\u00f3w\". Dla przyk\u0142adu - event DOMCon",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 40,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 11,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": true,
+      "message_reason_hours_not_approved": "jQuery - biblioteka kt\u00f3ra zrobi\u0142a niema\u0142e zamieszanie w internecie.\r\n\r\nJej popularno\u015b\u0107 nie wzi\u0119\u0142a si\u0119 znik\u0105d. Po pierwsze jQuery bardzo upraszcza pisanie skrypt\u00f3w. Dzi\u0119ki temu zamiast skupia\u0107 si\u0119 jak napisa\u0107 dany fragment kodu, skupiamy si\u0119 na tym jak rozwi\u0105za\u0107 dany problem.\r\nDruga sprawa to olbrzymie zaplecze gotowych plugin\u00f3w. Chcesz u\u017cy\u0107 lightboxa na stronie? Dorzucasz plugin, dopisujesz 2-3 linijki kodu i masz lightbox. Chcesz u\u017cy\u0107 na stronie responsywnej karuzeli? Znowu - zastosujesz odpowiedni plugin, napiszesz kilka linii kodu i problem rozwi\u0105zany. Chcesz przeci\u0105ganie i zarz\u0105dzanie listami? Prosz\u0119 bardzo\r\n\r\nDzi\u0119ki takiemu podej\u015bciu tworzenie projekt\u00f3w staje si\u0119 naprawd\u0119 szybkie (a i zalet\u0105 jest to, \u017ce takie rozwi\u0105zania s\u0105 spradzane przez setki os\u00f3b).\r\n\r\nKolejn\u0105 zalet\u0105 - w dzisiejszych czasach mo\u017ce mniej znacz\u0105c\u0105 - jest jednolito\u015b\u0107 kodu. Gdy jQuery wchodzi\u0142a na rynek wci\u0105\u017c istnia\u0142a na rynku spora rozbie\u017cno\u015b\u0107 w implementacji r\u00f3\u017cnych \"ficzer\u00f3w\". Dla przyk\u0142adu - event DOMContentLoaded nie ",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 41,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 10,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "0.0",
+      "month_is_approved": true,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 42,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 9,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 43,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 8,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "50.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 44,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 7,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "200.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": "bo nie",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 45,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 6,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "200.0",
+      "month_is_approved": true,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 46,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 5,
+      "salary_is_paid": true,
+      "hours_worked_in_this_month": "60.0",
+      "month_is_approved": true,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": null,
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "0.00"
+    }
+  },
+  {
+    "model": "employees.month",
+    "pk": 47,
+    "fields": {
+      "year": 2017,
+      "employee": 30,
+      "month": 2,
+      "salary_is_paid": false,
+      "hours_worked_in_this_month": "80.0",
+      "month_is_approved": false,
+      "month_not_approved_with_comment": false,
+      "message_reason_hours_not_approved": "nie zgadzam sie",
+      "rate_per_hour_this_month": "15.00",
+      "bonuses": "100.00"
+    }
+  }
+]

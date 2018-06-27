@@ -1,0 +1,86 @@
+{% extends 'polishlody/base.html' %}
+{% load i18n %}
+
+{% block body_block %}
+
+<head>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<div class="panel panel-heading panel-default">
+    <div class="form-container approval-container">
+
+        <center>
+            <h4>
+                {% trans 'Are you sure you want to disapprove this month?' %}
+            </h4>
+            <table class="table table-hover approval-table">
+                <tr>
+                    <td>
+                        {% trans 'Employee:' %}
+                    </td>
+                    <td>
+                        {{ employee.employee }}
+                    </td>
+                <tr>
+                    <td>
+                        {% trans 'Month:' %}
+                    </td>
+                    <td>
+                        {{ month.get_month_display }} {{ month.year }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {% trans 'Hours worked in this month:' %}
+                    </td>
+                    <td>
+                        {{ month.hours_worked_in_this_month }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% trans 'Rate per hour this month:' %}
+                    </td>
+                    <td>
+                        {{ month.rate_per_hour_this_month }}
+                    </td>
+                </tr>
+            </table>
+        </center>
+
+        <div id="chars_remaning_id" name= "{% trans 'Characters remaining' %}"  align="center">{% trans 'Characters remaining' %} 1000</div>
+
+        <form method="POST">
+
+            <textarea class="form-container textarea_disapprove" name="employee_message" id="employee_message_id" maxlength=1000 placeholder="Your message"></textarea>
+
+
+            {% csrf_token %}
+            <center>
+                <input type="submit" name="submit" value="{% trans 'Submit' %}" class="btn btn-primary">
+                <a href="{% url 'employee_detail' employee.id %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
+                {{ form.month_not_approved_with_comment }}
+
+            </center>
+        </form>
+
+    </div>
+
+
+</div>
+
+<script>
+
+       $('#employee_message_id').on('keyup', function(){
+       let charsRemaningArea=$('#chars_remaning_id');
+       let remanings=1000-(+$(this).val().length);
+       charsRemaningArea.text(charsRemaningArea.attr('name')+" "+ remanings);
+    });
+
+
+</script>
+{% endblock %}
